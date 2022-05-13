@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
+-->
+<html>
+    <head>
+        <title>Login Page</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    </head>
+    <body>
+        <form action="LoginServlet" method="POST" id="my_form" onsubmit="return submitUserForm();">
+            UserID <input type="text" name="userID" required=""/><br>
+            Password <input type="password" name="password" required=""/><br>
+            <div class="g-recaptcha" data-sitekey="6Lf9dzseAAAAAECT4pIub9Dfu8M5GHrN0ptZrAHF" data-callback="verifyCaptcha"></div>
+            <div id="g-recaptcha-error"></div>
+            <br/>
+            <input type="submit" name="action" value="Submit"/>
+            <input type="reset" value="Reset"/>
+        </form>
+        <a href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:6969/UserManagement/login-google&response_type=code&client_id=509457839207-jdqdqpduhao5h1vjq065v0d4uk830te7.apps.googleusercontent.com&approval_prompt=force">Login With Google</a>  
+        <script>
+            var recaptcha_response = '';
+            function submitUserForm() {
+                if (recaptcha_response.length == 0) {
+                    document.getElementById('g-recaptcha-error').innerHTML = '<span style="color:red;">This field is required.</span>';
+                    return false;
+                }
+                return true;
+            }
+
+            function verifyCaptcha(token) {
+                recaptcha_response = token;
+                document.getElementById('g-recaptcha-error').innerHTML = '';
+            }
+        </script>
+    </body>
+</html>
