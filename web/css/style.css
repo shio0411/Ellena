@@ -37,6 +37,53 @@ body {
 	font-family: "Montserrat", sans-serif;
 	-webkit-font-smoothing: antialiased;
 }
+.sidenav {
+  height: 100%;
+  width: 18%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #fbe2d6;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+.sidenav a {
+  margin: 12% 12%;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 500;
+  color: #000000;
+  display: block;
+}
+
+.sidenav a:hover {
+  color: #e1746f;
+}
+
+.main {
+  margin-left: 18%; /* Same as the width of the sidenav */
+}
+
+.fa{
+    margin-right: 10px;
+    color: #eab676;
+}
+
+.table{
+    margin: 5% 5%;
+    width: 90%;
+}
+
+table tr{
+    font-size: 10px;
+}
+
+td{
+    height:40px;
+    width: 120px;
+}
 
 h1,
 h2,

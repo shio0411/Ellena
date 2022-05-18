@@ -20,8 +20,8 @@ public class UserDTO {
     private String address;
     private Date   birthday;
     private String phone;
-    private boolean status;
-
+    private boolean status;    
+    
     public UserDTO() {
         this.userID = "";
         this.fullName = "";
