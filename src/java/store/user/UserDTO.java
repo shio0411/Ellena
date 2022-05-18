@@ -70,7 +70,7 @@ public class UserDTO {
         this.password = password;
     }
 
-    public boolean isSex() {
+    public boolean getSex() {
         return sex;
     }
 
@@ -110,7 +110,7 @@ public class UserDTO {
         this.phone = phone;
     }
 
-    public boolean isStatus() {
+    public boolean getStatus() {
         return status;
     }
 
