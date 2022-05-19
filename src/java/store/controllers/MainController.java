@@ -23,7 +23,7 @@ public class MainController extends HttpServlet {
     private static final String LOGIN_GOOGLE = "LoginGoogle";
     private static final String LOGIN_GOOGLE_CONTROLLER = "LoginGoogleController";
     private static final String SEARCH = "Search";
-    private static final String SEARCH_CONTROLLER = "SearchController";
+    private static final String SEARCH_CONTROLLER = "SearchProductController";
     private static final String REMOVE = "Remove";
     private static final String REMOVE_CONTROLLER = "RemoveController";
     private static final String UPDATE = "Update";

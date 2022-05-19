@@ -17,7 +17,7 @@ import store.user.UserDTO;
 
 public class LoginController extends HttpServlet {
     private static final String ERROR = "login.jsp";
-    private static final String ADMIN_PAGE = "MainController?action=Search&search=";
+    private static final String ADMIN_PAGE = "admin.jsp";//"MainController?action=Search&search=";
     private static final String CUSTOMER_PAGE = "home.jsp";
     private static final String CM = "CM";
     private static final String AD = "AD";

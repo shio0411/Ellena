@@ -1,9 +1,4 @@
-<%-- 
-    Document   : admin
-    Created on : May 17, 2022, 12:51:35 PM
-    Author     : giama
---%>
-
+<%@page import="store.user.UserDAO"%>
 <%@page import="java.util.List"%>
 <%@page import="store.user.UserDTO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -11,7 +6,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Admin Page</title>
+        <title>Administrator Page</title>
         <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
         <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
         <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
@@ -28,19 +23,36 @@
                 response.sendRedirect("login.jsp");
                 return;
             }
+            UserDAO dao = new UserDAO();
 
         %>
         <div class="sidenav">
-            <a href="MainController?action=Search&search="><i class="fa fa-address-card fa-lg"></i>Quản lý tài khoản</a>
+            <a href="admin.jsp"><i class="fa fa-address-card fa-lg"></i>Quản lý tài khoản</a>
             <a href="#"><i class="fa fa-group fa-lg"></i>Quản lý manager</a>
             <a href="#"><i class="fa fa-cart-plus fa-lg"></i>Quản lý loại sản phẩm</a>
         </div>
         
         <div class="main">
-            
-            
+            <form action="MainController" method="POST">
+                <input type="text" name="search" required="" value="<%= search%>" placeholder="Tìm kiếm tài khoản">
+                Quyền
+                <select name="roleID">
+                    <option value="%" selected hidden>Chọn một quyền</option>
+                    <option value="AD">Người quản trị</option>
+                    <option value="MN">Người quản lý</option>
+                    <option value="EM">Nhân viên</option>
+                    <option value="CM">Khách hàng</option>
+                </select>
+                Trạng thái
+                <select name="status">
+                    <option value="true">Active</option>
+                    <option value="false">Inactive</option>
+                </select>
+                <input type="submit" name="action" value="Search" class="btn-outline-dark">
+            </form>   
             <%
             List<UserDTO> listUser = (List<UserDTO>) request.getAttribute("LIST_USER");
+            if(search == "") listUser = dao.getAllUsers();
             if (listUser != null) {
                 if (listUser.size() > 0) {
             %>      
@@ -58,12 +70,12 @@
                 <tr>
                     <td style="font-weight: bold"><%= user.getUserID()%></td>
                     <td><%= user.getFullName()%></td>
-                    <td><%= user.getPhone()%>></td>
+                    <td><%= user.getPhone()%></td>
                     <td><%= user.getRoleID()%></td>
                     <td>
                         <select name="status">
-                            <option value="true" <% if(user.isStatus()) {%> selected <% }%>>true</option>
-                            <option value="false" <% if(!user.isStatus()) {%> selected <% }%>>false</option>
+                            <option value="true" <% if(user.isStatus()) {%> selected <% }%>>Active</option>
+                            <option value="false" <% if(!user.isStatus()) {%> selected <% }%>>Inactive</option>
                         </select>
                     </td>
                 </tr>

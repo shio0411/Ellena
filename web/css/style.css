@@ -63,7 +63,7 @@ body {
 }
 
 .main {
-  margin-left: 18%; /* Same as the width of the sidenav */
+    margin-left: 18%; /* Same as the width of the sidenav */
 }
 
 .fa{
@@ -83,6 +83,14 @@ table tr{
 td{
     height:40px;
     width: 120px;
+}
+
+form{
+    margin: 3% 5%;
+}
+
+form input, form select{
+    margin-right: 4%;
 }
 
 h1,

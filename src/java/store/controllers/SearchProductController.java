@@ -18,8 +18,8 @@ import store.user.UserDTO;
  *
  * @author vankh
  */
-@WebServlet(name = "SearchController", urlPatterns = {"/SearchController"})
-public class SearchController extends HttpServlet {
+@WebServlet(name = "SearchProductController", urlPatterns = {"/SearchProductController"})
+public class SearchProductController extends HttpServlet {
 
     private static final String ERROR = "admin.jsp";
     private static final String SUCCESS = "admin.jsp";
@@ -30,8 +30,10 @@ public class SearchController extends HttpServlet {
         String url = ERROR;
         try {
             String search = request.getParameter("search");
+            String roleID = request.getParameter("roleID");
+            String status = request.getParameter("status");
             UserDAO dao = new UserDAO();
-            List<UserDTO> listUser = dao.getListUsers(search);
+            List<UserDTO> listUser = dao.getListUsers(search, roleID, status);
             if (listUser.size() > 0) {
                 request.setAttribute("LIST_USER", listUser);
                 url = SUCCESS;
