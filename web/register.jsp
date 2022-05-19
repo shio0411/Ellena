@@ -43,8 +43,23 @@
 
                                             <div class="form-outline">
                                                 <label class="form-label" for="email">Email</label>
-                                                <input type="email" name="userID" id="firstName" class="form-control form-control-lg" />
+                                                <input type="email" name="userID" id="firstName" required="" class="form-control form-control-lg" />
+                                                <p style="color: red">${requestScope.USER_ERROR.userID}</p>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12 mb-4">
+
+                                            <div class="form-outline">
+                                                <label class="form-label" for="fulName">Họ và tên</label>
+                                                <input type="text" name="fullName" id="firstName" required="" class="form-control form-control-lg" />
                                                 
+
                                             </div>
 
                                         </div>
@@ -55,16 +70,16 @@
 
                                             <div class="form-outline">
                                                 <label class="form-label" for="password">Mật khẩu</label>
-                                                <input type="password" name="password" id="password" class="form-control form-control-lg" />
-                                                
+                                                <input type="password" name="password" required="" id="password" class="form-control form-control-lg" />
+
                                             </div>
                                         </div>
                                         <div class="col-md-6 mb-4">
 
                                             <div class="form-outline">
                                                 <label class="form-label" for="confirm">Xác nhận mật khẩu</label>
-                                                <input type="password" name="confirm" id="confirm" class="form-control form-control-lg" />
-                                                
+                                                <input type="password" name="confirm" required="" id="confirm" class="form-control form-control-lg" />
+
                                             </div>
                                         </div>
                                     </div>
@@ -73,8 +88,8 @@
 
                                             <div class="form-outline datepicker w-100">
                                                 <label for="birthdayDate" class="form-label">Sinh nhật</label>
-                                                <input type="date" class="form-control form-control-lg" id="birthdayDate" />
-                                                
+                                                <input type="date" name="birthday" required="" class="form-control form-control-lg" id="birthdayDate" />
+
                                             </div>
 
                                         </div>
@@ -83,7 +98,7 @@
                                             <h6 class="mb-2 pb-1">Giới tính: </h6>
 
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="sex" id="femaleGender"
+                                                <input class="form-check-input" type="radio" required="" name="sex" id="femaleGender"
                                                        value="False" />
                                                 <label class="form-check-label" for="femaleGender">Nữ</label>
                                             </div>
@@ -105,24 +120,24 @@
                                             <div class="form-outline">
                                                 <label class="form-label" for="address">Địa chỉ</label>
                                                 <input type="text" name="address" id="address" class="form-control form-control-lg" />
-                                                
+
                                             </div>
 
                                         </div>
                                         <div class="col-md-6 mb-4 pb-2">
 
                                             <div class="form-outline">
-                                                <label class="form-label" for="phoneNumber">Phone Number</label>
-                                                <input type="tel" id="phoneNumber" class="form-control form-control-lg" />
-                                                
+                                                <label class="form-label" required="" for="phoneNumber">Phone Number</label>
+                                                <input type="tel" id="phoneNumber" name="phone" class="form-control form-control-lg" />
+
                                             </div>
 
                                         </div>
                                     </div>
 
 
-                                    <div class="mt-4 pt-2">
-                                        <input class="primary-btn"  name="action" type="submit" value="Register" />
+                                    <div>
+                                        <input class="primary-btn" type="submit" name="action" value="Register" />
                                     </div>
 
                                 </form>
