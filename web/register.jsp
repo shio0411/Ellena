@@ -73,7 +73,7 @@
 
                                             <div class="form-outline datepicker w-100">
                                                 <label for="birthdayDate" class="form-label">Sinh nhật</label>
-                                                <input type="text" class="form-control form-control-lg" id="birthdayDate" />
+                                                <input type="date" class="form-control form-control-lg" id="birthdayDate" />
                                                 
                                             </div>
 
@@ -133,48 +133,6 @@
             </div>
         </section>
 
-
-        <div class="text-center mb-5">
-            <h3 class="text-uppercase">Welcome to <strong>HAPPYVEGE</strong></h3>
-        </div>
-        <div>
-            <div class="col-lg-4 mt-5 cart-wrap ftco-animate">
-                <div class="cart-total mb-3">
-                    <h2>Thông tin của bạn</h2>
-                    <form action="MainController" class="info" method="POST">
-                        <div class="form-group">
-                            <p><label for="userID">Email*</label>
-                                <input type="text" name="userID" required="" class="form-control text-left px-3"></p>
-                                ${requestScope.USER_ERROR.userID}
-                            <p><label for="fullName">Full Name*</label>
-                                <input type="text" name="fullName" required="" class="form-control text-left px-3"></p>
-                                ${requestScope.USER_ERROR.fullName}
-                            <p><label for="password">Password*</label>
-                                <input type="password" name="password" required="" class="form-control text-left px-3"></p>
-                            <p><label for="confirm">Confirm*</label>
-                                <input type="password" name="confirm" required="" class="form-control text-left px-3"></p>
-                                ${requestScope.USER_ERROR.confirm}
-                            <p>
-                                <label for="sex">Giới tính*</label>
-                                </br>
-                                <input type="radio" name="sex" value="True">
-                                <label for="Male">Nam</label>
-                                <input type="radio" name="sex" value="False">
-                                <label for="Female">Nữ</label>
-                            </p>
-                            <p><label for="address">Address</label>
-                                <input type="text" name="address" class="form-control text-left px-3"></p>
-                            <p><label for="birthday">Birthday*</label>
-                                <input type="date" name="birthday" required="" class="form-control text-left px-3"></p>
-                            <p><label for="phone">Phone*</label>
-                                <input type="text" name="phone" required="" class="form-control text-left px-3"></p>
-
-                            <input type="submit" name="action" value="Register">
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
     </body>
 
     <script src="js/jquery-3.3.1.min.js"></script>
