@@ -33,20 +33,20 @@
 
 html,
 body {
-    height: 100%;
-    font-family: "Montserrat", sans-serif;
-    -webkit-font-smoothing: antialiased;
+	height: 100%;
+	font-family: "Montserrat", sans-serif;
+	-webkit-font-smoothing: antialiased;
 }
 .sidenav {
-    height: 100%;
-    width: 18%;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    background-color: #fbe2d6;
-    overflow-x: hidden;
-    padding-top: 20px;
+  height: 100%;
+  width: 18%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #fbe2d6;
+  overflow-x: hidden;
+  padding-top: 20px;
 }
 
 .sidenav a {
