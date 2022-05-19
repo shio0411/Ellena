@@ -70,7 +70,7 @@ public class UserDTO {
         this.password = password;
     }
 
-    public boolean isSex() {
+    public boolean getSex() {
         return sex;
     }
 

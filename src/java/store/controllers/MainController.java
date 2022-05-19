@@ -19,7 +19,9 @@ public class MainController extends HttpServlet {
     
     private static final String ERROR = "error.jsp";
     private static final String LOGIN = "Login";
-    private static final String LOGIN_CONTROLLER = "LoginController";
+    private static final String LOGIN_CONTROLLER = "Login";
+    private static final String REGISTER = "Register";
+    private static final String REGISTER_CONTROLLER = "Register";
     private static final String LOGIN_GOOGLE = "LoginGoogle";
     private static final String LOGIN_GOOGLE_CONTROLLER = "LoginGoogleController";
     private static final String SEARCH = "Search";
@@ -66,6 +68,9 @@ public class MainController extends HttpServlet {
             if (null != action) switch (action) {
                 case LOGIN:
                     url = LOGIN_CONTROLLER;
+                    break;
+                case REGISTER:
+                    url = REGISTER_CONTROLLER;
                     break;
                 case LOGIN_GOOGLE:
                     url = LOGIN_GOOGLE_CONTROLLER;
