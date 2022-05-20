@@ -25,7 +25,6 @@ public class UserDAO {
     private static final String INSERT = "INSERT tblUsers(userID, fullName, password, sex, roleID, address, birthday, phone, status) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String SEARCH_USER = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID LIKE ? AND roleID LIKE ? AND status=?";
     private static final String SEARCH_USER_ALL = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers";
-    private static final String GET_USER_BY_ID = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID LIKE ?";
     private static final String SEARCH_MANAGER = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID LIKE ? AND roleID LIKE 'MN' AND status=?";
     private static final String SEARCH_MANAGER_ALL = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE roleID LIKE 'MN'";
 
@@ -103,7 +102,6 @@ public class UserDAO {
         return check;
     }
     
-    //sau khi dang ky, them user vao database
     public boolean addUser(UserDTO user) throws SQLException {
         boolean check = false;
         Connection conn = null;
@@ -112,7 +110,7 @@ public class UserDAO {
             conn = DBUtils.getConnection();
             ptm = conn.prepareStatement(INSERT);
             String id = user.getUserID();
-            String name = "N" + user.getFullName();
+            String name = user.getFullName();
             String password = user.getPassword();
             boolean sex = user.getSex();
             String roleID = user.getRoleID();

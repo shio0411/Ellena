@@ -26,6 +26,8 @@ public class MainController extends HttpServlet {
     private static final String LOGIN_GOOGLE_CONTROLLER = "LoginGoogleController";
     private static final String SEARCH_ACCOUNT = "SearchAccount";
     private static final String SEARCH_ACCOUNT_CONTROLLER = "SearchAccountController";
+    private static final String ADD_ACCOUNT = "Create an account";
+    private static final String ADD_ACCOUNT_CONTROLLER = "AddAccountController";
     private static final String SEARCH_MANAGER = "SearchManager";
     private static final String SEARCH_MANAGER_CONTROLLER = "SearchManagerController";
     private static final String REMOVE = "Remove";
@@ -52,17 +54,10 @@ public class MainController extends HttpServlet {
     private static final String CHECKOUT_CONTROLLER = "CheckoutController";
     private static final String SUBSCRIBE = "Subscribe";
     private static final String SUBSCRIBE_CONTROLLER = "SubscribeController";
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
@@ -82,6 +77,9 @@ public class MainController extends HttpServlet {
                     break;
                 case SEARCH_MANAGER:
                     url = SEARCH_MANAGER_CONTROLLER;
+                    break;
+                case ADD_ACCOUNT:
+                    url = ADD_ACCOUNT_CONTROLLER;
                 break;
                 case VIEW_USER:
                     url = VIEW_USER_CONTROLLER;

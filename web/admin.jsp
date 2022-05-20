@@ -6,7 +6,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Administrator Page</title>
+        <title>Trang chủ | Administrator</title>
         <jsp:include page="meta.jsp" flush="true"/>
     </head>
     <body>
@@ -34,7 +34,7 @@
                 Quyền
                 <select name="roleID">
                     <option value="%" selected hidden>Chọn một quyền</option>
-                    <option value="AD">Người quản trị</option>
+                    <option value="AD">Quản trị viên</option>
                     <option value="MN">Người quản lý</option>
                     <option value="EM">Nhân viên</option>
                     <option value="CM">Khách hàng</option>
@@ -46,7 +46,7 @@
                 </select>
                 <button type="submit" name="action" value="SearchAccount" class="btn-outline-dark" style="width: 7%; padding: 0.5% 2%;"><i class="fa fa-search fa-lg"></i></button>
             </form>   
-
+            <a href="add-account.jsp">Tạo tài khoản mới</a>
             <%
                 List<UserDTO> listUser = (List<UserDTO>) request.getAttribute("LIST_USER");
                 if (listUser != null) {

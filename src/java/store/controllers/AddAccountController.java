@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package store.controllers;
 
 import java.io.IOException;
@@ -17,16 +12,13 @@ import store.user.UserDAO;
 import store.user.UserDTO;
 import store.user.UserError;
 
-/**
- *
- * @author giama
- */
-@WebServlet(name = "RegisterController", urlPatterns = {"/Register"})
-public class RegisterController extends HttpServlet {
 
-    private static final String ERROR = "register.jsp";
-    private static final String SUCCESS = "login.jsp";
+@WebServlet(name = "AddAccountController", urlPatterns = {"/AddAccountController"})
+public class AddAccountController extends HttpServlet {
 
+    private static final String ERROR = "add-account.jsp";
+    private static final String SUCCESS = "ShowAccountController";
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -34,7 +26,7 @@ public class RegisterController extends HttpServlet {
         try {
             String userID = request.getParameter("userID");
             String fullName = request.getParameter("fullName");
-            String roleID = "CM";
+            String roleID = request.getParameter("roleID");
             String password = request.getParameter("password");
             String confirm = request.getParameter("confirm");
             boolean sex = Boolean.parseBoolean("sex");
@@ -48,11 +40,11 @@ public class RegisterController extends HttpServlet {
             boolean checkDuplicate = dao.checkDuplicate(userID);
             if (checkDuplicate) {
                 check = false;
-                userError.setUserID("Email đã được dùng!");
+                userError.setUserID("Email's already been used!");
             }
             if (!password.equals(confirm)) {
                 check = false;
-                userError.setConfirm("Password và xác nhận password khác nhau!");
+                userError.setConfirm("Password and confirm pass are different!");
             }
 
             if (check) {
@@ -67,7 +59,7 @@ public class RegisterController extends HttpServlet {
 
             }
         } catch (Exception e) {
-            log("Error at RegisterController: " + e.toString());
+            log("Error at AddAccountController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
