@@ -33,7 +33,11 @@ public class MainController extends HttpServlet {
     private static final String REMOVE = "Remove";
     private static final String REMOVE_CONTROLLER = "RemoveController";
     private static final String UPDATE_ACCOUNT = "UpdateAccount";
-    private static final String UPDATE_ACCOUNT_PAGE = "edit-account.jsp";
+    private static final String UPDATE_ACCOUNT_PAGE = "UpdateAccountController";
+    private static final String DEACTIVATE_ACCOUNT = "DeactivateAccount";
+    private static final String DEACTIVATE_ACCOUNT_CONTROLLER = "DeactivateAccountController";
+    private static final String ACTIVATE_ACCOUNT = "ActivateAccount";
+    private static final String ACTIVATE_ACCOUNT_CONTROLLER = "ActivateAccountController";
     private static final String LOGOUT = "Logout";
     private static final String LOGOUT_CONTROLLER = "LogoutController";
     private static final String INSERT = "Insert";
@@ -89,6 +93,12 @@ public class MainController extends HttpServlet {
                     break;
                 case UPDATE_ACCOUNT:
                     url = UPDATE_ACCOUNT_PAGE;
+                    break;
+                case DEACTIVATE_ACCOUNT:
+                    url = DEACTIVATE_ACCOUNT_CONTROLLER;
+                    break;
+                case ACTIVATE_ACCOUNT:
+                    url = ACTIVATE_ACCOUNT_CONTROLLER;
                     break;
                 case LOGOUT:
                     url = LOGOUT_CONTROLLER;

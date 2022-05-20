@@ -27,6 +27,9 @@ public class UserDAO {
     private static final String SEARCH_USER_ALL = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers";
     private static final String SEARCH_MANAGER = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID LIKE ? AND roleID LIKE 'MN' AND status=?";
     private static final String SEARCH_MANAGER_ALL = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE roleID LIKE 'MN'";
+    private static final String UPDATE_ACCOUNT = "UPDATE tblUsers SET fullName=?, sex=?, roleID=?, address=?, birthday=?, phone=? WHERE userID=?";
+    private static final String ACTIVATE_ACCOUNT = "UPDATE tblUsers SET status=1 WHERE userID=?";
+    private static final String DEACTIVATE_ACCOUNT = "UPDATE tblUsers SET status=0 WHERE userID=?";
 
     public UserDTO checkLogin(String userID, String password) throws SQLException {
         UserDTO user = null;
@@ -293,5 +296,79 @@ public class UserDAO {
             }
         }
         return list;
+    }
+    
+    public boolean updateAccount (UserDTO user) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DBUtils.getConnection();
+            ptm = conn.prepareStatement(UPDATE_ACCOUNT);
+            ptm.setString(1, user.getFullName());
+            ptm.setBoolean(2, user.getSex());
+            ptm.setString(3, user.getRoleID());
+            ptm.setString(4, user.getAddress());
+            ptm.setDate(5, new java.sql.Date((user.getBirthday()).getTime()));
+            ptm.setString(6, user.getPhone());
+            ptm.setString(7, user.getUserID());
+            
+            check = ptm.executeUpdate()>0?true: false;            
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+    
+    public boolean activateAccount (String userID) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DBUtils.getConnection();
+            ptm = conn.prepareStatement(ACTIVATE_ACCOUNT);
+            ptm.setString(1, userID);
+            
+            check = ptm.executeUpdate()>0?true: false;            
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+    
+    public boolean deactivateAccount (String userID) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DBUtils.getConnection();
+            ptm = conn.prepareStatement(DEACTIVATE_ACCOUNT);
+            ptm.setString(1, userID);            
+            check = ptm.executeUpdate()>0?true: false;            
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
     }
 }

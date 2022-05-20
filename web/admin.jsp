@@ -8,6 +8,9 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Trang chủ | Administrator</title>
         <jsp:include page="meta.jsp" flush="true"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     </head>
     <body>
         <%
@@ -20,8 +23,30 @@
                 response.sendRedirect("login.jsp");
                 return;
             }
-
+            String message = (String) request.getAttribute("MESSAGE");
+            if (message != null) {
         %>
+
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Thông báo</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                    </div>
+                    <div class="modal-body">
+                        <p><%=message%></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    </div>
+                </div>
+
+            </div>
+        </div> <%}%>
         <div class="sidenav">
             <a href="admin.jsp" style="color: #873e23; font-weight: bold;"><i class="fa fa-address-card fa-lg"></i>Quản lý tài khoản</a>
             <a href="ShowManagerController"><i class="fa fa-group fa-lg"></i>Quản lý manager</a>
@@ -62,9 +87,9 @@
                     <th>Chỉnh sửa</th>
                 </tr>
                 <%
+                    int id = 1;
                     for (UserDTO user : listUser) {
                 %>
-                <form action="MainController" method="POST">
                 <tr>
                     <td style="font-weight: bold"><%= user.getUserID()%></td>
                     <td><%= user.getFullName()%></td>
@@ -74,24 +99,145 @@
                         <%
                             if (user.isStatus()) {
                         %>
-                                Active
-                        <%} else {
-                        %>
-                                Inactive
-                        <%
-                            }
-                        %>
-                    </td>
-                    <td>
-                        <button type="submit" name="action" value="UpdateAccount">Chỉnh sửa</button>
-                    </td>
+                <a href="MainController?action=DeactivateAccount&userID=<%=user.getUserID()%>">Vô hiệu hoá</a>
+                    <%} else {
+                    %>
+                <a href="MainController?action=ActivateAccount&userID=<%=user.getUserID()%>">Kích hoạt</a>
+                    <%
+                        }
+                    %>
+                </td>
+                <td>
+                    <div class="modal fade" id="myModal<%=id%>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" id="<%=id%>" >
+                            <div class="modal-content" >
+                                <div class="modal-header">
+                                    <h4 class="modal-title" id="myModalLabel">Chỉnh sửa tài khoản</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+                                </div>
+                                <div class="modal-body">
+                                    <form action="MainController">
+                                        <div class="row">
+                                            <div class="col-md-12 mb-4">
+
+                                                <div class="form-outline">
+                                                    <label class="form-label" for="email">Email</label>
+                                                    <input type="email" name="userID" value="<%= user.getUserID()%>" readonly="" id="userID" class="form-control form-control-lg" />
+                                                    <p style="color: red">${requestScope.USER_ERROR.userID}</p>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6 mb-4 pb-2">
+
+                                                <div class="form-outline">
+                                                    <label class="form-label" for="fullName">Họ và tên</label>
+                                                    <input type="text" name="fullName" value="<%= user.getFullName()%>" id="fullName" class="form-control form-control-lg" />
+
+                                                </div>
+
+                                            </div>
+                                            <div class="col-md-6 mb-4 pb-2">
+
+                                                <div class="form-outline">
+                                                    <label class="form-label" required="" for="roleID">Quyền</label>
+                                                    <% if (user.getRoleID().equals("CM")) {%><input type="text" name="roleID" readonly="" value="<%=user.getRoleID()%>" class="form-control form-control-lg"><%} else {%>
+                                                    <select class="form-control form-control-lg" <%if (user.getRoleID().equals("AD")) {%> style="background: #eee; /*Simular campo inativo - Sugestão @GabrielRodrigues*/
+                                                            pointer-events: none;
+                                                            touch-action: none;" tabindex="-1" aria-disabled="true"<%}%> name="roleID">
+                                                        <option value="AD" <%if (user.getRoleID().equals("AD")) {%>selected <%}%>>AD</option>
+                                                        <option value="MN" <%if (user.getRoleID().equals("MN")) {%>selected <%}%>>MN</option>  
+                                                        <option value="EM" <%if (user.getRoleID().equals("EM")) {%>selected <%}%>>EM</option>
+                                                    </select> 
+                                                    <%}%>
+                                                </div>
+                                            </div>        
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-4 d-flex align-items-center">
+
+                                                <div class="form-outline datepicker w-100">
+                                                    <label for="birthdayDate" class="form-label">Ngày sinh</label>
+                                                    <input type="date" name="birthday" value="<%= user.getBirthday()%>" class="form-control form-control-lg" id="birthdayDate" />
+
+                                                </div>
+
+                                            </div>
+                                            <div class="col-md-6 mb-4">
+
+                                                <h6 class="mb-2 pb-1">Giới tính: </h6>
+
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="sex" id="femaleGender"
+                                                           value="False" <% if (user.getSex() == false) {%> checked <% } %>/>
+                                                    <label class="form-check-label" for="femaleGender">Nữ</label>
+                                                </div>
+
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="sex" id="maleGender"
+                                                           value="True" <% if (user.getSex() == true) {%> checked <% }%>/>
+                                                    <label class="form-check-label" for="maleGender">Nam</label>
+                                                </div>
+
+
+
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6 mb-4 pb-2">
+
+                                                <div class="form-outline">
+                                                    <label class="form-label" for="address">Địa chỉ</label>
+                                                    <input type="text" name="address" value="<%=user.getAddress()%>" id="address" class="form-control form-control-lg" />
+                                                </div>
+
+                                            </div>
+                                            <div class="col-md-6 mb-4 pb-2">
+
+                                                <div class="form-outline">
+                                                    <label class="form-label" required="" for="phoneNumber">Số điện thoại</label>
+                                                    <input type="tel" id="phoneNumber" value="<%=user.getPhone()%>" name="phone" class="form-control form-control-lg" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-default" type="submit" name="action" value="UpdateAccount">Cập nhật</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                                    <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+                                </div>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" data-toggle="modal" data-target="#myModal<%=id++%>">Chỉnh sửa</button>
+
+                    <!-- Modal -->
+
+
+                </td>
+
                 </tr>
-                </form>
-                <% }
-                    }
-                }%>
+                <%         }
+                        }
+                    }%>
             </table>
         </div>
-
+        <script>
+            $(document).ready(function () {
+                $("#myModal").modal();
+            });
+        </script>
     </body>
 </html>
