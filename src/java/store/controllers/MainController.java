@@ -24,12 +24,14 @@ public class MainController extends HttpServlet {
     private static final String REGISTER_CONTROLLER = "Register";
     private static final String LOGIN_GOOGLE = "LoginGoogle";
     private static final String LOGIN_GOOGLE_CONTROLLER = "LoginGoogleController";
-    private static final String SEARCH = "Search";
-    private static final String SEARCH_CONTROLLER = "SearchProductController";
+    private static final String SEARCH_ACCOUNT = "SearchAccount";
+    private static final String SEARCH_ACCOUNT_CONTROLLER = "SearchAccountController";
+    private static final String SEARCH_MANAGER = "SearchManager";
+    private static final String SEARCH_MANAGER_CONTROLLER = "SearchManagerController";
     private static final String REMOVE = "Remove";
     private static final String REMOVE_CONTROLLER = "RemoveController";
-    private static final String UPDATE = "Update";
-    private static final String UPDATE_CONTROLLER = "UpdateController";
+    private static final String UPDATE_ACCOUNT = "UpdateAccount";
+    private static final String UPDATE_ACCOUNT_PAGE = "edit-account.jsp";
     private static final String LOGOUT = "Logout";
     private static final String LOGOUT_CONTROLLER = "LogoutController";
     private static final String INSERT = "Insert";
@@ -75,17 +77,20 @@ public class MainController extends HttpServlet {
                 case LOGIN_GOOGLE:
                     url = LOGIN_GOOGLE_CONTROLLER;
                     break;
-                case SEARCH:
-                    url = SEARCH_CONTROLLER;
+                case SEARCH_ACCOUNT:
+                    url = SEARCH_ACCOUNT_CONTROLLER;
                     break;
+                case SEARCH_MANAGER:
+                    url = SEARCH_MANAGER_CONTROLLER;
+                break;
                 case VIEW_USER:
                     url = VIEW_USER_CONTROLLER;
                     break;
                 case INSERT:
                     url = INSERT_CONTROLLER;
                     break;
-                case UPDATE:
-                    url = UPDATE_CONTROLLER;
+                case UPDATE_ACCOUNT:
+                    url = UPDATE_ACCOUNT_PAGE;
                     break;
                 case LOGOUT:
                     url = LOGOUT_CONTROLLER;

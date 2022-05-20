@@ -18,8 +18,8 @@ import store.user.UserDTO;
  *
  * @author vankh
  */
-@WebServlet(name = "SearchProductController", urlPatterns = {"/SearchProductController"})
-public class SearchProductController extends HttpServlet {
+@WebServlet(name = "SearchAccountController", urlPatterns = {"/SearchAccountController"})
+public class SearchAccountController extends HttpServlet {
 
     private static final String ERROR = "admin.jsp";
     private static final String SUCCESS = "admin.jsp";
@@ -39,7 +39,7 @@ public class SearchProductController extends HttpServlet {
                 url = SUCCESS;
             }
         } catch (Exception e) {
-            log("Error at SearchController: " + e.toString());
+            log("Error at SearchAccountController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

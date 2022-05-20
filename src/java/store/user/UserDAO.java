@@ -22,12 +22,12 @@ public class UserDAO {
 
     private static final String LOGIN = "SELECT fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID=? AND password=?";
     private static final String CHECK_DUPLICATE = "SELECT fullName FROM tblUsers WHERE userID=?";
-    private static final String SEARCH_PRODUCT = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID LIKE ? AND roleID LIKE ? AND status=?";
-    private static final String SEARCH_PRODUCT_ALL = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers";
     private static final String INSERT = "INSERT tblUsers(userID, fullName, password, sex, roleID, address, birthday, phone, status) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String SEARCH_USER = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID LIKE ? AND roleID LIKE ? AND status=?";
     private static final String SEARCH_USER_ALL = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers";
-
+    private static final String GET_USER_BY_ID = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID LIKE ?";
+    private static final String SEARCH_MANAGER = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID LIKE ? AND roleID LIKE 'MN' AND status=?";
+    private static final String SEARCH_MANAGER_ALL = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE roleID LIKE 'MN'";
 
     public UserDTO checkLogin(String userID, String password) throws SQLException {
         UserDTO user = null;
@@ -103,7 +103,7 @@ public class UserDAO {
         return check;
     }
     
-
+    //sau khi dang ky, them user vao database
     public boolean addUser(UserDTO user) throws SQLException {
         boolean check = false;
         Connection conn = null;
@@ -152,7 +152,6 @@ public class UserDAO {
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                ptm = conn.prepareStatement(SEARCH_PRODUCT);
                 ptm = conn.prepareStatement(SEARCH_USER);
                 ptm.setString(1, "%" + search + "%");
                 ptm.setString(2, roleID);
@@ -193,7 +192,7 @@ public class UserDAO {
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                ptm = conn.prepareStatement(SEARCH_PRODUCT_ALL);
+                ptm = conn.prepareStatement(SEARCH_USER_ALL);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
                     String userID = rs.getString("userID");
@@ -221,5 +220,80 @@ public class UserDAO {
         }
         return list;
     }
-
+    
+    public List<UserDTO> getListManagers(String search, String Status) throws SQLException {
+        List<UserDTO> list = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(SEARCH_MANAGER);
+                ptm.setString(1, "%" + search + "%");
+                ptm.setString(2, Status);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    String userID = rs.getString("userID");
+                    String fullName = rs.getString("fullName");
+                    boolean sex = rs.getBoolean("sex");
+                    String roleID = rs.getString("roleID");
+                    String address = rs.getString("address");
+                    Date birthday = rs.getDate("birthday");
+                    String phone = rs.getString("phone");
+                    boolean status = rs.getBoolean("status");
+                    list.add(new UserDTO(userID, fullName, "*******", sex, roleID, address, birthday, phone, status));
+                }
+            }
+        } catch (Exception e) {
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return list;
+    }
+    
+    public List<UserDTO> getAllManagers() throws SQLException {
+        List<UserDTO> list = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(SEARCH_MANAGER_ALL);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    String userID = rs.getString("userID");
+                    String fullName = rs.getString("fullName");
+                    boolean sex = rs.getBoolean("sex");
+                    String roleID = rs.getString("roleID");
+                    String address = rs.getString("address");
+                    Date birthday = rs.getDate("birthday");
+                    String phone = rs.getString("phone");
+                    boolean status = rs.getBoolean("status");
+                    list.add(new UserDTO(userID, fullName, "*******", sex, roleID, address, birthday, phone, status));
+                }
+            }
+        } catch (Exception e) {
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return list;
+    }
 }
