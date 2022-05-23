@@ -6,67 +6,45 @@
 package store.controllers;
 
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import store.user.UserDAO;
-import store.user.UserDTO;
+import store.shopping.CategoryDAO;
+import store.shopping.CategoryDTO;
 
-public class LoginController extends HttpServlet {
-
-    private static final String ERROR = "login.jsp";
-    private static final String ADMIN_PAGE = "ShowAccountController";
-    private static final String CUSTOMER_PAGE = "home.jsp";
-    private static final String MANAGER_PAGE = "manager.jsp";
-    private static final String EMPLOYEE_PAGE = "employee.jsp";
-    private static final String CM = "CM";
-    private static final String AD = "AD";
-    private static final String MN = "MN";
-    private static final String EM = "EM";
-
+/**
+ *
+ * @author giama
+ */
+public class ViewHomeController extends HttpServlet {
+    private static final String ERROR = "error.jsp";
+    private static final String SUCCESS = "home.jsp";
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
-            String userID = request.getParameter("userID");
-            String password = request.getParameter("password");
-            UserDAO dao = new UserDAO();
-            UserDTO user = dao.checkLogin(userID, password);
-            HttpSession session = request.getSession();          
-            if (null != user) {
-                session.setAttribute("LOGIN_USER", user);               
-                String roleID = user.getRoleID();
-                if (!user.isStatus()) {
-                    request.setAttribute("ERROR", "Tài khoản của bạn đang bị vô hiệu hoá!");
-                } else {
-                    switch (roleID) {
-                        case AD:
-                            url = ADMIN_PAGE;
-                            break;
-                        case CM:
-                            url = CUSTOMER_PAGE;
-                            break;
-                        case MN:
-                            url = MANAGER_PAGE;
-                            break;
-                        case EM:
-                            url = EMPLOYEE_PAGE;
-                            break;
-                        default:
-                            request.setAttribute("ERROR", "Quyền của bạn không được hỗ trợ!");
-                            break;
-                    }
-                }
-
-            } else {
-                request.setAttribute("ERROR", "Bạn đã nhập sai ID hoặc mật khẩu!");
+            HttpSession session = request.getSession();
+            if (session != null) {
+                CategoryDAO ctdao = new CategoryDAO();
+                List<CategoryDTO> listCategory = ctdao.getListCategory("", "true");
+                session.setAttribute("LIST_CATEGORY", listCategory);
+                url = SUCCESS;
             }
-
         } catch (Exception e) {
-            log("Error at LoginController: " + e.toString());
+            log("Error at ViewHomeController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
