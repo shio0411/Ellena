@@ -6,53 +6,45 @@
 package store.controllers;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.List;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import store.user.UserDAO;
-import store.user.UserDTO;
+import javax.servlet.http.HttpSession;
+import store.shopping.CategoryDAO;
+import store.shopping.CategoryDTO;
 
 /**
  *
  * @author giama
  */
-@WebServlet(name = "UpdateAccountController", urlPatterns = {"/UpdateAccountController"})
-public class UpdateAccountController extends HttpServlet {
-
-    private static final String ERROR = "ShowAccountController";
-    private static final String SUCCESS = "ShowAccountController";
-
+public class ViewHomeController extends HttpServlet {
+    private static final String ERROR = "error.jsp";
+    private static final String SUCCESS = "home.jsp";
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
-            String userID = request.getParameter("userID");
-            String fullName = request.getParameter("fullName");
-            String password = "*********";
-            String roleID = request.getParameter("roleID");
-            boolean sex = Boolean.parseBoolean(request.getParameter("sex"));
-            String address = request.getParameter("address");
-            Date birthday = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("birthday"));
-            String phone = request.getParameter("phone");
-            boolean check = true;
-            UserDAO dao = new UserDAO();
-            if (check) {
-                UserDTO user = new UserDTO(userID, fullName, password, sex, roleID, address, birthday, phone, true);
-                boolean checkUpdate = dao.updateAccount(user);
-                if (checkUpdate) {
-                    url = SUCCESS;
-                    request.setAttribute("MESSAGE", "Cập nhật thành công!");
-                }
-            } else {
-                request.setAttribute("MESSAGE", "Cập nhật thất bại!");
+            HttpSession session = request.getSession();
+            if (session != null) {
+                CategoryDAO dao = new CategoryDAO();
+                List<CategoryDTO> listCategory = dao.getListCategory("", "true");
+                session.setAttribute("LIST_CATEGORY", listCategory);
+                url = SUCCESS;
             }
         } catch (Exception e) {
-            log("Error at UpdateAccountController: " + e.toString());
+            log("Error at ViewHomeController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

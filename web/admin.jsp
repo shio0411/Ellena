@@ -41,7 +41,7 @@
                         <p><%=message%></p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                        <a href="ShowAccountController"><button type="button" class="btn btn-default">Đóng</button></a>
                     </div>
                 </div>
 
@@ -181,15 +181,16 @@
                                                 <h6 class="mb-2 pb-1">Giới tính: </h6>
 
                                                 <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="sex" id="femaleGender"
-                                                           value="False" <% if (user.getSex() == false) {%> checked <% } %>/>
-                                                    <label class="form-check-label" for="femaleGender">Nữ</label>
+                                                    
+                                                    <input class="form-check-input" type="radio" name="sex" id="maleGender"
+                                                           value="true" <% if (user.getSex() == true) {%> checked <% }%>/>
+                                                    <label class="form-check-label" for="maleGender">Nam</label>
                                                 </div>
 
                                                 <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="sex" id="maleGender"
-                                                           value="True" <% if (user.getSex() == true) {%> checked <% }%>/>
-                                                    <label class="form-check-label" for="maleGender">Nam</label>
+                                                    <input class="form-check-input" type="radio" name="sex" id="femaleGender"
+                                                           value="false" <% if (user.getSex() == false) {%> checked <% } %>/>
+                                                    <label class="form-check-label" for="femaleGender">Nữ</label>
                                                 </div>
 
 

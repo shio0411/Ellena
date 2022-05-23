@@ -91,13 +91,13 @@
 
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input" type="radio" required="" name="sex" id="femaleGender"
-                                                       value="False" />
+                                                       value="false" />
                                                 <label class="form-check-label" for="femaleGender">Nữ</label>
                                             </div>
 
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input" type="radio" name="sex" id="maleGender"
-                                                       value="True" />
+                                                       value="true" />
                                                 <label class="form-check-label" for="maleGender">Nam</label>
                                             </div>
 

@@ -8,6 +8,11 @@
         <servlet-name>LoginController</servlet-name>
         <servlet-class>store.controllers.LoginController</servlet-class>
     </servlet>
+    
+    <servlet>
+        <servlet-name>ViewHomeController</servlet-name>
+        <servlet-class>store.controllers.ViewHomeController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>MainController</servlet-name>
         <url-pattern>/MainController</url-pattern>
@@ -16,12 +21,17 @@
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/Login</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewHomeController</servlet-name>
+        <url-pattern>/ViewHomeController</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
         </session-timeout>
     </session-config>
     <welcome-file-list>
+        <welcome-file>ViewHomeController</welcome-file>
         <welcome-file>home.jsp</welcome-file>
     </welcome-file-list>
 </web-app>
