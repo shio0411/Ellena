@@ -23,6 +23,8 @@ public class UserDAO {
     private static final String UPDATE_ACCOUNT = "UPDATE tblUsers SET fullName=?, sex=?, roleID=?, address=?, birthday=?, phone=? WHERE userID=?";
     private static final String UPDATE_PASSWORD = "UPDATE tblUsers SET password=? WHERE userID=?";
     private static final String UPDATE_NAME = "UPDATE tblUsers SET fullName=? WHERE userID=?";
+    private static final String UPDATE_ADDRESS = "UPDATE tblUsers SET address=? WHERE userID=?";
+    private static final String UPDATE_PHONE = "UPDATE tblUsers SET phone=? WHERE userID=?";
     private static final String ACTIVATE_ACCOUNT = "UPDATE tblUsers SET status=1 WHERE userID=?";
     private static final String DEACTIVATE_ACCOUNT = "UPDATE tblUsers SET status=0 WHERE userID=?";
 
@@ -392,6 +394,54 @@ public class UserDAO {
             conn = DBUtils.getConnection();
             ptm = conn.prepareStatement(UPDATE_NAME);
             ptm.setString(1, newName);
+            ptm.setString(2, userID);
+            
+            check = ptm.executeUpdate()>0?true: false;            
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+    
+    public boolean updateAddress(String newAddress, String userID) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DBUtils.getConnection();
+            ptm = conn.prepareStatement(UPDATE_ADDRESS);
+            ptm.setString(1, newAddress);
+            ptm.setString(2, userID);
+            
+            check = ptm.executeUpdate()>0?true: false;            
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+    
+    public boolean updatePhone(String newPhone, String userID) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DBUtils.getConnection();
+            ptm = conn.prepareStatement(UPDATE_PHONE);
+            ptm.setString(1, newPhone);
             ptm.setString(2, userID);
             
             check = ptm.executeUpdate()>0?true: false;            

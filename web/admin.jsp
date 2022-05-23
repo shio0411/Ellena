@@ -55,8 +55,9 @@
         </div>
 
         <div class="main">
-            Xin chào, <a href="my-profile.jsp"><%= loginUser.getFullName()%></a>
+        
             <form action="MainController" method="POST" style="margin-left: 65%;">                
+                Xin chào, <a href="my-profile.jsp"><%= loginUser.getFullName()%></a>
                 <input type="submit" name="action" value="Logout" style="margin-left: 4%;">
             </form>
                 

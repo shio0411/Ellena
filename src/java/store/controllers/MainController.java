@@ -35,6 +35,10 @@ public class MainController extends HttpServlet {
     private static final String UPDATE_PASSWORD_PAGE = "UpdatePasswordController";
     private static final String UPDATE_NAME = "UpdateName";
     private static final String UPDATE_NAME_PAGE = "UpdateNameController";
+    private static final String UPDATE_ADDRESS = "UpdateAddress";
+    private static final String UPDATE_ADDRESS_PAGE = "UpdateAddressController";
+    private static final String UPDATE_PHONE = "UpdatePhone";
+    private static final String UPDATE_PHONE_PAGE = "UpdatePhoneController";
     private static final String DEACTIVATE_ACCOUNT = "DeactivateAccount";
     private static final String DEACTIVATE_ACCOUNT_CONTROLLER = "DeactivateAccountController";
     private static final String ACTIVATE_ACCOUNT = "ActivateAccount";
@@ -106,6 +110,12 @@ public class MainController extends HttpServlet {
                     break;
                 case UPDATE_NAME:
                     url = UPDATE_NAME_PAGE;
+                    break;
+                case UPDATE_ADDRESS:
+                    url = UPDATE_ADDRESS_PAGE;
+                    break;
+                case UPDATE_PHONE:
+                    url = UPDATE_PHONE_PAGE;
                     break;
                 case DEACTIVATE_ACCOUNT:
                     url = DEACTIVATE_ACCOUNT_CONTROLLER;
