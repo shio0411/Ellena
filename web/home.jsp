@@ -42,12 +42,12 @@
             </a></li>
         </ul>
         <div class="offcanvas__logo">
-            <a href="./index.html"><img src="img/logo.png" alt=""></a>
+            <a href="./home.jsp"><img src="img/logo.png" alt=""></a>
         </div>
         <div id="mobile-menu-wrap"></div>
         <div class="offcanvas__auth">
             <a href="MainController?action=Login">Login</a>
-            <a href="#">Register</a>
+            <a href="./register.jsp">Register</a>
         </div>
     </div>
     <!-- Offcanvas Menu End -->

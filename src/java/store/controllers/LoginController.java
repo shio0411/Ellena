@@ -6,24 +6,30 @@
 package store.controllers;
 
 import java.io.IOException;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import store.shopping.CategoryDAO;
+import store.shopping.CategoryDTO;
 import store.user.UserDAO;
 import store.user.UserDTO;
 
-
 public class LoginController extends HttpServlet {
+
     private static final String ERROR = "login.jsp";
     private static final String ADMIN_PAGE = "ShowAccountController";
     private static final String CUSTOMER_PAGE = "home.jsp";
+    private static final String MANAGER_PAGE = "manager.jsp";
+    private static final String EMPLOYEE_PAGE = "employee.jsp";
     private static final String CM = "CM";
     private static final String AD = "AD";
     private static final String MN = "MN";
     private static final String EM = "EM";
-            
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -34,11 +40,14 @@ public class LoginController extends HttpServlet {
             UserDAO dao = new UserDAO();
             UserDTO user = dao.checkLogin(userID, password);
             HttpSession session = request.getSession();
-            if (user != null) {
+            CategoryDAO ctdao = new CategoryDAO();
+            List<CategoryDTO> listCategory = ctdao.getListCategory("", "True");
+            if (null != user) {
                 session.setAttribute("LOGIN_USER", user);
+                session.setAttribute("LIST_CATEGORY", listCategory);
                 String roleID = user.getRoleID();
-                if (null == roleID) {
-                    request.setAttribute("ERROR_MESSAGE", "Your role is not supported!");
+                if (!user.isStatus()) {
+                    request.setAttribute("ERROR", "Tài khoản của bạn đang bị vô hiệu hoá!");
                 } else {
                     switch (roleID) {
                         case AD:
@@ -47,13 +56,20 @@ public class LoginController extends HttpServlet {
                         case CM:
                             url = CUSTOMER_PAGE;
                             break;
+                        case MN:
+                            url = MANAGER_PAGE;
+                            break;
+                        case EM:
+                            url = EMPLOYEE_PAGE;
+                            break;
                         default:
-                            request.setAttribute("ERROR_MESSAGE", "Your role is not supported!");
+                            request.setAttribute("ERROR", "Quyền của bạn không được hỗ trợ!");
                             break;
                     }
                 }
+
             } else {
-                request.setAttribute("ERROR", "Incorrect ID or password!");
+                request.setAttribute("ERROR", "Bạn đã nhập sai ID hoặc mật khẩu!");
             }
 
         } catch (Exception e) {
