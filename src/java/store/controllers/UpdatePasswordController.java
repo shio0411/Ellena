@@ -56,6 +56,7 @@ public class UpdatePasswordController extends HttpServlet {
                 }
 
             } else {
+                request.setAttribute("USER_ERROR", userError);
                 request.setAttribute("MESSAGE", "Cập nhật thất bại!");
 
             }

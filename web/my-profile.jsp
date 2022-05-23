@@ -1,3 +1,4 @@
+<%@page import="store.user.UserError"%>
 <%@page import="store.user.UserDTO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -46,20 +47,19 @@
                                                     <div class="form-outline">
                                                         <label class="form-label" for="newName">Tên mới</label>
                                                         <input type="text" name="newName" id="newName" maxlength="100" class="form-control form-control-lg" />
-                                                        <p style="color: red">${requestScope.USER_ERROR.password}</p>
                                                     </div>
 
                                                 </div>
 
                                             </div>
-                                            
-                                </div>
-                                <div class="modal-footer">
-                                    <button class="btn btn-default" type="submit" name="action" value="UpdateName">Cập nhật</button>
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-default" type="submit" name="action" value="UpdateName">Cập nhật</button>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                         </div>
                         <i class="fa fa-edit fa-2x" data-toggle="modal" data-target="#myModal3" style="margin-left: 12px;"></i>
                     </td>
@@ -112,13 +112,13 @@
                                                 </div>
 
                                             </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button class="btn btn-default" type="submit" name="action" value="UpdatePassword">Cập nhật</button>
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-default" type="submit" name="action" value="UpdatePassword">Cập nhật</button>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                         </div>
                         <i class="fa fa-edit fa-2x" data-toggle="modal" data-target="#myModal1" style="margin-left: 12px;"></i>
                     </td>
@@ -145,25 +145,36 @@
 
                                                     <div class="form-outline">
                                                         <label class="form-label" for="newAddress">Địa chỉ mới</label>
-                                                        <input type="text" name="newAddress" id="newAddress" class="form-control form-control-lg" />
-                                                        <p style="color: red">${requestScope.USER_ERROR.password}</p>
+                                                        <input type="text" name="newAddress" id="newAddress" class="form-control form-control-lg" />                                                    
                                                     </div>
 
                                                 </div>
 
                                             </div>
-                                            
-                                </div>
-                                <div class="modal-footer">
-                                    <button class="btn btn-default" type="submit" name="action" value="UpdateAddress">Cập nhật</button>
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-default" type="submit" name="action" value="UpdateAddress">Cập nhật</button>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                         </div>
                         <i class="fa fa-edit fa-2x" data-toggle="modal" data-target="#myModal2" style="margin-left: 12px;"></i>
                     </td>
                 </tr>
         </div>
+
+        <% UserError userError = (UserError) request.getAttribute("USER_ERROR");
+            if (userError != null) { %>
+        <script>
+
+            $(document).ready(function () {
+                $("#myModal1").modal();
+            });
+
+        </script>                                                
+        <% }%>                             
+
     </body>
 </html>
