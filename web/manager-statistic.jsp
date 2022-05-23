@@ -4,6 +4,10 @@
     Author     : Jason 2.0
 --%>
 
+<%@page import="java.util.Set"%>
+<%@page import="java.sql.Date"%>
+<%@page import="java.util.Map"%>
+<%@page import="java.util.List"%>
 <%@page import="store.user.UserDTO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -39,10 +43,44 @@
         </div>
         <div class="main">
             <h1>Thống kê</h1>
+            <%
+                Map<Date, Integer> orderStatistic = (Map<Date, Integer>) request.getAttribute("ORDER_STATISTIC");
+                if (orderStatistic != null) {
+                    if (orderStatistic.size() > 0) {
+
+            %>
+            <div class = "container-fluid">
+                <div class = "row">
+                    <table class = "table col-md-4">
+                        <thead class = "thead-dark">
+                            <tr>
+                                <th>Order Date</th>
+                                <th>Quantity</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+
+                            <%                        Set<Date> set = orderStatistic.keySet();
+                                for (Date key : set) {
+                            %>
+                            <tr>
+                                <td><%=key%></td>
+                                <td><%=orderStatistic.get(key)%></td>
+                            </tr>
+                            <%
+                                }
+                            %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <%}
+                }%>
         </div>
-        
-        
-        
-        
+
+
+
+
     </body>
 </html>
