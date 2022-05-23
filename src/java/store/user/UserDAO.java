@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package store.user;
 
 import java.sql.Connection;
@@ -14,20 +9,20 @@ import java.util.Date;
 import java.util.List;
 import store.utils.DBUtils;
 
-/**
- *
- * @author giama
- */
+
 public class UserDAO {
 
     private static final String LOGIN = "SELECT fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID=? AND password=?";
     private static final String CHECK_DUPLICATE = "SELECT fullName FROM tblUsers WHERE userID=?";
     private static final String INSERT = "INSERT tblUsers(userID, fullName, password, sex, roleID, address, birthday, phone, status) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String SEARCH_USER = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID LIKE ? AND roleID LIKE ? AND status=?";
+    private static final String GET_USER_BY_ID = "SELECT userID, fullName, password, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID=?";
     private static final String SEARCH_USER_ALL = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers";
     private static final String SEARCH_MANAGER = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID LIKE ? AND roleID LIKE 'MN' AND status=?";
     private static final String SEARCH_MANAGER_ALL = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE roleID LIKE 'MN'";
     private static final String UPDATE_ACCOUNT = "UPDATE tblUsers SET fullName=?, sex=?, roleID=?, address=?, birthday=?, phone=? WHERE userID=?";
+    private static final String UPDATE_PASSWORD = "UPDATE tblUsers SET password=? WHERE userID=?";
+    private static final String UPDATE_NAME = "UPDATE tblUsers SET fullName=? WHERE userID=?";
     private static final String ACTIVATE_ACCOUNT = "UPDATE tblUsers SET status=1 WHERE userID=?";
     private static final String DEACTIVATE_ACCOUNT = "UPDATE tblUsers SET status=0 WHERE userID=?";
 
@@ -51,7 +46,7 @@ public class UserDAO {
                     Date birthday = rs.getDate("birthday");
                     String phone = rs.getString("phone");
                     boolean status = rs.getBoolean("status");
-                    user = new UserDTO(userID, fullName, "*******", sex, roleID, address, birthday, phone, status);
+                    user = new UserDTO(userID, fullName, password, sex, roleID, address, birthday, phone, status);
                 }
             }
 
@@ -222,6 +217,44 @@ public class UserDAO {
         return list;
     }
     
+    public UserDTO getUserByID(String userID) throws SQLException {
+        UserDTO user = null;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_USER_BY_ID);
+                ptm.setString(1, userID);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    String fullName = rs.getString("fullName");
+                    String password = rs.getString("password");
+                    boolean sex = rs.getBoolean("sex");
+                    String roleID = rs.getString("roleID");
+                    String address = rs.getString("address");
+                    Date birthday = rs.getDate("birthday");
+                    String phone = rs.getString("phone");
+                    boolean status = rs.getBoolean("status");
+                    user = new UserDTO(userID, fullName, password, sex, roleID, address, birthday, phone, status);
+                }
+            }
+        } catch (Exception e) {
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return user;
+    }
+    
     public List<UserDTO> getListManagers(String search, String Status) throws SQLException {
         List<UserDTO> list = new ArrayList<>();
         Connection conn = null;
@@ -312,6 +345,54 @@ public class UserDAO {
             ptm.setDate(5, new java.sql.Date((user.getBirthday()).getTime()));
             ptm.setString(6, user.getPhone());
             ptm.setString(7, user.getUserID());
+            
+            check = ptm.executeUpdate()>0?true: false;            
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+    
+    public boolean updatePassword(String password, String userID) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DBUtils.getConnection();
+            ptm = conn.prepareStatement(UPDATE_PASSWORD);
+            ptm.setString(1, password);
+            ptm.setString(2, userID);
+            
+            check = ptm.executeUpdate()>0?true: false;            
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+    
+    public boolean updateName(String newName, String userID) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DBUtils.getConnection();
+            ptm = conn.prepareStatement(UPDATE_NAME);
+            ptm.setString(1, newName);
+            ptm.setString(2, userID);
             
             check = ptm.executeUpdate()>0?true: false;            
         } catch (ClassNotFoundException | SQLException e) {

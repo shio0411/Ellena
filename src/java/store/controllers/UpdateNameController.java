@@ -1,60 +1,43 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package store.controllers;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import store.user.UserDAO;
 import store.user.UserDTO;
+import store.user.UserError;
 
-/**
- *
- * @author giama
- */
-@WebServlet(name = "UpdateAccountController", urlPatterns = {"/UpdateAccountController"})
-public class UpdateAccountController extends HttpServlet {
-    private static final String ERROR = "ShowAccountController";
-    private static final String SUCCESS = "ShowAccountController";
+
+@WebServlet(name = "UpdateNameController", urlPatterns = {"/UpdateNameController"})
+public class UpdateNameController extends HttpServlet {
+
+    private static final String ERROR = "my-profile.jsp";
+    private static final String SUCCESS = "my-profile.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
-            String userID = request.getParameter("userID");
-            String fullName = request.getParameter("fullName");
-            String password = "*********";
-            String roleID = request.getParameter("roleID");
-            boolean sex = Boolean.parseBoolean("sex");
-            String address = request.getParameter("address");
-            Date birthday = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("birthday"));
-            String phone = request.getParameter("phone");
+            HttpSession session = request.getSession();
+            UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
+            String userID = loginUser.getUserID();
+            String newName = request.getParameter("newName");
             boolean check = true;
             UserDAO dao = new UserDAO();          
-
-            if (check) {
-                UserDTO user = new UserDTO(userID, fullName, password, sex, roleID, address, birthday, phone, true);
-                boolean checkUpdate = dao.updateAccount(user);
-                if (checkUpdate) {
-                    url = SUCCESS;
-                    request.setAttribute("MESSAGE", "Cập nhật thành công!");
-                }
-
-            } else {
-                request.setAttribute("MESSAGE", "Cập nhật thất bại!");
-
+            boolean checkUpdate = dao.updateName(newName, userID);
+            if (checkUpdate) {
+                url = SUCCESS;
+                UserDTO user = dao.getUserByID(userID);
+                session.setAttribute("LOGIN_USER", user);
             }
+
         } catch (Exception e) {
-            log("Error at UpdateAccountController: " + e.toString());
+            log("Error at UpdateNameController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

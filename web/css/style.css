@@ -64,7 +64,9 @@ body {
 }
 
 .main {
-    margin-left: 18%; /* Same as the width of the sidenav */
+    margin: 2% 5%;
+    margin-left: 22%; /* Same as the width of the sidenav */
+    padding-bottom: 2%;
 }
 
 .fa{
@@ -73,8 +75,12 @@ body {
 }
 
 .table{
-    margin: 5% 5%;
-    width: 90%;
+    margin: 2% 0;
+    width: 100%;
+}
+
+table tr{
+    font-size: 12px;
 }
 
 .form-popup {
@@ -86,24 +92,18 @@ body {
   z-index: 9;
 }
 
-table tr{
-    font-size: 10px;
-}
-
 td{
     height:40px;
     width: 120px;
 }
 
 form{
-    margin: 3% 5%;
+    margin: 3% 0;
 }
 
 form input, form select{
     margin-right: 4%;
 }
-
-
 
 h1,
 h2,
@@ -3746,4 +3746,16 @@ ol {
 		width: 100%;
 		font-size: 24px;
 	}
+}
+
+.profile{
+    width: 50%;
+}
+
+.profile td{
+    width: 70%;
+}
+
+.profile tr{
+    border-bottom: 2px #E5E5E5 solid; 
 }

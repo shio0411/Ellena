@@ -1,51 +1,57 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 package store.controllers;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import store.user.UserDAO;
 import store.user.UserDTO;
+import store.user.UserError;
+    
+@WebServlet(name = "UpdatePasswordController", urlPatterns = {"/UpdatePasswordController"})
+public class UpdatePasswordController extends HttpServlet {
 
-/**
- *
- * @author giama
- */
-@WebServlet(name = "UpdateAccountController", urlPatterns = {"/UpdateAccountController"})
-public class UpdateAccountController extends HttpServlet {
-    private static final String ERROR = "ShowAccountController";
-    private static final String SUCCESS = "ShowAccountController";
+    private static final String ERROR = "my-profile.jsp";
+    private static final String SUCCESS = "my-profile.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
-            String userID = request.getParameter("userID");
-            String fullName = request.getParameter("fullName");
-            String password = "*********";
-            String roleID = request.getParameter("roleID");
-            boolean sex = Boolean.parseBoolean("sex");
-            String address = request.getParameter("address");
-            Date birthday = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("birthday"));
-            String phone = request.getParameter("phone");
+            HttpSession session = request.getSession();
+            UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
+            String userID = loginUser.getUserID();
+            String currentPassword = request.getParameter("currentPassword");
+            String newPassword = request.getParameter("newPassword");
+            String confirmNewPassword = request.getParameter("confirmNewPassword");
             boolean check = true;
             UserDAO dao = new UserDAO();          
-
+            UserError userError = new UserError();
+            
+            if(!currentPassword.equals(loginUser.getPassword())){
+                check = false;
+                userError.setPassword("Incorrect password!");
+            }
+            
+            if (!newPassword.equals(confirmNewPassword)) {
+                check = false;
+                userError.setConfirm("Password and confirm pass are different!");
+            }
+            
             if (check) {
-                UserDTO user = new UserDTO(userID, fullName, password, sex, roleID, address, birthday, phone, true);
-                boolean checkUpdate = dao.updateAccount(user);
+                boolean checkUpdate = dao.updatePassword(newPassword, userID);
                 if (checkUpdate) {
                     url = SUCCESS;
+                    UserDTO user = dao.getUserByID(userID);
+                    session.setAttribute("LOGIN_USER", user);
                     request.setAttribute("MESSAGE", "Cập nhật thành công!");
                 }
 
@@ -54,12 +60,11 @@ public class UpdateAccountController extends HttpServlet {
 
             }
         } catch (Exception e) {
-            log("Error at UpdateAccountController: " + e.toString());
+            log("Error at UpdatePasswordController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
     }
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

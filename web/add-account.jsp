@@ -73,7 +73,7 @@
                                                 <label class="form-label" for="password">Quyền</label>
                                                 <select name="roleID" class="form-control form-control-lg">
                                                     <option value="AD" required="">Quản trị viên</option>
-                                                    <option value="MN" required="">Quản lý</option>
+                                                    <option value="MN">Quản lý</option>
                                                     <option value="EM">Nhân viên</option>
                                                 </select>
 
@@ -133,7 +133,7 @@
                                     </div>
 
                                     <div>
-                                        <input class="primary-btn" type="submit" name="action" value="Create an account" />
+                                        <button class="primary-btn" type="submit" name="action" value="Create an account" >Tạo một tài khoản mới</button>
                                     </div>
 
                                 </form>

@@ -1,62 +1,33 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package store.controllers;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import store.user.UserDAO;
-import store.user.UserDTO;
+import javax.servlet.http.HttpSession;
 
-/**
- *
- * @author giama
- */
-@WebServlet(name = "UpdateAccountController", urlPatterns = {"/UpdateAccountController"})
-public class UpdateAccountController extends HttpServlet {
-    private static final String ERROR = "ShowAccountController";
-    private static final String SUCCESS = "ShowAccountController";
+@WebServlet(name = "LogoutController", urlPatterns = {"/LogoutController"})
+public class LogoutController extends HttpServlet {
+
+    private static final String ERROR = "login.jsp";
+    private static final String SUCCESS = "login.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
-            String userID = request.getParameter("userID");
-            String fullName = request.getParameter("fullName");
-            String password = "*********";
-            String roleID = request.getParameter("roleID");
-            boolean sex = Boolean.parseBoolean("sex");
-            String address = request.getParameter("address");
-            Date birthday = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("birthday"));
-            String phone = request.getParameter("phone");
-            boolean check = true;
-            UserDAO dao = new UserDAO();          
-
-            if (check) {
-                UserDTO user = new UserDTO(userID, fullName, password, sex, roleID, address, birthday, phone, true);
-                boolean checkUpdate = dao.updateAccount(user);
-                if (checkUpdate) {
-                    url = SUCCESS;
-                    request.setAttribute("MESSAGE", "Cập nhật thành công!");
-                }
-
-            } else {
-                request.setAttribute("MESSAGE", "Cập nhật thất bại!");
-
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                session.invalidate();
+                url = SUCCESS;
             }
         } catch (Exception e) {
-            log("Error at UpdateAccountController: " + e.toString());
+            log("Error at LogoutController: " + e.toString());
         } finally {
-            request.getRequestDispatcher(url).forward(request, response);
+            response.sendRedirect(url);
         }
     }
 

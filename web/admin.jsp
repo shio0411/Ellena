@@ -8,7 +8,6 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Trang chủ | Administrator</title>
         <jsp:include page="meta.jsp" flush="true"/>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     </head>
@@ -26,7 +25,8 @@
             String message = (String) request.getAttribute("MESSAGE");
             if (message != null) {
         %>
-
+        
+        <!-- Pop-up thông báo cập nhật thành công -->
         <div class="modal fade" id="myModal" role="dialog">
             <div class="modal-dialog">
 
@@ -47,15 +47,21 @@
 
             </div>
         </div> <%}%>
+        
         <div class="sidenav">
-            <a href="admin.jsp" style="color: #873e23; font-weight: bold;"><i class="fa fa-address-card fa-lg"></i>Quản lý tài khoản</a>
+            <a href="ShowAccountController" style="color: #873e23; font-weight: bold;"><i class="fa fa-address-card fa-lg"></i>Quản lý tài khoản</a>
             <a href="ShowManagerController"><i class="fa fa-group fa-lg"></i>Quản lý manager</a>
-            <a href="#"><i class="fa fa-cart-plus fa-lg"></i>Quản lý loại sản phẩm</a>
+            <a href="ShowCategoryController"><i class="fa fa-cart-plus fa-lg"></i>Quản lý loại sản phẩm</a>
         </div>
 
         <div class="main">
+            Xin chào, <a href="my-profile.jsp"><%= loginUser.getFullName()%></a>
+            <form action="MainController" method="POST" style="margin-left: 65%;">                
+                <input type="submit" name="action" value="Logout" style="margin-left: 4%;">
+            </form>
+                
             <form action="MainController" method="POST">
-                <input type="text" name="search" required="" value="<%= search%>" placeholder="Tìm kiếm tài khoản">
+                <input type="text" name="search" value="<%= search%>" placeholder="Tìm kiếm tài khoản">
                 Quyền
                 <select name="roleID">
                     <option value="%" selected hidden>Chọn một quyền</option>
@@ -69,7 +75,7 @@
                     <option value="true">Active</option>
                     <option value="false">Inactive</option>
                 </select>
-                <button type="submit" name="action" value="SearchAccount" class="btn-outline-dark" style="width: 7%; padding: 0.5% 2%;"><i class="fa fa-search fa-lg"></i></button>
+                <button type="submit" name="action" value="SearchAccount" class="btn-outline-dark" style="width: 15%; padding: 0.5% 0.1%;"><i class="fa fa-search fa-lg"></i>Search</button>
             </form>   
             <a href="add-account.jsp">Tạo tài khoản mới</a>
             <%
@@ -99,14 +105,16 @@
                         <%
                             if (user.isStatus()) {
                         %>
-                <a href="MainController?action=DeactivateAccount&userID=<%=user.getUserID()%>">Vô hiệu hoá</a>
-                    <%} else {
-                    %>
-                <a href="MainController?action=ActivateAccount&userID=<%=user.getUserID()%>">Kích hoạt</a>
-                    <%
-                        }
-                    %>
-                </td>
+                             <a href="MainController?action=DeactivateAccount&userID=<%=user.getUserID()%>">Vô hiệu hoá</a>
+                        <%} else {
+                        %>
+                             <a href="MainController?action=ActivateAccount&userID=<%=user.getUserID()%>">Kích hoạt</a>
+                        <%
+                            }
+                        %>
+                    </td>
+                
+                <!-- Chỉnh sửa chi tiết account-->
                 <td>
                     <div class="modal fade" id="myModal<%=id%>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                         <div class="modal-dialog" id="<%=id%>" >
@@ -124,8 +132,6 @@
                                                 <div class="form-outline">
                                                     <label class="form-label" for="email">Email</label>
                                                     <input type="email" name="userID" value="<%= user.getUserID()%>" readonly="" id="userID" class="form-control form-control-lg" />
-                                                    <p style="color: red">${requestScope.USER_ERROR.userID}</p>
-
                                                 </div>
 
                                             </div>
@@ -208,7 +214,7 @@
                                             </div>
                                         </div>
 
-
+                                            
 
                                 </div>
                                 <div class="modal-footer">
@@ -222,9 +228,6 @@
                         </div>
                     </div>
                     <button type="button" data-toggle="modal" data-target="#myModal<%=id++%>">Chỉnh sửa</button>
-
-                    <!-- Modal -->
-
 
                 </td>
 

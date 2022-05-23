@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package store.controllers;
 
 import java.io.IOException;
@@ -11,10 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author giama
- */
+
 public class MainController extends HttpServlet {
     
     private static final String ERROR = "error.jsp";
@@ -30,10 +23,18 @@ public class MainController extends HttpServlet {
     private static final String ADD_ACCOUNT_CONTROLLER = "AddAccountController";
     private static final String SEARCH_MANAGER = "SearchManager";
     private static final String SEARCH_MANAGER_CONTROLLER = "SearchManagerController";
+    private static final String SEARCH_CATEGORY = "SearchCategory";
+    private static final String SEARCH_CATEGORY_CONTROLLER = "SearchCategoryController";
+    private static final String ADD_CATEGORY = "AddCategory";
+    private static final String ADD_CATEGORY_CONTROLLER = "AddCategoryController";
     private static final String REMOVE = "Remove";
     private static final String REMOVE_CONTROLLER = "RemoveController";
     private static final String UPDATE_ACCOUNT = "UpdateAccount";
     private static final String UPDATE_ACCOUNT_PAGE = "UpdateAccountController";
+    private static final String UPDATE_PASSWORD = "UpdatePassword";
+    private static final String UPDATE_PASSWORD_PAGE = "UpdatePasswordController";
+    private static final String UPDATE_NAME = "UpdateName";
+    private static final String UPDATE_NAME_PAGE = "UpdateNameController";
     private static final String DEACTIVATE_ACCOUNT = "DeactivateAccount";
     private static final String DEACTIVATE_ACCOUNT_CONTROLLER = "DeactivateAccountController";
     private static final String ACTIVATE_ACCOUNT = "ActivateAccount";
@@ -82,6 +83,12 @@ public class MainController extends HttpServlet {
                 case SEARCH_MANAGER:
                     url = SEARCH_MANAGER_CONTROLLER;
                     break;
+                case SEARCH_CATEGORY:
+                    url = SEARCH_CATEGORY_CONTROLLER;
+                    break;
+                case ADD_CATEGORY:
+                    url = ADD_CATEGORY_CONTROLLER;
+                    break;
                 case ADD_ACCOUNT:
                     url = ADD_ACCOUNT_CONTROLLER;
                 break;
@@ -93,6 +100,12 @@ public class MainController extends HttpServlet {
                     break;
                 case UPDATE_ACCOUNT:
                     url = UPDATE_ACCOUNT_PAGE;
+                    break;
+                case UPDATE_PASSWORD:
+                    url = UPDATE_PASSWORD_PAGE;
+                    break;
+                case UPDATE_NAME:
+                    url = UPDATE_NAME_PAGE;
                     break;
                 case DEACTIVATE_ACCOUNT:
                     url = DEACTIVATE_ACCOUNT_CONTROLLER;

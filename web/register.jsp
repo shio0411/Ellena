@@ -129,7 +129,7 @@
 
 
                                     <div>
-                                        <input class="primary-btn" type="submit" name="action" value="Register" />
+                                        <button class="primary-btn" type="submit" name="action" value="Register" >Đăng ký</button>
                                     </div>
 
                                 </form>

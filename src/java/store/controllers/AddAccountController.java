@@ -40,11 +40,11 @@ public class AddAccountController extends HttpServlet {
             boolean checkDuplicate = dao.checkDuplicate(userID);
             if (checkDuplicate) {
                 check = false;
-                userError.setUserID("Email's already been used!");
+                userError.setUserID("Email đã được sử dụng!");
             }
             if (!password.equals(confirm)) {
                 check = false;
-                userError.setConfirm("Password and confirm pass are different!");
+                userError.setConfirm("Mật khẩu và xác nhận mật khẩu khác nhau!");
             }
 
             if (check) {
