@@ -1,7 +1,9 @@
 
-# Release Summary#1
+# Release Summary #1
 ***Changes since last pull from 23/05/2022***
+
 ***Release date: 25/5/2022***
+
 ***Note: Still using the old DB since 23/05/2022***
 
 ## New files:
