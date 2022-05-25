@@ -72,7 +72,7 @@
                             <li><a>Category</a>
                                 <ul class="dropdown">
                                     <% for (CategoryDTO cat : listCategory) {%>
-                                    <li><a href="./product/"><%=cat.getCategoryName()%></a></li>
+                                    <li><a href="CategoryRouteController?category=<%=cat.getCategoryName()%>"><%=cat.getCategoryName()%></a></li>
                                         <% }%>
                                 </ul>
                             </li>

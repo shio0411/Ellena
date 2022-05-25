@@ -13,6 +13,14 @@
         <servlet-name>ViewHomeController</servlet-name>
         <servlet-class>store.controllers.ViewHomeController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>category</servlet-name>
+        <jsp-file>/category.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>category</servlet-name>
+        <url-pattern>/category/*</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>MainController</servlet-name>
         <url-pattern>/MainController</url-pattern>
