@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -455,21 +457,30 @@ public class UserDAO {
         return check;
     }
 
-    public Map<Date, Integer> getStatisticOrders() throws SQLException {
+    public Map<String, Integer> getStatisticOrders() throws SQLException {
         Connection conn = null;
         PreparedStatement ptm = null;
         ResultSet rs = null;
-        Map<Date, Integer> map = new HashMap<>();
+        Map<String, Integer> map = new HashMap<>();
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
                 ptm = conn.prepareStatement(STATISTIC_ORDER_QUANITY);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
-                    Date date = rs.getDate("orderDate");
+                    String date = rs.getString("orderDate");
                     int quantity = rs.getInt("quantity");
                     map.put(date, quantity);
-                    
+                }
+                SimpleDateFormat DateFor = new SimpleDateFormat("yyyy-MM-dd");
+                Calendar cal = Calendar.getInstance();
+                for (int i = 0; i < 30; i++) {
+                    String stringDate = DateFor.format(cal.getTime());
+                    if (map.get(stringDate) == null) {
+                        map.put(stringDate, 0);
+                    }
+
+                    cal.add(Calendar.DATE, -1);
                 }
             }
         } catch (Exception e) {

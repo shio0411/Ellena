@@ -29,7 +29,7 @@ public class ManagerStatisticController extends HttpServlet {
         String url = ERROR;
         try {
             UserDAO dao = new UserDAO();
-            Map<Date, Integer> orderStatistic= dao.getStatisticOrders();
+            Map<String, Integer> orderStatistic= dao.getStatisticOrders();
             if (orderStatistic.size() > 0) {
                 request.setAttribute("ORDER_STATISTIC", orderStatistic);
                 url = SUCCESS;
