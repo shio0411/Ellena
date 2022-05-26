@@ -1,13 +1,16 @@
 # update:
+
 main controller: add 2 cases: search-order, update-order
-    private static final String SEARCH_ORDER = "SearchOrder";
-    private static final String SEARCH_ORDER_CONTROLLER = "SearchOrderController";
-    private static final String UPDATE_ORDER = "UpdateOrder";
-    private static final String UPDATE_ORDER_CONTROLLER = "UpdateOrderController";
+private static final String SEARCH_ORDER = "SearchOrder";
+private static final String SEARCH_ORDER_CONTROLLER = "SearchOrderController";
+private static final String UPDATE_ORDER = "UpdateOrder";
+private static final String UPDATE_ORDER_CONTROLLER = "UpdateOrderController";
+
 
 
 
 # add new:
+
 manager-order.jsp
 UpdateOrderController.java
 ShowOrderController.java
