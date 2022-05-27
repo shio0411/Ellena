@@ -21,22 +21,22 @@
 
 ## Changes in code:
 - **manager-product.jsp**
-    - Change in "Sắp xếp theo" drop-down menu:
-        - From ``` <option value="categoryID">ID danh mục</option> ``` to ```<option value="categoryName">Loại sản phẩm</option>```
-        - Remove the `required=""` in `<select name="orderBy">`
-    - Change table naming from "ID danh mục" to "Loại sản phẩm"
-    - Change the URL Rewriting in `SearchController` `pageNav` : move the page numbering to the end of the link (Previous link, numbers links, Next link)
+	- Change in "Sắp xếp theo" drop-down menu:
+		- From ``` <option value="categoryID">ID danh mục</option> ``` to ```<option value="categoryName">Loại sản phẩm</option>```
+		- Remove the `required=""` in `<select name="orderBy">`
+	- Change table naming from "ID danh mục" to "Loại sản phẩm"
+	- Change the URL Rewriting in `SearchController` `pageNav` : move the page numbering to the end of the link (Previous link, numbers links, Next link)
 
 - **ProductDTO**
-    - Add `private String categoryName;`
-    - Add `private int lowStockLimit`
+	- Add `private String categoryName;`
+	- Add `private int lowStockLimit`
 
 - **ProductDAO**
-    - Fix `getAllProduct` and `getListProduct` list because of the `ProductDTO` change
-    - Change SQL Query from selecting `categoryID` to `categoryName`
+	- Fix `getAllProduct` and `getListProduct` list because of the `ProductDTO` change
+	- Change SQL Query from selecting `categoryID` to `categoryName`
 
 - **ManagerSearchProductController**
-    - Remove unused import
+	- Remove unused import
 
 ## Discovered possible issues:
  1. 

@@ -11,19 +11,19 @@ import store.utils.DBUtils;
 public class ProductDAO {
 
     private static final String SHOW_PRODUCT_PAGINATION = "WITH subTable AS("
-                                                                    + "SELECT productID, productName, categoryID, status, ROW_NUMBER() OVER(ORDER BY productID ASC) as row# "
-                                                                    + "FROM tblProduct "
+                                                                    + "SELECT productID, productName, B.categoryName, A.status, ROW_NUMBER() OVER(ORDER BY (SELECT NULL)) as row# "
+                                                                    + "FROM tblProduct A inner join tblCategory B on (A.categoryID = B.categoryID) "
                                                                     + ")"
-                                                        + "SELECT productID, productName, categoryID, status, row# "
+                                                        + "SELECT productID, productName, categoryName, status, row# "
                                                         + "FROM subTable "
                                                         + "WHERE row# BETWEEN ? AND ?";
     private static final String NUMBER_OF_PRODUCT = "SELECT Top 1 COUNT (*) OVER () AS ROW_COUNT FROM tblProduct";
     private static final String SEARCH_PRODUCT_PAGINATION = "WITH subTable AS("
-                                                                    + "SELECT productID, productName, categoryID, status, ROW_NUMBER() OVER(ORDER BY ? ASC) as row# "
-                                                                    + "FROM tblProduct "
-                                                                    + "WHERE productName LIKE ? AND status=?"
+                                                                    + "SELECT productID, productName, B.categoryName, A.status, ROW_NUMBER() OVER(ORDER BY ? ASC) as row# "
+                                                                    + "FROM tblProduct A inner join tblCategory B on (A.categoryID = B.categoryID) "
+                                                                    + "WHERE productName LIKE ? AND A.status=?"
                                                                     + ")"
-                                                        + "SELECT productID, productName, categoryID, status, row# "
+                                                        + "SELECT productID, productName, categoryName, status, row# "
                                                         + "FROM subTable "
                                                         + "WHERE row# BETWEEN ? AND ?";
     private static final String NUMBER_OF_SEARCH_PRODUCT = "SELECT Top 1 COUNT (*) OVER () AS ROW_COUNT FROM tblProduct WHERE productName LIKE ? AND status=?";
@@ -56,9 +56,9 @@ public class ProductDAO {
                 while (rs.next()) {
                     int productID = rs.getInt("productID");
                     String productName = rs.getString("productName");
-                    int categoryID = rs.getInt("categoryID");
+                    String categoryName = rs.getString("categoryName");
                     Boolean status = rs.getBoolean("status");
-                    listProduct.add(new ProductDTO(productID, productName, "", "", "", "", 0, 0, categoryID, null, status) );
+                    listProduct.add(new ProductDTO(productID, productName, "", "", "", "", 0, 0, 0, 0, categoryName, null, status) );
                 }
             }
 
@@ -104,9 +104,9 @@ public class ProductDAO {
                 while (rs.next()) {
                     int productID = rs.getInt("productID");
                     String productName = rs.getString("productName");
-                    int categoryID = rs.getInt("categoryID");
+                    String categoryName = rs.getString("categoryName");
                     Boolean statusParam = rs.getBoolean("status");
-                    listProduct.add(new ProductDTO(productID, productName, "", "", "", "", 0, 0, categoryID, null, statusParam) );
+                    listProduct.add(new ProductDTO(productID, productName, "", "", "", "", 0, 0, 0, 0, categoryName, null, statusParam) );
                 }
             }
 

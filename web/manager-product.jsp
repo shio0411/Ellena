@@ -75,6 +75,7 @@
         <div class="main">
             <!--logout row-->
             <div class="row">
+                Xin chào, <a href="my-profile.jsp"><%= loginUser.getFullName()%></a>
                 <form action="MainController" method="POST" class="col-12 text-right"">                
                     <input type="submit" name="action" value="Logout" style="margin-left: 4%;">
                 </form>
@@ -92,10 +93,10 @@
                     <form action="MainController" method="POST">
                         <input type="text" name="search" value="<%= search%>" placeholder="Tìm kiếm sản phẩm">
 
-                        <select name="orderBy" required="">
+                        <select name="orderBy">
                             <option value="(SELECT NULL)" selected hidden>Sắp xếp theo</option><!-- SQL for ORDER BY "NONE" -->
                             <option value="productName">Tên sản phẩm</option>
-                            <option value="productID">Mã sản phẩm</option>
+                            <option value="categoryName">Loại sản phẩm</option>
                         </select>
 
                         Trạng thái
@@ -127,7 +128,7 @@
                 <tr style="background-color: #b57c68">
                     <th>Tên Sản phẩm</th>
                     <th>ID Sản phẩm</th>                
-                    <th>ID Danh mục</th>
+                    <th>Loại sản phẩm</th>
                     <th>Trạng thái</th>
                     <th>Chỉnh sửa</th>
                 </tr>
@@ -138,7 +139,7 @@
                 <tr>
                     <td style="font-weight: bold"><%= list.getProductName()%></td>
                     <td><%= list.getProductID()%></td>
-                    <td><%= list.getCategoryID()%></td>
+                    <td><%= list.getCategoryName()%></td>
                     <td>
                         <%
                             if (list.isStatus()) {
@@ -223,7 +224,7 @@
                 %>
 
                 <!-- For displaying Previous link except for the 1st page -->
-                <td><a href="ManagerSearchProductController?page=<%= currentPage - 1%>&search=<%= search%>&orderBy=<%= orderBy%>&status=<%= status%>">Previous</a></td>
+                <td><a href="ManagerSearchProductController?search=<%= search%>&orderBy=<%= orderBy%>&status=<%= status%>&page=<%= currentPage - 1%>">Previous</a></td>
                 <%
                     }
                 %>
@@ -238,7 +239,7 @@
                         <%
                         } else {
                         %>
-                        <td><a href="ManagerSearchProductController?page=<%= i%>&search=<%= search%>&orderBy=<%= orderBy%>&status=<%= status%>"><%= i%></a></td>
+                        <td><a href="ManagerSearchProductController?search=<%= search%>&orderBy=<%= orderBy%>&status=<%= status%>&page=<%= i%>"><%= i%></a></td>
                             <%
                                     }
                                 }
@@ -250,7 +251,7 @@
                 <%
                     if (currentPage < noOfPages) {
                 %>
-                <td><a href="ManagerSearchProductController?page=<%= currentPage + 1%>&search=<%= search%>&orderBy=<%= orderBy%>&status=<%= status%>">Next</a></td>
+                <td><a href="ManagerSearchProductController?search=<%= search%>&orderBy=<%= orderBy%>&status=<%= status%>&page=<%= currentPage + 1%>">Next</a></td>
                 <%
                         }
 

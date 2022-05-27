@@ -2,8 +2,8 @@ package store.shopping;
 
 import java.util.Date;
 
-
 public class ProductDTO {
+
     private int productID;
     private String productName;
     private String image;
@@ -12,7 +12,9 @@ public class ProductDTO {
     private String color;
     private int price;
     private int quantity;
+    private int lowStockLimit;
     private int categoryID;
+    private String categoryName;
     private Date importDate;
     private boolean status;
 
@@ -25,12 +27,14 @@ public class ProductDTO {
         this.color = "";
         this.price = 0;
         this.quantity = 0;
+        this.lowStockLimit = 0;
         this.categoryID = 0;
+        this.categoryName = "";
         this.importDate = new Date();
         this.status = false;
     }
 
-    public ProductDTO(int productID, String productName, String image, String description, String size, String color, int price, int quantity, int categoryID, Date importDate, boolean status) {
+    public ProductDTO(int productID, String productName, String image, String description, String size, String color, int price, int quantity, int lowStockLimit, int categoryID, String categoryName, Date importDate, boolean status) {
         this.productID = productID;
         this.productName = productName;
         this.image = image;
@@ -39,11 +43,13 @@ public class ProductDTO {
         this.color = color;
         this.price = price;
         this.quantity = quantity;
+        this.lowStockLimit = lowStockLimit;
         this.categoryID = categoryID;
+        this.categoryName = categoryName;
         this.importDate = importDate;
         this.status = status;
     }
-    
+
     public int getProductID() {
         return productID;
     }
@@ -108,12 +114,28 @@ public class ProductDTO {
         this.quantity = quantity;
     }
 
+    public int getLowStockLimit() {
+        return lowStockLimit;
+    }
+
+    public void setLowStockLimit(int lowStockLimit) {
+        this.lowStockLimit = lowStockLimit;
+    }
+
     public int getCategoryID() {
         return categoryID;
     }
 
     public void setCategoryID(int categoryID) {
         this.categoryID = categoryID;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 
     public Date getImportDate() {
@@ -131,6 +153,5 @@ public class ProductDTO {
     public void setStatus(boolean status) {
         this.status = status;
     }
-    
-    
+
 }

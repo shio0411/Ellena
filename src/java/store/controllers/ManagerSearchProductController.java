@@ -11,7 +11,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import static store.controllers.ManagerShowProductController.SUCCESS;
 import store.shopping.ProductDAO;
 import store.shopping.ProductDTO;
 
@@ -45,7 +44,7 @@ public class ManagerSearchProductController extends HttpServlet {
             
             List<ProductDTO> listProduct = dao.getListProduct(orderBy, name, statusOrdering, (page * productPerPage) - productPerPage + 1, productPerPage * page);
 
-            if (listProduct.size() > 0) {//debug here
+            if (listProduct.size() > 0) {
 
                 int noOfProducts = dao.getNumberOfProduct();
                 int noOfPages = (int) Math.ceil(noOfProducts * 1.0 / productPerPage);
