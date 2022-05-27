@@ -1,7 +1,5 @@
 
-
 # Release Summary #2
-
 ***Changes since last push from 26/05/2022***
 ***Release date: 27/5/2022***
 ***Note: Using the new DB (26/5/2022)***
