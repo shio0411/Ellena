@@ -6,6 +6,7 @@
 
 ***Note: Using the new DB (26/5/2022)***
 
+
 ## Last change log milestone
 - [x] Change table to `productID, productName, categoryName, status` 
     - [x] Change table name/value (manager-product.jsp)
