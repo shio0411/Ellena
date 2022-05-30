@@ -9,11 +9,12 @@ import java.util.List;
 import store.utils.DBUtils;
 
 public class CategoryDAO {
-    
+
     private static final String SEARCH_CATEGORY = "SELECT categoryID, categoryName, [order], status FROM tblCategory WHERE dbo.fuChuyenCoDauThanhKhongDau(categoryName) LIKE ? AND status=?";
     private static final String SEARCH_CATEGORY_ALL = "SELECT categoryID, categoryName, [order], status FROM tblCategory";
     private static final String INSERT_CATEGORY = "INSERT INTO tblCategory VALUES (?, ?, ?)";
-    
+    private static final String UPDATE_CATEGORY = "UPDATE tblCategory SET categoryName=?, [order]=? WHERE categoryID=?";
+
     public List<CategoryDTO> getListCategory(String search, String Status) throws SQLException {
         List<CategoryDTO> list = new ArrayList<>();
         Connection conn = null;
@@ -48,7 +49,7 @@ public class CategoryDAO {
         }
         return list;
     }
-    
+
     public List<CategoryDTO> getAllCategory() throws SQLException {
         List<CategoryDTO> list = new ArrayList<>();
         Connection conn = null;
@@ -81,7 +82,7 @@ public class CategoryDAO {
         }
         return list;
     }
-    
+
     public boolean addCategory(CategoryDTO cat) throws SQLException {
         boolean check = false;
         Connection conn = null;
@@ -107,4 +108,29 @@ public class CategoryDAO {
         }
         return check;
     }
+
+    public boolean updateCategory(CategoryDTO cat) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DBUtils.getConnection();
+            ptm = conn.prepareStatement(UPDATE_CATEGORY);
+            ptm.setString(1, cat.getCategoryName());
+            ptm.setInt(2, cat.getOrder());
+            ptm.setInt(3, cat.getCategoryID());
+            check = ptm.executeUpdate() > 0 ? true : false;
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+
 }

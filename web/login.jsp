@@ -15,7 +15,6 @@
         <jsp:include page="meta.jsp" flush="true"/>
     </head>
     <body>
-        <% List<CategoryDTO> listCategory = (List<CategoryDTO>) session.getAttribute("LIST_CATEGORY"); %>
         <!-- Page Preloder -->
         <div id="preloder">
             <div class="loader"></div>
@@ -53,45 +52,10 @@
                         <div class="header__logo">
                             <a href="./"><img src="img/logo.png" alt=""></a>
                         </div>
-                    </div>
-                    <div class="col-xl-6 col-lg-7" >
-                        <nav class="header__menu">
-                            <ul>
-                                <li class="active"><a href="./">Home</a></li>
-                                <li><a>Category</a>
-                                    <ul class="dropdown">
-                                        <% for (CategoryDTO cat: listCategory) { %>
-                                        <li><a href="./product/"><%=cat.getCategoryName()%></a></li>
-                                       <% } %>
-                                    </ul>
-                                </li>
-                                <li><a href="./blog.html">Blog</a></li>
-                                <li><a href="./contact.html">Contact</a></li>
-                            </ul>
-                        </nav>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="header__right">
-                            <div class="header__right__auth">
-                                <a href="login.jsp">Login</a>
-                                <a href="register.jsp">Register</a>
-                            </div>
-                            <ul class="header__right__widget">
-                                <li><span class="icon_search search-switch"></span></li>
-                                <li><a href="#"><span class="icon_heart_alt"></span>
-                                        <div class="tip">2</div>
-                                    </a></li>
-                                <li><a href="#"><span class="icon_bag_alt"></span>
-                                        <div class="tip">2</div>
-                                    </a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="canvas__open">
-                    <i class="fa fa-bars"></i>
-                </div>
+                           
             </div>
+                </div>
+                </div>
         </header>
         <!-- Header Section End -->
         <section class="vh-100 gradient-custom">

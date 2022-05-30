@@ -1,33 +1,51 @@
+
 package store.controllers;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import store.shopping.CategoryDAO;
+import store.shopping.CategoryDTO;
 
-@WebServlet(name = "LogoutController", urlPatterns = {"/LogoutController"})
-public class LogoutController extends HttpServlet {
+/**
+ *
+ * @author vankh
+ */
+@WebServlet(name = "UpdateCategoryController", urlPatterns = {"/UpdateCategoryController"})
+public class UpdateCategoryController extends HttpServlet {
 
-    private static final String ERROR = "login.jsp";
-    private static final String SUCCESS = "login.jsp";
+ 
+    private static final String ERROR = "ShowCategoryController";
+    private static final String SUCCESS = "ShowCategoryController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
-            HttpSession session = request.getSession(false);
-            if (session != null) {
-                session.invalidate();
-                url = SUCCESS;
+            int categoryID = Integer.parseInt(request.getParameter("categoryID"));
+            String categoryName = request.getParameter("categoryName");
+            int order = Integer.parseInt(request.getParameter("order"));
+            boolean check = true;
+            CategoryDAO dao = new CategoryDAO();
+            if (check) {
+                CategoryDTO cat = new CategoryDTO(categoryID, categoryName, order, true);
+                boolean checkUpdate = dao.updateCategory(cat);
+                if (checkUpdate) {
+                    url = SUCCESS;
+                    request.setAttribute("MESSAGE", "Cập nhật thành công!");
+                }
+            } else {
+                request.setAttribute("MESSAGE", "Cập nhật thất bại!");
             }
-            } catch (Exception e) {
-            log("Error at LogoutController: " + e.toString());
+        } catch (Exception e) {
+            log("Error at UpdateAccountController: " + e.toString());
         } finally {
-            response.sendRedirect(url);
+            request.getRequestDispatcher(url).forward(request, response);
         }
     }
 

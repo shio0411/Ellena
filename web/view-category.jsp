@@ -97,8 +97,7 @@
                                             <div class="col-md-6 mb-4 pb-2">
                                                  <div class="form-outline">
                                                     <label class="form-label" for="categoryID">ID</label>
-                                                    <input type="number" name="categoryID" value="<%= category.getCategoryID()%>" readonly="" id="userID" class="form-control form-control-lg" />
-                                                    <p style="color: red">${requestScope.USER_ERROR.userID}</p>
+                                                    <input type="number" name="categoryID" value="<%= category.getCategoryID()%>" readonly="" id="categoryID" class="form-control form-control-lg" />
 
                                                 </div>
 

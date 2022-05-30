@@ -1,9 +1,6 @@
-<%-- 
-    Document   : home
-    Created on : May 17, 2022, 12:43:37 PM
-    Author     : giama
---%>
-
+<%@page import="store.user.UserDTO"%>
+<%@page import="java.util.Collections"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="store.shopping.CategoryDTO"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -25,7 +22,14 @@
 </head>
 
 <body>
-    <% List<CategoryDTO> listCategory = (List<CategoryDTO>) session.getAttribute("LIST_CATEGORY");%>
+    <% List<CategoryDTO> listCategory = (List<CategoryDTO>) session.getAttribute("LIST_CATEGORY");
+        UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
+        ArrayList<Integer> categoryOrder = new ArrayList();
+        for (CategoryDTO cat : listCategory) {
+            categoryOrder.add(cat.getOrder());
+        }
+        Collections.sort(categoryOrder);
+    %>
 
     <!-- Page Preloder -->
     <div id="preloder">
@@ -46,7 +50,7 @@
                 </a></li>
         </ul>
         <div class="offcanvas__logo">
-            <a href="./"><img src="img/logo.png" alt=""></a>
+            <a href="./"><img src="img/ellena-logo.png" alt=""></a>
         </div>
         <div id="mobile-menu-wrap"></div>
         <div class="offcanvas__auth">
@@ -62,31 +66,44 @@
             <div class="row">
                 <div class="col-xl-3 col-lg-2">
                     <div class="header__logo">
-                        <a href="./"><img src="img/logo.png" alt=""></a>
+                        <a href="./"><img class="img-fluid" style="height: 31px; width: 98px" src="img/ellena-logo.png" alt=""></a>
                     </div>
                 </div>
                 <div class="col-xl-6 col-lg-7" >
                     <nav class="header__menu">
                         <ul>
                             <li class="active"><a href="./">Home</a></li>
-                            <li><a>Category</a>
+                            <li><a>Thời trang</a>
                                 <ul class="dropdown">
-                                    <% for (CategoryDTO cat : listCategory) {%>
+                                    <%
+                                        for (int i : categoryOrder) {
+                                            for (CategoryDTO cat : listCategory) {
+                                                if (cat.getOrder() == i) {
+                                    %>
                                     <li><a href="CategoryRouteController?category=<%=cat.getCategoryName()%>"><%=cat.getCategoryName()%></a></li>
-                                        <% }%>
+                                        <%
+                                                    }
+                                                }
+                                            }%>
                                 </ul>
                             </li>
-                            <li><a href="./blog.html">Blog</a></li>
-                            <li><a href="./contact.html">Contact</a></li>
+                            <li><a href="./blog.html">Khám phá</a></li>
+                            <li><a href="./contact.jsp">Liên hệ</a></li>
                         </ul>
                     </nav>
                 </div>
                 <div class="col-lg-3">
                     <div class="header__right">
+                        <%if (user != null) {%>
+                        <div class="header__right__auth">
+                            <a style="font-weight: 500; color: #721c24" href="my-profile.jsp"><%= user.getFullName().toUpperCase()%></a>
+                        </div>
+                        <% } else {%>
                         <div class="header__right__auth">
                             <a href="login.jsp">Login</a>
                             <a href="register.jsp">Register</a>
                         </div>
+                        <%}%>
                         <ul class="header__right__widget">
                             <li><span class="icon_search search-switch"></span></li>
                             <li><a href="#"><span class="icon_heart_alt"></span>
@@ -114,9 +131,9 @@
                     <div class="categories__item categories__large__item set-bg"
                          data-setbg="img/categories/category-1.jpg">
                         <div class="categories__text">
-                            <h1>Women’s fashion</h1>
-                            <p>Sitamet, consectetur adipiscing elit, sed do eiusmod tempor incidid-unt labore
-                                edolore magna aliquapendisse ultrices gravida.</p>
+                            <h1>Enrich The Beauty</h1>
+                            Khám phá bộ sưu tập mới nhất của chúng tôi
+                            <p style="font-weight: bold;">The Ellena Project</p>
                             <a href="#">Shop now</a>
                         </div>
                     </div>
@@ -126,36 +143,36 @@
                         <div class="col-lg-6 col-md-6 col-sm-6 p-0">
                             <div class="categories__item set-bg" data-setbg="img/categories/category-2.jpg">
                                 <div class="categories__text">
-                                    <h4>Men’s fashion</h4>
+                                    <h4>Nổi Bật</h4>
                                     <p>358 items</p>
-                                    <a href="#">Shop now</a>
+                                    <a href="#Noi-bat" >Shop now</a>
                                 </div>
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 p-0">
                             <div class="categories__item set-bg" data-setbg="img/categories/category-3.jpg">
                                 <div class="categories__text">
-                                    <h4>Kid’s fashion</h4>
+                                    <h4>Bán Chạy Nhất</h4>
                                     <p>273 items</p>
-                                    <a href="#">Shop now</a>
+                                    <a href="#Ban-chay-nhat">Shop now</a>
                                 </div>
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 p-0">
                             <div class="categories__item set-bg" data-setbg="img/categories/category-4.jpg">
                                 <div class="categories__text">
-                                    <h4>Cosmetics</h4>
+                                    <h4>New Arrivals</h4>
                                     <p>159 items</p>
-                                    <a href="#">Shop now</a>
+                                    <a href="#New-arrivals">Shop now</a>
                                 </div>
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 p-0">
                             <div class="categories__item set-bg" data-setbg="img/categories/category-5.jpg">
                                 <div class="categories__text">
-                                    <h4>Accessories</h4>
+                                    <h4>Đặc Trưng</h4>
                                     <p>792 items</p>
-                                    <a href="#">Shop now</a>
+                                    <a href="#Dac-trung">Shop now</a>
                                 </div>
                             </div>
                         </div>
@@ -172,17 +189,16 @@
             <div class="row">
                 <div class="col-lg-4 col-md-4">
                     <div class="section-title">
-                        <h4>New product</h4>
+                        <h4 id="New-arrivals">Hàng mới về</h4>
                     </div>
                 </div>
                 <div class="col-lg-8 col-md-8">
                     <ul class="filter__controls">
-                        <li class="active" data-filter="*">All</li>
-                        <li data-filter=".women">Women’s</li>
-                        <li data-filter=".men">Men’s</li>
-                        <li data-filter=".kid">Kid’s</li>
-                        <li data-filter=".accessories">Accessories</li>
-                        <li data-filter=".cosmetic">Cosmetics</li>
+                        <li class="active" data-filter="*">Tất cả</li>
+                        <li data-filter=".women">Áo khoác</li>
+                        <li data-filter=".men">Váy đầm</li>
+                        <li data-filter=".kid">Chân váy</li>
+                        <li data-filter=".accessories">Quần short</li>
                     </ul>
                 </div>
             </div>
@@ -413,7 +429,7 @@
                 <div class="col-lg-4 col-md-4 col-sm-6">
                     <div class="trend__content">
                         <div class="section-title">
-                            <h4>Hot Trend</h4>
+                            <h4 id="Noi-bat">Nổi bật</h4>
                         </div>
                         <div class="trend__item">
                             <div class="trend__item__pic">
@@ -468,7 +484,7 @@
                 <div class="col-lg-4 col-md-4 col-sm-6">
                     <div class="trend__content">
                         <div class="section-title">
-                            <h4>Best seller</h4>
+                            <h4 id="Ban-chay-nhat">Bán chạy nhất</h4>
                         </div>
                         <div class="trend__item">
                             <div class="trend__item__pic">
@@ -523,7 +539,7 @@
                 <div class="col-lg-4 col-md-4 col-sm-6">
                     <div class="trend__content">
                         <div class="section-title">
-                            <h4>Feature</h4>
+                            <h4 id="Dac-trung">Đặc trưng</h4>
                         </div>
                         <div class="trend__item">
                             <div class="trend__item__pic">
@@ -629,29 +645,29 @@
                 <div class="col-lg-3 col-md-4 col-sm-6">
                     <div class="services__item">
                         <i class="fa fa-car"></i>
-                        <h6>Free Shipping</h6>
-                        <p>For all oder over $99</p>
+                        <h6>Miễn Phí Vận Chuyển</h6>
+                        <p>Cho đơn hàng dưới 5km</p>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-4 col-sm-6">
                     <div class="services__item">
                         <i class="fa fa-money"></i>
-                        <h6>Money Back Guarantee</h6>
-                        <p>If good have Problems</p>
+                        <h6>Bảo Đảm Hoàn Tiền</h6>
+                        <p>Nếu sản phẩm bị lỗi</p>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-4 col-sm-6">
                     <div class="services__item">
                         <i class="fa fa-support"></i>
-                        <h6>Online Support 24/7</h6>
-                        <p>Dedicated support</p>
+                        <h6>Hỗ Trợ Online 24/7</h6>
+                        <p>Kết nối bất kỳ lúc nào</p>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-4 col-sm-6">
                     <div class="services__item">
                         <i class="fa fa-headphones"></i>
-                        <h6>Payment Secure</h6>
-                        <p>100% secure payment</p>
+                        <h6>Thanh Toán An Toàn</h6>
+                        <p>100% thanh toán bảo mật</p>
                     </div>
                 </div>
             </div>
@@ -659,157 +675,48 @@
     </section>
     <!-- Services Section End -->
 
-    <!-- Instagram Begin -->
-    <div class="instagram">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
-                    <div class="instagram__item set-bg" data-setbg="img/instagram/insta-1.jpg">
-                        <div class="instagram__text">
-                            <i class="fa fa-instagram"></i>
-                            <a href="#">@ ashion_shop</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
-                    <div class="instagram__item set-bg" data-setbg="img/instagram/insta-2.jpg">
-                        <div class="instagram__text">
-                            <i class="fa fa-instagram"></i>
-                            <a href="#">@ ashion_shop</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
-                    <div class="instagram__item set-bg" data-setbg="img/instagram/insta-3.jpg">
-                        <div class="instagram__text">
-                            <i class="fa fa-instagram"></i>
-                            <a href="#">@ ashion_shop</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
-                    <div class="instagram__item set-bg" data-setbg="img/instagram/insta-4.jpg">
-                        <div class="instagram__text">
-                            <i class="fa fa-instagram"></i>
-                            <a href="#">@ ashion_shop</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
-                    <div class="instagram__item set-bg" data-setbg="img/instagram/insta-5.jpg">
-                        <div class="instagram__text">
-                            <i class="fa fa-instagram"></i>
-                            <a href="#">@ ashion_shop</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
-                    <div class="instagram__item set-bg" data-setbg="img/instagram/insta-6.jpg">
-                        <div class="instagram__text">
-                            <i class="fa fa-instagram"></i>
-                            <a href="#">@ ashion_shop</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Instagram End -->
-
-    <!-- Footer Section Begin -->
-    <footer class="footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-4 col-md-6 col-sm-7">
-                    <div class="footer__about">
-                        <div class="footer__logo">
-                            <a href="./index.html"><img src="img/logo.png" alt=""></a>
-                        </div>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                            cilisis.</p>
-                        <div class="footer__payment">
-                            <a href="#"><img src="img/payment/payment-1.png" alt=""></a>
-                            <a href="#"><img src="img/payment/payment-2.png" alt=""></a>
-                            <a href="#"><img src="img/payment/payment-3.png" alt=""></a>
-                            <a href="#"><img src="img/payment/payment-4.png" alt=""></a>
-                            <a href="#"><img src="img/payment/payment-5.png" alt=""></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-3 col-sm-5">
-                    <div class="footer__widget">
-                        <h6>Quick links</h6>
-                        <ul>
-                            <li><a href="#">About</a></li>
-                            <li><a href="#">Blogs</a></li>
-                            <li><a href="#">Contact</a></li>
-                            <li><a href="#">FAQ</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-3 col-sm-4">
-                    <div class="footer__widget">
-                        <h6>Account</h6>
-                        <ul>
-                            <li><a href="#">My Account</a></li>
-                            <li><a href="#">Orders Tracking</a></li>
-                            <li><a href="#">Checkout</a></li>
-                            <li><a href="#">Wishlist</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-8 col-sm-8">
-                    <div class="footer__newslatter">
-                        <h6>NEWSLETTER</h6>
-                        <form action="#">
-                            <input type="text" placeholder="Email">
-                            <button type="submit" class="site-btn">Subscribe</button>
-                        </form>
-                        <div class="footer__social">
-                            <a href="#"><i class="fa fa-facebook"></i></a>
-                            <a href="#"><i class="fa fa-twitter"></i></a>
-                            <a href="#"><i class="fa fa-youtube-play"></i></a>
-                            <a href="#"><i class="fa fa-instagram"></i></a>
-                            <a href="#"><i class="fa fa-pinterest"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                    <div class="footer__copyright__text">
-                        <p>Copyright &copy; <script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a></p>
-                    </div>
-                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                </div>
-            </div>
-        </div>
-    </footer>
-    <!-- Footer Section End -->
+    <jsp:include page="footer.jsp" flush="true" />
 
     <!-- Search Begin -->
     <div class="search-model">
         <div class="h-100 d-flex align-items-center justify-content-center">
             <div class="search-close-switch">+</div>
-            <form class="search-model-form">
-                <input type="text" id="search-input" placeholder="Search here.....">
+            <form action="MainController" class="search-model-form">
+                <input type="text" name="search" id="search-input" placeholder="Tìm kiếm sản phẩm.....">
+                <input type="hidden" name="action" value="search-catalog" />
             </form>
         </div>
     </div>
     <!-- Search End -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+  // Add smooth scrolling to all links
+  $("a").on('click', function(event) {
 
+    // Make sure this.hash has a value before overriding default behavior
+    if (this.hash !== "") {
+      // Prevent default anchor click behavior
+      event.preventDefault();
+
+      // Store hash
+      var hash = this.hash;
+
+      // Using jQuery's animate() method to add smooth page scroll
+      // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
+      $('html, body').animate({
+        scrollTop: $(hash).offset().top
+      }, 800, function(){
+
+        // Add hash (#) to URL when done scrolling (default click behavior)
+        window.location.hash = hash;
+      });
+    } // End if
+  });
+});
+</script>
     <!-- Js Plugins -->
-    <script src="js/jquery-3.3.1.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/jquery.magnific-popup.min.js"></script>
-    <script src="js/jquery-ui.min.js"></script>
-    <script src="js/mixitup.min.js"></script>
-    <script src="js/jquery.countdown.min.js"></script>
-    <script src="js/jquery.slicknav.js"></script>
-    <script src="js/owl.carousel.min.js"></script>
-    <script src="js/jquery.nicescroll.min.js"></script>
-    <script src="js/main.js"></script>
+    <jsp:include page="js-plugins.jsp" flush="true"/>
 </body>
 
 </html>
