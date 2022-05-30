@@ -1,25 +1,27 @@
 package store.shopping;
 
-import java.sql.Date;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
 public class OrderStatusDTO {
 
-    private Date updateDate;
+    private Timestamp updateDate;
     private String statusName;
 
     public OrderStatusDTO() {
     }
 
-    public OrderStatusDTO(Date updateDate, String statusName) {
+    public OrderStatusDTO(Timestamp updateDate, String statusName) {
         this.updateDate = updateDate;
         this.statusName = statusName;
     }
 
-    public Date getUpdateDate() {
-        return updateDate;
+    public String getUpdateDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        return sdf.format(updateDate);
     }
 
-    public void setUpdateDate(Date updateDate) {
+    public void setUpdateDate(Timestamp updateDate) {
         this.updateDate = updateDate;
     }
 

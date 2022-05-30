@@ -64,9 +64,9 @@
         </div> 
 
         <div class="main">
-            Xin chào, <a href="my-profile.jsp"><%= loginUser.getFullName()%></a>
 
-            <form action="MainController" method="POST" style="margin-left: 65%;">                
+            <form action="MainController" method="POST" style="margin-left: 65%;">  
+                Xin chào, <a href="my-profile.jsp"><%= loginUser.getFullName()%></a>
                 <input type="submit" name="action" value="Logout" style="margin-left: 4%;">
             </form>
 
@@ -185,7 +185,7 @@
 
                                                     <div class="form-outline">
                                                         <label class="form-label" for="orderDate">Order date</label>
-                                                        <input type="date" readonly="" name="orderDate" value="<%= order.getOrderDate()%>" id="orderDate" class="form-control form-control-lg" />
+                                                        <input type="text" readonly="" name="orderDate" value="<%= order.getOrderDate()%>" id="orderDate" class="form-control form-control-lg" />
 
                                                     </div>
 

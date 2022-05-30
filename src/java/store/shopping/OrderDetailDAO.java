@@ -1,10 +1,10 @@
 package store.shopping;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import store.utils.DBUtils;
@@ -68,7 +68,7 @@ public class OrderDetailDAO {
                 ptm.setInt(1, orderID);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
-                    Date updateDate = rs.getDate("updateDate");
+                    Timestamp updateDate = rs.getTimestamp("updateDate");
                     String statusName = rs.getString("statusName");
 
                     list.add(new OrderStatusDTO(updateDate, statusName));

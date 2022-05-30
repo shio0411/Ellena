@@ -1,16 +1,16 @@
 package store.shopping;
 
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 
 public class OrderDTO {
+
     private int orderID;
     private Date orderDate;
     private int total;
     private String userName;
     private int statusID;
     private String statusName;
-
-    
 
     public OrderDTO() {
     }
@@ -32,8 +32,9 @@ public class OrderDTO {
         this.orderID = orderID;
     }
 
-    public Date getOrderDate() {
-        return orderDate;
+    public String getOrderDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        return sdf.format(orderDate);
     }
 
     public void setOrderDate(Date orderDate) {
@@ -71,6 +72,5 @@ public class OrderDTO {
     public void setStatusID(int statusID) {
         this.statusID = statusID;
     }
-    
-    
+
 }

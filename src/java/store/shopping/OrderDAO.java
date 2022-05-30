@@ -28,9 +28,9 @@ public class OrderDAO {
 
     private static final String UPDATE_ORDER_STATUS = "INSERT INTO tblOrderStatusUpdate(statusID, orderID, updateDate) VALUES (?, ?, GETDATE())";
 
-    private static final String SEARCH_ORDER_BY_EMAIL = "SELECT orderID, orderDate, total, userID, fullName, statusID, statusName \n"
-            + "FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID \n"
-            + "WHERE fullName LIKE ?";
+    private static final String SEARCH_ORDER_BY_EMAIL = "SELECT orderID, orderDate, total, userID, fullName, statusID, statusName, [TenKhongDau] "
+            + "FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID "
+            + "WHERE [TenKhongDau] LIKE '%' + [dbo].[fuChuyenCoDauThanhKhongDau](?) + '%'";
 
     
 
@@ -44,7 +44,7 @@ public class OrderDAO {
             conn = DBUtils.getConnection();
             if (conn != null) {
                 ptm = conn.prepareStatement(SEARCH_ORDER_BY_EMAIL);
-                ptm.setString(1, "%" + search + "%");
+                ptm.setString(1, search);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
                     int orderID = rs.getInt("orderID");

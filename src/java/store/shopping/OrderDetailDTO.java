@@ -1,7 +1,7 @@
-
 package store.shopping;
 
 public class OrderDetailDTO {
+
     private String productName;
     private int price;
     private int quantity;
@@ -58,5 +58,5 @@ public class OrderDetailDTO {
     public void setColor(String color) {
         this.color = color;
     }
-    
+
 }
