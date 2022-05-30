@@ -41,6 +41,7 @@
                 <input type="text" name="search" value="<%= search%>" placeholder="Tìm kiếm loại sản phẩm">
                 Trạng thái
                 <select name="status">
+                    <option value="all">Chọn trạng thái</option>
                     <option value="true">Active</option>
                     <option value="false">Inactive</option>
                 </select>
@@ -65,7 +66,7 @@
                 for (CategoryDTO category : listCategory) {
             %>
                 <tr>
-                    <td style="font-weight: bold"><%= category.getCategoryID()%></td>
+                    <td><%= category.getCategoryID()%></td>
                     <td><%= category.getCategoryName()%></td>
                     <td><%= category.getOrder()%></td>
                     <td>

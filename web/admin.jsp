@@ -73,6 +73,7 @@
                 </select>
                 Trạng thái
                 <select name="status">
+                    <option value="all" selected hidden>Chọn trạng thái</option>
                     <option value="true">Active</option>
                     <option value="false">Inactive</option>
                 </select>

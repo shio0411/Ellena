@@ -10,10 +10,13 @@ import store.utils.DBUtils;
 
 public class CategoryDAO {
 
-    private static final String SEARCH_CATEGORY = "SELECT categoryID, categoryName, [order], status FROM tblCategory WHERE dbo.fuChuyenCoDauThanhKhongDau(categoryName) LIKE ? AND status=?";
+    private static final String SEARCH_CATEGORY = "SELECT categoryID, categoryName, [order], status FROM tblCategory WHERE dbo.fuChuyenCoDauThanhKhongDau(categoryName) LIKE ?";
+    private static final String SEARCH_CATEGORY_WITH_STATUS = "SELECT categoryID, categoryName, [order], status FROM tblCategory WHERE dbo.fuChuyenCoDauThanhKhongDau(categoryName) LIKE ? AND status=?";
     private static final String SEARCH_CATEGORY_ALL = "SELECT categoryID, categoryName, [order], status FROM tblCategory";
     private static final String INSERT_CATEGORY = "INSERT INTO tblCategory VALUES (?, ?, ?)";
     private static final String UPDATE_CATEGORY = "UPDATE tblCategory SET categoryName=?, [order]=? WHERE categoryID=?";
+    private static final String CHECK_DUPLICTE_ORDER = "SELECT [order] FROM tblCategory";
+
 
     public List<CategoryDTO> getListCategory(String search, String Status) throws SQLException {
         List<CategoryDTO> list = new ArrayList<>();
@@ -23,9 +26,14 @@ public class CategoryDAO {
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                ptm = conn.prepareStatement(SEARCH_CATEGORY);
-                ptm.setString(1, "%" + search + "%");
-                ptm.setString(2, Status);
+                if(Status.equalsIgnoreCase("all")){
+                    ptm = conn.prepareStatement(SEARCH_CATEGORY);
+                    ptm.setString(1, "%" + search + "%");
+                }else{
+                    ptm = conn.prepareStatement(SEARCH_CATEGORY_WITH_STATUS);
+                    ptm.setString(1, "%" + search + "%");
+                    ptm.setString(2, Status);
+                }
                 rs = ptm.executeQuery();
                 while (rs.next()) {
                     int categoryID = rs.getInt("categoryID");
@@ -132,5 +140,5 @@ public class CategoryDAO {
         }
         return check;
     }
-
+    
 }

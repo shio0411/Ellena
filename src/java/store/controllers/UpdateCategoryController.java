@@ -2,7 +2,6 @@
 package store.controllers;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -29,7 +28,7 @@ public class UpdateCategoryController extends HttpServlet {
         try {
             int categoryID = Integer.parseInt(request.getParameter("categoryID"));
             String categoryName = request.getParameter("categoryName");
-            int order = Integer.parseInt(request.getParameter("order"));
+            int order = Integer.parseInt(request.getParameter("order")); 
             boolean check = true;
             CategoryDAO dao = new CategoryDAO();
             if (check) {

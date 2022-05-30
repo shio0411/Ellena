@@ -66,7 +66,7 @@
             <div class="row">
                 <div class="col-xl-3 col-lg-2">
                     <div class="header__logo">
-                        <a href="./"><img class="img-fluid" style="height: 31px; width: 98px" src="img/ellena-logo.png" alt=""></a>
+                        <a href="./"><img class="img-fluid" style="height: 38px;" src="img/ellena-logo.png" alt=""></a>
                     </div>
                 </div>
                 <div class="col-xl-6 col-lg-7" >
