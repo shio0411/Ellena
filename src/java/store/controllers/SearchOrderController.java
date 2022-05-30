@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package store.controllers;
 
 import java.io.IOException;
@@ -30,24 +25,8 @@ public class SearchOrderController extends HttpServlet {
             String sNumberOfWeek = request.getParameter("numberOfWeek");
             String sStatusID = request.getParameter("statusID");
             OrderDAO dao = new OrderDAO();
-            List<OrderDTO> listOrder = null;
-            listOrder = dao.getOrder(search, sNumberOfWeek, sStatusID);
-//            if (!"".equals(search)) {
-//                listOrder = dao.getOrderByName(search);
-//            } else if (!"%".equals(sNumberOfWeek) && !"%".equals(sStatusID)) {
-//                int numberOfWeek = Integer.parseInt(sNumberOfWeek);
-//                int statusID = Integer.parseInt(sStatusID);
-//                listOrder = dao.getOrder(numberOfWeek, statusID);
-//            } else if (!"%".equals(sNumberOfWeek) && "%".equals(sStatusID)) {
-//                int numberOfWeek = Integer.parseInt(sNumberOfWeek);
-//                listOrder = dao.getOrderByDate(numberOfWeek);
-//            } else if ("%".equals(sNumberOfWeek) && !"%".equals(sStatusID)) {
-//                int statusID = Integer.parseInt(sStatusID);
-//                listOrder = dao.getOrderByStatus(statusID);
-//            } else if ("%".equals(sNumberOfWeek) && "%".equals(sStatusID)) {
-//                listOrder = dao.getAllOrder();
-//            } 
-            
+            List<OrderDTO> listOrder = dao.getOrder(search, sNumberOfWeek, sStatusID);
+
             if (listOrder.size() > 0) {
                 request.setAttribute("LIST_ORDER", listOrder);
                 url = SUCCESS;

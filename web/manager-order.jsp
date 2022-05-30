@@ -1,7 +1,6 @@
+<%@page import="store.shopping.OrderDAO"%>
 <%@page import="store.shopping.OrderStatusDTO"%>
 <%@page import="store.shopping.OrderDetailDTO"%>
-<%@page import="store.shopping.OrderDetailDAO"%>
-<%@page import="store.shopping.OrderDAO"%>
 <%@page import="store.shopping.OrderDTO"%>
 <%@page import="java.util.List"%>
 <%@page import="store.user.UserDTO"%>
@@ -94,7 +93,7 @@
             ${requestScope.EMPTY_LIST_MESSAGE}
             <%
                 List<OrderDTO> listOrder = (List<OrderDTO>) request.getAttribute("LIST_ORDER");
-                OrderDetailDAO orderDetailDAO = new OrderDetailDAO();
+                OrderDAO dao = new OrderDAO();
 
                 if (listOrder != null) {
                     if (listOrder.size() > 0) {
@@ -219,7 +218,7 @@
                                                         </thead>
                                                         <tbody>
                                                             <%
-                                                                List<OrderDetailDTO> orderDetailList = orderDetailDAO.getOrderDetail(order.getOrderID());
+                                                                List<OrderDetailDTO> orderDetailList = dao.getOrderDetail(order.getOrderID());
                                                                 for (OrderDetailDTO orderDetail : orderDetailList) {
 
 
@@ -287,7 +286,7 @@
                                             </thead>
                                             <tbody>
                                                 <%
-                                                    List<OrderStatusDTO> orderStatusList = orderDetailDAO.getUpdateStatusHistory(order.getOrderID());
+                                                    List<OrderStatusDTO> orderStatusList = dao.getUpdateStatusHistory(order.getOrderID());
                                                     for (OrderStatusDTO orderStatus : orderStatusList) {
                                                 %>
                                                 <tr>

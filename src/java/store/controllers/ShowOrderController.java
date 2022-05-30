@@ -1,4 +1,3 @@
-
 package store.controllers;
 
 import java.io.IOException;
@@ -11,13 +10,12 @@ import javax.servlet.http.HttpServletResponse;
 import store.shopping.OrderDAO;
 import store.shopping.OrderDTO;
 
-
 @WebServlet(name = "ShowOrderController", urlPatterns = {"/ShowOrderController"})
 public class ShowOrderController extends HttpServlet {
 
     private static final String ERROR = "manager-order.jsp";
     private static final String SUCCESS = "manager-order.jsp";
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
