@@ -31,21 +31,22 @@ public class SearchOrderController extends HttpServlet {
             String sStatusID = request.getParameter("statusID");
             OrderDAO dao = new OrderDAO();
             List<OrderDTO> listOrder = null;
-            if (!"".equals(search)) {
-                listOrder = dao.getOrderByEmail(search);
-            } else if (!"%".equals(sNumberOfWeek) && !"%".equals(sStatusID)) {
-                int numberOfWeek = Integer.parseInt(sNumberOfWeek);
-                int statusID = Integer.parseInt(sStatusID);
-                listOrder = dao.getOrder(numberOfWeek, statusID);
-            } else if (!"%".equals(sNumberOfWeek) && "%".equals(sStatusID)) {
-                int numberOfWeek = Integer.parseInt(sNumberOfWeek);
-                listOrder = dao.getOrderByDate(numberOfWeek);
-            } else if ("%".equals(sNumberOfWeek) && !"%".equals(sStatusID)) {
-                int statusID = Integer.parseInt(sStatusID);
-                listOrder = dao.getOrderByStatus(statusID);
-            } else if ("%".equals(sNumberOfWeek) && "%".equals(sStatusID)) {
-                listOrder = dao.getAllOrder();
-            } 
+            listOrder = dao.getOrder(search, sNumberOfWeek, sStatusID);
+//            if (!"".equals(search)) {
+//                listOrder = dao.getOrderByName(search);
+//            } else if (!"%".equals(sNumberOfWeek) && !"%".equals(sStatusID)) {
+//                int numberOfWeek = Integer.parseInt(sNumberOfWeek);
+//                int statusID = Integer.parseInt(sStatusID);
+//                listOrder = dao.getOrder(numberOfWeek, statusID);
+//            } else if (!"%".equals(sNumberOfWeek) && "%".equals(sStatusID)) {
+//                int numberOfWeek = Integer.parseInt(sNumberOfWeek);
+//                listOrder = dao.getOrderByDate(numberOfWeek);
+//            } else if ("%".equals(sNumberOfWeek) && !"%".equals(sStatusID)) {
+//                int statusID = Integer.parseInt(sStatusID);
+//                listOrder = dao.getOrderByStatus(statusID);
+//            } else if ("%".equals(sNumberOfWeek) && "%".equals(sStatusID)) {
+//                listOrder = dao.getAllOrder();
+//            } 
             
             if (listOrder.size() > 0) {
                 request.setAttribute("LIST_ORDER", listOrder);

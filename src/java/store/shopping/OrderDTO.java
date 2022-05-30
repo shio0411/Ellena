@@ -11,17 +11,19 @@ public class OrderDTO {
     private String userName;
     private int statusID;
     private String statusName;
+    private String trackingID;
 
     public OrderDTO() {
     }
 
-    public OrderDTO(int orderID, Date orderDate, int total, String userID, int statusID, String statusName) {
+    public OrderDTO(int orderID, Date orderDate, int total, String userName, int statusID, String statusName, String trackingID) {
         this.orderID = orderID;
         this.orderDate = orderDate;
         this.total = total;
-        this.userName = userID;
+        this.userName = userName;
         this.statusID = statusID;
         this.statusName = statusName;
+        this.trackingID = trackingID;
     }
 
     public int getOrderID() {
@@ -71,6 +73,14 @@ public class OrderDTO {
 
     public void setStatusID(int statusID) {
         this.statusID = statusID;
+    }
+
+    public String getTrackingID() {
+        return trackingID;
+    }
+
+    public void setTrackingID(String trackingID) {
+        this.trackingID = trackingID;
     }
 
 }

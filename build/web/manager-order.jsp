@@ -243,7 +243,17 @@
                                                 </div>
 
                                             </div>
+                                            <div class="row">
+                                                <div class="col-md-12 mb-4">
 
+                                                    <div class="form-outline">
+                                                        <label class="form-label" for="trackingID">Tracking ID</label>
+                                                        <input type="text" name="trackingID" value="<%= order.getTrackingID()%>" id="trackingID" class="form-control form-control-lg" />
+                                                    </div>
+
+                                                </div>
+                                                    <!--t //hêm icon edit ở đây-->
+                                            </div>
                                         </div>
                                         <div class="modal-footer">
                                             <button class="btn btn-default" type="submit" name="action" value="UpdateOrder">Cập nhật</button>
