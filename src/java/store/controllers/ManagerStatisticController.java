@@ -7,11 +7,15 @@ package store.controllers;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
+import javafx.util.Pair;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import store.shopping.StatisticDAO;
+import store.shopping.StatisticDTO;
 import store.user.UserDAO;
 
 /**
@@ -28,10 +32,20 @@ public class ManagerStatisticController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
-            UserDAO dao = new UserDAO();
-            Map<String, Integer> orderStatistic= dao.getStatisticOrders();
-            if (orderStatistic.size() > 0) {
-                request.setAttribute("ORDER_STATISTIC", orderStatistic);
+            StatisticDAO dao = new StatisticDAO();
+            Map<String, StatisticDTO> orderStatistic7Day = dao.getStatisticOrder7Day();
+            Map<String, StatisticDTO> orderStatistic4Week = dao.getStatisticOrder4Week();
+            Map<String, StatisticDTO> orderStatistic1Year = dao.getStatisticOrder1Year();
+            StatisticDTO today = dao.getStatisticOrderToday();
+            List<Pair<String, StatisticDTO>> bestSeller = dao.getBestSeller();
+            List<Pair<String, StatisticDTO>> bestIncome = dao.getBestIncome();
+            if (orderStatistic7Day.size() > 0) {
+                request.setAttribute("ORDER_STATISTIC_7DAY", orderStatistic7Day);
+                request.setAttribute("ORDER_STATISTIC_4WEEK", orderStatistic4Week);
+                request.setAttribute("ORDER_STATISTIC_1YEAR", orderStatistic1Year);
+                request.setAttribute("ORDER_STATISTIC_TODAY", today);
+                request.setAttribute("BEST_SELLER", bestSeller);
+                request.setAttribute("BEST_INCOME", bestIncome);
                 url = SUCCESS;
             }
         } catch (Exception e) {

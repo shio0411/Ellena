@@ -4,6 +4,8 @@
     Author     : Jason 2.0
 --%>
 
+<%@page import="javafx.util.Pair"%>
+<%@page import="store.shopping.StatisticDTO"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Collections"%>
 <%@page import="java.util.Set"%>
@@ -40,166 +42,291 @@
             }
         %>
         <div class="container">
-        <div class="sidenav">
-            <a href="manager-statistic.jsp" style="color: #873e23; font-weight: bold; font-size: 120%;"><i class=""></i>Số liệu thống kê</a>
-            <a href="manager-statistic.jsp" style="color: #873e23; font-weight: bold; text-indent: 25px; font-size: 100%;"><i class=""></i>Tổng quan</a>
-            <a href="manager.jsp" style="text-indent: 25px;"><i class=""></i>Doanh thu sản phẩm</a>
-            <a href="manager-product.jsp" style="color: #873e23; font-weight: bold; font-size: 100%;"><i class=""></i>Quản lí sản phẩm</a>
-            <a href="manager-product.jsp" style="text-indent: 25px;"><i class=""></i>Danh sách sản phẩm</a>
-            <a href="manager.jsp" style="color: #873e23; font-weight: bold; font-size: 100%;"><i class=""></i>Quản lí đơn hàng</a>
-            <a href="manager.jsp" style="text-indent: 25px;"><i class=""></i>Danh sách đơn hàng</a>
+            <div class="sidenav">
+                <a href="manager-statistic.jsp" style="color: #873e23; font-weight: bold;"><i class=""></i>Số liệu thống kê</a>
+                <a href="manager-product.jsp" style="color: #873e23; font-weight: bold;"><i class=""></i>Quản lí sản phẩm</a>
+                <a href="manager-order.jsp" style="color: #873e23; font-weight: bold;"><i class=""></i>Quản lí đơn hàng</a>
+            </div>
+            <div class="main">
+                <%
+                    StatisticDTO today = (StatisticDTO)request.getAttribute("ORDER_STATISTIC_TODAY");                    
+                    %>
+                    <div class="row row-content">
+                <div class="card col-sm-4 align-items-center">
+                    <h3 class=""><b><%=today.getOrderQuantity()%></b></h3>
+                    <div class="card-body">
+                        <p>Đơn hàng</p>
+                    </div>
+                </div>
+                <div class="card col-sm-4 align-items-center">
+                    <h3 class=""><b><%=today.getIncome()%></b></h3>
+                    <div class="card-body">
+                        <p>Doanh thu</p>
+                    </div>
+                </div>
+                <div class="card col-sm-4 align-items-center">
+                    <h3 class=""><b><%=today.getProductQuantity()%></b></h3>
+                    <div class="card-body">
+                        <p>Sản phẩm bán ra</p>
+                    </div>
+                </div>
+                </div>
+                    <br>
+                <div class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" >Thời gian</a>
+                <div class="dropdown-menu nav-tabs" role="tablist">
+                    <button class="dropdown-item nav-link btn btn-light" role ="tab"  type="button" data-toggle="tab" data-target="#chart1" >7 ngày gần đây</button>
+                    <button class="dropdown-item nav-link btn btn-light" role ="tab"  type="button" data-toggle="tab" data-target="#chart2" >4 tuần gần đây</button>
+                    <button class="dropdown-item nav-link btn btn-light" role ="tab"  type="button" data-toggle="tab" data-target="#chart3" >12 tháng gần đây</button>
+                </div>
+            </div>
+                <div class="tab-content">
+                    <div id="chart1" class ="tab-pane fade active in" role="tabpanel">
+                        <h3>Số liệu 7 ngày gần đây</h3>
+                        <canvas id="7DayChart"></canvas>
+                    </div>
+                    <div id="chart2" class ="tab-pane fade" role="tabpanel">
+                         <h3>Số liệu 4 tuần gần đây</h3>
+                        <canvas id="4WeekChart"></canvas>
+                    </div>
+                    <div id="chart3" class ="tab-pane fade" role="tabpanel"> 
+                         <h3>Số liệu 12 tháng gần đây</h3>
+                        <canvas id="1YearChart"></canvas>
+                    </div>
+                </div>
+
+                <%
+                    Map<String, StatisticDTO> orderStatistic7Day = (Map<String, StatisticDTO>) request.getAttribute("ORDER_STATISTIC_7DAY");
+                    Map<String, StatisticDTO> orderStatistic4Week = (Map<String, StatisticDTO>) request.getAttribute("ORDER_STATISTIC_4WEEK");
+                    Map<String, StatisticDTO> orderStatistic1Year = (Map<String, StatisticDTO>) request.getAttribute("ORDER_STATISTIC_1YEAR");
+                    List<Pair<String, StatisticDTO>> bestSeller = (List<Pair<String, StatisticDTO>>) request.getAttribute("BEST_SELLER");
+                    List<Pair<String, StatisticDTO>> bestIncome = (List<Pair<String, StatisticDTO>>) request.getAttribute("BEST_INCOME");  
+                    Set<String> set7day = orderStatistic7Day.keySet();
+                    Set<String> set4week = orderStatistic4Week.keySet();
+                    Set<String> set1year = orderStatistic1Year.keySet();
+                    List<String> list7day = new ArrayList<String>(set7day);
+                    List<String> list4week = new ArrayList<String>(set4week);
+                    List<String> list1year = new ArrayList<String>(set1year);
+                    Collections.sort(list7day);
+                    Collections.sort(list4week);
+                    Collections.sort(list1year);                            
+
+                %>
+                
+                
+                
+            </div>
         </div>
         <div class="main">
-            <h1>Thống kê</h1>
-            <div class="row">
-                <canvas id="30DayChart" class ="col-sm-12"></canvas>
-            </div>
-            <div class="row">
-                <canvas id="14DayChart" class ="col-sm-12"></canvas>
-            </div>
-            <div class="row">
-                <canvas id="7DayChart" class ="col-sm-12"></canvas>
-            </div>
-            
-                <%
-                    Map<String, Integer> orderStatistic = (Map<String, Integer>) request.getAttribute("ORDER_STATISTIC");
-                    if (orderStatistic != null) {
-                        if (orderStatistic.size() > 0) {
-
-                            Set<String> set = orderStatistic.keySet();
-                            List<String> list = new ArrayList<String>(set);
-                            Collections.sort(list);
-                            
-                %>
-            <script type="text/javascript">
-                var ctx = document.getElementById("30DayChart");
-                var myChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels:[<%
-                            for(String key : list){
-                                %>"<%=key%>",<%
-                            }
-                                        %>],
-                        datasets: [
-                            {label: 'Order quantity',
-                                data: [<%
-                            for(String key : list){
-                                %>"<%=orderStatistic.get(key)%>",<%
-                            }
-                                        %>],
-                                backgroundColor: "#873e23",
-
-                                borderColor: [
-            
-                                ],
-                                borderWidth: 1
-                            }
-                        ]
-                    },
-                    options: {
-                        scales: {
-                            
-                            yAxes: [{
-                                    ticks: {
-                                        beginAtZero: true
-                                    }
-                                }],
-                            xAxes: [{
-                            barPercentage: 0.2
-                             }]
-                        }
-                    }
-                });
-
-            </script>
-            <script type="text/javascript">
-                var ctx = document.getElementById("14DayChart");
-                var myChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels:[<%
-                            for(int i = 13 ; i >= 0 ; i--){
-                                %>"<%=list.get(list.size()-i-1)%>",<%
-                            }
-                                        %>],
-                        datasets: [
-                            {label: 'Order quantity',
-                                data: [<%
-                            for(int i = 13 ; i >= 0 ; i--){
-                                %>"<%=orderStatistic.get(list.get(list.size()-i-1))%>",<%
-                            }
-                                        %>],
-                                backgroundColor: "#873e23",
-
-                                borderColor: [
-            
-                                ],
-                                borderWidth: 1
-                            }
-                        ]
-                    },
-                    options: {
-                        scales: {
-                            
-                            yAxes: [{
-                                    ticks: {
-                                        beginAtZero: true
-                                    }
-                                }],
-                            xAxes: [{
-                            barPercentage: 0.2
-                             }]
-                        }
-                    }
-                });
-
-            </script>
-            <script type="text/javascript">
-                var ctx = document.getElementById("7DayChart");
-                var myChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels:[<%
-                            for(int i = 6 ; i >= 0 ; i--){
-                                %>"<%=list.get(list.size()-i-1)%>",<%
-                            }
-                                        %>],
-                        datasets: [
-                            {label: 'Order quantity',
-                                data: [<%
-                            for(int i = 6 ; i >= 0 ; i--){
-                                %>"<%=orderStatistic.get(list.get(list.size()-i-1))%>",<%
-                            }
-                                        %>],
-                                backgroundColor: "#873e23",
-
-                                borderColor: [
-            
-                                ],
-                                borderWidth: 1
-                            }
-                        ]
-                    },
-                    options: {
-                        scales: {
-                            
-                            yAxes: [{
-                                    ticks: {
-                                        beginAtZero: true
-                                    }
-                                }],
-                            xAxes: [{
-                            barPercentage: 0.2
-                             }]
-                        }
-                    }
-                });
-
-            </script>
-            <%}
-                }%>
+            <h2>Sản phẩm bán chạy nhất:</h2>
+             <div class="row row-content align-items-center">
+            <%
+                int cnt = 1;
+                for(Pair<String, StatisticDTO> p : bestSeller){
+                    %>
+                    <div class="col-12 col-sm-2">
+                        <span class="badge badge-primary"><%=cnt++%></span>
+                        <h4><b><%=p.getKey()%></b></h4>
+                        <div>Mã sản phẩm: <%=p.getValue().getOrderQuantity()%></div>
+                        <div>Số lượng bán được: <%=p.getValue().getIncome()%></div>
+                      
+                    </div>  
+                    <%
+                }
+            %>  
+             </div>
+            <h2>Sản phẩm có doanh thu cao nhất:</h2>
+             <div class="row row-content align-items-center">
+            <%
+                cnt = 1;
+                for(Pair<String, StatisticDTO> p : bestIncome){
+                    %>
+                    <div class="col-12 col-sm-2">
+                        <span class="badge badge-primary"><%=cnt++%></span>
+                        <h4><b><%=p.getKey()%></b></h4>
+                        <div>Mã sản phẩm: <%=p.getValue().getOrderQuantity()%></div>
+                        <div>Doanh thu: <%=p.getValue().getProductQuantity()%></div>
+                      
+                    </div>  
+                    <%
+                }
+            %>  
         </div>
+
         </div>
+        <script>
+                    <!--$("[data-target="#30DayChart"]").on       $("#orderchat")-->
+                </script>
+        <script type="text/javascript">
+            var ctx = document.getElementById("7DayChart");
+            var myChart = new Chart(ctx, {
+            type: 'bar',
+                    data: {
+                    labels:[<%for (String key : list7day) {
+                            %>"<%=key%>",
+                            <%}%>],
+                            datasets: [
+                            {label: 'Order quantity',
+                                    data: [<%for (String key : list7day) {
+                                        %>"<%=orderStatistic7Day.get(key).getOrderQuantity()%>",
+                                        <%}%>],
+                                    backgroundColor: "#873e23",
+                                    borderColor: [
+
+                                    ],
+                                    borderWidth: 1
+                            },
+                            {label: 'income',
+                                    data: [<%for (String key : list7day) {
+                                        %>"<%=orderStatistic7Day.get(key).getIncome()%>",
+                                        <%}%>],
+                                    backgroundColor: "#93A3B1",
+                                    borderColor: [
+
+                                    ],
+                                    borderWidth: 1
+                            },
+                            {label: 'Product quantity',
+                                    data: [<%for (String key : list7day) {
+                                        %>"<%=orderStatistic7Day.get(key).getProductQuantity()%>",
+                                        <%}%>],
+                                    backgroundColor: "#FCA17D",
+                                    borderColor: [
+
+                                    ],
+                                    borderWidth: 1
+                            }
+                            ]
+                    },
+                    options: {
+                    scales: {
+
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }],
+                        xAxes: [{
+
+                            }]
+                    },
+                    interaction: {
+                        mode: 'point'
+                    }
+                    }
+            });
+        </script>
+        <script type="text/javascript">
+            var ctx = document.getElementById("4WeekChart");
+            var myChart = new Chart(ctx, {
+            type: 'bar',
+                    data: {
+                    labels:[<%for (String key : list4week) {
+                            %>"<%=key%>",
+                            <%}%>],
+                            datasets: [
+                            {label: 'Order quantity',
+                                    data: [<%for (String key : list4week) {
+                                        %>"<%=orderStatistic4Week.get(key).getOrderQuantity()%>",
+                                        <%}%>],
+                                    backgroundColor: "#873e23",
+                                    borderColor: [
+
+                                    ],
+                                    borderWidth: 1
+                            },
+                            {label: 'income',
+                                    data: [<%for (String key : list4week) {
+                                        %>"<%=orderStatistic4Week.get(key).getIncome()%>",
+                                        <%}%>],
+                                    backgroundColor: "#93A3B1",
+                                    borderColor: [
+
+                                    ],
+                                    borderWidth: 1
+                            },
+                            {label: 'Product quantity',
+                                    data: [<%for (String key : list4week) {
+                                        %>"<%=orderStatistic4Week.get(key).getProductQuantity()%>",
+                                        <%}%>],
+                                    backgroundColor: "#FCA17D",
+                                    borderColor: [
+
+                                    ],
+                                    borderWidth: 1
+                            }
+                            ]
+                    },
+                    options: {
+                    scales: {
+
+                    yAxes: [{
+                    ticks: {
+                    beginAtZero: true
+                    }
+                    }],
+                            xAxes: [{
+
+                            }]
+                    }
+                    }
+            });
+        </script>
+        <script type="text/javascript">
+            var ctx = document.getElementById("1YearChart");
+            var myChart = new Chart(ctx, {
+            type: 'bar',
+                    data: {
+                    labels:[<%for (String key : list1year) {
+                            %>"<%=key%>",
+                            <%}%>],
+                            datasets: [
+                            {label: 'Order quantity',
+                                    data: [<%for (String key : list1year) {
+                                        %>"<%=orderStatistic1Year.get(key).getOrderQuantity()%>",
+                                        <%}%>],
+                                    backgroundColor: "#873e23",
+                                    borderColor: [
+
+                                    ],
+                                    borderWidth: 1
+                            },
+                            {label: 'income',
+                                    data: [<%for (String key : list1year) {
+                                        %>"<%=orderStatistic1Year.get(key).getIncome()%>",
+                                        <%}%>],
+                                    backgroundColor: "#93A3B1",
+                                    borderColor: [
+
+                                    ],
+                                    borderWidth: 1
+                            },
+                            {label: 'Product quantity',
+                                    data: [<%for (String key : list1year) {
+                                        %>"<%=orderStatistic1Year.get(key).getProductQuantity()%>",
+                                        <%}%>],
+                                    backgroundColor: "#FCA17D",
+                                    borderColor: [
+
+                                    ],
+                                    borderWidth: 1
+                            }
+                            ]
+                    },
+                    options: {
+                    scales: {
+
+                    yAxes: [{
+                    ticks: {
+                    beginAtZero: true
+                    }
+                    }],
+                            xAxes: [{
+
+                            }]
+                    }
+                    }
+            });
+        </script>
     </body>
 </html>

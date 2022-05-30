@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import store.utils.DBUtils;
 
+
 public class UserDAO {
 
     private static final String LOGIN = "SELECT fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID=? AND password=?";
@@ -28,7 +29,7 @@ public class UserDAO {
     private static final String UPDATE_NAME = "UPDATE tblUsers SET fullName=? WHERE userID=?";
     private static final String ACTIVATE_ACCOUNT = "UPDATE tblUsers SET status=1 WHERE userID=?";
     private static final String DEACTIVATE_ACCOUNT = "UPDATE tblUsers SET status=0 WHERE userID=?";
-    private static final String STATISTIC_ORDER_QUANITY = "SELECT orderDate, COUNT(*) AS [quantity] FROM tblOrder GROUP BY orderDate";
+    private static final String STATISTIC_ORDER_QUANITY = "SELECT orderDate, COUNT(*) AS [orderQuantity], SUM(total) AS [income], SUM(quantity) as [productQuantity] FROM tblOrder o JOIN tblOrderDetail d ON o.orderID = d.orderID GROUP BY orderDate";
 
     public UserDTO checkLogin(String userID, String password) throws SQLException {
         UserDTO user = null;
