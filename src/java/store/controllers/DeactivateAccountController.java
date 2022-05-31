@@ -24,14 +24,18 @@ public class DeactivateAccountController extends HttpServlet {
         String url = ERROR;
         try {
             String userID = request.getParameter("userID");
-            String search = request.getParameter("search");
-            String roleID = request.getParameter("roleID");
+            String from = request.getParameter("from");
             UserDAO dao = new UserDAO();
             boolean check = dao.deactivateAccount(userID);
             if (check) {
-                url = SUCCESS;
+                if(from.equalsIgnoreCase("showaccount")){
+                    url = "SearchAccountController";
+                }else if(from.equalsIgnoreCase("showmanager")){
+                    url = "SearchManagerController";
+                }
+                
                 request.setAttribute("MESSAGE", "Cập nhật thành công!");
-            }
+            }  
         } catch (Exception e) {
             log("Error at DeactivateAccountController: " + e.toString());
         } finally {

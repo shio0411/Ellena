@@ -111,10 +111,10 @@
                         <%
                             if (user.isStatus()) {
                         %>
-                             <a href="MainController?action=DeactivateAccount&userID=<%=user.getUserID()%>&search=<%= search %>&roleID=<%= roleID %>">Vô hiệu hoá</a>
+                             <a href="MainController?action=DeactivateAccount&userID=<%=user.getUserID()%>&search=<%= search %>&roleID=<%= roleID %>&from=ShowAccount">Vô hiệu hoá</a>
                         <%} else {
                         %>
-                             <a href="MainController?action=ActivateAccount&userID=<%=user.getUserID()%>&search=<%= search %>&roleID=<%= roleID %>">Kích hoạt</a>
+                             <a href="MainController?action=ActivateAccount&userID=<%=user.getUserID()%>&search=<%= search %>&roleID=<%= roleID %>&from=ShowAccount">Kích hoạt</a>
                         <%
                             }
                         %>

@@ -19,7 +19,8 @@ public class UserDAO {
     private static final String SEARCH_USER_WITH_STATUS = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID LIKE ? AND roleID LIKE ? AND status=?";
     private static final String GET_USER_BY_ID = "SELECT userID, fullName, password, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID=?";
     private static final String SEARCH_USER_ALL = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers";
-    private static final String SEARCH_MANAGER = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID LIKE ? AND roleID LIKE 'MN' AND status=?";
+    private static final String SEARCH_MANAGER = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID LIKE ? AND roleID LIKE 'MN'";
+    private static final String SEARCH_MANAGER_WITH_STATUS = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID LIKE ? AND roleID LIKE 'MN' AND status=?";
     private static final String SEARCH_MANAGER_ALL = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE roleID LIKE 'MN'";
     private static final String UPDATE_ACCOUNT = "UPDATE tblUsers SET fullName=?, sex=?, roleID=?, address=?, birthday=?, phone=? WHERE userID=?";
     private static final String UPDATE_PASSWORD = "UPDATE tblUsers SET password=? WHERE userID=?";
@@ -276,9 +277,14 @@ public class UserDAO {
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                ptm = conn.prepareStatement(SEARCH_MANAGER);
-                ptm.setString(1, "%" + search + "%");
-                ptm.setString(2, Status);
+                if ("true".equalsIgnoreCase(Status) || "false".equalsIgnoreCase(Status)) {
+                    ptm = conn.prepareStatement(SEARCH_MANAGER_WITH_STATUS);
+                    ptm.setString(1, "%" + search + "%");
+                    ptm.setString(2, Status);
+                } else {
+                    ptm = conn.prepareStatement(SEARCH_MANAGER);
+                    ptm.setString(1, "%" + search + "%");
+                }
                 rs = ptm.executeQuery();
                 while (rs.next()) {
                     String userID = rs.getString("userID");

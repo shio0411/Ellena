@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import store.user.UserDAO;
 import store.user.UserDTO;
-import store.utils.VNCharacterUtils;
 
 /**
  *
