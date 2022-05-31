@@ -24,23 +24,10 @@
         <div class="offcanvas-menu-overlay"></div>
         <div class="offcanvas-menu-wrapper">
             <div class="offcanvas__close">+</div>
-            <ul class="offcanvas__widget">
-                <li><span class="icon_search search-switch"></span></li>
-                <li><a href="#"><span class="icon_heart_alt"></span>
-                        <div class="tip">2</div>
-                    </a></li>
-                <li><a href="#"><span class="icon_bag_alt"></span>
-                        <div class="tip">2</div>
-                    </a></li>
-            </ul>
             <div class="offcanvas__logo">
-                <a href="./"><img src="img/logo.png" alt=""></a>
+                <a href="./"><img class="img-fluid" style="height: 38px;" src="img/ellena-logo.png" alt=""></a>
             </div>
-            <div id="mobile-menu-wrap"></div>
-            <div class="offcanvas__auth">
-                <a href="./login">Login</a>
-                <a href="./register">Register</a>
-            </div>
+            <div id="mobile-menu-wrap"></div>          
         </div>
         <!-- Offcanvas Menu End -->
 
@@ -50,7 +37,7 @@
                 <div class="row">
                     <div class="col-xl-3 col-lg-2">
                         <div class="header__logo">
-                            <a href="./"><img src="img/logo.png" alt=""></a>
+                            <a href="./"><img class="img-fluid" style="height: 38px;" src="img/ellena-logo.png" alt=""></a>
                         </div>
                            
             </div>
