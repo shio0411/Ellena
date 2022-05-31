@@ -1,6 +1,7 @@
 package store.controllers;
 
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -23,6 +24,14 @@ public class AddCategoryController extends HttpServlet {
             String categoryName = request.getParameter("categoryName");
             int order = Integer.parseInt(request.getParameter("order"));
             CategoryDAO dao = new CategoryDAO();
+            int i = order;
+            if (dao.checkDuplicateOrder(order)) {
+                List<Integer> largerOrderCategoryID = dao.listLargerOrderCategoryID(order);
+                for (Integer categoryId : largerOrderCategoryID) {
+                    dao.incrementLargerOrderByOne(i, categoryId);
+                    i++;
+                }
+            }
             CategoryDTO cat = new CategoryDTO(categoryName, order, true);
             boolean checkInsert = dao.addCategory(cat);
             if (checkInsert) {

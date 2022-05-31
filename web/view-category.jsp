@@ -22,7 +22,31 @@
                 response.sendRedirect("login.jsp");
                 return;
             }
+            String message = (String) request.getAttribute("MESSAGE");
+            if (message != null) {
         %>
+        
+        <!-- Pop-up thông báo cập nhật thành công -->
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Thông báo</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                    </div>
+                    <div class="modal-body">
+                        <p><%=message%></p>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="MainController?action=SearchCategory&search=<%=search %>"><button type="button" class="btn btn-default">Đóng</button></a>
+                    </div>
+                </div>
+
+            </div>
+        </div> <%}%>
           
         
         <div class="sidenav">
@@ -41,6 +65,7 @@
                 <input type="text" name="search" value="<%= search%>" placeholder="Tìm kiếm loại sản phẩm">
                 Trạng thái
                 <select name="status">
+                    <option value="all">Chọn trạng thái</option>
                     <option value="true">Active</option>
                     <option value="false">Inactive</option>
                 </select>
@@ -65,17 +90,17 @@
                 for (CategoryDTO category : listCategory) {
             %>
                 <tr>
-                    <td style="font-weight: bold"><%= category.getCategoryID()%></td>
+                    <td><%= category.getCategoryID()%></td>
                     <td><%= category.getCategoryName()%></td>
                     <td><%= category.getOrder()%></td>
                     <td>
                         <%
                             if (category.isStatus()) {
                         %>
-                            <a href="MainController?action=DeactivateAccount&categoryID=<%=category.getCategoryID()%>">Vô hiệu hoá</a>
+                            <a href="MainController?action=DeactivateCategory&categoryID=<%=category.getCategoryID()%>&search=<%= search %>">Vô hiệu hoá</a>
                         <%} else {
                         %>
-                            <a href="MainController?action=ActivateAccount&userID=<%=category.getCategoryID()%>">Kích hoạt</a>
+                            <a href="MainController?action=ActivateCategory&categoryID=<%=category.getCategoryID()%>&search=<%= search %>">Kích hoạt</a>
                         <%
                             }
                         %>
@@ -97,8 +122,7 @@
                                             <div class="col-md-6 mb-4 pb-2">
                                                  <div class="form-outline">
                                                     <label class="form-label" for="categoryID">ID</label>
-                                                    <input type="number" name="categoryID" value="<%= category.getCategoryID()%>" readonly="" id="userID" class="form-control form-control-lg" />
-                                                    <p style="color: red">${requestScope.USER_ERROR.userID}</p>
+                                                    <input type="number" name="categoryID" value="<%= category.getCategoryID()%>" readonly="" id="categoryID" class="form-control form-control-lg" />
 
                                                 </div>
 
@@ -117,7 +141,7 @@
 
                                                <div class="form-outline">
                                                     <label class="form-label" for="categoryName">Tên loại sản phẩm</label>
-                                                    <input type="text" name="categoryName" value="<%= category.getCategoryName()%>" id="categoryName" class="form-control form-control-lg" />
+                                                    <input type="text" name="categoryName" value="<%= category.getCategoryName()%>" maxlength="50" id="categoryName" class="form-control form-control-lg" />
 
                                                 </div>
 

@@ -1,50 +1,47 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 package store.controllers;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import store.user.UserDAO;
 
 /**
  *
- * @author giama
+ * @author vankh
  */
-@WebServlet(name = "ActivateAccountController", urlPatterns = {"/ActivateAccountController"})
-public class ActivateAccountController extends HttpServlet {
-    private static final String ERROR = "ShowAccountController";
-    private static final String SUCCESS = "SearchAccountController";
+@WebServlet(name = "SearchCatalogController", urlPatterns = {"/SearchCatalogController"})
+public class SearchCatalogController extends HttpServlet {
 
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = ERROR;
-        try {
-            String userID = request.getParameter("userID");
-            String roleID = request.getParameter("roleID");
-            String from = request.getParameter("from");
-            UserDAO dao = new UserDAO();
-            boolean check = dao.activateAccount(userID);
-            if (check) {
-                if(from.equalsIgnoreCase("showaccount")){
-                    url = "SearchAccountController";
-                }else if(from.equalsIgnoreCase("showmanager")){
-                    url = "SearchManagerController";
-                }
-                
-                request.setAttribute("MESSAGE", "Cập nhật thành công!");
-            }   
-        } catch (Exception e) {
-            log("Error at ActivateAccountController: " + e.toString());
-        } finally {
-            request.getRequestDispatcher(url).forward(request, response);
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet SearchCatalogController</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet SearchCatalogController at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
         }
     }
 

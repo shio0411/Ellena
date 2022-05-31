@@ -22,6 +22,11 @@
                 response.sendRedirect("login.jsp");
                 return;
             }
+            List<UserDTO> listUser = (List<UserDTO>) request.getAttribute("LIST_USER");
+            String roleID = request.getParameter("roleID");
+            if (roleID == null) {
+                roleID = "%";
+            }
             String message = (String) request.getAttribute("MESSAGE");
             if (message != null) {
         %>
@@ -41,7 +46,7 @@
                         <p><%=message%></p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                        <a href="MainController?action=SearchAccount&search=<%=search%>&roleID=<%= roleID %>"><button type="button" class="btn btn-default">Đóng</button></a>
                     </div>
                 </div>
 
@@ -73,14 +78,14 @@
                 </select>
                 Trạng thái
                 <select name="status">
+                    <option value="all" selected hidden>Chọn trạng thái</option>
                     <option value="true">Active</option>
                     <option value="false">Inactive</option>
                 </select>
                 <button type="submit" name="action" value="SearchAccount" class="btn-outline-dark" style="width: 15%; padding: 0.5% 0.1%;"><i class="fa fa-search fa-lg"></i>Search</button>
             </form>   
             <a href="add-account.jsp">Tạo tài khoản mới</a>
-            <%
-                List<UserDTO> listUser = (List<UserDTO>) request.getAttribute("LIST_USER");
+            <%               
                 if (listUser != null) {
                     if (listUser.size() > 0) {
             %>      
@@ -106,10 +111,10 @@
                         <%
                             if (user.isStatus()) {
                         %>
-                             <a href="MainController?action=DeactivateAccount&userID=<%=user.getUserID()%>">Vô hiệu hoá</a>
+                             <a href="MainController?action=DeactivateAccount&userID=<%=user.getUserID()%>&search=<%= search %>&roleID=<%= roleID %>&from=ShowAccount">Vô hiệu hoá</a>
                         <%} else {
                         %>
-                             <a href="MainController?action=ActivateAccount&userID=<%=user.getUserID()%>">Kích hoạt</a>
+                             <a href="MainController?action=ActivateAccount&userID=<%=user.getUserID()%>&search=<%= search %>&roleID=<%= roleID %>&from=ShowAccount">Kích hoạt</a>
                         <%
                             }
                         %>
@@ -181,15 +186,16 @@
                                                 <h6 class="mb-2 pb-1">Giới tính: </h6>
 
                                                 <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="sex" id="femaleGender"
-                                                           value="False" <% if (user.getSex() == false) {%> checked <% } %>/>
-                                                    <label class="form-check-label" for="femaleGender">Nữ</label>
+                                                    
+                                                    <input class="form-check-input" type="radio" name="sex" id="maleGender"
+                                                           value="true" <% if (user.getSex() == true) {%> checked <% }%>/>
+                                                    <label class="form-check-label" for="maleGender">Nam</label>
                                                 </div>
 
                                                 <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="sex" id="maleGender"
-                                                           value="True" <% if (user.getSex() == true) {%> checked <% }%>/>
-                                                    <label class="form-check-label" for="maleGender">Nam</label>
+                                                    <input class="form-check-input" type="radio" name="sex" id="femaleGender"
+                                                           value="false" <% if (user.getSex() == false) {%> checked <% } %>/>
+                                                    <label class="form-check-label" for="femaleGender">Nữ</label>
                                                 </div>
 
 

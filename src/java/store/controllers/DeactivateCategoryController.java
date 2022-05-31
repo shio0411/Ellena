@@ -1,48 +1,36 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package store.controllers;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import store.user.UserDAO;
+import store.shopping.CategoryDAO;
 
-/**
- *
- * @author giama
- */
-@WebServlet(name = "ActivateAccountController", urlPatterns = {"/ActivateAccountController"})
-public class ActivateAccountController extends HttpServlet {
-    private static final String ERROR = "ShowAccountController";
-    private static final String SUCCESS = "SearchAccountController";
+
+@WebServlet(name = "DeactivateCategoryController", urlPatterns = {"/DeactivateCategoryController"})
+public class DeactivateCategoryController extends HttpServlet {
+
+    private static final String ERROR = "ShowCategoryController";
+    private static final String SUCCESS = "SearchCategoryController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
-            String userID = request.getParameter("userID");
-            String roleID = request.getParameter("roleID");
-            String from = request.getParameter("from");
-            UserDAO dao = new UserDAO();
-            boolean check = dao.activateAccount(userID);
+            String categoryID = request.getParameter("categoryID");
+            CategoryDAO dao = new CategoryDAO();
+            boolean check = dao.deactivateCategory(categoryID);
             if (check) {
-                if(from.equalsIgnoreCase("showaccount")){
-                    url = "SearchAccountController";
-                }else if(from.equalsIgnoreCase("showmanager")){
-                    url = "SearchManagerController";
-                }
-                
+                url = SUCCESS;
                 request.setAttribute("MESSAGE", "Cập nhật thành công!");
             }   
         } catch (Exception e) {
-            log("Error at ActivateAccountController: " + e.toString());
+            log("Error at DeactivateCategoryController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

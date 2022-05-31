@@ -1,4 +1,3 @@
-
 package store.controllers;
 
 import java.io.IOException;
@@ -7,9 +6,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 public class MainController extends HttpServlet {
-    
+
     private static final String ERROR = "error.jsp";
     private static final String LOGIN = "Login";
     private static final String LOGIN_CONTROLLER = "Login";
@@ -23,10 +21,14 @@ public class MainController extends HttpServlet {
     private static final String ADD_ACCOUNT_CONTROLLER = "AddAccountController";
     private static final String SEARCH_MANAGER = "SearchManager";
     private static final String SEARCH_MANAGER_CONTROLLER = "SearchManagerController";
+    private static final String SEARCH_CATALOG = "search-catalog";
+    private static final String SEARCH_CATALOG_CONTROLLER = "SearchCatalogController";
     private static final String SEARCH_CATEGORY = "SearchCategory";
     private static final String SEARCH_CATEGORY_CONTROLLER = "SearchCategoryController";
     private static final String ADD_CATEGORY = "AddCategory";
     private static final String ADD_CATEGORY_CONTROLLER = "AddCategoryController";
+    private static final String UPDATE_CATEGORY = "UpdateCategory";
+    private static final String UPDATE_CATEGORY_CONTROLLER = "UpdateCategoryController";
     private static final String REMOVE = "Remove";
     private static final String REMOVE_CONTROLLER = "RemoveController";
     private static final String UPDATE_ACCOUNT = "UpdateAccount";
@@ -43,6 +45,10 @@ public class MainController extends HttpServlet {
     private static final String DEACTIVATE_ACCOUNT_CONTROLLER = "DeactivateAccountController";
     private static final String ACTIVATE_ACCOUNT = "ActivateAccount";
     private static final String ACTIVATE_ACCOUNT_CONTROLLER = "ActivateAccountController";
+    private static final String DEACTIVATE_CATEGORY = "DeactivateCategory";
+    private static final String DEACTIVATE_CATEGORY_CONTROLLER = "DeactivateCategoryController";
+    private static final String ACTIVATE_CATEGORY = "ActivateCategory";
+    private static final String ACTIVATE_CATEGORY_CONTROLLER = "ActivateCategoryController";
     private static final String LOGOUT = "Logout";
     private static final String LOGOUT_CONTROLLER = "LogoutController";
     private static final String INSERT = "Insert";
@@ -71,87 +77,101 @@ public class MainController extends HttpServlet {
         String url = ERROR;
         try {
             String action = request.getParameter("action");
-            if (null != action) switch (action) {
-                case LOGIN:
-                    url = LOGIN_CONTROLLER;
-                    break;
-                case REGISTER:
-                    url = REGISTER_CONTROLLER;
-                    break;
-                case LOGIN_GOOGLE:
-                    url = LOGIN_GOOGLE_CONTROLLER;
-                    break;
-                case SEARCH_ACCOUNT:
-                    url = SEARCH_ACCOUNT_CONTROLLER;
-                    break;
-                case SEARCH_MANAGER:
-                    url = SEARCH_MANAGER_CONTROLLER;
-                    break;
-                case SEARCH_CATEGORY:
-                    url = SEARCH_CATEGORY_CONTROLLER;
-                    break;
-                case ADD_CATEGORY:
-                    url = ADD_CATEGORY_CONTROLLER;
-                    break;
-                case ADD_ACCOUNT:
-                    url = ADD_ACCOUNT_CONTROLLER;
-                break;
-                case VIEW_USER:
-                    url = VIEW_USER_CONTROLLER;
-                    break;
-                case INSERT:
-                    url = INSERT_CONTROLLER;
-                    break;
-                case UPDATE_ACCOUNT:
-                    url = UPDATE_ACCOUNT_PAGE;
-                    break;
-                case UPDATE_PASSWORD:
-                    url = UPDATE_PASSWORD_PAGE;
-                    break;
-                case UPDATE_NAME:
-                    url = UPDATE_NAME_PAGE;
-                    break;
-                case UPDATE_ADDRESS:
-                    url = UPDATE_ADDRESS_PAGE;
-                    break;
-                case UPDATE_PHONE:
-                    url = UPDATE_PHONE_PAGE;
-                    break;
-                case DEACTIVATE_ACCOUNT:
-                    url = DEACTIVATE_ACCOUNT_CONTROLLER;
-                    break;
-                case ACTIVATE_ACCOUNT:
-                    url = ACTIVATE_ACCOUNT_CONTROLLER;
-                    break;
-                case LOGOUT:
-                    url = LOGOUT_CONTROLLER;
-                    break;
-                case REMOVE:
-                    url = REMOVE_CONTROLLER;
-                    break;
-                case HIDE:
-                    url = HIDE_CONTROLLER;
-                    break;
-                case UNHIDE:
-                    url = UNHIDE_CONTROLLER;
-                    break;
-                case CREATE:
-                    url = CREATE_CONTROLLER;
-                    break;
-                case ADD_TO_CART:
-                    url = ADD_TO_CART_CONTROLLER;
-                    break;
-                case UPDATE_CART:
-                    url = UPDATE_CART_CONTROLLER;
-                    break;
-                case CHECKOUT:
-                    url = CHECKOUT_CONTROLLER;
-                    break;
-                case SUBSCRIBE:
-                    url = SUBSCRIBE_CONTROLLER;
-                    break;
-                default:
-                    break;
+            if (null != action) {
+                switch (action) {
+                    case LOGIN:
+                        url = LOGIN_CONTROLLER;
+                        break;
+                    case REGISTER:
+                        url = REGISTER_CONTROLLER;
+                        break;
+                    case LOGIN_GOOGLE:
+                        url = LOGIN_GOOGLE_CONTROLLER;
+                        break;
+                    case SEARCH_ACCOUNT:
+                        url = SEARCH_ACCOUNT_CONTROLLER;
+                        break;
+                    case SEARCH_MANAGER:
+                        url = SEARCH_MANAGER_CONTROLLER;
+                        break;
+                    case SEARCH_CATEGORY:
+                        url = SEARCH_CATEGORY_CONTROLLER;
+                        break;
+                    case SEARCH_CATALOG:
+                        url = SEARCH_CATALOG_CONTROLLER;
+                        break;
+                    case ADD_CATEGORY:
+                        url = ADD_CATEGORY_CONTROLLER;
+                        break;
+                    case ADD_ACCOUNT:
+                        url = ADD_ACCOUNT_CONTROLLER;
+                        break;
+                    case VIEW_USER:
+                        url = VIEW_USER_CONTROLLER;
+                        break;
+                    case INSERT:
+                        url = INSERT_CONTROLLER;
+                        break;
+                    case UPDATE_ACCOUNT:
+                        url = UPDATE_ACCOUNT_PAGE;
+                        break;
+                    case UPDATE_CATEGORY:
+                        url = UPDATE_CATEGORY_CONTROLLER;
+                        break;
+                    case UPDATE_PASSWORD:
+                        url = UPDATE_PASSWORD_PAGE;
+                        break;
+                    case UPDATE_NAME:
+                        url = UPDATE_NAME_PAGE;
+                        break;
+                    case UPDATE_ADDRESS:
+                        url = UPDATE_ADDRESS_PAGE;
+                        break;
+                    case UPDATE_PHONE:
+                        url = UPDATE_PHONE_PAGE;
+                        break;
+                    case DEACTIVATE_ACCOUNT:
+                        url = DEACTIVATE_ACCOUNT_CONTROLLER;
+                        break;
+                    case ACTIVATE_ACCOUNT:
+                        url = ACTIVATE_ACCOUNT_CONTROLLER;
+                        break;
+                    case DEACTIVATE_CATEGORY:
+                        url = DEACTIVATE_CATEGORY_CONTROLLER;
+                        break;
+                    case ACTIVATE_CATEGORY:
+                        url = ACTIVATE_CATEGORY_CONTROLLER;
+                        break;
+                    case LOGOUT:
+                        url = LOGOUT_CONTROLLER;
+                        break;
+                    case REMOVE:
+                        url = REMOVE_CONTROLLER;
+                        break;
+                    case HIDE:
+                        url = HIDE_CONTROLLER;
+                        break;
+                    case UNHIDE:
+                        url = UNHIDE_CONTROLLER;
+                        break;
+                    case CREATE:
+                        url = CREATE_CONTROLLER;
+                        break;
+                    case ADD_TO_CART:
+                        url = ADD_TO_CART_CONTROLLER;
+                        break;
+                    case UPDATE_CART:
+                        url = UPDATE_CART_CONTROLLER;
+                        break;
+                    case CHECKOUT:
+                        url = CHECKOUT_CONTROLLER;
+                        break;
+                    case SUBSCRIBE:
+                        url = SUBSCRIBE_CONTROLLER;
+                        break;
+                    default:
+                        break;
+                }
             }
         } catch (Exception e) {
             log("Error at MainController: " + e.toString());
