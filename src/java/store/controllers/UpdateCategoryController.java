@@ -1,7 +1,7 @@
-
 package store.controllers;
 
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,7 +17,6 @@ import store.shopping.CategoryDTO;
 @WebServlet(name = "UpdateCategoryController", urlPatterns = {"/UpdateCategoryController"})
 public class UpdateCategoryController extends HttpServlet {
 
- 
     private static final String ERROR = "ShowCategoryController";
     private static final String SUCCESS = "ShowCategoryController";
 
@@ -28,16 +27,21 @@ public class UpdateCategoryController extends HttpServlet {
         try {
             int categoryID = Integer.parseInt(request.getParameter("categoryID"));
             String categoryName = request.getParameter("categoryName");
-            int order = Integer.parseInt(request.getParameter("order")); 
-            boolean check = true;
+            int order = Integer.parseInt(request.getParameter("order"));
+            int i = order;
             CategoryDAO dao = new CategoryDAO();
-            if (check) {
-                CategoryDTO cat = new CategoryDTO(categoryID, categoryName, order, true);
-                boolean checkUpdate = dao.updateCategory(cat);
-                if (checkUpdate) {
-                    url = SUCCESS;
-                    request.setAttribute("MESSAGE", "Cập nhật thành công!");
+            if (dao.checkDuplicateOrder(order)) {
+                List<Integer> largerOrderCategoryID = dao.listLargerOrderCategoryID(order);
+                for (Integer categoryId : largerOrderCategoryID) {
+                    dao.incrementLargerOrderByOne(i, categoryId);
+                    i++;
                 }
+            }
+            CategoryDTO cat = new CategoryDTO(categoryID, categoryName, order, true);
+            boolean checkUpdate = dao.updateCategory(cat);
+            if (checkUpdate) {
+                url = SUCCESS;
+                request.setAttribute("MESSAGE", "Cập nhật thành công!");
             } else {
                 request.setAttribute("MESSAGE", "Cập nhật thất bại!");
             }
@@ -48,7 +52,7 @@ public class UpdateCategoryController extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *

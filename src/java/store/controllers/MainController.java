@@ -45,6 +45,10 @@ public class MainController extends HttpServlet {
     private static final String DEACTIVATE_ACCOUNT_CONTROLLER = "DeactivateAccountController";
     private static final String ACTIVATE_ACCOUNT = "ActivateAccount";
     private static final String ACTIVATE_ACCOUNT_CONTROLLER = "ActivateAccountController";
+    private static final String DEACTIVATE_CATEGORY = "DeactivateCategory";
+    private static final String DEACTIVATE_CATEGORY_CONTROLLER = "DeactivateCategoryController";
+    private static final String ACTIVATE_CATEGORY = "ActivateCategory";
+    private static final String ACTIVATE_CATEGORY_CONTROLLER = "ActivateCategoryController";
     private static final String LOGOUT = "Logout";
     private static final String LOGOUT_CONTROLLER = "LogoutController";
     private static final String INSERT = "Insert";
@@ -131,6 +135,12 @@ public class MainController extends HttpServlet {
                         break;
                     case ACTIVATE_ACCOUNT:
                         url = ACTIVATE_ACCOUNT_CONTROLLER;
+                        break;
+                    case DEACTIVATE_CATEGORY:
+                        url = DEACTIVATE_CATEGORY_CONTROLLER;
+                        break;
+                    case ACTIVATE_CATEGORY:
+                        url = ACTIVATE_CATEGORY_CONTROLLER;
                         break;
                     case LOGOUT:
                         url = LOGOUT_CONTROLLER;

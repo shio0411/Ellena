@@ -22,6 +22,11 @@
                 response.sendRedirect("login.jsp");
                 return;
             }
+            List<UserDTO> listUser = (List<UserDTO>) request.getAttribute("LIST_USER");
+            String roleID = request.getParameter("roleID");
+            if (roleID == null) {
+                roleID = "%";
+            }
             String message = (String) request.getAttribute("MESSAGE");
             if (message != null) {
         %>
@@ -41,7 +46,7 @@
                         <p><%=message%></p>
                     </div>
                     <div class="modal-footer">
-                        <a href="ShowAccountController"><button type="button" class="btn btn-default">Đóng</button></a>
+                        <a href="MainController?action=SearchAccount&search=<%=search%>&roleID=<%= roleID %>"><button type="button" class="btn btn-default">Đóng</button></a>
                     </div>
                 </div>
 
@@ -80,8 +85,7 @@
                 <button type="submit" name="action" value="SearchAccount" class="btn-outline-dark" style="width: 15%; padding: 0.5% 0.1%;"><i class="fa fa-search fa-lg"></i>Search</button>
             </form>   
             <a href="add-account.jsp">Tạo tài khoản mới</a>
-            <%
-                List<UserDTO> listUser = (List<UserDTO>) request.getAttribute("LIST_USER");
+            <%               
                 if (listUser != null) {
                     if (listUser.size() > 0) {
             %>      
@@ -107,10 +111,10 @@
                         <%
                             if (user.isStatus()) {
                         %>
-                             <a href="MainController?action=DeactivateAccount&userID=<%=user.getUserID()%>">Vô hiệu hoá</a>
+                             <a href="MainController?action=DeactivateAccount&userID=<%=user.getUserID()%>&search=<%= search %>&roleID=<%= roleID %>">Vô hiệu hoá</a>
                         <%} else {
                         %>
-                             <a href="MainController?action=ActivateAccount&userID=<%=user.getUserID()%>">Kích hoạt</a>
+                             <a href="MainController?action=ActivateAccount&userID=<%=user.getUserID()%>&search=<%= search %>&roleID=<%= roleID %>">Kích hoạt</a>
                         <%
                             }
                         %>

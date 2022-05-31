@@ -22,7 +22,31 @@
                 response.sendRedirect("login.jsp");
                 return;
             }
+            String message = (String) request.getAttribute("MESSAGE");
+            if (message != null) {
         %>
+        
+        <!-- Pop-up thông báo cập nhật thành công -->
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Thông báo</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                    </div>
+                    <div class="modal-body">
+                        <p><%=message%></p>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="MainController?action=SearchCategory&search=<%=search %>"><button type="button" class="btn btn-default">Đóng</button></a>
+                    </div>
+                </div>
+
+            </div>
+        </div> <%}%>
           
         
         <div class="sidenav">
@@ -73,10 +97,10 @@
                         <%
                             if (category.isStatus()) {
                         %>
-                            <a href="MainController?action=DeactivateAccount&categoryID=<%=category.getCategoryID()%>">Vô hiệu hoá</a>
+                            <a href="MainController?action=DeactivateCategory&categoryID=<%=category.getCategoryID()%>&search=<%= search %>">Vô hiệu hoá</a>
                         <%} else {
                         %>
-                            <a href="MainController?action=ActivateAccount&userID=<%=category.getCategoryID()%>">Kích hoạt</a>
+                            <a href="MainController?action=ActivateCategory&categoryID=<%=category.getCategoryID()%>&search=<%= search %>">Kích hoạt</a>
                         <%
                             }
                         %>
@@ -117,7 +141,7 @@
 
                                                <div class="form-outline">
                                                     <label class="form-label" for="categoryName">Tên loại sản phẩm</label>
-                                                    <input type="text" name="categoryName" value="<%= category.getCategoryName()%>" id="categoryName" class="form-control form-control-lg" />
+                                                    <input type="text" name="categoryName" value="<%= category.getCategoryName()%>" maxlength="50" id="categoryName" class="form-control form-control-lg" />
 
                                                 </div>
 
