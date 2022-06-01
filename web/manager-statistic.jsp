@@ -124,13 +124,16 @@
                 int cnt = 1;
                 for(Pair<String, StatisticDTO> p : bestSeller){
                     %>
-                    <div class="col-12 col-sm-2">
+                    <div class="card rounded ml-2 py-5 col-12 col-md-2">
+                    <div class="card-header ">
                         <span class="badge badge-primary"><%=cnt++%></span>
-                        <h4><b><%=p.getKey()%></b></h4>
+                        <h4 class=""><b><%=p.getKey()%></b></h4>       
+                    </div>
+                    <div class="card-body">
                         <div>Mã sản phẩm: <%=p.getValue().getOrderQuantity()%></div>
                         <div>Số lượng bán được: <%=p.getValue().getIncome()%></div>
-                      
-                    </div>  
+                    </div>
+                    </div>
                     <%
                 }
             %>  
