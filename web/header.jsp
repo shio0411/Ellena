@@ -69,8 +69,8 @@
                     <div class="col-xl-6 col-lg-7" >
                         <nav class="header__menu">
                             <ul id="menu">
-                                <li <%if(request.getRequestURL().toString().contains("/home.jsp")) { %>class="active"<%}%>><a href="./">Home</a></li>
-                                <li <%if(request.getRequestURL().toString().contains("/category")) { %>class="active"<%}%>><a>Thời trang</a>
+                                <li id="home"><a href="./">Trang chủ</a></li>
+                                <li id="category"><a>Thời trang</a>
                                     <ul class="dropdown">
                                         <%
                                             for (int i : categoryOrder) {
@@ -84,8 +84,8 @@
                                                 }%>
                                     </ul>
                                 </li>
-                                <li><a href="./blog.html">Khám phá</a></li>
-                                <li <%if(request.getRequestURL().toString().contains("/contact")) { %>class="active"<%}%>><a href="./contact.jsp">Liên hệ</a></li>
+                                <li id="browse"><a href="./blog.html">Khám phá</a></li>
+                                <li id="contact"><a href="./contact.jsp">Liên hệ</a></li>
                             </ul>
                         </nav>
                     </div>
@@ -131,12 +131,14 @@
             // Add active class to the current button (highlight it)
             var header = document.getElementById("menu");
             var btns = header.getElementsByTagName("li");
-            for (var i = 0; i < btns.length; i++) {
-                btns[i].addEventListener("click", function () {
-                    var current = document.getElementsByClassName("active");
-                    current[0].className = current[0].className.replace(" active", "");
-                    this.className += " active";
-                });
+            var path = window.location.href;
+            var check = true;
+            for (var i = btns.length - 1; i > 0; i--) {
+                if (path.includes(btns[i].id)) {
+                    btns[i].className += " active";
+                    check = false;
+                }
+                if (check) btns[0].className += " active";
             }
         </script>
         <jsp:include page="js-plugins.jsp" flush="true"/>

@@ -46,7 +46,12 @@ public class AuthenFilter implements Filter {
 
     public AuthenFilter() {
         CUSTOMER_FUNCTION = new ArrayList<>();
-        CUSTOMER_FUNCTION.add("./");
+        CUSTOMER_FUNCTION.add("");
+        CUSTOMER_FUNCTION.add("home.jsp");
+        CUSTOMER_FUNCTION.add("ViewHomeController");
+        CUSTOMER_FUNCTION.add("contact.jsp");
+        CUSTOMER_FUNCTION.add("category.jsp");
+        
 
         ADMIN_FUNCTION = new ArrayList<>();
         ADMIN_FUNCTION.add("admin.jsp");
@@ -54,11 +59,18 @@ public class AuthenFilter implements Filter {
         ADMIN_FUNCTION.add("add-category.jsp");
         ADMIN_FUNCTION.add("view-category.jsp");
         ADMIN_FUNCTION.add("view-manager.jsp");
+        ADMIN_FUNCTION.add("my-profile.jsp");
+        ADMIN_FUNCTION.add("ShowManagerController");
+        ADMIN_FUNCTION.add("ShowCategoryController");
+        ADMIN_FUNCTION.add("ShowAccountController");
+        
+       
 
         MANAGER_FUNCTION = new ArrayList<>();
         MANAGER_FUNCTION.add("manager-product.jsp");
         MANAGER_FUNCTION.add("manager-statistic.jsp");
-
+        MANAGER_FUNCTION.add("my-profile.jsp");
+        
     }
 
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
@@ -133,41 +145,48 @@ public class AuthenFilter implements Filter {
             if (res.getStatus() == 404) {
                 res.sendRedirect("error.jsp");
             } else {
+                HttpSession session = req.getSession();
+                UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
                 String uri = req.getRequestURI();
-                if (uri.equals("/Ellena/") || uri.contains("google") || uri.contains(".jpg") || uri.contains(".gif") || uri.contains(".png")
-                        || uri.contains("css") || uri.contains("fonts") || uri.contains("scss") || uri.contains("Ellena/js")
-                        || uri.contains("sass") || uri.contains("error.jsp")) {
-                    chain.doFilter(request, response);
+                int index = uri.lastIndexOf("/");
+                String resource = uri.substring(index + 1);
+                if (loginUser == null) {
+                    if (uri.equals("/Ellena/") || uri.contains("google") || uri.contains(".jpg") || uri.contains(".gif") || uri.contains(".png")
+                            || uri.contains("css") || uri.contains("fonts") || uri.contains("scss") || uri.contains("Ellena/js")
+                            || uri.contains("sass") || uri.contains("error.jsp") || uri.contains("ViewHomeController")
+                            || uri.contains("register.jsp") || uri.contains("login.jsp") || uri.contains("MainController") || uri.contains("footer.jsp")
+                            || uri.contains("home.jsp") || uri.contains("meta.jsp") || uri.contains("contact.jsp") || uri.contains("category.jsp")
+                            || uri.contains("header.jsp")) {
+                        chain.doFilter(request, response);
+                    }
+                    else if (!ADMIN_FUNCTION.contains(resource) && !CUSTOMER_FUNCTION.contains(resource) && !MANAGER_FUNCTION.contains(resource)) {
+                        res.sendError(404);
+                    } else {
+                        res.sendRedirect(HOME_PAGE);
+                    }
+
+                } else if (session == null) {
+                    res.sendRedirect(HOME_PAGE);
+                    request.setAttribute("ERROR", "Session timeout!");
                 } else {
-                    if (uri.contains("ViewHomeController") || uri.contains("error.jsp") || uri.contains("register.jsp")
-                            || uri.contains("login.jsp") || uri.contains("MainController")
-                            || uri.contains("footer.jsp") || uri.contains("home.jsp")
-                            || uri.contains("js-plugin.jsp") || uri.contains("meta.jsp") || uri.contains("contact.jsp")
-                            || uri.contains("category.jsp") || uri.contains("error.jsp") || uri.contains("header.jsp")) {
+                    if (uri.contains(".jpg") || uri.contains(".gif") || uri.contains(".png")
+                            || uri.contains("css") || uri.contains("fonts") || uri.contains("scss") || uri.contains("Ellena/js")
+                            || uri.contains("sass") || uri.contains("error.jsp") || uri.contains("MainController")
+                            || uri.contains("meta.jsp")) {
                         chain.doFilter(request, response);
                     } else {
-                        int index = uri.lastIndexOf("/");
-                        String resource = uri.substring(index + 1);
-                        HttpSession session = req.getSession();
-                        if (session == null) {
-                            res.sendRedirect(HOME_PAGE);
-                            request.setAttribute("ERROR", "Session timeout!");
+
+                        String roleID = loginUser.getRoleID();
+                        if (AD.equals(roleID) && ADMIN_FUNCTION.contains(resource)) {
+                            chain.doFilter(request, response);
+                        } else if (CM.equals(roleID) && CUSTOMER_FUNCTION.contains(resource)) {
+                            chain.doFilter(request, response);
+                        } else if (MN.equals(roleID) && MANAGER_FUNCTION.contains(resource)) {
+                            chain.doFilter(request, response);
                         } else {
-                            UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
-                            if (loginUser != null) {
-                                String roleID = loginUser.getRoleID();
-                                if (AD.equals(roleID) && ADMIN_FUNCTION.contains(resource)) {
-                                    chain.doFilter(request, response);
-                                } else if (CM.equals(roleID) && CUSTOMER_FUNCTION.contains(resource)) {
-                                    chain.doFilter(request, response);
-                                } else {
-                                    res.sendRedirect(HOME_PAGE);
-                                }
-                            } else {
-                                if (!ADMIN_FUNCTION.contains(resource) && !CUSTOMER_FUNCTION.contains(resource)) 
-                                    res.sendError(404);
-                            }
+                            res.sendRedirect(HOME_PAGE);
                         }
+
                     }
                 }
             }
