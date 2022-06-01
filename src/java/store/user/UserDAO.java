@@ -4,9 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import store.utils.DBUtils;
 
 public class UserDAO {
@@ -29,6 +33,7 @@ public class UserDAO {
     private static final String UPDATE_PHONE = "UPDATE tblUsers SET phone=? WHERE userID=?";
     private static final String ACTIVATE_ACCOUNT = "UPDATE tblUsers SET status=1 WHERE userID=?";
     private static final String DEACTIVATE_ACCOUNT = "UPDATE tblUsers SET status=0 WHERE userID=?";
+    private static final String STATISTIC_ORDER_QUANITY = "SELECT orderDate, COUNT(*) AS [orderQuantity], SUM(total) AS [income], SUM(quantity) as [productQuantity] FROM tblOrder o JOIN tblOrderDetail d ON o.orderID = d.orderID GROUP BY orderDate";
 
     public UserDTO checkLogin(String userID, String password) throws SQLException {
         UserDTO user = null;
@@ -518,5 +523,46 @@ public class UserDAO {
             }
         }
         return check;
+    }
+
+    public Map<String, Integer> getStatisticOrders() throws SQLException {
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        Map<String, Integer> map = new HashMap<>();
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(STATISTIC_ORDER_QUANITY);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    String date = rs.getString("orderDate");
+                    int quantity = rs.getInt("quantity");
+                    map.put(date, quantity);
+                }
+                SimpleDateFormat DateFor = new SimpleDateFormat("yyyy-MM-dd");
+                Calendar cal = Calendar.getInstance();
+                for (int i = 0; i < 30; i++) {
+                    String stringDate = DateFor.format(cal.getTime());
+                    if (map.get(stringDate) == null) {
+                        map.put(stringDate, 0);
+                    }
+
+                    cal.add(Calendar.DATE, -1);
+                }
+            }
+        } catch (Exception e) {
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return map;
     }
 }
