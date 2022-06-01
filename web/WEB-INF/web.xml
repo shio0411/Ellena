@@ -8,10 +8,6 @@
         <servlet-name>LoginController</servlet-name>
         <servlet-class>store.controllers.LoginController</servlet-class>
     </servlet>
-    <servlet>
-        <servlet-name>ManagerStatisticController</servlet-name>
-        <servlet-class>store.controllers.ManagerStatisticController</servlet-class>
-    </servlet>
     <servlet-mapping>
         <servlet-name>MainController</servlet-name>
         <url-pattern>/MainController</url-pattern>
@@ -19,10 +15,6 @@
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/Login</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ManagerStatisticController</servlet-name>
-        <url-pattern>/ManagerStatisticController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -6,7 +6,6 @@
 package store.controllers;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import javafx.util.Pair;
@@ -16,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import store.shopping.StatisticDAO;
 import store.shopping.StatisticDTO;
-import store.user.UserDAO;
 
 /**
  *
