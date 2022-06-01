@@ -38,12 +38,12 @@ public class UpdatePasswordController extends HttpServlet {
             
             if(!currentPassword.equals(loginUser.getPassword())){
                 check = false;
-                userError.setPassword("Incorrect password!");
+                userError.setPassword("Mật khẩu bạn nhập không đúng!");
             }
             
             if (!newPassword.equals(confirmNewPassword)) {
                 check = false;
-                userError.setConfirm("Password and confirm pass are different!");
+                userError.setConfirm("Mật khẩu và xác nhận mật khẩu khác nhau!");
             }
             
             if (check) {

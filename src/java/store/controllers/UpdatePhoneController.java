@@ -1,48 +1,44 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package store.controllers;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import store.user.UserDAO;
+import store.user.UserDTO;
 
-/**
- *
- * @author giama
- */
-@WebServlet(name = "ActivateAccountController", urlPatterns = {"/ActivateAccountController"})
-public class ActivateAccountController extends HttpServlet {
-    private static final String ERROR = "ShowAccountController";
-    private static final String SUCCESS = "SearchAccountController";
+
+@WebServlet(name = "UpdatePhoneController", urlPatterns = {"/UpdatePhoneController"})
+public class UpdatePhoneController extends HttpServlet {
+
+    private static final String ERROR = "my-profile.jsp";
+    private static final String SUCCESS = "my-profile.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
-            String userID = request.getParameter("userID");
-            String roleID = request.getParameter("roleID");
-            String from = request.getParameter("from");
-            UserDAO dao = new UserDAO();
-            boolean check = dao.activateAccount(userID);
-            if (check) {
-                if(from.equalsIgnoreCase("showaccount")){
-                    url = "SearchAccountController";
-                }else if(from.equalsIgnoreCase("showmanager")){
-                    url = "SearchManagerController";
-                }
-                
-                request.setAttribute("MESSAGE", "Cập nhật thành công!");
-            }   
+            HttpSession session = request.getSession();
+            UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
+            String userID = loginUser.getUserID();
+            String newPhone = request.getParameter("newPhone");
+            boolean check = true;
+            UserDAO dao = new UserDAO();          
+            boolean checkUpdate = dao.updatePhone(newPhone, userID);
+            if (checkUpdate) {
+                url = SUCCESS;
+                UserDTO user = dao.getUserByID(userID);
+                session.setAttribute("LOGIN_USER", user);
+            }
+
         } catch (Exception e) {
-            log("Error at ActivateAccountController: " + e.toString());
+            log("Error at UpdateAddressController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

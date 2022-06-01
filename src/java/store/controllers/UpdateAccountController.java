@@ -22,6 +22,7 @@ import store.user.UserDTO;
  */
 @WebServlet(name = "UpdateAccountController", urlPatterns = {"/UpdateAccountController"})
 public class UpdateAccountController extends HttpServlet {
+
     private static final String ERROR = "ShowAccountController";
     private static final String SUCCESS = "ShowAccountController";
 
@@ -34,13 +35,12 @@ public class UpdateAccountController extends HttpServlet {
             String fullName = request.getParameter("fullName");
             String password = "*********";
             String roleID = request.getParameter("roleID");
-            boolean sex = Boolean.parseBoolean("sex");
+            boolean sex = Boolean.parseBoolean(request.getParameter("sex"));
             String address = request.getParameter("address");
             Date birthday = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("birthday"));
             String phone = request.getParameter("phone");
             boolean check = true;
-            UserDAO dao = new UserDAO();          
-
+            UserDAO dao = new UserDAO();
             if (check) {
                 UserDTO user = new UserDTO(userID, fullName, password, sex, roleID, address, birthday, phone, true);
                 boolean checkUpdate = dao.updateAccount(user);
@@ -48,10 +48,8 @@ public class UpdateAccountController extends HttpServlet {
                     url = SUCCESS;
                     request.setAttribute("MESSAGE", "Cập nhật thành công!");
                 }
-
             } else {
                 request.setAttribute("MESSAGE", "Cập nhật thất bại!");
-
             }
         } catch (Exception e) {
             log("Error at UpdateAccountController: " + e.toString());

@@ -3,25 +3,50 @@
     <servlet>
         <servlet-name>MainController</servlet-name>
         <servlet-class>store.controllers.MainController</servlet-class>
+    </servlet>   
+    <servlet>
+        <servlet-name>ViewHomeController</servlet-name>
+        <servlet-class>store.controllers.ViewHomeController</servlet-class>
     </servlet>
+    <servlet-mapping>
+        <servlet-name>ViewHomeController</servlet-name>
+        <url-pattern>/ViewHomeController</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>category</servlet-name>
+        <jsp-file>/category.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>category</servlet-name>
+        <url-pattern>/category/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MainController</servlet-name>
+        <url-pattern>/MainController</url-pattern>
+    </servlet-mapping>    
     <servlet>
         <servlet-name>LoginController</servlet-name>
         <servlet-class>store.controllers.LoginController</servlet-class>
     </servlet>
-    <servlet-mapping>
-        <servlet-name>MainController</servlet-name>
-        <url-pattern>/MainController</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
+    <servlet-mapping>   
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/Login</url-pattern>
     </servlet-mapping>
+    <error-page>  
+        <exception-type>java.lang.Exception</exception-type>  
+        <location>/ExceptionHandlerController</location>  
+    </error-page>  
+    <error-page>  
+        <error-code>404</error-code>  
+        <location>/ExceptionHandlerController</location>  
+    </error-page>  
     <session-config>
         <session-timeout>
             30
         </session-timeout>
     </session-config>
     <welcome-file-list>
+        <welcome-file>ViewHomeController</welcome-file>
         <welcome-file>home.jsp</welcome-file>
     </welcome-file-list>
 </web-app>

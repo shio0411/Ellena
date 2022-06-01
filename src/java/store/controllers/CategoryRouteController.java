@@ -6,43 +6,47 @@
 package store.controllers;
 
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import store.user.UserDAO;
+import store.shopping.CategoryDAO;
+import store.shopping.CategoryDTO;
+import store.utils.VNCharacterUtils;
 
 /**
  *
  * @author giama
  */
-@WebServlet(name = "ActivateAccountController", urlPatterns = {"/ActivateAccountController"})
-public class ActivateAccountController extends HttpServlet {
-    private static final String ERROR = "ShowAccountController";
-    private static final String SUCCESS = "SearchAccountController";
-
+@WebServlet(name = "CategoryRouteController", urlPatterns = {"/CategoryRouteController"})
+public class CategoryRouteController extends HttpServlet {
+    private static final String ERROR = "error.jsp";
+    
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
-            String userID = request.getParameter("userID");
-            String roleID = request.getParameter("roleID");
-            String from = request.getParameter("from");
-            UserDAO dao = new UserDAO();
-            boolean check = dao.activateAccount(userID);
-            if (check) {
-                if(from.equalsIgnoreCase("showaccount")){
-                    url = "SearchAccountController";
-                }else if(from.equalsIgnoreCase("showmanager")){
-                    url = "SearchManagerController";
-                }
-                
-                request.setAttribute("MESSAGE", "Cập nhật thành công!");
-            }   
+            String category = VNCharacterUtils.removeAccent(request.getParameter("category"));
+            CategoryDAO dao = new CategoryDAO();
+            List<CategoryDTO> listCategory = dao.getListCategory(category, "true");
+            if (listCategory.size() > 0) {
+                request.setAttribute("LIST_CATEGORY", listCategory);
+                url = "./category/" + category;
+            }
         } catch (Exception e) {
-            log("Error at ActivateAccountController: " + e.toString());
+            log("Error at CategoryRouteController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
