@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import javafx.util.Pair;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,6 +21,7 @@ import store.shopping.StatisticDTO;
  *
  * @author VP
  */
+@WebServlet(name = "ManagerStatisticController", urlPatterns = {"/ManagerStatisticController"})
 public class ManagerStatisticController extends HttpServlet {
 
     private static final String ERROR = "error.jsp";
