@@ -43,9 +43,9 @@
         %>
         <div class="container">
             <div class="sidenav">
-                <a href="manager-statistic.jsp" style="color: #873e23; font-weight: bold;"><i class=""></i>Số liệu thống kê</a>
-                <a href="manager-product.jsp" style="color: #873e23;"><i class=""></i>Quản lí sản phẩm</a>
-                <a href="manager-order.jsp" style="color: #873e23;"><i class=""></i>Quản lí đơn hàng</a>
+                <a href="ManagerStatisticController" style="color: #873e23; font-weight: bold;"><i class=""></i>Số liệu thống kê</a>
+                <a href="manager-product.jsp"><i class=""></i>Quản lí sản phẩm</a>
+                <a href="manager-order.jsp"><i class=""></i>Quản lí đơn hàng</a>
             </div>
             <div class="main">
                 <%
