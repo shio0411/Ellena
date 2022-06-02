@@ -75,7 +75,7 @@
                     <div class="col-lg-4 col-md-6 col-sm-7">
                         <div class="footer__about">
                             <div class="footer__logo">
-                                <a href="./home.jsp"><img src="img/logo.png" alt=""></a>
+                                <a href="./home.jsp"><img class="img-fluid" style="height: 38px;" src="img/ellena-logo.png" alt="logo"></a>
                             </div>
                             <p>Địa chỉ: Long Thạnh Mỹ, Quận 9, TP.HCM <br> Email: Support@ellenafashion.com</p>
                             <div class="footer__payment">

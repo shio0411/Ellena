@@ -44,10 +44,10 @@
                         <div class="header__logo">
                             <a href="./"><img class="img-fluid" style="height: 38px;" src="img/ellena-logo.png" alt=""></a>
                         </div>
-                           
+
+                    </div>
+                </div>
             </div>
-                </div>
-                </div>
         </header>
         <section class="vh-100 gradient-custom">
             <div class="container py-5 h-100">
@@ -78,7 +78,7 @@
                                             <div class="form-outline">
                                                 <label class="form-label" for="fullName">Họ và tên</label>
                                                 <input type="text" name="fullName" id="firstName" required="" class="form-control form-control-lg" />
-                                                
+
 
                                             </div>
 
@@ -169,15 +169,20 @@
         </section>
 
     </body>
-
-    <script src="js/jquery-3.3.1.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/jquery.magnific-popup.min.js"></script>
-    <script src="js/jquery-ui.min.js"></script>
-    <script src="js/mixitup.min.js"></script>
-    <script src="js/jquery.countdown.min.js"></script>
-    <script src="js/jquery.slicknav.js"></script>
-    <script src="js/owl.carousel.min.js"></script>
-    <script src="js/jquery.nicescroll.min.js"></script>
-    <script src="js/main.js"></script>  
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+        (function () {
+            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/62986537b0d10b6f3e754a36/1g4hkmp1j';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
+    </script>
+    <!--End of Tawk.to Script-->
+    <!-- Js Plugins -->
+    
+    <jsp:include page="js-plugins.jsp" flush="true"/>
 </html>
