@@ -1,10 +1,8 @@
 package store.shopping;
 
-import java.util.Date;
-
 
 public class ProductDTO {
-    private String productID;
+    private int productID;
     private String productName;
     private String image;
     private String description;
@@ -12,22 +10,44 @@ public class ProductDTO {
     private String color;
     private int price;
     private int quantity;
-    private int categoryID;
-    private Date importDate;
+    private float discount;
+    private int lowStockLimit;
+    private String categoryName;
     private boolean status;
 
     public ProductDTO() {
         
     }
 
-    public String getProductID() {
+    public ProductDTO(int productID, String productName, int price, float discount, int lowStockLimit, String categoryName, boolean status) {
+        this.productID = productID;
+        this.productName = productName;
+        this.price = price;
+        this.discount = discount;
+        this.lowStockLimit = lowStockLimit;
+        this.categoryName = categoryName;
+        this.status = status;
+    }
+    
+    
+
+    public int getProductID() {
         return productID;
     }
 
-    public void setProductID(String productID) {
+    public void setProductID(int productID) {
         this.productID = productID;
     }
 
+    public float getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(float discount) {
+        this.discount = discount;
+    }
+
+    
     public String getProductName() {
         return productName;
     }
@@ -55,11 +75,21 @@ public class ProductDTO {
     public String getSize() {
         return size;
     }
+    
 
     public void setSize(String size) {
         this.size = size;
     }
 
+    public int getLowStockLimit() {
+        return lowStockLimit;
+    }
+
+    public void setLowStockLimit(int lowStockLimit) {
+        this.lowStockLimit = lowStockLimit;
+    }
+
+    
     public String getColor() {
         return color;
     }
@@ -84,21 +114,15 @@ public class ProductDTO {
         this.quantity = quantity;
     }
 
-    public int getCategoryID() {
-        return categoryID;
+    public String getCategoryName() {
+        return categoryName;
     }
 
-    public void setCategoryID(int categoryID) {
-        this.categoryID = categoryID;
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 
-    public Date getImportDate() {
-        return importDate;
-    }
-
-    public void setImportDate(Date importDate) {
-        this.importDate = importDate;
-    }
+    
 
     public boolean isStatus() {
         return status;
