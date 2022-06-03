@@ -1,40 +1,50 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package store.shopping;
 
-public class ProductDTO {
+/**
+ *
+ * @author ASUS
+ */
+public class ProductError {
 
-    private int productID;
+    private String productID;
     private String productName;
     private String image;
     private String description;
     private String size;
     private String color;
-    private int price;
-    private Double discount;
-    private int quantity;
-    private int lowStockLimit;
-    private int categoryID;
+    private String price;
+    private String discount;
+    private String quantity;
+    private String lowStockLimit;
+    private String categoryID;
     private String categoryName;
-    private Double rating;
-    private boolean status;
+    private String rating;
+    private String status;
+    private String errorMessage;
 
-    public ProductDTO() {
-        this.productID = 0;
+    public ProductError() {
+        this.productID = "";
         this.productName = "";
         this.image = "";
         this.description = "";
         this.size = "";
         this.color = "";
-        this.price = 0;
-        this.discount = 0.0;
-        this.quantity = 0;
-        this.lowStockLimit = 0;
-        this.categoryID = 0;
+        this.price = "";
+        this.discount = "";
+        this.quantity = "";
+        this.lowStockLimit = "";
+        this.categoryID = "";
         this.categoryName = "";
-        this.rating = 0.0;
-        this.status = false;
+        this.rating = "";
+        this.status = "";
+        this.errorMessage = "";
     }
 
-    public ProductDTO(int productID, String productName, String image, String description, String size, String color, int price, Double discount, int quantity, int lowStockLimit, int categoryID, String categoryName, Double rating, boolean status) {
+    public ProductError(String productID, String productName, String image, String description, String size, String color, String price, String discount, String quantity, String lowStockLimit, String categoryID, String categoryName, String rating, String status, String errorMessage) {
         this.productID = productID;
         this.productName = productName;
         this.image = image;
@@ -49,13 +59,14 @@ public class ProductDTO {
         this.categoryName = categoryName;
         this.rating = rating;
         this.status = status;
+        this.errorMessage = errorMessage;
     }
 
-    public int getProductID() {
+    public String getProductID() {
         return productID;
     }
 
-    public void setProductID(int productID) {
+    public void setProductID(String productID) {
         this.productID = productID;
     }
 
@@ -99,43 +110,43 @@ public class ProductDTO {
         this.color = color;
     }
 
-    public int getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
-    public Double getDiscount() {
+    public String getDiscount() {
         return discount;
     }
 
-    public void setDiscount(Double discount) {
+    public void setDiscount(String discount) {
         this.discount = discount;
     }
 
-    public int getQuantity() {
+    public String getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(String quantity) {
         this.quantity = quantity;
     }
 
-    public int getLowStockLimit() {
+    public String getLowStockLimit() {
         return lowStockLimit;
     }
 
-    public void setLowStockLimit(int lowStockLimit) {
+    public void setLowStockLimit(String lowStockLimit) {
         this.lowStockLimit = lowStockLimit;
     }
 
-    public int getCategoryID() {
+    public String getCategoryID() {
         return categoryID;
     }
 
-    public void setCategoryID(int categoryID) {
+    public void setCategoryID(String categoryID) {
         this.categoryID = categoryID;
     }
 
@@ -147,20 +158,28 @@ public class ProductDTO {
         this.categoryName = categoryName;
     }
 
-    public Double getRating() {
+    public String getRating() {
         return rating;
     }
 
-    public void setRating(Double rating) {
+    public void setRating(String rating) {
         this.rating = rating;
     }
 
-    public boolean isStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 
 }

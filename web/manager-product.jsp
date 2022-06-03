@@ -96,7 +96,7 @@
                         <select name="orderBy">
                             <option value="(SELECT NULL)" selected hidden>Sắp xếp theo</option><!-- SQL for ORDER BY "NONE" -->
                             <option value="productName">Tên sản phẩm</option>
-                            <option value="categoryName">Loại sản phẩm</option>
+                            <option value="categoryName">Loại sản phẩm</option><!-<!-- Fix/update later -->
                         </select>
 
                         Trạng thái
@@ -107,7 +107,9 @@
 
                         <button type="submit" name="action" value="ManagerSearchProduct" class="btn-outline-dark" style="width: 7%; padding: 0.5% 2%;"><i class="fa fa-search fa-lg"></i></button>
                         <!--switch to SearchController page count after submit form-->
-                        <% searchAll = (boolean) request.getAttribute("SWITCH_SEARCH"); %>
+                        <%
+                            searchAll = (boolean) request.getAttribute("SWITCH_SEARCH");
+                        %>
                     </form>
                 </div>
 
@@ -119,26 +121,24 @@
             </div>
 
             <!--display product list-->
-            <%
-                List<ProductDTO> listProduct = (List<ProductDTO>) request.getAttribute("LIST_PRODUCT");
+            <%  List<ProductDTO> listProduct = (List<ProductDTO>) request.getAttribute("LIST_PRODUCT");
                 if (listProduct != null) {
                     if (listProduct.size() > 0) {
             %>  
             <table class="table table-hover table-bordered">
                 <tr style="background-color: #b57c68">
-                    <th>Tên Sản phẩm</th>
-                    <th>ID Sản phẩm</th>                
+                    <th>ID Sản phẩm</th>
+                    <th>Tên Sản phẩm</th>                
                     <th>Loại sản phẩm</th>
                     <th>Trạng thái</th>
                     <th>Chỉnh sửa</th>
                 </tr>
                 <%
-                    int id = 1;
                     for (ProductDTO list : listProduct) {
                 %>
                 <tr>
-                    <td style="font-weight: bold"><%= list.getProductName()%></td>
-                    <td><%= list.getProductID()%></td>
+                    <td style="font-weight: bold"><%= list.getProductID()%></td>
+                    <td><%= list.getProductName()%></td>
                     <td><%= list.getCategoryName()%></td>
                     <td>
                         <%
@@ -155,7 +155,7 @@
 
                     <!-- Chỉnh sửa chi tiết product-->
                     <td>
-                        <button type="button" data-toggle="modal" data-target="#myModal<%=id++%>">Chỉnh sửa</button>
+                        <button type="button" onclick="document.location='ManagerShowProductDetailController?productID=<%=list.getProductID()%>'">Chỉnh sửa</button>
                     </td>
 
                 </tr>
@@ -163,13 +163,16 @@
                         }
                     }%>
             </table>
-            
+
 
 
             <!--page nav-->
+            <% 
+                if (listProduct!=null) { //if no product in list, page nav won't display
+                        
+                    
+            %>
             <div class="row" style="justify-content: center; align-items: center; text-align: center;">
-
-
 
                 <%
                     int currentPage = (int) request.getAttribute("currentPage");
@@ -177,7 +180,7 @@
 
                     if (searchAll) { //Currently at ShowController
 
-    //                start of pageNav
+                        //start of pageNav
                         if (currentPage != 1) {
                 %>
 
@@ -213,13 +216,13 @@
                 <%
                     }
 
-    //                end of pageNav
+                    //                end of pageNav
                 %>
 
 
 
                 <%            } else {//Currently at SearchController
-    //                    start of pageNav
+                    //                    start of pageNav
                     if (currentPage != 1) {
                 %>
 
@@ -255,13 +258,15 @@
                 <%
                         }
 
-    //                end of pageNav
+                        //                end of pageNav
                     }
 
                 %>
 
             </div>
-
+            <% 
+                } //end of the "No product" if statement
+            %>
 
 
         </div>

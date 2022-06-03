@@ -11,64 +11,64 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import store.shopping.ProductDAO;
 import store.shopping.ProductDTO;
-import store.utils.VNCharacterUtils;
 
 /**
  *
  * @author ASUS
  */
-@WebServlet(name = "ManagerSearchProductController", urlPatterns = {"/ManagerSearchProductController"})
-public class ManagerSearchProductController extends HttpServlet {
+@WebServlet(name = "ManagerShowProductDetailController", urlPatterns = {"/ManagerShowProductDetailController"})
+public class ManagerShowProductDetailController extends HttpServlet {
 
-    public static final String ERROR = "manager-product.jsp";
-    public static final String SUCCESS = "manager-product.jsp";
-
+    public static final String ERROR = "manager-product-detail.jsp";
+    public static final String SUCCESS = "manager-product-detail.jsp";
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
-        int page = 1; // page it start counting
-        int productPerPage = 5; //number of product per page
-        int noOfPages = 1;// default number of page, to prevent no product was found
-
         try {
             ProductDAO dao = new ProductDAO();
+            HttpSession session = request.getSession();
+            
+//            ------------------getProduct----------------------
+            int productID = Integer.parseInt(request.getParameter("productID"));
+            ProductDTO product = dao.getProduct(productID);
+            session.setAttribute("PRODUCT", product);
+            
+            
+            
+//            --------------------------------------------------
 
-            if (request.getParameter("page") != null) {
-                page = Integer.parseInt(request.getParameter("page"));
-            }
 
-            String orderBy = request.getParameter("orderBy");
-            String name = VNCharacterUtils.removeAccent(request.getParameter("search"));
-            String statusOrdering = request.getParameter("status");
 
-            List<ProductDTO> listProduct = dao.getListProduct(orderBy, name, statusOrdering, (page * productPerPage) - productPerPage + 1, productPerPage * page);
 
-            if (listProduct.size() > 0) {
+//            ----------------getProductImage-------------------
+//            list images
+            List<ProductDTO> listImage = dao.getListImage(productID, "%", "%");
+            request.setAttribute("LIST_IMAGE", listImage);
 
-                int noOfProducts = dao.getNumberOfProduct();
-                noOfPages = (int) Math.ceil(noOfProducts * 1.0 / productPerPage);
+//            --------------------------------------------------
 
-                request.setAttribute("LIST_PRODUCT", listProduct);
-                request.setAttribute("noOfPages", noOfPages);
-                request.setAttribute("currentPage", page);
 
-                url = SUCCESS;
-            }
-            //give manager-product.jsp know that we are in SearchProduct
-            boolean searchPage = false;
-            request.setAttribute("noOfPages", noOfPages);
-            request.setAttribute("currentPage", page);
-            request.setAttribute("SWITCH_SEARCH", searchPage);
 
+
+
+//            ---------------getListProductDetail---------------
+
+//            --------------------------------------------------
+
+
+            url = SUCCESS;
+            
         } catch (Exception e) {
-            log("Error at ManagerShowProductController: " + toString());
+            log("Error at ManagerShowProductDetailController : "+ toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
-
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
