@@ -1,13 +1,15 @@
 package store.shopping;
 
+import java.util.List;
+import java.util.Map;
+
 
 public class ProductDTO {
     private int productID;
     private String productName;
-    private String image;
     private String description;
-    private String size;
-    private String color;
+    private Map<String, List<String>> colorImage;
+    private Map<List<String>, Integer> colorSizeQuantity;
     private int price;
     private int quantity;
     private float discount;
@@ -19,6 +21,19 @@ public class ProductDTO {
         
     }
 
+    public ProductDTO(int productID, String productName, String description, Map<String, List<String>> colorImage, int price, int quantity, float discount, int lowStockLimit, String categoryName, boolean status) {
+        this.productID = productID;
+        this.productName = productName;
+        this.description = description;
+        this.colorImage = colorImage;
+        this.price = price;
+        this.quantity = quantity;
+        this.discount = discount;
+        this.lowStockLimit = lowStockLimit;
+        this.categoryName = categoryName;
+        this.status = status;
+    }
+
     public ProductDTO(int productID, String productName, int price, float discount, int lowStockLimit, String categoryName, boolean status) {
         this.productID = productID;
         this.productName = productName;
@@ -28,8 +43,22 @@ public class ProductDTO {
         this.categoryName = categoryName;
         this.status = status;
     }
-    
-    
+
+    public ProductDTO(int productID, String productName, String description, Map<String, List<String>> colorImage, Map<List<String>, Integer> colorSizeQuantity, int price, int quantity, float discount, int lowStockLimit, String categoryName, boolean status) {
+        this.productID = productID;
+        this.productName = productName;
+        this.description = description;
+        this.colorImage = colorImage;
+        this.colorSizeQuantity = colorSizeQuantity;
+        this.price = price;
+        this.quantity = quantity;
+        this.discount = discount;
+        this.lowStockLimit = lowStockLimit;
+        this.categoryName = categoryName;
+        this.status = status;
+    }
+
+   
 
     public int getProductID() {
         return productID;
@@ -39,29 +68,12 @@ public class ProductDTO {
         this.productID = productID;
     }
 
-    public float getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(float discount) {
-        this.discount = discount;
-    }
-
-    
     public String getProductName() {
         return productName;
     }
 
     public void setProductName(String productName) {
         this.productName = productName;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
     }
 
     public String getDescription() {
@@ -72,31 +84,23 @@ public class ProductDTO {
         this.description = description;
     }
 
-    public String getSize() {
-        return size;
+    public Map<String, List<String>> getColorImage() {
+        return colorImage;
     }
+
+    public void setColorImage(Map<String, List<String>> colorImage) {
+        this.colorImage = colorImage;
+    }
+
+    public Map<List<String>, Integer> getColorSizeQuantity() {
+        return colorSizeQuantity;
+    }
+
+    public void setColorSizeQuantity(Map<List<String>, Integer> colorSizeQuantity) {
+        this.colorSizeQuantity = colorSizeQuantity;
+    }
+
     
-
-    public void setSize(String size) {
-        this.size = size;
-    }
-
-    public int getLowStockLimit() {
-        return lowStockLimit;
-    }
-
-    public void setLowStockLimit(int lowStockLimit) {
-        this.lowStockLimit = lowStockLimit;
-    }
-
-    
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
 
     public int getPrice() {
         return price;
@@ -114,6 +118,22 @@ public class ProductDTO {
         this.quantity = quantity;
     }
 
+    public float getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(float discount) {
+        this.discount = discount;
+    }
+
+    public int getLowStockLimit() {
+        return lowStockLimit;
+    }
+
+    public void setLowStockLimit(int lowStockLimit) {
+        this.lowStockLimit = lowStockLimit;
+    }
+
     public String getCategoryName() {
         return categoryName;
     }
@@ -122,8 +142,6 @@ public class ProductDTO {
         this.categoryName = categoryName;
     }
 
-    
-
     public boolean isStatus() {
         return status;
     }
@@ -131,6 +149,14 @@ public class ProductDTO {
     public void setStatus(boolean status) {
         this.status = status;
     }
+
+    
+
+    
+
+    
+
+    
     
     
 }

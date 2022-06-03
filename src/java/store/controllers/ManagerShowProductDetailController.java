@@ -31,9 +31,10 @@ public class ManagerShowProductDetailController extends HttpServlet {
         String url = ERROR;
         try {
             ProductDAO dao = new ProductDAO();
-            List<ProductDTO> listProduct = dao.getAllProduct();
-            if (listProduct.size() > 0) {
-                request.setAttribute("LIST_PRODUCT", listProduct);
+            int id = Integer.parseInt(request.getParameter("productID"));
+            ProductDTO product = dao.getProductDetail(id);
+            if (product != null) {
+                request.setAttribute("PRODUCT_DETAIL", product);
                 url = SUCCESS;
             }
         } catch (Exception e) {
