@@ -25,6 +25,8 @@ public class MainController extends HttpServlet {
     private static final String SEARCH_CATALOG_CONTROLLER = "SearchCatalogController";
     private static final String SEARCH_CATEGORY = "SearchCategory";
     private static final String SEARCH_CATEGORY_CONTROLLER = "SearchCategoryController";
+    private static final String MANAGER_SEARCH_PRODUCT = "ManagerSearchProduct";
+    private static final String MANAGER_SEARCH_PRODUCT_CONTROLLER = "ManagerSearchProductController";
     private static final String ADD_CATEGORY = "AddCategory";
     private static final String ADD_CATEGORY_CONTROLLER = "AddCategoryController";
     private static final String UPDATE_CATEGORY = "UpdateCategory";
@@ -49,6 +51,10 @@ public class MainController extends HttpServlet {
     private static final String DEACTIVATE_CATEGORY_CONTROLLER = "DeactivateCategoryController";
     private static final String ACTIVATE_CATEGORY = "ActivateCategory";
     private static final String ACTIVATE_CATEGORY_CONTROLLER = "ActivateCategoryController";
+    private static final String ACTIVATE_PRODUCT = "ActivateProduct";
+    private static final String ACTIVATE_PRODUCT_CONTROLLER = "ActivateProductController";
+    private static final String DEACTIVATE_PRODUCT = "DeactivateProduct";
+    private static final String DEACTIVATE_PRODUCT_CONTROLLER = "DeactivateProductController";
     private static final String LOGOUT = "Logout";
     private static final String LOGOUT_CONTROLLER = "LogoutController";
     private static final String INSERT = "Insert";
@@ -97,6 +103,9 @@ public class MainController extends HttpServlet {
                     case SEARCH_CATEGORY:
                         url = SEARCH_CATEGORY_CONTROLLER;
                         break;
+                    case MANAGER_SEARCH_PRODUCT:
+                        url = MANAGER_SEARCH_PRODUCT_CONTROLLER;
+                        break;
                     case SEARCH_CATALOG:
                         url = SEARCH_CATALOG_CONTROLLER;
                         break;
@@ -141,6 +150,12 @@ public class MainController extends HttpServlet {
                         break;
                     case ACTIVATE_CATEGORY:
                         url = ACTIVATE_CATEGORY_CONTROLLER;
+                        break;
+                    case DEACTIVATE_PRODUCT:
+                        url = DEACTIVATE_PRODUCT_CONTROLLER;
+                        break;
+                    case ACTIVATE_PRODUCT:
+                        url = ACTIVATE_PRODUCT_CONTROLLER;
                         break;
                     case LOGOUT:
                         url = LOGOUT_CONTROLLER;

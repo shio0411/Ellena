@@ -71,7 +71,9 @@ public class AuthenFilter implements Filter {
         MANAGER_FUNCTION.add("manager-statistic.jsp");
         MANAGER_FUNCTION.add("my-profile.jsp");
         MANAGER_FUNCTION.add("ManagerStatisticController");
-        
+        MANAGER_FUNCTION.add("ManagerShowProductController");
+        MANAGER_FUNCTION.add("ManagerShowProductDetailController");
+        MANAGER_FUNCTION.add("manager-product-details.jsp");
     }
 
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
