@@ -130,13 +130,13 @@
                         <div class="col-md-6 mb-4">
                             <div class="form-outline">
                                 <label class="form-label" for="price">Giá tiền</label>
-                                <input class="form-control form-control-lg" type="int" name="price" id="price" value="<%= product.getPrice()%>"/>
+                                <input class="form-control form-control-lg" type="number" name="price" value="<%= product.getPrice()%>"/>
                             </div>
                         </div>
                         <div class="col-md-6 mb-4">
                             <div class="form-outline">
-                                <label class="form-label" for="price">Giảm giá</label>
-                                <input class="form-control form-control-lg" type="int" name="price" id="price" value="<%= product.getDiscount()%>"/>
+                                <label class="form-label" for="discount">Giảm giá</label>
+                                <input class="form-control form-control-lg" type="number" min="0" max="1" step="0.1" name="discount" id="price" value="<%= product.getDiscount()%>"/>
                             </div>
                         </div>
 
@@ -192,12 +192,12 @@
                                             <% for (int z = 0; z < key.size(); z += 2) {
                                                     if (color.equalsIgnoreCase(key.get(z))) {%>
                                             <tr>
-                                                <td><%= key.get(z + 1)%></td>
+                                                <td><input type="text" name="size" value="<%= key.get(z + 1)%>" maxlength="50" style="width: 60px"/></td>
                                                 <% List<String> colorSize = new ArrayList<>();
                                                     colorSize.add(key.get(z));
                                                     colorSize.add(key.get(z + 1));
                                                 %>
-                                                <td><%= product.getColorSizeQuantity().get(colorSize)%></td>
+                                                <td><input type="number" name="quantity" value="<%= product.getColorSizeQuantity().get(colorSize)%>"></td>
                                             </tr>
                                             <% }
                                                 } %>
