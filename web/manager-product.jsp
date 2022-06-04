@@ -44,13 +44,6 @@
                     <form action="MainController" method="POST">
                         <input type="text" name="search" value="<%= search%>" placeholder="Tìm kiem san pham">
 
-                        <select name="orderBy" required="">
-                            <option value="%" selected hidden>Sắp xếp theo</option>
-                            <option value="quantity">Số lượng</option>
-                            <option value="importDate">Ngày nhập</option>
-                            <option value="categoryID">Danh mục</option>
-                        </select>
-
                         Trạng thái
                         <select name="status">
                             <option value="all">Chọn trạng thái</option>
@@ -63,13 +56,10 @@
                 </div>
 
 
-                <!--add new product-->
-                <div class="col-3" style="text-align: center; display: flex; justify-content: center; align-items: center;">
-                    <a href="">Thêm sản phẩm mới</a>
-                </div>
+
             </div>
-               
-            <!--display product list-->            
+            <a href="add-product.jsp">Thêm sản phẩm mới</a>
+            
             <%  List<ProductDTO> listProduct = (List<ProductDTO>) request.getAttribute("LIST_PRODUCT");
                 if (listProduct != null) {
                     if (listProduct.size() > 0) {
@@ -92,7 +82,7 @@
                     <td><%= list.getProductName()%></td>
                     <td><%= list.getCategoryName()%></td>
                     <td><%= list.getPrice()%></td>
-                    <td><%= Math.round(list.getDiscount() * 100) %></td>
+                    <td><%= Math.round(list.getDiscount() * 100)%></td>
                     <td>
                         <%
                             if (list.isStatus()) {

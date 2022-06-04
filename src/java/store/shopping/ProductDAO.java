@@ -25,19 +25,13 @@ public class ProductDAO {
             + "ON p.productID = pc.productID \n"
             + "AND p.productID = ?\n"
             + "JOIN tblColorImage ci\n"
-            + "ON ci.productColorID = pc.productColorID"; //-------------------------------
+            + "ON ci.productColorID = pc.productColorID"; 
     private static final String GET_PRODUCT_COLOR_SIZES = "SELECT color, size, quantity\n"
             + "FROM tblProduct p JOIN tblProductColors pc \n"
             + "ON p.productID = pc.productID \n"
             + "AND p.productID = ?\n"
             + "JOIN tblColorSizes cs\n"
             + "ON cs.productColorID = pc.productColorID";
-
-    private int numberOfProduct;
-
-    public int getNumberOfProduct() {
-        return numberOfProduct;
-    }
 
     public List<ProductDTO> getAllProduct() throws SQLException {
         List<ProductDTO> listProduct = new ArrayList<>();
