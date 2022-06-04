@@ -3762,3 +3762,33 @@ ol {
 .profile tr{
     border-bottom: 2px #E5E5E5 solid; 
 }
+
+.color-1{
+    background: #873e23;
+}
+.color-2{
+    background: #93A3B1;
+}
+.color-3{
+    background: #FCA17D;
+}
+.color-4{
+    background: #344055;
+}
+
+.color-5{
+    background: #040F0F;
+}
+.color-bg{
+    background: #fbe2d6;
+}
+
+.side-nav{
+    min-width: 250px;
+    max-width: 250px;
+}
+
+.content{
+    width: 100%;
+    min-height: 100vh;
+}
