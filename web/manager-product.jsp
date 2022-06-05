@@ -172,12 +172,42 @@
                         
                     
             %>
-            <div class="row" style="justify-content: center; align-items: center; text-align: center;">
+            <div class="row pagination__option" style="justify-content: center; align-items: center; text-align: center;">
 
                 <%
                     int currentPage = (int) request.getAttribute("currentPage");
                     int noOfPages = (int) request.getAttribute("noOfPages");
-
+                    int noOfPageLinks = 5; // amount of page links to be displayed
+                    int minLinkRange = noOfPageLinks/2; // minimum link range ahead/behind
+                    
+//                    -------------------------------Calculating the begin and end of pageNav for loop-------------------------------
+                    
+                  //  int begin = ((currentPage - minLinkRange) > 0 ? ((currentPage - minLinkRange) < (noOfPages - noOfPageLinks + 1) ? (currentPage - minLinkRange) : (noOfPages - noOfPageLinks)) : 0) + 1; (referance)
+                    int begin = 0;
+                    if ((currentPage - minLinkRange) > 0) {
+                        if ((currentPage - minLinkRange) < (noOfPages - noOfPageLinks + 1)) {
+		begin = (currentPage - minLinkRange);
+                        } else {
+		begin = (noOfPages - noOfPageLinks+1);
+                                    }
+                    } else {
+                        begin = 1;
+                    }
+                        
+                  //  int end = (currentPage + minLinkRange) < noOfPages ? ((currentPage + minLinkRange) > noOfPageLinks ? (currentPage + minLinkRange) : noOfPageLinks) : noOfPages; (referance)
+                  int end = 0;
+                    if ((currentPage + minLinkRange) < noOfPages) {
+                        if ((currentPage + minLinkRange) > noOfPageLinks) {
+		end = (currentPage + minLinkRange);
+                        } else {
+		end = noOfPageLinks;
+                        }
+                    } else {
+                        end = noOfPages;
+                    }
+//                    -----------------------------------------------------------------------------------------------------------------------------
+                    
+                    
                     if (searchAll) { //Currently at ShowController
 
                         //start of pageNav
@@ -185,34 +215,32 @@
                 %>
 
                 <!-- For displaying Previous link except for the 1st page -->
-                <td><a href="ManagerShowProductController?page=<%= currentPage - 1%>">Previous</a></td>
+                <a href="ManagerShowProductController?page=<%= currentPage - 1%>"><i class="glyphicon glyphicon-menu-left"></i></a>
                 <%
                     }
                 %>
 
                 <!--For displaying Page numbers. The when condition does not display a link for the current page-->
-                <table border="1" cellspacing="5" cellpadding="5">
-                    <tr>
-                        <%  for (int i = 1; i <= noOfPages; i++) {
+                
+                        <%  for (int i = begin; i <= end; i++) {
                                 if (currentPage == i) {
                         %>
-                        <td><%= i%></td>
+                        <a class="active" style="background: #000000; color: #ffffff"><%= i%></a>  <!-- There is no active class for pagination (currenly hard code) -->
                         <%
                         } else {
                         %>
-                        <td><a href="ManagerShowProductController?page=<%= i%>"><%= i%></a></td>
+                        <a href="ManagerShowProductController?page=<%= i%>" style="text-decoration: none;"><%= i%></a>
                             <%
                                     }
                                 }
                             %>
-                    </tr>
-                </table>
+                    
 
                 <!--For displaying Next link -->
                 <%
                     if (currentPage < noOfPages) {
                 %>
-                <td><a href="ManagerShowProductController?page=<%= currentPage + 1%>">Next</a></td>
+                <a href="ManagerShowProductController?page=<%= currentPage + 1%>"><i class="glyphicon glyphicon-menu-right"></i></a>
                 <%
                     }
 
@@ -227,34 +255,32 @@
                 %>
 
                 <!-- For displaying Previous link except for the 1st page -->
-                <td><a href="ManagerSearchProductController?search=<%= search%>&orderBy=<%= orderBy%>&status=<%= status%>&page=<%= currentPage - 1%>">Previous</a></td>
+                <a href="ManagerSearchProductController?search=<%= search%>&orderBy=<%= orderBy%>&status=<%= status%>&page=<%= currentPage - 1%>" style="text-decoration: none;"><i class="glyphicon glyphicon-menu-left"></i></a>
                 <%
                     }
                 %>
 
-                <!--For displaying Page numbers. The when condition does not display a link for the current page-->
-                <table border="1" cellspacing="5" cellpadding="5">
-                    <tr>
-                        <%  for (int i = 1; i <= noOfPages; i++) {
+                <!--For displaying Page numbers. The when condition does not display a link for the current page--> 
+                
+                        <%  for (int i = begin; i <= end; i++) {
                                 if (currentPage == i) {
                         %>
-                        <td><%= i%></td>
+                        <a class="active" style="background: #000000; color: #ffffff"><%= i%></a>  <!-- There is no active class for pagination (currenly hard code) -->
                         <%
                         } else {
                         %>
-                        <td><a href="ManagerSearchProductController?search=<%= search%>&orderBy=<%= orderBy%>&status=<%= status%>&page=<%= i%>"><%= i%></a></td>
+                        <a href="ManagerSearchProductController?search=<%= search%>&orderBy=<%= orderBy%>&status=<%= status%>&page=<%= i%>"><%= i%></a>
                             <%
                                     }
                                 }
                             %>
-                    </tr>
-                </table>
+                    
 
                 <!--For displaying Next link -->
                 <%
                     if (currentPage < noOfPages) {
                 %>
-                <td><a href="ManagerSearchProductController?search=<%= search%>&orderBy=<%= orderBy%>&status=<%= status%>&page=<%= currentPage + 1%>">Next</a></td>
+                <a href="ManagerSearchProductController?search=<%= search%>&orderBy=<%= orderBy%>&status=<%= status%>&page=<%= currentPage + 1%>"><i class="glyphicon glyphicon-menu-right"></i></a>
                 <%
                         }
 

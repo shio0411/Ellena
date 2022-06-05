@@ -1,7 +1,7 @@
 <%-- 
-    Document   : login
-    Created on : May 17, 2022, 12:43:51 PM
-    Author     : giama
+    Document   : forgot-password
+    Created on : Jun 5, 2022, 12:22:19 AM
+    Author     : Jason 2.0
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -93,13 +93,16 @@
             </div>
         </header>
         <!-- Header Section End -->
+        
+        
+        
         <section class="vh-100 gradient-custom">
             <div class="container py-5 h-100">
                 <div class="row justify-content-center align-items-center h-100">
                     <div class="col-12 col-lg-9 col-xl-7">
                         <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
                             <div class="card-body p-4 p-md-5">
-                                <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Đăng nhập</h3>
+                                <h3 class="mb-4 pb-2 pb-md-0 mb-md-5" style="text-align: center;">Đặt lại mật khẩu</h3>
                                 <form action="MainController" method="post">
                                     <div class="row">
                                         <div class="col-md-12 mb-4">
@@ -113,26 +116,15 @@
                                         </div>
 
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-12 mb-4">
-
-                                            <div class="form-outline">
-                                                <label for="password">Mật khẩu</label>                                                
-                                                <input type="password" name="password" class="form-control" placeholder="*********" id="password">
-
-                                            </div>
-
-                                        </div>
-
-                                    </div>
+                                    <!--ERROR message-->
                                     <p style="color: red">${requestScope.ERROR}</p>
+                                    
                                     <div>
-                                        <button class="primary-btn" type="submit" name="action" value="Login" >Đăng nhập</button>
+                                        <button class="primary-btn" type="submit" name="action" value="ForgotPassword" >Gửi mail xác nhận mã OTP</button>
                                     </div>
 
                                 </form>
-                                    <!--"Quên mật khẩu" link-->
-                                    <a href="forgot-password.jsp">Quên mật khẩu</a>    
+                                    
                                     
                             </div>
                         </div>
@@ -140,6 +132,8 @@
                 </div>
             </div>
         </section>
+                                    
+                                    
         <script src="js/jquery-3.3.1.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
         <script src="js/jquery.magnific-popup.min.js"></script>

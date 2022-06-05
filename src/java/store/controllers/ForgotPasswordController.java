@@ -5,63 +5,55 @@
 package store.controllers;
 
 import java.io.IOException;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import store.shopping.ProductDAO;
-import store.shopping.ProductDTO;
+import store.user.UserDAO;
+import store.utils.JavaMailUtils;
 
 /**
  *
- * @author ASUS
+ * @author Jason 2.0
  */
-@WebServlet(name = "ManagerShowProductController", urlPatterns = {"/ManagerShowProductController"})
-public class ManagerShowProductController extends HttpServlet {
+@WebServlet(name = "ForgotPasswordController", urlPatterns = {"/ForgotPasswordController"})
+public class ForgotPasswordController extends HttpServlet {
 
-    public static final String ERROR = "manager-product.jsp";
-    public static final String SUCCESS = "manager-product.jsp";
+    public static final String ERROR = "forgot-password.jsp";
+    public static final String SUCCESS = "validate-otp.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
-        int page = 1; // page it start counting
-        int productPerPage = 3; //number of product per page
-
         try {
-            ProductDAO dao = new ProductDAO();
+            String userID = request.getParameter("userID");
+            UserDAO dao = new UserDAO();
+            boolean checkDuplicate = dao.checkDuplicate(userID);
+            if (checkDuplicate) {// true == there's a valid email in database
 
-            if (request.getParameter("page") != null) {
-                page = Integer.parseInt(request.getParameter("page"));
-            }
-            
-            List<ProductDTO> listProduct = dao.getAllProduct((page * productPerPage) - productPerPage + 1, productPerPage * page);
+                try {
+                    JavaMailUtils.sendMail(userID, "ForgotPasswordOTP");
+                    
+//                    request.setAttribute("USER_ID", userID);
+//                    request.setAttribute("OTP_CHECK", JavaMailUtils.getOtpValue());
+                    
+                    url = SUCCESS;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
-            if (listProduct.size() > 0) {
-
-                int noOfProducts = dao.getNumberOfProduct();
-                int noOfPages = (int) Math.ceil(noOfProducts * 1.0 / productPerPage);
-
-                request.setAttribute("LIST_PRODUCT", listProduct);
-                request.setAttribute("noOfPages", noOfPages);
-                request.setAttribute("currentPage", page);
-                
-//                give manager-product.jsp know that we are in ShowProduct
-                boolean searchPage = true;
-                request.setAttribute("SWITCH_SEARCH", searchPage);
-
-                url = SUCCESS;
+            } else {// false == there's no valid email in database
+                url = ERROR;
+                request.setAttribute("ERROR", "Bạn nhập sai ID hoặc bạn chưa có tài khoản!");
             }
 
         } catch (Exception e) {
-            log("Error at ManagerShowProductController: " + toString());
+            log("ERROR at ForgotPasswordController : " + toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
