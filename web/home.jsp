@@ -1,8 +1,10 @@
+<%@page import="store.shopping.ProductDTO"%>
 <%@page import="store.user.UserDTO"%>
 <%@page import="java.util.Collections"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="store.shopping.CategoryDTO"%>
 <%@page import="java.util.List"%>
+<%@page import="java.util.Map"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 
@@ -324,6 +326,9 @@
     <!-- Banner Section End -->
 
     <!-- Trend Section Begin -->
+    <%
+        List<ProductDTO> trendList = (List<ProductDTO>)request.getAttribute("TREND_LIST");
+    %>
     <section class="product spad">
         <div class="container">
             <div class="row">
@@ -334,17 +339,20 @@
                 </div>
             </div>    
             <div class="row property__gallery">
+                <% for(ProductDTO product : trendList){
+                    %>
+   
                 <div class="col-lg-3 col-md-4 col-sm-6 mix women">
                     <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="img/product/product-1.jpg">
+                        <div class="product__item__pic set-bg" data-setbg="<%=product.getColorImage().get("key").get(0)%>.jpg">
                             <ul class="product__hover">
-                                <li><a href="img/product/product-1.jpg" class="image-popup"><span class="arrow_expand"></span></a></li>
+                                <li><a href="<%=product.getColorImage().get("key").get(0)%>.jpg" class="image-popup"><span class="arrow_expand"></span></a></li>
                                 <li><a href="#"><span class="icon_heart_alt"></span></a></li>
                                 <li><a href="#"><span class="icon_bag_alt"></span></a></li>
                             </ul>
                         </div>
                         <div class="product__item__text">
-                            <h6><a href="#">Buttons tweed blazer</a></h6>
+                            <h6><a href="#"><%=product.getProductName()%></a></h6>
                             <div class="rating">
                                 <i class="fa fa-star"></i>
                                 <i class="fa fa-star"></i>
@@ -352,10 +360,11 @@
                                 <i class="fa fa-star"></i>
                                 <i class="fa fa-star"></i>
                             </div>
-                            <div class="product__price">$ 59.0</div>
+                            <div class="product__price">$ <%=product.getPrice()%></div>
                         </div>
                     </div>
                 </div>
+                <%}%>
             </div>
         </div>
     </section>
