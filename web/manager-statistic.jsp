@@ -36,11 +36,9 @@
             if (search == null) {
                 search = "";
             }
-            if (loginUser == null || !"MN".equals(loginUser.getRoleID())) {
-                response.sendRedirect("login.jsp");
-                return;
-            }
+            
         %>
+        
         <div class="container">
             <div class="sidenav">
                 <a href="ManagerStatisticController" style="color: #873e23; font-weight: bold;"><i class="fa fa-bar-chart fa-lg"></i>Số liệu thống kê</a>
@@ -51,6 +49,10 @@
                 <%
                     StatisticDTO today = (StatisticDTO)request.getAttribute("ORDER_STATISTIC_TODAY");                    
                     %>
+                    <form action="MainController" method="POST" style="margin-left: 65%;">                
+                Xin chào, <a href="my-profile.jsp"><%= loginUser.getFullName()%></a>
+                <input type="submit" name="action" value="Logout" style="margin-left: 4%;">
+            </form>
                     <div class="row row-content">
                 <div class="card col-sm-4 align-items-center">
                     <h3 class=""><b><%=today.getOrderQuantity()%></b></h3>
