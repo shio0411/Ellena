@@ -39,7 +39,14 @@ public class AddProductController extends HttpServlet {
             float discount = Float.parseFloat(request.getParameter("discount"));
             String description = request.getParameter("description");
             String[] color = request.getParameterValues("color");
+            
+            String[] variantsCountString = request.getParameterValues("variantsCount");
+            int[] variantsCount = new int[variantsCountString.length];
+            for (int i = 0; i < variantsCountString.length; i++) {
+                variantsCount[i] = Integer.parseInt(variantsCountString[i]);
+            }
             String[] size = request.getParameterValues("size");
+            
             String[] quantityString = request.getParameterValues("quantity");
             int[] quantity = new int[quantityString.length];
             for (int i = 0; i < quantityString.length; i++) {

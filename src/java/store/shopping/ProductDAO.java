@@ -32,7 +32,7 @@ public class ProductDAO {
             + "AND p.productID = ?\n"
             + "JOIN tblColorSizes cs\n"
             + "ON cs.productColorID = pc.productColorID";
-
+    private static final String DELETE_IMAGE = "DELETE FROM tblColorImage WHERE image=?";
     public List<ProductDTO> getAllProduct() throws SQLException {
         List<ProductDTO> listProduct = new ArrayList<>();
         Connection conn = null;
@@ -250,5 +250,28 @@ public class ProductDAO {
 
         return product;
     }
-
+    
+    public boolean deleteImage (String image) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DBUtils.getConnection();
+            ptm = conn.prepareStatement(DELETE_IMAGE);
+            ptm.setString(1, image);
+            
+            check = ptm.executeUpdate()>0?true: false;
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
 }

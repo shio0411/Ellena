@@ -104,7 +104,9 @@
                                             <div class="col-md-4 mb-4">
                                                 <div class="form-outline">
                                                     <label class="form-label" for="color">Màu</label>
+                                                    
                                                     <input class="form-control form-control-lg" required="" type="text" name="color" placeholder="Ví dụ: Trắng"/>
+                                                    <input id="variantsCount1" type="hidden" name="variantsCount" value="1"/>
                                                 </div>
                                             </div> 
                                             <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -116,7 +118,7 @@
 
                                                         </div>
                                                         <div class="modal-body">
-                                                            <div class="sq">
+                                                            <div class="sq1">
                                                                 <div class="row" id="variant1">
                                                                     <div class="col-md-5 mb-4 pb-2">
                                                                         <div class="form-outline">
@@ -136,7 +138,7 @@
                                                                 </div>
                                                             </div>
                                                             <!-- Add a variant inside pop-up -->
-                                                            <button class="mb-4" type="button" id="addVariant" style="margin-left: 2.6%; border: none; background: none"><i class="fa fa-plus-circle fa-lg"></i></button>
+                                                            <button class="mb-4" type="button" id="addVariant1" style="margin-left: 2.6%; border: none; background: none"><i class="fa fa-plus-circle fa-lg"></i></button>
                                                             <!-- Upload image -->
                                                             <div class="row">
                                                                 <div id="upload-image1" class="col-md-5 mb-4">
@@ -264,14 +266,19 @@
                 </div>
             </div>
         </section>
- 
+
         <script>
             var newId = 2;
+
+
+
             $(document).ready(function (e) {
                 $("#addColor").click(function (e) {
+
                     $(".color-container").append('<div class="row" id="color' + newId + '"><div class="col-md-4 mb-4"><div class="form-outline">' +
                             '<label class="form-label" for="color">Màu</label>' +
                             '<input class="form-control form-control-lg" type="text" name="color" placeholder="Ví dụ: Trắng"/></div></div>' +
+                            '<input id="variantsCount'+newId+'" type="hidden" name="variantsCount" value="1"/>' +
                             '<div class="modal fade" id="myModal' + newId + '" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
                             '<div class="modal-dialog" id="' + newId + '" >' +
                             '<div class="modal-content" >' +
@@ -279,7 +286,7 @@
                             '<h4 class="modal-title" id="myModalLabel">Chi tiết màu</h4>' +
                             '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div>' +
                             '<div class="modal-body">' +
-                            '<div class="sq">' +
+                            '<div class="sq' + newId + '">' +
                             '<div class="row" id="variant' + newId + '">' +
                             '<div class="col-md-5 mb-4 pb-2">' +
                             '<div class="form-outline">' +
@@ -292,7 +299,7 @@
                             '<input class="form-control form-control-lg" required="" type="number" min="0" name="quantity" placeholder="Ví dụ: 300"/>' +
                             '</div></div>' +
                             '<button type="button" onclick="removeVariant(`variant' + newId + '`)" style="border: none; background: none;"><i class="fa fa-remove fa-lg"></i></button></div></div>' +
-                            '<button class="mb-4" type="button" id="addVariant" style="border: none; background: none"><i class="fa fa-plus-circle fa-lg"></i></button>' +
+                            '<button class="mb-4" type="button" id="addVariant' + newId + '" style="border: none; background: none"><i class="fa fa-plus-circle fa-lg"></i></button>' +
                             '<div class="row"><div id="upload-image' + newId + '" class="col-md-5 mb-4">' +
                             '<div><input accept="image/*" type="file" name="files" id="file-input1" class="file-input"/>' +
                             '<div id="preview' + newId + '"></div></div></div></div>' +
@@ -301,31 +308,72 @@
                             '<button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button></div></div></div></div>' +
                             '<button type="button" data-toggle="modal" data-target="#myModal' + newId + '" style="border: none; background: none;"><i class="fa fa-edit fa-lg"></i></button>' +
                             '<button type="button" onclick="removeColor(`color' + newId + '`)" style="border: none; background: none;"><i class="fa fa-remove fa-lg"></i></button></div>');
+                            
+                    $("#addVariant" + newId).click(function (e) {
+                        
+                        var modalId = findAncestor(this, ".fade").id;
+                        modalId = modalId.charAt(modalId.length - 1);
+                        var variantsCount = parseInt(document.getElementById("variantsCount"+modalId).value);
+                    variantsCount += 1;
+                    document.getElementById("variantsCount"+modalId).setAttribute("value", variantsCount);
+                        
+                        console.log(document.getElementById("variantsCount"+modalId).value);
+                        $(".sq" + modalId).append('<div class="row" id="' + modalId + 'variant' + newVariantId + '"><div class="col-md-5 mb-4"><div class="form-outline">' +
+                                '<label class="form-label" for="size">Size</label>' +
+                                '<input class="form-control form-control-lg"  required="" type="text" name="size" placeholder="Ví dụ: XL"/></div></div>' +
+                                '<div class="col-md-5 mb-4"><div class="form-outline">' +
+                                '<label class="form-label" for="quantity">Số lượng</label>' +
+                                '<input class="form-control form-control-lg" required="" type="number" min="0" name="quantity" placeholder="Ví dụ: 300"/></div></div>' +
+                                '<button type="button" onclick="removeVariant(`' + modalId + 'variant' + newVariantId + '`)" style="border: none; background: none;"><i class="fa fa-remove fa-lg"></i></button>');
+                        newVariantId++;
+
+                    });
                     newId++;
+
                 });
 
             });
-
+            function findAncestor(el, sel) {
+                while ((el = el.parentElement) && !((el.matches || el.matchesSelector).call(el, sel)))
+                    ;
+                return el;
+            }
             var newVariantId = 2;
+            var addVariantId = 1;
             $(document).ready(function (e) {
-                $("#addVariant").click(function (e) {
-                    $(".sq").append('<div class="row" id="variant' + newVariantId + '"><div class="col-md-5 mb-4"><div class="form-outline">' +
+                $("#addVariant1").click(function (e) {
+                    var modalId = findAncestor(this, ".fade").id;
+                    modalId = modalId.charAt(modalId.length - 1);
+                    var variantsCount = parseInt(document.getElementById("variantsCount1").value);
+                    variantsCount += 1;
+                    document.getElementById("variantsCount1").setAttribute("value", variantsCount);
+                    console.log(document.getElementById("variantsCount1").value);
+                    $(".sq1").append('<div class="row" id="' + modalId + 'variant' + newVariantId + '"><div class="col-md-5 mb-4"><div class="form-outline">' +
                             '<label class="form-label" for="size">Size</label>' +
                             '<input class="form-control form-control-lg"  required="" type="text" name="size" placeholder="Ví dụ: XL"/></div></div>' +
                             '<div class="col-md-5 mb-4"><div class="form-outline">' +
                             '<label class="form-label" for="quantity">Số lượng</label>' +
                             '<input class="form-control form-control-lg" required="" type="number" min="0" name="quantity" placeholder="Ví dụ: 300"/></div></div>' +
-                            '<button type="button" onclick="removeVariant(`variant' + newVariantId + '`)" style="border: none; background: none;"><i class="fa fa-remove fa-lg"></i></button>');
+                            '<button type="button" onclick="removeVariant(`' + modalId + 'variant' + newVariantId + '`)" style="border: none; background: none;"><i class="fa fa-remove fa-lg"></i></button>');
                     newVariantId++;
+
                 });
             });
+
+
+
             function removeColor(id) {
                 const element = document.getElementById(id);
                 element.remove();
             }
             function removeVariant(id) {
                 const element = document.getElementById(id);
+                var modalId = element.id.charAt(0);
+                var variantsCount = parseInt(document.getElementById("variantsCount"+modalId).value);
+                variantsCount -= 1;
+                document.getElementById("variantsCount"+modalId).setAttribute("value", variantsCount);
                 element.remove();
+                
             }
         </script>
 

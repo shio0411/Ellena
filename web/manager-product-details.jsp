@@ -241,7 +241,7 @@
 
                                         <%    }%>
 
-                                        <button id="add" type="button" onClick="checkImages()">Add more images</button> 
+                                        <a href="MainController?action=ViewImages&productID=<%=product.getProductID()%>"<button id="add" type="button" onClick="checkImages()">Add more images</button></a>
 
 
                                     </div>
