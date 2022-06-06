@@ -32,7 +32,6 @@
                 <input type="submit" name="action" value="Logout" style="margin-left: 4%;">
             </form>
 
-            <!--h1 title row-->
             <div class="row" style="margin: 0;">
                 <h1>Danh sách sản phẩm</h1>
             </div>
@@ -41,8 +40,8 @@
             <div class="row">
                 <!--search bar-->
                 <div class="col-9">
-                    <form action="MainController" method="POST">
-                        <input type="text" name="search" value="<%= search%>" placeholder="Tìm kiem san pham">
+                    <form action="MainController">
+                        <input type="text" name="search" value="<%= search%>" placeholder="Tìm kiếm sản phẩm">
 
                         Trạng thái
                         <select name="status">

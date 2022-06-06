@@ -49,7 +49,7 @@ public class ManagerStatisticController extends HttpServlet {
                 url = SUCCESS;
             }
         } catch (Exception e) {
-            log("Error at ShowManagerController: " + e.toString());
+            log("Error at ManagerStatisticController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

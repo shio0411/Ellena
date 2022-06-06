@@ -5,8 +5,10 @@
 package store.controllers;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,43 +16,68 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import store.shopping.ProductDAO;
 import store.shopping.ProductDTO;
-import store.utils.VNCharacterUtils;
 
 /**
  *
  * @author vankh
  */
-@WebServlet(name = "ManagerSearchProductController", urlPatterns = {"/ManagerSearchProductController"})
-public class ManagerSearchProductController extends HttpServlet {
+@WebServlet(name = "AddProductController", urlPatterns = {"/AddProductController"})
+public class AddProductController extends HttpServlet {
 
-    public static final String ERROR = "manager-product.jsp";
-    public static final String SUCCESS = "manager-product.jsp";
-
+    private static final String ERROR = "add-product.jsp";
+    private static final String SUCCESS = "ManagerShowProductController";
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
-
         try {
-            ProductDAO dao = new ProductDAO();
-            String search = VNCharacterUtils.removeAccent(request.getParameter("search"));
-            String status = request.getParameter("status");
-
-            List<ProductDTO> listProduct = dao.getListProduct(search, status);
-
-            if (listProduct.size() > 0) {
-                request.setAttribute("LIST_PRODUCT", listProduct);
-                url = SUCCESS;
+            String productName = request.getParameter("productName").toUpperCase();
+            int categoryID = Integer.parseInt(request.getParameter("categoryID"));
+            int lowStockLimit = Integer.parseInt(request.getParameter("lowStockLimit"));
+            int price = Integer.parseInt(request.getParameter("price"));
+            float discount = Float.parseFloat(request.getParameter("discount"));
+            String description = request.getParameter("description");
+            String[] color = request.getParameterValues("color");
+            String[] size = request.getParameterValues("size");
+            String[] quantityString = request.getParameterValues("quantity");
+            int[] quantity = new int[quantityString.length];
+            for (int i = 0; i < quantityString.length; i++) {
+                quantity[i] = Integer.parseInt(quantityString[i]);
             }
+            
+            Map<List<String>, Integer> colorSizeQuantity = new HashMap<>();
+            
+            for(int i =0; i< color.length; i++){
+                List<String> colorSize = new ArrayList<>();
+                colorSize.add(color[i].substring(0, 1).toUpperCase() + color[i].substring(1)); //capitalize the string
+                colorSize.add(size[i].toUpperCase());
+                colorSizeQuantity.put(colorSize, quantity[i]);
+            }
+            
+            Map<String, List<String>> colorImage = new HashMap<>();
+            
+            
+            boolean check = true;
+            ProductDAO dao = new ProductDAO();
 
+            if (check) {
+                ProductDTO product = new ProductDTO();
+//                boolean checkInsert = dao.addUser(user);
+//                if (checkInsert) {
+//                    url = SUCCESS;
+//                }
+
+            } else {
+               // request.setAttribute("USER_ERROR", userError);
+
+            }
         } catch (Exception e) {
-            log("Error at ManagerShowProductController: " + toString());
+            log("Error at AddProductController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
-
     }
-
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

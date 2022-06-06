@@ -74,6 +74,9 @@ public class AuthenFilter implements Filter {
         MANAGER_FUNCTION.add("ManagerShowProductController");
         MANAGER_FUNCTION.add("ManagerShowProductDetailController");
         MANAGER_FUNCTION.add("manager-product-details.jsp");
+        MANAGER_FUNCTION.add("add-product.jsp");
+        MANAGER_FUNCTION.add("add-variant.jsp");
+        MANAGER_FUNCTION.add("AddProductController");
     }
 
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)

@@ -18,10 +18,6 @@
             if (search == null) {
                 search = "";
             }
-            if (loginUser == null || !"AD".equals(loginUser.getRoleID())) {
-                response.sendRedirect("login.jsp");
-                return;
-            }
             List<UserDTO> listUser = (List<UserDTO>) request.getAttribute("LIST_USER");
             String roleID = request.getParameter("roleID");
             if (roleID == null) {

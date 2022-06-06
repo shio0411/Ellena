@@ -19,6 +19,8 @@ public class MainController extends HttpServlet {
     private static final String SEARCH_ACCOUNT_CONTROLLER = "SearchAccountController";
     private static final String ADD_ACCOUNT = "Create an account";
     private static final String ADD_ACCOUNT_CONTROLLER = "AddAccountController";
+    private static final String ADD_PRODUCT = "Add a product";
+    private static final String ADD_PRODUCT_CONTROLLER = "AddProductController";
     private static final String SEARCH_MANAGER = "SearchManager";
     private static final String SEARCH_MANAGER_CONTROLLER = "SearchManagerController";
     private static final String SEARCH_CATALOG = "search-catalog";
@@ -114,6 +116,9 @@ public class MainController extends HttpServlet {
                         break;
                     case ADD_ACCOUNT:
                         url = ADD_ACCOUNT_CONTROLLER;
+                        break;
+                    case ADD_PRODUCT:
+                        url = ADD_PRODUCT_CONTROLLER;
                         break;
                     case VIEW_USER:
                         url = VIEW_USER_CONTROLLER;

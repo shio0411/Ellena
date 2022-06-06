@@ -10,7 +10,6 @@
 
         <jsp:include page="meta.jsp" flush="true"/>
     </head>
-    <body>
         <body class="goto-here">
 
         <section class="vh-100 gradient-custom">
@@ -124,7 +123,7 @@
                                         <div class="col-md-6 mb-4 pb-2">
 
                                             <div class="form-outline">
-                                                <label class="form-label" required="" for="phoneNumber">Phone Number</label>
+                                                <label class="form-label" required="" for="phoneNumber">Số điện thoại</label>
                                                 <input type="tel" id="phoneNumber" name="phone" class="form-control form-control-lg" />
 
                                             </div>
@@ -156,5 +155,4 @@
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/jquery.nicescroll.min.js"></script>
     <script src="js/main.js"></script>  
-    </body>
 </html>
