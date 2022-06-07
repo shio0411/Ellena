@@ -4,27 +4,36 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import store.utils.DBUtils;
-
 
 public class UserDAO {
 
     private static final String LOGIN = "SELECT fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID=? AND password=?";
     private static final String CHECK_DUPLICATE = "SELECT fullName FROM tblUsers WHERE userID=?";
     private static final String INSERT = "INSERT tblUsers(userID, fullName, password, sex, roleID, address, birthday, phone, status) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    private static final String SEARCH_USER = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID LIKE ? AND roleID LIKE ? AND status=?";
+    private static final String SEARCH_USER = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID LIKE ?";
+    private static final String SEARCH_USER_WITH_ROLE_ID = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID LIKE ? AND roleID LIKE ?";
+    private static final String SEARCH_USER_WITH_STATUS = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID LIKE ? AND roleID LIKE ? AND status=?";
     private static final String GET_USER_BY_ID = "SELECT userID, fullName, password, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID=?";
     private static final String SEARCH_USER_ALL = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers";
-    private static final String SEARCH_MANAGER = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID LIKE ? AND roleID LIKE 'MN' AND status=?";
+    private static final String SEARCH_MANAGER = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID LIKE ? AND roleID LIKE 'MN'";
+    private static final String SEARCH_MANAGER_WITH_STATUS = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID LIKE ? AND roleID LIKE 'MN' AND status=?";
     private static final String SEARCH_MANAGER_ALL = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE roleID LIKE 'MN'";
     private static final String UPDATE_ACCOUNT = "UPDATE tblUsers SET fullName=?, sex=?, roleID=?, address=?, birthday=?, phone=? WHERE userID=?";
     private static final String UPDATE_PASSWORD = "UPDATE tblUsers SET password=? WHERE userID=?";
     private static final String UPDATE_NAME = "UPDATE tblUsers SET fullName=? WHERE userID=?";
+    private static final String UPDATE_ADDRESS = "UPDATE tblUsers SET address=? WHERE userID=?";
+    private static final String UPDATE_PHONE = "UPDATE tblUsers SET phone=? WHERE userID=?";
     private static final String ACTIVATE_ACCOUNT = "UPDATE tblUsers SET status=1 WHERE userID=?";
     private static final String DEACTIVATE_ACCOUNT = "UPDATE tblUsers SET status=0 WHERE userID=?";
+    private static final String STATISTIC_ORDER_QUANITY = "SELECT orderDate, COUNT(*) AS [orderQuantity], SUM(total) AS [income], SUM(quantity) as [productQuantity] FROM tblOrder o JOIN tblOrderDetail d ON o.orderID = d.orderID GROUP BY orderDate";
 
     public UserDTO checkLogin(String userID, String password) throws SQLException {
         UserDTO user = null;
@@ -99,7 +108,7 @@ public class UserDAO {
 
         return check;
     }
-    
+
     public boolean addUser(UserDTO user) throws SQLException {
         boolean check = false;
         Connection conn = null;
@@ -148,10 +157,20 @@ public class UserDAO {
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                ptm = conn.prepareStatement(SEARCH_USER);
-                ptm.setString(1, "%" + search + "%");
-                ptm.setString(2, roleID);
-                ptm.setString(3, Status);
+                if (roleID == null) {
+                    ptm = conn.prepareStatement(SEARCH_USER);
+                    ptm.setString(1, "%" + search + "%");
+                } else if ("true".equalsIgnoreCase(Status) || "false".equalsIgnoreCase(Status)) {
+                    ptm = conn.prepareStatement(SEARCH_USER_WITH_STATUS);
+                    ptm.setString(1, "%" + search + "%");
+                    ptm.setString(2, roleID);
+                    ptm.setString(3, Status);
+                } else {
+                    ptm = conn.prepareStatement(SEARCH_USER_WITH_ROLE_ID);
+                    ptm.setString(1, "%" + search + "%");
+                    ptm.setString(2, roleID);
+
+                }
                 rs = ptm.executeQuery();
                 while (rs.next()) {
                     String userID = rs.getString("userID");
@@ -179,7 +198,7 @@ public class UserDAO {
         }
         return list;
     }
-    
+
     public List<UserDTO> getAllUsers() throws SQLException {
         List<UserDTO> list = new ArrayList<>();
         Connection conn = null;
@@ -216,7 +235,7 @@ public class UserDAO {
         }
         return list;
     }
-    
+
     public UserDTO getUserByID(String userID) throws SQLException {
         UserDTO user = null;
         Connection conn = null;
@@ -254,7 +273,7 @@ public class UserDAO {
         }
         return user;
     }
-    
+
     public List<UserDTO> getListManagers(String search, String Status) throws SQLException {
         List<UserDTO> list = new ArrayList<>();
         Connection conn = null;
@@ -263,9 +282,14 @@ public class UserDAO {
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                ptm = conn.prepareStatement(SEARCH_MANAGER);
-                ptm.setString(1, "%" + search + "%");
-                ptm.setString(2, Status);
+                if ("true".equalsIgnoreCase(Status) || "false".equalsIgnoreCase(Status)) {
+                    ptm = conn.prepareStatement(SEARCH_MANAGER_WITH_STATUS);
+                    ptm.setString(1, "%" + search + "%");
+                    ptm.setString(2, Status);
+                } else {
+                    ptm = conn.prepareStatement(SEARCH_MANAGER);
+                    ptm.setString(1, "%" + search + "%");
+                }
                 rs = ptm.executeQuery();
                 while (rs.next()) {
                     String userID = rs.getString("userID");
@@ -293,7 +317,7 @@ public class UserDAO {
         }
         return list;
     }
-    
+
     public List<UserDTO> getAllManagers() throws SQLException {
         List<UserDTO> list = new ArrayList<>();
         Connection conn = null;
@@ -330,8 +354,8 @@ public class UserDAO {
         }
         return list;
     }
-    
-    public boolean updateAccount (UserDTO user) throws SQLException {
+
+    public boolean updateAccount(UserDTO user) throws SQLException {
         boolean check = false;
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -345,8 +369,8 @@ public class UserDAO {
             ptm.setDate(5, new java.sql.Date((user.getBirthday()).getTime()));
             ptm.setString(6, user.getPhone());
             ptm.setString(7, user.getUserID());
-            
-            check = ptm.executeUpdate()>0?true: false;            
+
+            check = ptm.executeUpdate() > 0 ? true : false;
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         } finally {
@@ -359,7 +383,7 @@ public class UserDAO {
         }
         return check;
     }
-    
+
     public boolean updatePassword(String password, String userID) throws SQLException {
         boolean check = false;
         Connection conn = null;
@@ -369,8 +393,8 @@ public class UserDAO {
             ptm = conn.prepareStatement(UPDATE_PASSWORD);
             ptm.setString(1, password);
             ptm.setString(2, userID);
-            
-            check = ptm.executeUpdate()>0?true: false;            
+
+            check = ptm.executeUpdate() > 0 ? true : false;
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         } finally {
@@ -383,7 +407,7 @@ public class UserDAO {
         }
         return check;
     }
-    
+
     public boolean updateName(String newName, String userID) throws SQLException {
         boolean check = false;
         Connection conn = null;
@@ -393,8 +417,8 @@ public class UserDAO {
             ptm = conn.prepareStatement(UPDATE_NAME);
             ptm.setString(1, newName);
             ptm.setString(2, userID);
-            
-            check = ptm.executeUpdate()>0?true: false;            
+
+            check = ptm.executeUpdate() > 0 ? true : false;
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         } finally {
@@ -407,8 +431,56 @@ public class UserDAO {
         }
         return check;
     }
-    
-    public boolean activateAccount (String userID) throws SQLException {
+
+    public boolean updateAddress(String newAddress, String userID) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DBUtils.getConnection();
+            ptm = conn.prepareStatement(UPDATE_ADDRESS);
+            ptm.setString(1, newAddress);
+            ptm.setString(2, userID);
+
+            check = ptm.executeUpdate() > 0 ? true : false;
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+
+    public boolean updatePhone(String newPhone, String userID) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DBUtils.getConnection();
+            ptm = conn.prepareStatement(UPDATE_PHONE);
+            ptm.setString(1, newPhone);
+            ptm.setString(2, userID);
+
+            check = ptm.executeUpdate() > 0 ? true : false;
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+
+    public boolean activateAccount(String userID) throws SQLException {
         boolean check = false;
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -416,8 +488,8 @@ public class UserDAO {
             conn = DBUtils.getConnection();
             ptm = conn.prepareStatement(ACTIVATE_ACCOUNT);
             ptm.setString(1, userID);
-            
-            check = ptm.executeUpdate()>0?true: false;            
+
+            check = ptm.executeUpdate() > 0 ? true : false;
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         } finally {
@@ -430,16 +502,16 @@ public class UserDAO {
         }
         return check;
     }
-    
-    public boolean deactivateAccount (String userID) throws SQLException {
+
+    public boolean deactivateAccount(String userID) throws SQLException {
         boolean check = false;
         Connection conn = null;
         PreparedStatement ptm = null;
         try {
             conn = DBUtils.getConnection();
             ptm = conn.prepareStatement(DEACTIVATE_ACCOUNT);
-            ptm.setString(1, userID);            
-            check = ptm.executeUpdate()>0?true: false;            
+            ptm.setString(1, userID);
+            check = ptm.executeUpdate() > 0 ? true : false;
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         } finally {
@@ -451,5 +523,46 @@ public class UserDAO {
             }
         }
         return check;
+    }
+
+    public Map<String, Integer> getStatisticOrders() throws SQLException {
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        Map<String, Integer> map = new HashMap<>();
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(STATISTIC_ORDER_QUANITY);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    String date = rs.getString("orderDate");
+                    int quantity = rs.getInt("quantity");
+                    map.put(date, quantity);
+                }
+                SimpleDateFormat DateFor = new SimpleDateFormat("yyyy-MM-dd");
+                Calendar cal = Calendar.getInstance();
+                for (int i = 0; i < 30; i++) {
+                    String stringDate = DateFor.format(cal.getTime());
+                    if (map.get(stringDate) == null) {
+                        map.put(stringDate, 0);
+                    }
+
+                    cal.add(Calendar.DATE, -1);
+                }
+            }
+        } catch (Exception e) {
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return map;
     }
 }

@@ -4,6 +4,8 @@
     Author     : giama
 --%>
 
+<%@page import="store.shopping.CategoryDTO"%>
+<%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -22,23 +24,10 @@
         <div class="offcanvas-menu-overlay"></div>
         <div class="offcanvas-menu-wrapper">
             <div class="offcanvas__close">+</div>
-            <ul class="offcanvas__widget">
-                <li><span class="icon_search search-switch"></span></li>
-                <li><a href="#"><span class="icon_heart_alt"></span>
-                        <div class="tip">2</div>
-                    </a></li>
-                <li><a href="#"><span class="icon_bag_alt"></span>
-                        <div class="tip">2</div>
-                    </a></li>
-            </ul>
             <div class="offcanvas__logo">
-                <a href="./home.jsp"><img src="img/logo.png" alt=""></a>
+                <a href="./"><img class="img-fluid" style="height: 38px;" src="img/ellena-logo.png" alt=""></a>
             </div>
-            <div id="mobile-menu-wrap"></div>
-            <div class="offcanvas__auth">
-                <a href="MainController?action=Login">Login</a>
-                <a href="#">Register</a>
-            </div>
+            <div id="mobile-menu-wrap"></div>          
         </div>
         <!-- Offcanvas Menu End -->
 
@@ -48,47 +37,10 @@
                 <div class="row">
                     <div class="col-xl-3 col-lg-2">
                         <div class="header__logo">
-                            <a href="./index.html"><img src="img/logo.png" alt=""></a>
+                            <a href="./"><img class="img-fluid" style="height: 38px;" src="img/ellena-logo.png" alt=""></a>
                         </div>
+
                     </div>
-                    <div class="col-xl-6 col-lg-7" >
-                        <nav class="header__menu">
-                            <ul>
-                                <li class="active"><a href="./index.html">Home</a></li>
-                                <li><a href="./shop.html">Shop</a></li>
-                                <li><a href="#">Pages</a>
-                                    <ul class="dropdown">
-                                        <li><a href="./product-details.html">Product Details</a></li>
-                                        <li><a href="./shop-cart.html">Shop Cart</a></li>
-                                        <li><a href="./checkout.html">Checkout</a></li>
-                                        <li><a href="./blog-details.html">Blog Details</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="./blog.html">Blog</a></li>
-                                <li><a href="./contact.html">Contact</a></li>
-                            </ul>
-                        </nav>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="header__right">
-                            <div class="header__right__auth">
-                                <a href="login.jsp">Login</a>
-                                <a href="register.jsp">Register</a>
-                            </div>
-                            <ul class="header__right__widget">
-                                <li><span class="icon_search search-switch"></span></li>
-                                <li><a href="#"><span class="icon_heart_alt"></span>
-                                        <div class="tip">2</div>
-                                    </a></li>
-                                <li><a href="#"><span class="icon_bag_alt"></span>
-                                        <div class="tip">2</div>
-                                    </a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="canvas__open">
-                    <i class="fa fa-bars"></i>
                 </div>
             </div>
         </header>
@@ -129,26 +81,32 @@
                                     <div>
                                         <button class="primary-btn" type="submit" name="action" value="Login" >Đăng nhập</button>
                                     </div>
-                                    
+
                                 </form>
                                     <a href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/Ellena/LoginGoogleController&response_type=code
     &client_id=772482426218-2l2bv33430edm3s1v7g12kul82kb5bmd.apps.googleusercontent.com&approval_prompt=force">Login With Google</a>  
-                                    <a href="https://www.facebook.com/dialog/oauth?client_id=893226585410442&redirect_uri=http://localhost:8080/Ellena/LoginFacebookController">Login Facebook</a>
+                                    <a href="https://www.facebook.com/dialog/oauth?client_id=893226585410442&redirect_uri=http://localhost:8080/Ellena/LoginFacebookController">Login with Facebook</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-        <script src="js/jquery-3.3.1.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script src="js/jquery.magnific-popup.min.js"></script>
-        <script src="js/jquery-ui.min.js"></script>
-        <script src="js/mixitup.min.js"></script>
-        <script src="js/jquery.countdown.min.js"></script>
-        <script src="js/jquery.slicknav.js"></script>
-        <script src="js/owl.carousel.min.js"></script>
-        <script src="js/jquery.nicescroll.min.js"></script>
-        <script src="js/main.js"></script>
+        <!--Start of Tawk.to Script-->
+        <script type="text/javascript">
+            var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+            (function () {
+                var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+                s1.async = true;
+                s1.src = 'https://embed.tawk.to/62986537b0d10b6f3e754a36/1g4hkmp1j';
+                s1.charset = 'UTF-8';
+                s1.setAttribute('crossorigin', '*');
+                s0.parentNode.insertBefore(s1, s0);
+            })();
+        </script>
+        <!--End of Tawk.to Script-->
+        
+        <!-- Js Plugins -->
+    <jsp:include page="js-plugins.jsp" flush="true"/>
     </body>
 </html>

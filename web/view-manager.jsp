@@ -38,6 +38,7 @@
                 <input type="text" name="search" value="<%= search%>" placeholder="Tìm kiếm manager">
                 Trạng thái
                 <select name="status">
+                    <option value="all" selected hidden>Chọn trạng thái</option>
                     <option value="true">Active</option>
                     <option value="false">Inactive</option>
                 </select>
@@ -70,10 +71,10 @@
                         <%
                             if (user.isStatus()) {
                         %>
-                             <a href="MainController?action=DeactivateAccount&userID=<%=user.getUserID()%>">Vô hiệu hoá</a>
+                             <a href="MainController?action=DeactivateAccount&userID=<%=user.getUserID()%>&search=<%= search %>&from=showmanager">Vô hiệu hoá</a>
                         <%} else {
                         %>
-                             <a href="MainController?action=ActivateAccount&userID=<%=user.getUserID()%>">Kích hoạt</a>
+                             <a href="MainController?action=ActivateAccount&userID=<%=user.getUserID()%>&search=<%= search %>&from=showmanager">Kích hoạt</a>
                         <%
                             }
                         %>
