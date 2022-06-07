@@ -10,7 +10,6 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Thêm một sản phẩm mới</title>
         <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
@@ -104,7 +103,7 @@
                                             <div class="col-md-4 mb-4">
                                                 <div class="form-outline">
                                                     <label class="form-label" for="color">Màu</label>
-                                                    
+
                                                     <input class="form-control form-control-lg" required="" type="text" name="color" placeholder="Ví dụ: Trắng"/>
                                                     <input id="variantsCount1" type="hidden" name="variantsCount" value="1"/>
                                                 </div>
@@ -152,10 +151,10 @@
                                                             <button id="addImage1" style="width: 25px; margin-left: 2.6%;" onClick="myFunction(1)">+</button>
                                                             <script>
                                                                 var inputID = 1;
-                                                                const maxInputs = 3;
+                                                                var maxInputs = 3;
                                                                 function myFunction(id) {
-                                                                    if (inputID === maxInputs) {
-                                                                        inputID = 1;
+                                                                    if(inputID === maxInputs){
+                                                                        maxInputs += 3;
                                                                     }
                                                                     inputID = inputID + 1;
 
@@ -178,7 +177,7 @@
 
                                                                     document.querySelector('#file-input' + inputID).addEventListener("change", previewImages);
 
-                                                                    if (inputID === maxInputs) {
+                                                                    if (inputID === maxInputs) {         
                                                                         document.querySelector("#addImage" + id).style.display = "none";
                                                                         document.querySelector("#addImage" + id).setAttribute("onClick", "");
                                                                     }
@@ -270,15 +269,13 @@
         <script>
             var newId = 2;
 
-
-
             $(document).ready(function (e) {
                 $("#addColor").click(function (e) {
 
                     $(".color-container").append('<div class="row" id="color' + newId + '"><div class="col-md-4 mb-4"><div class="form-outline">' +
                             '<label class="form-label" for="color">Màu</label>' +
                             '<input class="form-control form-control-lg" type="text" name="color" placeholder="Ví dụ: Trắng"/></div></div>' +
-                            '<input id="variantsCount'+newId+'" type="hidden" name="variantsCount" value="1"/>' +
+                            '<input id="variantsCount' + newId + '" type="hidden" name="variantsCount" value="1"/>' +
                             '<div class="modal fade" id="myModal' + newId + '" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
                             '<div class="modal-dialog" id="' + newId + '" >' +
                             '<div class="modal-content" >' +
@@ -301,36 +298,36 @@
                             '<button type="button" onclick="removeVariant(`variant' + newId + '`)" style="border: none; background: none;"><i class="fa fa-remove fa-lg"></i></button></div></div>' +
                             '<button class="mb-4" type="button" id="addVariant' + newId + '" style="border: none; background: none"><i class="fa fa-plus-circle fa-lg"></i></button>' +
                             '<div class="row"><div id="upload-image' + newId + '" class="col-md-5 mb-4">' +
-                            '<div><input accept="image/*" type="file" name="files" id="file-input1" class="file-input"/>' +
-                            '<div id="preview' + newId + '"></div></div></div></div>' +
+                            '<div><input accept="image/*" type="file" name="files" id="file-input1" class="file-input"/>'+ 
+                            '<div id="preview' + newId +'"></div></div></div></div>'+                                                                  
                             '<button id="addImage' + newId + '" style="width: 25px; margin-left: 2.6%;" onClick="myFunction(' + newId + ')">+</button></div>' +
                             '<div class="modal-footer">' +
                             '<button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button></div></div></div></div>' +
                             '<button type="button" data-toggle="modal" data-target="#myModal' + newId + '" style="border: none; background: none;"><i class="fa fa-edit fa-lg"></i></button>' +
                             '<button type="button" onclick="removeColor(`color' + newId + '`)" style="border: none; background: none;"><i class="fa fa-remove fa-lg"></i></button></div>');
-                            
-                    $("#addVariant" + newId).click(function (e) {
-                        
-                        var modalId = findAncestor(this, ".fade").id;
-                        modalId = modalId.charAt(modalId.length - 1);
-                        var variantsCount = parseInt(document.getElementById("variantsCount"+modalId).value);
-                    variantsCount += 1;
-                    document.getElementById("variantsCount"+modalId).setAttribute("value", variantsCount);
-                        
-                        console.log(document.getElementById("variantsCount"+modalId).value);
-                        $(".sq" + modalId).append('<div class="row" id="' + modalId + 'variant' + newVariantId + '"><div class="col-md-5 mb-4"><div class="form-outline">' +
-                                '<label class="form-label" for="size">Size</label>' +
-                                '<input class="form-control form-control-lg"  required="" type="text" name="size" placeholder="Ví dụ: XL"/></div></div>' +
-                                '<div class="col-md-5 mb-4"><div class="form-outline">' +
-                                '<label class="form-label" for="quantity">Số lượng</label>' +
-                                '<input class="form-control form-control-lg" required="" type="number" min="0" name="quantity" placeholder="Ví dụ: 300"/></div></div>' +
-                                '<button type="button" onclick="removeVariant(`' + modalId + 'variant' + newVariantId + '`)" style="border: none; background: none;"><i class="fa fa-remove fa-lg"></i></button>');
-                        newVariantId++;
 
-                    });
-                    newId++;
+            $("#addVariant" + newId).click(function (e) {
+
+                var modalId = findAncestor(this, ".fade").id;
+                modalId = modalId.charAt(modalId.length - 1);
+                var variantsCount = parseInt(document.getElementById("variantsCount" + modalId).value);
+                variantsCount += 1;
+                document.getElementById("variantsCount" + modalId).setAttribute("value", variantsCount);
+
+                console.log(document.getElementById("variantsCount" + modalId).value);
+                $(".sq" + modalId).append('<div class="row" id="' + modalId + 'variant' + newVariantId + '"><div class="col-md-5 mb-4"><div class="form-outline">' +
+                        '<label class="form-label" for="size">Size</label>' +
+                        '<input class="form-control form-control-lg"  required="" type="text" name="size" placeholder="Ví dụ: XL"/></div></div>' +
+                        '<div class="col-md-5 mb-4"><div class="form-outline">' +
+                        '<label class="form-label" for="quantity">Số lượng</label>' +
+                        '<input class="form-control form-control-lg" required="" type="number" min="0" name="quantity" placeholder="Ví dụ: 300"/></div></div>' +
+                        '<button type="button" onclick="removeVariant(`' + modalId + 'variant' + newVariantId + '`)" style="border: none; background: none;"><i class="fa fa-remove fa-lg"></i></button>');
+                newVariantId++;
 
                 });
+                newId++;
+
+            });
 
             });
             function findAncestor(el, sel) {
@@ -338,6 +335,7 @@
                     ;
                 return el;
             }
+            
             var newVariantId = 2;
             var addVariantId = 1;
             $(document).ready(function (e) {
@@ -360,8 +358,6 @@
                 });
             });
 
-
-
             function removeColor(id) {
                 const element = document.getElementById(id);
                 element.remove();
@@ -369,11 +365,11 @@
             function removeVariant(id) {
                 const element = document.getElementById(id);
                 var modalId = element.id.charAt(0);
-                var variantsCount = parseInt(document.getElementById("variantsCount"+modalId).value);
+                var variantsCount = parseInt(document.getElementById("variantsCount" + modalId).value);
                 variantsCount -= 1;
-                document.getElementById("variantsCount"+modalId).setAttribute("value", variantsCount);
+                document.getElementById("variantsCount" + modalId).setAttribute("value", variantsCount);
                 element.remove();
-                
+
             }
         </script>
 
