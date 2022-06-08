@@ -77,7 +77,7 @@ public class AddProductController extends HttpServlet {
 
             } else {
                // request.setAttribute("USER_ERROR", userError);
-
+               //for push
             }
         } catch (Exception e) {
             log("Error at AddProductController: " + e.toString());
