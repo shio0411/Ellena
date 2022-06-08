@@ -26,6 +26,21 @@
             List<CategoryDTO> listCategory = (List<CategoryDTO>) session.getAttribute("LIST_CATEGORY");
 
         %>
+        <style>
+            .img-wrap {
+                display: inline-block; 
+                width: 200px;
+                position: relative;
+
+            }
+            .img-wrap .close {
+                position: absolute;
+                top: 2px;
+                right: 2px;
+                z-index: 100;
+
+            }
+        </style>
         <section class="vh-100 gradient-custom">
             <div class="container py-5 h-100">
                 <div class="row justify-content-center align-items-center h-100">
@@ -142,54 +157,56 @@
                                                             <div class="row">
                                                                 <div id="upload-image1" class="col-md-5 mb-4">
                                                                     <div>
-                                                                        <input accept="image/*" type="file" name="files" id="file-input1" class="file-input"/>          
-                                                                        <div id="preview1"></div>
+                                                                        <input accept="image/*" type="file" name="files" onChange="previewImages(event)"/>          
+                                                                        <div id="preview" class="img-wrap"></div>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                             <!-- Add an image browse button -->
-                                                            <button id="addImage1" style="width: 25px; margin-left: 2.6%;" onClick="myFunction(1)">+</button>
+                                                            <button type="button" id="addImage1" style="width: 25px; margin-left: 2.6%;" onClick="myFunction(event)">+</button>
                                                             <script>
-                                                                var inputID = 1;
-                                                                var maxInputs = 3;
-                                                                function myFunction(id) {
-                                                                    if(inputID === maxInputs){
-                                                                        maxInputs += 3;
-                                                                    }
-                                                                    inputID = inputID + 1;
 
-                                                                    console.log(inputID);
+                                                                var maxInputs = 3;
+
+                                                                function myFunction(e) {
+
+                                                                    var id = e.target.id.charAt(e.target.id.length - 1);
+                                                                    var uploadDiv = e.target.previousElementSibling.firstElementChild;
+
                                                                     var container = document.createElement("div");
+
 
                                                                     var input = document.createElement("input");
                                                                     input.setAttribute("accept", "image/*");
                                                                     input.setAttribute("type", "file");
                                                                     input.setAttribute("name", "files");
-                                                                    input.setAttribute("id", "file-input" + inputID.toString());
-                                                                    input.setAttribute("class", "file-input");
+                                                                    input.setAttribute("onChange", "previewImages(event)");
+
 
                                                                     var preview = document.createElement("div");
-                                                                    preview.setAttribute("id", "preview" + inputID.toString());
+                                                                    preview.setAttribute("id", "preview");
+                                                                    preview.setAttribute("class", "img-wrap");
 
                                                                     container.appendChild(input);
                                                                     container.appendChild(preview);
-                                                                    document.getElementById("upload-image" + id).appendChild(container);
+                                                                    uploadDiv.appendChild(container);
 
-                                                                    document.querySelector('#file-input' + inputID).addEventListener("change", previewImages);
+                                                                    var inputCount = uploadDiv.children.length;
+                                                                    if (inputCount === maxInputs) {
 
-                                                                    if (inputID === maxInputs) {         
-                                                                        document.querySelector("#addImage" + id).style.display = "none";
-                                                                        document.querySelector("#addImage" + id).setAttribute("onClick", "");
+                                                                        if (inputCount === maxInputs) {
+                                                                            document.querySelector("#addImage" + id).style.display = "none";
+                                                                            document.querySelector("#addImage" + id).setAttribute("onClick", "");
+                                                                        }
+
                                                                     }
-
                                                                 }
+                                                                function previewImages(e) {
 
-                                                                function previewImages() {
-                                                                    var imageID = this.id.charAt(this.id.length - 1);
-                                                                    var preview = document.querySelector('#preview' + imageID);
+                                                                    var preview = e.target.nextElementSibling;
 
-                                                                    if (this.files) {
-                                                                        [].forEach.call(this.files, readAndPreview);
+                                                                    if (e.target.files) {
+                                                                        [].forEach.call(e.target.files, readAndPreview);
                                                                     }
 
 
@@ -205,21 +222,22 @@
 
                                                                         reader.addEventListener("load", function () {
 
-                                                                            var image = new Image();
-                                                                            image.height = 100;
+                                                                            var image = new Image(200, 100);
                                                                             image.title = file.name;
                                                                             image.src = this.result;
 
-                                                                            var span = document.createElement("span");
-                                                                            span.innerHTML = `&times;`;
-                                                                            span.addEventListener("click", deleteImage);
+                                                                            var button = document.createElement("button");
+                                                                            button.innerHTML = `&times;`;
+                                                                            button.setAttribute("class", "close");
+                                                                            button.setAttribute("type", "button");
+                                                                            button.addEventListener("click", deleteImage);
 
                                                                             while (preview.hasChildNodes()) {
                                                                                 preview.removeChild(preview.firstChild);
                                                                             }
 
                                                                             preview.appendChild(image);
-                                                                            preview.appendChild(span);
+                                                                            preview.appendChild(button);
                                                                         });
 
                                                                         reader.readAsDataURL(file);
@@ -228,17 +246,16 @@
 
                                                                 }
                                                                 function deleteImage() {
-                                                                    var imageID = this.parentElement.id;
-                                                                    var inputID = imageID.charAt(imageID.length - 1);
-                                                                    var input = document.querySelector("#file-input" + inputID);
+                                                                    var image = this.parentElement;
+
+                                                                    var input = image.previousElementSibling;
 
                                                                     input.value = "";
-                                                                    while (this.parentElement.hasChildNodes()) {
-                                                                        this.parentElement.removeChild(this.parentElement.firstChild);
+                                                                    while (image.hasChildNodes()) {
+                                                                        image.removeChild(image.firstChild);
                                                                     }
                                                                 }
-
-                                                                document.querySelector('#file-input' + inputID.toString()).addEventListener("change", previewImages);
+                                                            
                                                             </script>
                                                         </div>
                                                         <div class="modal-footer">
@@ -298,36 +315,36 @@
                             '<button type="button" onclick="removeVariant(`variant' + newId + '`)" style="border: none; background: none;"><i class="fa fa-remove fa-lg"></i></button></div></div>' +
                             '<button class="mb-4" type="button" id="addVariant' + newId + '" style="border: none; background: none"><i class="fa fa-plus-circle fa-lg"></i></button>' +
                             '<div class="row"><div id="upload-image' + newId + '" class="col-md-5 mb-4">' +
-                            '<div><input accept="image/*" type="file" name="files" id="file-input1" class="file-input"/>'+ 
-                            '<div id="preview' + newId +'"></div></div></div></div>'+                                                                  
-                            '<button id="addImage' + newId + '" style="width: 25px; margin-left: 2.6%;" onClick="myFunction(' + newId + ')">+</button></div>' +
+                            '<div><input accept="image/*" type="file" name="files" onChange="previewImages(event)"/>' +
+                            '<div id="preview" class="img-wrap"></div></div></div></div>' +
+                            '<button type="button" id="addImage' + newId + '" style="width: 25px; margin-left: 2.6%;" onClick="myFunction(event)">+</button></div>' +
                             '<div class="modal-footer">' +
                             '<button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button></div></div></div></div>' +
                             '<button type="button" data-toggle="modal" data-target="#myModal' + newId + '" style="border: none; background: none;"><i class="fa fa-edit fa-lg"></i></button>' +
                             '<button type="button" onclick="removeColor(`color' + newId + '`)" style="border: none; background: none;"><i class="fa fa-remove fa-lg"></i></button></div>');
 
-            $("#addVariant" + newId).click(function (e) {
+                    $("#addVariant" + newId).click(function (e) {
 
-                var modalId = findAncestor(this, ".fade").id;
-                modalId = modalId.charAt(modalId.length - 1);
-                var variantsCount = parseInt(document.getElementById("variantsCount" + modalId).value);
-                variantsCount += 1;
-                document.getElementById("variantsCount" + modalId).setAttribute("value", variantsCount);
+                        var modalId = findAncestor(this, ".fade").id;
+                        modalId = modalId.charAt(modalId.length - 1);
+                        var variantsCount = parseInt(document.getElementById("variantsCount" + modalId).value);
+                        variantsCount += 1;
+                        document.getElementById("variantsCount" + modalId).setAttribute("value", variantsCount);
 
-                console.log(document.getElementById("variantsCount" + modalId).value);
-                $(".sq" + modalId).append('<div class="row" id="' + modalId + 'variant' + newVariantId + '"><div class="col-md-5 mb-4"><div class="form-outline">' +
-                        '<label class="form-label" for="size">Size</label>' +
-                        '<input class="form-control form-control-lg"  required="" type="text" name="size" placeholder="Ví dụ: XL"/></div></div>' +
-                        '<div class="col-md-5 mb-4"><div class="form-outline">' +
-                        '<label class="form-label" for="quantity">Số lượng</label>' +
-                        '<input class="form-control form-control-lg" required="" type="number" min="0" name="quantity" placeholder="Ví dụ: 300"/></div></div>' +
-                        '<button type="button" onclick="removeVariant(`' + modalId + 'variant' + newVariantId + '`)" style="border: none; background: none;"><i class="fa fa-remove fa-lg"></i></button>');
-                newVariantId++;
+                        console.log(document.getElementById("variantsCount" + modalId).value);
+                        $(".sq" + modalId).append('<div class="row" id="' + modalId + 'variant' + newVariantId + '"><div class="col-md-5 mb-4"><div class="form-outline">' +
+                                '<label class="form-label" for="size">Size</label>' +
+                                '<input class="form-control form-control-lg"  required="" type="text" name="size" placeholder="Ví dụ: XL"/></div></div>' +
+                                '<div class="col-md-5 mb-4"><div class="form-outline">' +
+                                '<label class="form-label" for="quantity">Số lượng</label>' +
+                                '<input class="form-control form-control-lg" required="" type="number" min="0" name="quantity" placeholder="Ví dụ: 300"/></div></div>' +
+                                '<button type="button" onclick="removeVariant(`' + modalId + 'variant' + newVariantId + '`)" style="border: none; background: none;"><i class="fa fa-remove fa-lg"></i></button>');
+                        newVariantId++;
+
+                    });
+                    newId++;
 
                 });
-                newId++;
-
-            });
 
             });
             function findAncestor(el, sel) {
@@ -335,7 +352,7 @@
                     ;
                 return el;
             }
-            
+
             var newVariantId = 2;
             var addVariantId = 1;
             $(document).ready(function (e) {
