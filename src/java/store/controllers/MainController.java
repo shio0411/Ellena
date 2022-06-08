@@ -2,10 +2,15 @@ package store.controllers;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+@MultipartConfig(
+        fileSizeThreshold = 1024 * 1024 * 1, // 1 MB
+        maxFileSize = 1024 * 1024 * 10, // 10 MB
+        maxRequestSize = 1024 * 1024 * 100 // 100 MB
+)
 public class MainController extends HttpServlet {
 
     private static final String ERROR = "error.jsp";
@@ -19,6 +24,8 @@ public class MainController extends HttpServlet {
     private static final String SEARCH_ACCOUNT_CONTROLLER = "SearchAccountController";
     private static final String ADD_ACCOUNT = "Create an account";
     private static final String ADD_ACCOUNT_CONTROLLER = "AddAccountController";
+    private static final String ADD_PRODUCT = "Add a product";
+    private static final String ADD_PRODUCT_CONTROLLER = "AddProductController";
     private static final String SEARCH_MANAGER = "SearchManager";
     private static final String SEARCH_MANAGER_CONTROLLER = "SearchManagerController";
     private static final String SEARCH_CATALOG = "search-catalog";
@@ -75,7 +82,11 @@ public class MainController extends HttpServlet {
     private static final String CHECKOUT_CONTROLLER = "CheckoutController";
     private static final String SUBSCRIBE = "Subscribe";
     private static final String SUBSCRIBE_CONTROLLER = "SubscribeController";
-
+    private static final String VIEW_IMAGES = "ViewImages";
+    private static final String VIEW_IMAGES_CONTROLLER = "ViewImagesController";
+    private static final String DELETE_IMAGE = "DeleteImage";
+    private static final String DELETE_IMAGE_CONTROLLER = "DeleteImageController";
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
@@ -114,6 +125,9 @@ public class MainController extends HttpServlet {
                         break;
                     case ADD_ACCOUNT:
                         url = ADD_ACCOUNT_CONTROLLER;
+                        break;
+                    case ADD_PRODUCT:
+                        url = ADD_PRODUCT_CONTROLLER;
                         break;
                     case VIEW_USER:
                         url = VIEW_USER_CONTROLLER;
@@ -183,6 +197,12 @@ public class MainController extends HttpServlet {
                         break;
                     case SUBSCRIBE:
                         url = SUBSCRIBE_CONTROLLER;
+                        break;
+                    case VIEW_IMAGES:
+                        url = VIEW_IMAGES_CONTROLLER;
+                        break;
+                    case DELETE_IMAGE:
+                        url = DELETE_IMAGE_CONTROLLER;
                         break;
                     default:
                         break;

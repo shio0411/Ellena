@@ -16,9 +16,9 @@ public class ProductDAO {
     private static final String ACTIVATE_PRODUCT = "UPDATE tblProduct SET status=1 WHERE productID=?";
     private static final String DEACTIVATE_PRODUCT = "UPDATE tblProduct SET status=0 WHERE productID=?";
     private static final String SEARCH_ALL_PRODUCT = "SELECT productID, productName, price, categoryName, discount, lowStockLimit, p.status  FROM tblProduct p JOIN tblCategory c ON p.categoryID=c.categoryID";
-    private static final String SEARCH_PRODUCT = "SELECT productID, productName, price, categoryName, discount, lowStockLimit, p.status  FROM tblProduct p JOIN tblCategory c ON p.categoryID=c.categoryID HAVING dbo.fuChuyenCoDauThanhKhongDau(productName) LIKE ?";
+    private static final String SEARCH_PRODUCT = "SELECT productID, productName, price, categoryName, discount, lowStockLimit, p.status  FROM tblProduct p JOIN tblCategory c ON p.categoryID=c.categoryID AND dbo.fuChuyenCoDauThanhKhongDau(productName) LIKE ?";
     private static final String GET_PRODUCT = "SELECT productID, productName, price, description, categoryName, discount, lowStockLimit, p.status  FROM tblProduct p JOIN tblCategory c ON p.categoryID=c.categoryID AND productID=?";
-    private static final String SEARCH_PRODUCT_WITH_STATUS = "SELECT * FROM tblProduct WHERE dbo.fuChuyenCoDauThanhKhongDau(productName) LIKE ? AND status=?";
+    private static final String SEARCH_PRODUCT_WITH_STATUS = "SELECT productID, productName, price, categoryName, discount, lowStockLimit, p.status FROM tblProduct p JOIN tblCategory c ON p.categoryID=c.categoryID AND dbo.fuChuyenCoDauThanhKhongDau(productName) LIKE ? AND p.status=?";
     private static final String GET_PRODUCT_COLOR_IMAGES = "SELECT color, image\n"
             + "FROM tblProduct p JOIN tblProductColors pc\n"
             + "ON p.productID = pc.productID \n"
@@ -56,6 +56,7 @@ public class ProductDAO {
 "JOIN tblColorImage i ON pc.productColorID = i.productColorID\n" +
 "WHERE p.productID in (SELECT TOP 20 productID FROM tblProduct ORDER BY productID desc)\n" +
 "ORDER BY p.productID desc";
+    private static final String DELETE_IMAGE = "DELETE FROM tblColorImage WHERE image=?";
     public List<ProductDTO> getAllProduct() throws SQLException {
         List<ProductDTO> listProduct = new ArrayList<>();
         Connection conn = null;
@@ -117,7 +118,6 @@ public class ProductDAO {
                 while (rs.next()) {
                     int productID = rs.getInt("productID");
                     String productName = rs.getString("productName");
-
                     int price = rs.getInt("price");
                     float discount = rs.getFloat("discount");
                     String categoryName = rs.getString("categoryName");
@@ -522,4 +522,28 @@ public class ProductDAO {
 
         return list;
     }
+     public boolean deleteImage (String image) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DBUtils.getConnection();
+            ptm = conn.prepareStatement(DELETE_IMAGE);
+            ptm.setString(1, image);
+            
+            check = ptm.executeUpdate()>0?true: false;
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+
 }

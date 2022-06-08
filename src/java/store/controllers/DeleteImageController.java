@@ -1,56 +1,53 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 package store.controllers;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import store.shopping.ProductDAO;
-import store.shopping.ProductDTO;
-import store.utils.VNCharacterUtils;
 
 /**
  *
- * @author vankh
+ * @author giama
  */
-@WebServlet(name = "ManagerSearchProductController", urlPatterns = {"/ManagerSearchProductController"})
-public class ManagerSearchProductController extends HttpServlet {
-
-    public static final String ERROR = "manager-product.jsp";
-    public static final String SUCCESS = "manager-product.jsp";
-
+@WebServlet(name = "DeleteImageController", urlPatterns = {"/DeleteImageController"})
+public class DeleteImageController extends HttpServlet {
+    private static final String ERROR = "error.jsp";
+    private static final String SUCCESS = "MainController?action=ViewImages";
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
-
         try {
+            String image = request.getParameter("imageName");
             ProductDAO dao = new ProductDAO();
-            String search = VNCharacterUtils.removeAccent(request.getParameter("search"));
-            String status = request.getParameter("status");
-
-            List<ProductDTO> listProduct = dao.getListProduct(search, status);
-
-            if (listProduct.size() > 0) {
-                request.setAttribute("LIST_PRODUCT", listProduct);
+            boolean check = dao.deleteImage(image);
+            if (check) {
+                request.setAttribute("MESSAGE", "Ảnh đã được xoá thành công.");
                 url = SUCCESS;
             }
-
         } catch (Exception e) {
-            log("Error at ManagerShowProductController: " + toString());
+            log("Error at ManagerShowProductDetailController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
-
     }
-
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
