@@ -47,9 +47,9 @@
         </div> <%}%>
 
         <div class="sidenav">
-            <a href="ManagerStatisticController"><i class=""></i>Số liệu thống kê</a>
-            <a href="ManagerShowProductController" style="color: #873e23; font-weight: bold;"><i class=""></i>Quản lí sản phẩm</a>
-            <a href="manager-order.jsp"><i class=""></i>Quản lí đơn hàng</a>
+            <a href="ManagerStatisticController"><i class="fa fa-bar-chart fa-lg"></i>Số liệu thống kê</a>
+            <a href="ManagerShowProductController" style="color: #873e23; font-weight: bold;"><i class="fa fa-archive fa-lg"></i>Quản lí sản phẩm</a>
+            <a href="manager-order.jsp"><i class="fa fa-cart-plus fa-lg"></i>Quản lí đơn hàng</a>
         </div>
 
         <div class="main">
@@ -193,10 +193,10 @@
                                                     if (color.equalsIgnoreCase(key.get(z))) {%>
                                             <tr>
                                                 <td><input type="text" name="size" value="<%= key.get(z + 1)%>" maxlength="50" style="width: 60px"/></td>
-                                                <% List<String> colorSize = new ArrayList<>();
-                                                    colorSize.add(key.get(z));
-                                                    colorSize.add(key.get(z + 1));
-                                                %>
+                                                    <% List<String> colorSize = new ArrayList<>();
+                                                        colorSize.add(key.get(z));
+                                                        colorSize.add(key.get(z + 1));
+                                                    %>
                                                 <td><input type="number" name="quantity" value="<%= product.getColorSizeQuantity().get(colorSize)%>"></td>
                                             </tr>
                                             <% }
@@ -217,6 +217,7 @@
                                 <label class="form-label" for="colorImage">Hình ảnh sản phẩm</label>
                                 <ul class="nav nav-tabs">
                                     <% int t = 1;
+
                                         for (String color : colorList) {
                                     %>
                                     <li <%if (t == 1) { %> class="active" <%}%>><a data-toggle="tab" href="#<%= color%>"><%= color%></a></li>
@@ -228,13 +229,45 @@
 
                                 <div class="tab-content">
                                     <% int j = 1;
+
                                         for (String color : colorList) {
+                                            int imagesNumber = 0;
                                     %>
                                     <div id="<%= color%>" class="tab-pane fade <%if (j == 1) { %> in active <%}%>">
                                         <%  for (int k = 0; k < product.getColorImage().get(color).size(); k++) {%>
                                         <img style="height: 280px; width: 280px;" src="<%= product.getColorImage().get(color).get(k)%>.jpg"/>
-                                        <%}%>
+
+                                        <%++imagesNumber;%>
+
+                                        <%    }%>
+
+                                        <button id="add" type="button" onClick="checkImages()">Add more images</button> 
+
+
                                     </div>
+                                    <script>
+                                        function checkImages() {
+                                            if (<%=imagesNumber%> >= 3) {
+                                                return alert("Du roi nha!");
+                                            } else {
+                                                var container = document.createElement("div");
+                                                var input = document.createElement("input");
+                                                input.setAttribute("accept", "image/*");
+                                                input.setAttribute("type", "file");
+                                                input.setAttribute("name", "files");
+                                                input.setAttribute("id", "file-input" + inputID.toString());
+                                                input.setAttribute("class", "file-input");
+
+                                                var preview = document.createElement("div");
+                                                preview.setAttribute("id", "preview" + inputID.toString());
+
+                                                container.appendChild(input);
+                                                container.appendChild(preview);     
+                                                document.getElementById(<%=color%>).appendChild(container);
+
+                                                document.querySelector('#file-input' + inputID).addEventListener("change", previewImages);
+                                            }
+                                    </script>
                                     <% j++;
                                         }%>
                                 </div>
@@ -256,9 +289,14 @@
 
 
 <script>
-    $(document).ready(function () {
-        $("#myModal").modal();
-    });
+        $(document).ready(function () {
+            $("#myModal").modal();
+        }
+        );
+
+
+
+
 </script>  
 
 </body>

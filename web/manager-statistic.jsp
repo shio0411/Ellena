@@ -33,10 +33,7 @@
             if (search == null) {
                 search = "";
             }
-            if (loginUser == null || !"MN".equals(loginUser.getRoleID())) {
-                response.sendRedirect("login.jsp");
-                return;
-            }
+            
         %>
     <div class="wrapper d-flex align-items-stretch">
         <nav class="side-nav color-3">

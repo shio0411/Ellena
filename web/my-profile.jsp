@@ -13,13 +13,20 @@
     <body>
         <%
             UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
+            if ("AD".equalsIgnoreCase(loginUser.getRoleID())) {
         %>
         <div class="sidenav">
-            <a href="ShowAccountController" style="color: #873e23; font-weight: bold;"><i class="fa fa-address-card fa-lg"></i>Quản lý tài khoản</a>
+            <a href="ShowAccountController"><i class="fa fa-address-card fa-lg"></i>Quản lý tài khoản</a>
             <a href="ShowManagerController"><i class="fa fa-group fa-lg"></i>Quản lý manager</a>
             <a href="ShowCategoryController"><i class="fa fa-cart-plus fa-lg"></i>Quản lý loại sản phẩm</a>
         </div>
-
+        <% } else if ("MN".equalsIgnoreCase(loginUser.getRoleID())) {%>
+        <div class="sidenav">
+            <a href="ManagerStatisticController"><i class="fa fa-bar-chart fa-lg"></i>Số liệu thống kê</a>
+            <a href="ManagerShowProductController"><i class="fa fa-archive fa-lg"></i>Quản lí sản phẩm</a>
+            <a href="manager-order.jsp"><i class="fa fa-cart-plus fa-lg"></i>Quản lí đơn hàng</a>
+        </div>
+        <%}%>
         <div class="main">
             <h3>Profile của tôi</h3>
             <br>

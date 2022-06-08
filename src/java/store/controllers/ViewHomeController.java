@@ -44,7 +44,13 @@ public class ViewHomeController extends HttpServlet {
                 ProductDAO  prodDao = new ProductDAO();
                 List<CategoryDTO> listCategory = cateDao.getListCategory("", "true");
                 List<ProductDTO> trendList = prodDao.getTrendList();
-                request.setAttribute("TREND_LIST", trendList);
+                List<ProductDTO> bestSellerList = prodDao.getBestSellerList();
+                List<ProductDTO> saleList = prodDao.getSaleList();
+                List<ProductDTO> newList = prodDao.getNewArrivalList();
+                session.setAttribute("TREND_LIST", trendList);
+                session.setAttribute("BEST_SELLER_LIST", bestSellerList);
+                session.setAttribute("SALE_LIST", saleList);
+                session.setAttribute("NEW_ARRIVAL_LIST", newList);
                 session.setAttribute("LIST_CATEGORY", listCategory);
                 url = SUCCESS;
             }

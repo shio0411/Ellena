@@ -34,13 +34,28 @@ public class ProductDAO {
     private static final String GET_TREND_LIST = "SELECT p.productID, p.productName, p.price, p.discount, i.image\n" +
 "FROM tblProduct p JOIN tblProductColors pc ON p.productID = pc.productID \n" +
 "JOIN tblColorImage i ON pc.productColorID = i.productColorID\n" +
-"WHERE p.productID IN (SELECT TOP 4 p.productID \n" +
-"FROM tblProduct p JOIN tblOrderDetail d ON p.productID = d.productID \n" +
+"INNER JOIN tblOrderDetail d ON p.productID = d.productID \n" +
 "JOIN tblOrder o ON d.orderID = o.orderID  \n" +
 "WHERE DATEDIFF(day,o.orderDate,GETDATE()) < 30 \n" +
-"GROUP BY p.productID\n" +
-"ORDER BY SUM(d.quantity) desc)";
-
+"GROUP BY p.productID, p.productName, p.price, p.discount, i.image\n" +
+"ORDER BY SUM(d.quantity) desc";
+    private static final String GET_BEST_SELLER_LIST = "SELECT p.productID, p.productName, p.price, p.discount, i.image\n" +
+"FROM tblProduct p JOIN tblProductColors pc ON p.productID = pc.productID \n" +
+"JOIN tblColorImage i ON pc.productColorID = i.productColorID\n" +
+"JOIN tblOrderDetail d ON p.productID = d.productID \n" +
+"JOIN tblOrder o ON d.orderID = o.orderID\n" +
+"GROUP BY p.productID, p.productName, p.price, p.discount, i.image\n" +
+"ORDER BY SUM(d.quantity) desc";
+    private static final String GET_SALE_LIST = "SELECT p.productID, p.productName, p.price, p.discount, i.image\n" +
+"FROM tblProduct p JOIN tblProductColors pc ON p.productID = pc.productID \n" +
+"JOIN tblColorImage i ON pc.productColorID = i.productColorID\n" +
+"WHERE p.discount <> 0\n" +
+"ORDER BY p.discount desc";
+    private static final String GET_NEW_ARRIVAL_LIST = "SELECT p.productID, p.productName, p.price, p.discount, i.image\n" +
+"FROM tblProduct p JOIN tblProductColors pc ON p.productID = pc.productID \n" +
+"JOIN tblColorImage i ON pc.productColorID = i.productColorID\n" +
+"WHERE p.productID in (SELECT TOP 20 productID FROM tblProduct ORDER BY productID desc)\n" +
+"ORDER BY p.productID desc";
     public List<ProductDTO> getAllProduct() throws SQLException {
         List<ProductDTO> listProduct = new ArrayList<>();
         Connection conn = null;
@@ -268,6 +283,192 @@ public class ProductDAO {
             conn = DBUtils.getConnection();
             if (conn != null) {
                 ptm = conn.prepareStatement(GET_TREND_LIST);
+                rs = ptm.executeQuery();
+                int productID = 0;
+                String productName = "";
+                int price = 0;
+                float discount = 0;
+                Map<String, List<String>> image = new HashMap<>();
+                List<String> listImage = new ArrayList<>();
+                
+                while (rs.next()) {
+                    
+                    int tempProductID = rs.getInt("productID");
+                    String tempProductName = rs.getString("productName");
+                    int tempPrice = rs.getInt("price");
+                    float tempDiscount = rs.getFloat("discount");
+                    String tempImage = rs.getString("image");
+                    if (tempProductID != productID) {
+                        if (productID != 0) {
+                            image.put("key", listImage);
+                            ProductDTO product = new ProductDTO(productID, productName, "", image, new HashMap<List<String>, Integer>(), price, 0, discount, 0, "", false);
+                            list.add(product);        
+                        }
+                        image = new HashMap<>();
+                        listImage = new ArrayList<>();
+                        listImage.add(tempImage);
+                        productID = tempProductID;
+                        productName = tempProductName;
+                        price = tempPrice;
+                        discount = tempDiscount;
+                    } else {
+                        listImage.add(tempImage);
+                    }
+
+                }
+                image.put("key", listImage);
+                ProductDTO product = new ProductDTO(productID, productName, "", image, new HashMap<List<String>, Integer>(), price, 0, discount, 0, "", false);
+                list.add(product); 
+
+            }
+        } catch (Exception e) {
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+
+        return list;
+    }
+    public List<ProductDTO> getBestSellerList() throws SQLException {
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        List<ProductDTO> list = new ArrayList<>();
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_BEST_SELLER_LIST);
+                rs = ptm.executeQuery();
+                int productID = 0;
+                String productName = "";
+                int price = 0;
+                float discount = 0;
+                Map<String, List<String>> image = new HashMap<>();
+                List<String> listImage = new ArrayList<>();
+                
+                while (rs.next()) {
+                    
+                    int tempProductID = rs.getInt("productID");
+                    String tempProductName = rs.getString("productName");
+                    int tempPrice = rs.getInt("price");
+                    float tempDiscount = rs.getFloat("discount");
+                    String tempImage = rs.getString("image");
+                    if (tempProductID != productID) {
+                        if (productID != 0) {
+                            image.put("key", listImage);
+                            ProductDTO product = new ProductDTO(productID, productName, "", image, new HashMap<List<String>, Integer>(), price, 0, discount, 0, "", false);
+                            list.add(product);        
+                        }
+                        image = new HashMap<>();
+                        listImage = new ArrayList<>();
+                        listImage.add(tempImage);
+                        productID = tempProductID;
+                        productName = tempProductName;
+                        price = tempPrice;
+                        discount = tempDiscount;
+                    } else {
+                        listImage.add(tempImage);
+                    }
+
+                }
+                image.put("key", listImage);
+                ProductDTO product = new ProductDTO(productID, productName, "", image, new HashMap<List<String>, Integer>(), price, 0, discount, 0, "", false);
+                list.add(product); 
+
+            }
+        } catch (Exception e) {
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+
+        return list;
+    }
+    public List<ProductDTO> getSaleList() throws SQLException {
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        List<ProductDTO> list = new ArrayList<>();
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_SALE_LIST);
+                rs = ptm.executeQuery();
+                int productID = 0;
+                String productName = "";
+                int price = 0;
+                float discount = 0;
+                Map<String, List<String>> image = new HashMap<>();
+                List<String> listImage = new ArrayList<>();
+                
+                while (rs.next()) {
+                    
+                    int tempProductID = rs.getInt("productID");
+                    String tempProductName = rs.getString("productName");
+                    int tempPrice = rs.getInt("price");
+                    float tempDiscount = rs.getFloat("discount");
+                    String tempImage = rs.getString("image");
+                    if (tempProductID != productID) {
+                        if (productID != 0) {
+                            image.put("key", listImage);
+                            ProductDTO product = new ProductDTO(productID, productName, "", image, new HashMap<List<String>, Integer>(), price, 0, discount, 0, "", false);
+                            list.add(product);        
+                        }
+                        image = new HashMap<>();
+                        listImage = new ArrayList<>();
+                        listImage.add(tempImage);
+                        productID = tempProductID;
+                        productName = tempProductName;
+                        price = tempPrice;
+                        discount = tempDiscount;
+                    } else {
+                        listImage.add(tempImage);
+                    }
+
+                }
+                image.put("key", listImage);
+                ProductDTO product = new ProductDTO(productID, productName, "", image, new HashMap<List<String>, Integer>(), price, 0, discount, 0, "", false);
+                list.add(product); 
+
+            }
+        } catch (Exception e) {
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+
+        return list;
+    }
+    public List<ProductDTO> getNewArrivalList() throws SQLException {
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        List<ProductDTO> list = new ArrayList<>();
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_NEW_ARRIVAL_LIST);
                 rs = ptm.executeQuery();
                 int productID = 0;
                 String productName = "";

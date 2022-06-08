@@ -159,7 +159,7 @@ public class AuthenFilter implements Filter {
                             || uri.contains("sass") || uri.contains("error.jsp") || uri.contains("ViewHomeController")
                             || uri.contains("register.jsp") || uri.contains("login.jsp") || uri.contains("MainController") || uri.contains("footer.jsp")
                             || uri.contains("home.jsp") || uri.contains("meta.jsp") || uri.contains("contact.jsp") || uri.contains("category.jsp")
-                            || uri.contains("header.jsp")) {
+                            || uri.contains("header.jsp") || uri.contains("new-arrival.jsp") || uri.contains("trend.jsp") || uri.contains("sale-product.jsp") || uri.contains("best-seller.jsp")) {
                         chain.doFilter(request, response);
                     }
                     else if (!ADMIN_FUNCTION.contains(resource) && !CUSTOMER_FUNCTION.contains(resource) && !MANAGER_FUNCTION.contains(resource)) {

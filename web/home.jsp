@@ -16,23 +16,19 @@
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
-          rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <!-- Css Styles -->
     <jsp:include page="meta.jsp" flush="true"/>
 </head>
 
 <body>
     <jsp:include page="header.jsp" flush="true"/>
-
     <!-- Categories Section Begin -->
     <section class="categories">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-6 p-0">
-                    <div class="categories__item categories__large__item set-bg"
-                         data-setbg="img/categories/category-1.jpg">
+                    <div class="categories__item categories__large__item set-bg" data-setbg="img/categories/category-1.jpg">
                         <div class="categories__text">
                             <h1>Enrich The Beauty</h1>
                             Khám phá bộ sưu tập mới nhất của chúng tôi
@@ -48,7 +44,7 @@
                                 <div class="categories__text">
                                     <h4>Nổi Bật</h4>
                                     <p>358 items</p>
-                                    <a href="#Noi-bat" >Shop now</a>
+                                    <a href="#Noi-bat">Shop now</a>
                                 </div>
                             </div>
                         </div>
@@ -87,210 +83,98 @@
     <!-- Categories Section End -->
 
     <!-- Product Section Begin -->
+    <%
+        List<ProductDTO> newArrivalList = (List<ProductDTO>) session.getAttribute("NEW_ARRIVAL_LIST");
+    %>
     <section class="product spad">
         <div class="container">
             <div class="row">
                 <div class="col-lg-4 col-md-4">
                     <div class="section-title">
-                        <h4 id="New-arrivals">Hàng mới về</h4>
+                        <h4 id="moi-ve">Hàng mới về</h4>
                     </div>
                 </div>
                 <div class="col-lg-8 col-md-8">
                     <ul class="filter__controls">
-                        <li class="active" data-filter="*">Tất cả</li>
-                        <li data-filter=".women">Áo khoác</li>
-                        <li data-filter=".men">Váy đầm</li>
-                        <li data-filter=".kid">Chân váy</li>
-                        <li data-filter=".accessories">Quần short</li>
+                        <li><a class="show-more mt-3" href="new-arrival.jsp">XEM THÊM</a> <span class="fa fa-arrow-right" style="color:black"></span></li>
                     </ul>
                 </div>
             </div>
             <div class="row property__gallery">
-                <div class="col-lg-3 col-md-4 col-sm-6 mix women">
+                <% for (int i = 0; i < 8; i++) {
+                        ProductDTO product = newArrivalList.get(i);
+                %>
+                <div class="col-lg-3 col-md-4 col-sm-6 mix">
                     <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="img/product/product-1.jpg">
-                            <div class="label new">New</div>
-                            <ul class="product__hover">
-                                <li><a href="img/product/product-1.jpg" class="image-popup"><span class="arrow_expand"></span></a></li>
-                                <li><a href="#"><span class="icon_heart_alt"></span></a></li>
-                                <li><a href="#"><span class="icon_bag_alt"></span></a></li>
-                            </ul>
-                        </div>
-                        <div class="product__item__text">
-                            <h6><a href="#">Buttons tweed blazer</a></h6>
-                            <div class="rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
+                        <div class="product__item__pic set-bg">
+                            <%
+                                if(product.getColorImage().get("key").size() > 1)
+                                {
+                            %>
+                            <div id="new-product-<%=product.getProductID()%>" class="carousel slide" data-ride="carousel" data-interval="false">
+                                <div class="carousel-inner">
+                                    <%
+                                        for (String img : product.getColorImage().get("key")) {
+                                    %>
+                                    <div class="carousel-item">
+                                        <img class="d-block" src="<%=img%>.jpg" alt="First slide">
+                                    </div>
+                                    <%
+                                        }
+                                    %>
+                                </div>
+                                <a class="carousel-control-prev" data-target="#new-product-<%=product.getProductID()%>" role="button" data-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                                <a class="carousel-control-next" data-target="#new-product-<%=product.getProductID()%>" role="button" data-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Next</span>
+                                </a>
                             </div>
-                            <div class="product__price">$ 59.0</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 mix men">
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="img/product/product-2.jpg">
-                            <ul class="product__hover">
-                                <li><a href="img/product/product-2.jpg" class="image-popup"><span class="arrow_expand"></span></a></li>
-                                <li><a href="#"><span class="icon_heart_alt"></span></a></li>
-                                <li><a href="#"><span class="icon_bag_alt"></span></a></li>
-                            </ul>
-                        </div>
-                        <div class="product__item__text">
-                            <h6><a href="#">Flowy striped skirt</a></h6>
-                            <div class="rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                            </div>
-                            <div class="product__price">$ 49.0</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 mix accessories">
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="img/product/product-3.jpg">
-                            <div class="label stockout">out of stock</div>
-                            <ul class="product__hover">
-                                <li><a href="img/product/product-3.jpg" class="image-popup"><span class="arrow_expand"></span></a></li>
-                                <li><a href="#"><span class="icon_heart_alt"></span></a></li>
-                                <li><a href="#"><span class="icon_bag_alt"></span></a></li>
-                            </ul>
-                        </div>
-                        <div class="product__item__text">
-                            <h6><a href="#">Cotton T-Shirt</a></h6>
-                            <div class="rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                            </div>
-                            <div class="product__price">$ 59.0</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 mix cosmetic">
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="img/product/product-4.jpg">
-                            <ul class="product__hover">
-                                <li><a href="img/product/product-4.jpg" class="image-popup"><span class="arrow_expand"></span></a></li>
-                                <li><a href="#"><span class="icon_heart_alt"></span></a></li>
-                                <li><a href="#"><span class="icon_bag_alt"></span></a></li>
-                            </ul>
-                        </div>
-                        <div class="product__item__text">
-                            <h6><a href="#">Slim striped pocket shirt</a></h6>
-                            <div class="rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                            </div>
-                            <div class="product__price">$ 59.0</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 mix kid">
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="img/product/product-5.jpg">
-                            <ul class="product__hover">
-                                <li><a href="img/product/product-5.jpg" class="image-popup"><span class="arrow_expand"></span></a></li>
-                                <li><a href="#"><span class="icon_heart_alt"></span></a></li>
-                                <li><a href="#"><span class="icon_bag_alt"></span></a></li>
-                            </ul>
-                        </div>
-                        <div class="product__item__text">
-                            <h6><a href="#">Fit micro corduroy shirt</a></h6>
-                            <div class="rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                            </div>
-                            <div class="product__price">$ 59.0</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 mix women men kid accessories cosmetic">
-                    <div class="product__item sale">
-                        <div class="product__item__pic set-bg" data-setbg="img/product/product-6.jpg">
+                            <%
+                            }else{
+                              %>
+                            <img src="<%=product.getColorImage().get("key").get(0)%>.jpg">
+                            <%}%>
+                            <%
+                                if (product.getDiscount() != 0) {
+                            %>
                             <div class="label sale">Sale</div>
+                            <%}%>
                             <ul class="product__hover">
-                                <li><a href="img/product/product-6.jpg" class="image-popup"><span class="arrow_expand"></span></a></li>
+                                <li><a href="<%=product.getColorImage().get("key").get(0)%>.jpg" class="image-popup"><span class="arrow_expand"></span></a></li>
                                 <li><a href="#"><span class="icon_heart_alt"></span></a></li>
                                 <li><a href="#"><span class="icon_bag_alt"></span></a></li>
                             </ul>
                         </div>
                         <div class="product__item__text">
-                            <h6><a href="#">Tropical Kimono</a></h6>
-                            <div class="rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
+                            <h6><a href="#">
+                                    <%=product.getProductName()%></a></h6>
+                            <%
+                                    if (product.getDiscount() != 0) {
+                                %>
+                            <div class="">
+                                <span class="product__price text-danger">
+                                    <%= (int) (product.getPrice() / 1000 * (1 - product.getDiscount()))%>.000đ <span class="original-price"><s>
+                                            <%=product.getPrice() / 1000%>.000đ </s></span></span>
+                                <span class="product__price text-danger"> -
+                                    <%=(int) (product.getDiscount() * 100)%>%</span>
                             </div>
-                            <div class="product__price">$ 49.0 <span>$ 59.0</span></div>
+                            <%
+                            } else {
+                            %>
+                            <div class="product__price">
+                                <%=product.getPrice() / 1000%>.000đ</div>
+                            <%}%>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 mix women men kid accessories cosmetic">
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="img/product/product-7.jpg">
-                            <ul class="product__hover">
-                                <li><a href="img/product/product-7.jpg" class="image-popup"><span class="arrow_expand"></span></a></li>
-                                <li><a href="#"><span class="icon_heart_alt"></span></a></li>
-                                <li><a href="#"><span class="icon_bag_alt"></span></a></li>
-                            </ul>
-                        </div>
-                        <div class="product__item__text">
-                            <h6><a href="#">Contrasting sunglasses</a></h6>
-                            <div class="rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                            </div>
-                            <div class="product__price">$ 59.0</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 mix women men kid accessories cosmetic">
-                    <div class="product__item sale">
-                        <div class="product__item__pic set-bg" data-setbg="img/product/product-8.jpg">
-                            <div class="label">Sale</div>
-                            <ul class="product__hover">
-                                <li><a href="img/product/product-8.jpg" class="image-popup"><span class="arrow_expand"></span></a></li>
-                                <li><a href="#"><span class="icon_heart_alt"></span></a></li>
-                                <li><a href="#"><span class="icon_bag_alt"></span></a></li>
-                            </ul>
-                        </div>
-                        <div class="product__item__text">
-                            <h6><a href="#">Water resistant backpack</a></h6>
-                            <div class="rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                            </div>
-                            <div class="product__price">$ 49.0 <span>$ 59.0</span></div>
-                        </div>
-                    </div>
-                </div>
+                <%}%>
             </div>
         </div>
     </section>
     <!-- Product Section End -->
-
     <!-- Banner Section Begin -->
     <section class="banner set-bg" data-setbg="img/banner/banner-1.jpg">
         <div class="container">
@@ -327,7 +211,7 @@
 
     <!-- Trend Section Begin -->
     <%
-        List<ProductDTO> trendList = (List<ProductDTO>)request.getAttribute("TREND_LIST");
+        List<ProductDTO> trendList = (List<ProductDTO>) session.getAttribute("TREND_LIST");
     %>
     <section class="product spad">
         <div class="container">
@@ -337,14 +221,55 @@
                         <h4 id="Noi-bat">Nổi bật</h4>
                     </div>
                 </div>
-            </div>    
+                <div class="col-lg-8 col-md-8">
+                    <ul class="filter__controls">
+                        <li><a class="show-more mt-3" href="trend.jsp">XEM THÊM</a> <span class="fa fa-arrow-right" style="color:black"></span></li>
+                    </ul>
+                </div>
+            </div>
             <div class="row property__gallery">
-                <% for(ProductDTO product : trendList){
-                    %>
-   
-                <div class="col-lg-3 col-md-4 col-sm-6 mix women">
+                <% for (int i = 0; i < 4; i++) {
+                        ProductDTO product = trendList.get(i);
+                %>
+                <div class="col-lg-3 col-md-4 col-sm-6 mix">
                     <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="<%=product.getColorImage().get("key").get(0)%>.jpg">
+                        <div class="product__item__pic set-bg">
+                            <%
+                                if(product.getColorImage().get("key").size() > 1)
+                                {
+                            %>
+                            <div id="trend-product-<%=product.getProductID()%>" class="carousel slide" data-ride="carousel" data-interval="false">
+                                <div class="carousel-inner">
+                                    <%
+                                        for (String img : product.getColorImage().get("key")) {
+                                    %>
+                                    <div class="carousel-item">
+                                        <img class="d-block" src="<%=img%>.jpg">
+                                    </div>
+                                    <%
+                                        }
+                                    %>
+                                </div>
+                                <a class="carousel-control-prev" data-target="#trend-product-<%=product.getProductID()%>" role="button" data-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                                <a class="carousel-control-next" data-target="#trend-product-<%=product.getProductID()%>" role="button" data-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </div>
+                            <%}else{
+                                  %>
+                            <img src="<%=product.getColorImage().get("key").get(0)%>.jpg">
+                            <%
+                                   }
+                                  %>
+                            <%
+                                if (product.getDiscount() != 0) {
+                            %>
+                            <div class="label sale">Sale</div>
+                            <%}%>
                             <ul class="product__hover">
                                 <li><a href="<%=product.getColorImage().get("key").get(0)%>.jpg" class="image-popup"><span class="arrow_expand"></span></a></li>
                                 <li><a href="#"><span class="icon_heart_alt"></span></a></li>
@@ -352,15 +277,24 @@
                             </ul>
                         </div>
                         <div class="product__item__text">
-                            <h6><a href="#"><%=product.getProductName()%></a></h6>
-                            <div class="rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
+                            <h6><a href="#">
+                                    <%=product.getProductName()%></a></h6>
+                            <%
+                                if (product.getDiscount() != 0) {
+                            %>
+                            <div class="">
+                                <span class="product__price text-danger">
+                                    <%= (int) (product.getPrice() / 1000 * (1 - product.getDiscount()))%>.000đ <span class="original-price"><s>
+                                            <%=product.getPrice() / 1000%>.000đ </s></span></span>
+                                <span class="product__price text-danger"> -
+                                    <%=(int) (product.getDiscount() * 100)%>%</span>
                             </div>
-                            <div class="product__price">$ <%=product.getPrice()%></div>
+                            <%
+                            } else {
+                            %>
+                            <div class="product__price">
+                                <%=product.getPrice() / 1000%>.000đ</div>
+                            <%}%>
                         </div>
                     </div>
                 </div>
@@ -369,8 +303,10 @@
         </div>
     </section>
     <!-- Trend Section End -->
-
     <!-- Best-seller Section Begin -->
+    <%
+        List<ProductDTO> bestSellerList = (List<ProductDTO>) session.getAttribute("BEST_SELLER_LIST");
+    %>
     <section class="product spad">
         <div class="container">
             <div class="row">
@@ -379,73 +315,167 @@
                         <h4 id="Ban-chay-nhat">Bán chạy nhất</h4>
                     </div>
                 </div>
-            </div>    
+                <div class="col-lg-8 col-md-8">
+                    <ul class="filter__controls">
+                        <li><a class="show-more mt-3" href="best-seller.jsp">XEM THÊM</a> <span class="fa fa-arrow-right" style="color:black"></span></li>
+                    </ul>
+                </div>
+            </div>
             <div class="row property__gallery">
+                <% for (int i = 0; i < 4; i++) {
+                        ProductDTO product = bestSellerList.get(i);
+                %>
                 <div class="col-lg-3 col-md-4 col-sm-6 mix women">
                     <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="img/product/product-1.jpg">
-                            <ul class="product__hover">
-                                <li><a href="img/product/product-1.jpg" class="image-popup"><span class="arrow_expand"></span></a></li>
-                                <li><a href="#"><span class="icon_heart_alt"></span></a></li>
-                                <li><a href="#"><span class="icon_bag_alt"></span></a></li>
-                            </ul>
+                        <div class="product__item__pic set-bg" data-setbg="<%=product.getColorImage().get("key").get(0)%>.jpg">
+                            <div id="new-product-<%=product.getProductID()%>" class="carousel slide" data-ride="carousel" data-interval="false">
+                                <div class="carousel-inner">
+                                    <%
+                                        for (String img : product.getColorImage().get("key")) {
+                                    %>
+                                    <div class="carousel-item">
+                                        <img class="d-block" src="<%=img%>.jpg" alt="First slide">
+                                    </div>
+                                    <%
+                                        }
+                                    %>
+                                </div>
+                                <a class="carousel-control-prev" data-target="#new-product-<%=product.getProductID()%>" role="button" data-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                                <a class="carousel-control-next" data-target="#new-product-<%=product.getProductID()%>" role="button" data-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </div>
+                            <%
+                                if (product.getDiscount() != 0) {
+                            %>
+                            <div class="label sale">Sale</div>
+                            <%}%>
                         </div>
                         <div class="product__item__text">
-                            <h6><a href="#">Buttons tweed blazer</a></h6>
-                            <div class="rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
+                            <h6><a href="#">
+                                    <%=product.getProductName()%></a></h6>
+                            <%
+                                if (product.getDiscount() != 0) {
+                            %>
+                            <div class="">
+                                <span class="product__price text-danger">
+                                    <%= (int) (product.getPrice() / 1000 * (1 - product.getDiscount()))%>.000đ <span class="original-price"><s>
+                                            <%=product.getPrice() / 1000%>.000đ </s></span></span>
+                                <span class="product__price text-danger"> -
+                                    <%=(int) (product.getDiscount() * 100)%>%</span>
                             </div>
-                            <div class="product__price">$ 59.0</div>
+                            <%
+                            } else {
+                            %>
+                            <div class="product__price">
+                                <%=product.getPrice() / 1000%>.000đ</div>
+                            <%}%>
                         </div>
                     </div>
                 </div>
+                <%}%>
             </div>
         </div>
     </section>
     <!-- Best-seller Section End -->
-
-    <!-- Feature Section Begin -->
+    <!-- Sale Section Begin -->
+    <%
+        List<ProductDTO> saleList = (List<ProductDTO>) session.getAttribute("SALE_LIST");
+    %>
     <section class="product spad">
         <div class="container">
             <div class="row">
                 <div class="col-lg-4 col-md-4">
                     <div class="section-title">
-                        <h4 id="Dac-trung">Đặc trưng</h4>
+                        <h4 id="Dac-trung">Khuyến mãi</h4>
                     </div>
                 </div>
-            </div>    
+                <div class="col-lg-8 col-md-8">
+                    <ul class="filter__controls">
+                        <li><a class="show-more mt-3" href="sale-product.jsp">XEM THÊM</a> <span class="fa fa-arrow-right" style="color:black"></span></li>
+                    </ul>
+                </div>
+            </div>
             <div class="row property__gallery">
+                <% for (int i = 0; i < 4; i++) {
+                        ProductDTO product = saleList.get(i);
+                %>
                 <div class="col-lg-3 col-md-4 col-sm-6 mix women">
                     <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="img/product/product-1.jpg">
+                        <div class="product__item__pic set-bg">
+                            <%
+                                if(product.getColorImage().get("key").size() > 1)
+                                {
+                            %>
+                            <div id="sale-product-<%=product.getProductID()%>" class="carousel slide" data-ride="carousel" data-interval="false">
+                                <div class="carousel-inner">
+                                    <%
+                                        for (String img : product.getColorImage().get("key")) {
+                                    %>
+                                    <div class="carousel-item">
+                                        <img class="d-block" src="<%=img%>.jpg">
+                                    </div>
+                                    <%
+                                        }
+                                    %>
+                                </div>
+                                <a class="carousel-control-prev" data-target="#sale-product-<%=product.getProductID()%>" role="button" data-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                                <a class="carousel-control-next" data-target="#sale-product-<%=product.getProductID()%>" role="button" data-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </div>
+                            <%}else{
+                                  %>
+                            <img src="<%=product.getColorImage().get("key").get(0)%>.jpg">
+                            <%
+                                   }
+                                  %>
+                            <%
+                                if (product.getDiscount() != 0) {
+                            %>
+                            <div class="label sale">Sale</div>
+                            <%}%>
                             <ul class="product__hover">
-                                <li><a href="img/product/product-1.jpg" class="image-popup"><span class="arrow_expand"></span></a></li>
+                                <li><a href="<%=product.getColorImage().get("key").get(0)%>.jpg" class="image-popup"><span class="arrow_expand"></span></a></li>
                                 <li><a href="#"><span class="icon_heart_alt"></span></a></li>
                                 <li><a href="#"><span class="icon_bag_alt"></span></a></li>
                             </ul>
                         </div>
                         <div class="product__item__text">
-                            <h6><a href="#">Buttons tweed blazer</a></h6>
-                            <div class="rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
+                            <h6><a href="#">
+                                    <%=product.getProductName()%></a></h6>
+                            <%
+                                if (product.getDiscount() != 0) {
+                            %>
+                            <div class="">
+                                <span class="product__price text-danger">
+                                    <%= (int) (product.getPrice() / 1000 * (1 - product.getDiscount()))%>.000đ <span class="original-price"><s>
+                                            <%=product.getPrice() / 1000%>.000đ </s></span></span>
+                                <span class="product__price text-danger"> -
+                                    <%=(int) (product.getDiscount() * 100)%>%</span>
                             </div>
-                            <div class="product__price">$ 59.0</div>
+                            <%
+                            } else {
+                            %>
+                            <div class="product__price">
+                                <%=product.getPrice() / 1000%>.000đ</div>
+                            <%}%>
                         </div>
                     </div>
                 </div>
+                <%}%>
             </div>
         </div>
     </section>
-    <!-- Feature Section End -->
-
+    <!-- Sale Section End -->
     <!-- Discount Section Begin -->
     <section class="discount">
         <div class="container">
@@ -487,7 +517,6 @@
         </div>
     </section>
     <!-- Discount Section End -->
-
     <!-- Services Section Begin -->
     <section class="services spad">
         <div class="container">
@@ -529,46 +558,51 @@
 
     <!--Start of Tawk.to Script-->
     <script type="text/javascript">
-        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
-        (function () {
-            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
-            s1.async = true;
-            s1.src = 'https://embed.tawk.to/62986537b0d10b6f3e754a36/1g4hkmp1j';
-            s1.charset = 'UTF-8';
-            s1.setAttribute('crossorigin', '*');
-            s0.parentNode.insertBefore(s1, s0);
-        })();
+    var Tawk_API = Tawk_API || {},
+        Tawk_LoadStart = new Date();
+    (function() {
+        var s1 = document.createElement("script"),
+            s0 = document.getElementsByTagName("script")[0];
+        s1.async = true;
+        s1.src = 'https://embed.tawk.to/62986537b0d10b6f3e754a36/1g4hkmp1j';
+        s1.charset = 'UTF-8';
+        s1.setAttribute('crossorigin', '*');
+        s0.parentNode.insertBefore(s1, s0);
+    })();
     </script>
     <!--End of Tawk.to Script-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
-        $(document).ready(function () {
-            // Add smooth scrolling to all links
-            $("a").on('click', function (event) {
+    $(document).ready(function() {
+        // Add smooth scrolling to all links
+        $("a").on('click', function(event) {
 
-                // Make sure this.hash has a value before overriding default behavior
-                if (this.hash !== "") {
-                    // Prevent default anchor click behavior
-                    event.preventDefault();
+            // Make sure this.hash has a value before overriding default behavior
+            if (this.hash !== "") {
+                // Prevent default anchor click behavior
+                event.preventDefault();
 
-                    // Store hash
-                    var hash = this.hash;
+                // Store hash
+                var hash = this.hash;
 
-                    // Using jQuery's animate() method to add smooth page scroll
-                    // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
-                    $('html, body').animate({
-                        scrollTop: $(hash).offset().top
-                    }, 800, function () {
+                // Using jQuery's animate() method to add smooth page scroll
+                // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
+                $('html, body').animate({
+                    scrollTop: $(hash).offset().top
+                }, 800, function() {
 
-                        // Add hash (#) to URL when done scrolling (default click behavior)
-                        window.location.hash = hash;
-                    });
-                } // End if
-            });
+                    // Add hash (#) to URL when done scrolling (default click behavior)
+                    window.location.hash = hash;
+                });
+            } // End if
         });
+    });
     </script>
     <!-- Js Plugins -->
-    <jsp:include page="js-plugins.jsp" flush="true"/>
+    <jsp:include page="js-plugins.jsp" flush="true" />
+    <script>
+    $(".carousel-inner").children(".carousel-item:first-child").addClass("active");
+    </script>
 </body>
 
 </html>
