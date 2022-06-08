@@ -11,20 +11,24 @@ public class OrderDTO {
     private String userName;
     private int statusID;
     private String statusName;
+    private String payType;
     private String trackingID;
 
     public OrderDTO() {
     }
 
-    public OrderDTO(int orderID, Date orderDate, int total, String userName, int statusID, String statusName, String trackingID) {
+    public OrderDTO(int orderID, Date orderDate, int total, String userName, int statusID, String statusName, String payType, String trackingID) {
         this.orderID = orderID;
         this.orderDate = orderDate;
         this.total = total;
         this.userName = userName;
         this.statusID = statusID;
         this.statusName = statusName;
+        this.payType = payType;
         this.trackingID = trackingID;
     }
+
+   
 
     public int getOrderID() {
         return orderID;
@@ -73,6 +77,14 @@ public class OrderDTO {
 
     public void setStatusID(int statusID) {
         this.statusID = statusID;
+    }
+
+    public String getPayType() {
+        return payType;
+    }
+
+    public void setPayType(String payType) {
+        this.payType = payType;
     }
 
     public String getTrackingID() {

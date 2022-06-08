@@ -12,21 +12,22 @@ import store.utils.DBUtils;
 
 public class OrderDAO {
 
-    private static final String SEARCH_ORDER_ALL = "SELECT orderID, orderDate, total, userID, fullName, statusID, statusName, trackingID  "
+    private static final String UPDATE_TRACKINGID = "UPDATE tblOrder SET trackingID = ? WHERE orderID = ?";
+    private static final String SEARCH_ORDER_ALL = "SELECT orderID, orderDate, total, userID, fullName, statusID, statusName, payType, trackingID  "
             + "FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID ";
 
-    private static final String SEARCH_ORDER_BY_STATUS = "SELECT orderID, orderDate, total, userID, fullName, statusID, statusName, trackingID  FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID "
+    private static final String SEARCH_ORDER_BY_STATUS = "SELECT orderID, orderDate, total, userID, fullName, statusID, statusName, payType, trackingID  FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID "
             + "WHERE statusID = ? "
             + "AND [TenKhongDau] LIKE '%' + [dbo].[fuChuyenCoDauThanhKhongDau](?) + '%'";
 
-    private static final String SEARCH_ORDER = "SELECT orderID, orderDate, total, userID, fullName, statusID, statusName, trackingID  \n"
+    private static final String SEARCH_ORDER = "SELECT orderID, orderDate, total, userID, fullName, statusID, statusName, payType, trackingID  \n"
             + "FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID \n"
             + "WHERE (orderDate BETWEEN DATEADD(DAY, -DATEPART(WEEKDAY, GETDATE()) + 2 - 7 * ?, GETDATE()) \n"
             + "                 AND DATEADD(DAY, (-DATEPART(WEEKDAY, GETDATE()) + 2) * ? - 7 * ?, GETDATE())) \n"
             + "     AND statusID = ? "
             + "AND [TenKhongDau] LIKE '%' + [dbo].[fuChuyenCoDauThanhKhongDau](?) + '%'";
 
-    private static final String SEARCH_ORDER_BY_DATE = "SELECT orderID, orderDate, total, userID, fullName, statusID, statusName, trackingID  \n"
+    private static final String SEARCH_ORDER_BY_DATE = "SELECT orderID, orderDate, total, userID, fullName, statusID, statusName, payType, trackingID  \n"
             + "FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID \n"
             + "WHERE orderDate BETWEEN DATEADD(DAY, -DATEPART(WEEKDAY, GETDATE()) + 2 - 7 * ?, GETDATE()) \n"
             + "                 AND DATEADD(DAY, (-DATEPART(WEEKDAY, GETDATE()) + 2) * ? - 7 * ?, GETDATE()) "
@@ -34,7 +35,7 @@ public class OrderDAO {
 
     private static final String UPDATE_ORDER_STATUS = "INSERT INTO tblOrderStatusUpdate(statusID, orderID, updateDate) VALUES (?, ?, GETDATE())";
 
-    private static final String SEARCH_ORDER_BY_NAME = "SELECT orderID, orderDate, total, userID, fullName, statusID, statusName, [TenKhongDau], trackingID  "
+    private static final String SEARCH_ORDER_BY_NAME = "SELECT orderID, orderDate, total, userID, fullName, statusID, statusName, [TenKhongDau], payType, trackingID  "
             + "FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID "
             + "WHERE [TenKhongDau] LIKE '%' + [dbo].[fuChuyenCoDauThanhKhongDau](?) + '%'";
 
@@ -44,7 +45,7 @@ public class OrderDAO {
             + "WHERE orderID = ?";
 
     //Order status
-    private static final String SEARCH_ORDER_STATUS = "SELECT updateDate, statusName FROM tblOrderStatusUpdate t1 JOIN tblOrderStatus t2 ON t1.statusID = t2.statusID WHERE orderID = ?";
+    private static final String SEARCH_ORDER_STATUS = "SELECT t1.statusID, updateDate, statusName FROM tblOrderStatusUpdate t1 JOIN tblOrderStatus t2 ON t1.statusID = t2.statusID WHERE orderID = ?";
 
     public List<OrderDetailDTO> getOrderDetail(int orderID) throws SQLException {
         List<OrderDetailDTO> list = new ArrayList<>();
@@ -98,11 +99,11 @@ public class OrderDAO {
                 ptm.setInt(1, orderID);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
+                    int statusID = rs.getInt("statusID");
                     Timestamp updateDate = rs.getTimestamp("updateDate");
                     String statusName = rs.getString("statusName");
 
-                    list.add(new OrderStatusDTO(updateDate, statusName));
-
+                    list.add(new OrderStatusDTO(statusID, updateDate, statusName));
                 }
             }
         } catch (Exception e) {
@@ -181,8 +182,9 @@ public class OrderDAO {
                     int total = rs.getInt("total");
                     int statusID = rs.getInt("statusID");
                     String statusName = rs.getString("statusName");
+                    String payType = rs.getString("payType");
                     String trackingID = rs.getString("trackingID");
-                    list.add(new OrderDTO(orderID, orderDate, total, userName, statusID, statusName, trackingID));
+                    list.add(new OrderDTO(orderID, orderDate, total, userName, statusID, statusName, payType, trackingID));
 
                 }
             }
@@ -209,10 +211,44 @@ public class OrderDAO {
         PreparedStatement ptm = null;
 
         try {
+            List<OrderStatusDTO> list = getUpdateStatusHistory(orderID);
+            int currentStatusID = list.get(list.size() - 1).getStatusID();
+            if (currentStatusID != statusID) {
+                conn = DBUtils.getConnection();
+                if (conn != null) {
+                    ptm = conn.prepareStatement(UPDATE_ORDER_STATUS);
+                    ptm.setInt(1, statusID);
+                    ptm.setInt(2, orderID);
+
+                    check = ptm.executeUpdate() > 0;
+                }
+            } else {
+                check = true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+
+    public boolean updateOrderTrackingID(int orderID, String trackingID) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+
+        try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                ptm = conn.prepareStatement(UPDATE_ORDER_STATUS);
-                ptm.setInt(1, statusID);
+                ptm = conn.prepareStatement(UPDATE_TRACKINGID);
+                ptm.setString(1, trackingID);
                 ptm.setInt(2, orderID);
 
                 check = ptm.executeUpdate() > 0;
@@ -248,9 +284,10 @@ public class OrderDAO {
                     String userName = rs.getString("fullName");
                     int statusID = rs.getInt("statusID");
                     String statusName = rs.getString("statusName");
+                    String payType = rs.getString("payType");
                     String trackingID = rs.getString("trackingID");
 
-                    list.add(new OrderDTO(orderID, orderDate, total, userName, statusID, statusName, trackingID));
+                    list.add(new OrderDTO(orderID, orderDate, total, userName, statusID, statusName, payType, trackingID));
                 }
             }
         } catch (Exception e) {

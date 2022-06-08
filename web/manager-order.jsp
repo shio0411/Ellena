@@ -68,7 +68,7 @@
                 Xin chào, <a href="my-profile.jsp"><%= loginUser.getFullName()%></a>
                 <input type="submit" name="action" value="Logout" style="margin-left: 4%;">
             </form>
-
+            <h1>Danh sách đơn hàng</h1>
             <form action="MainController" method="POST">
                 <input type="text" name="search" value="<%= search%>" placeholder="Tìm kiếm đơn hàng">
                 Trạng thái
@@ -159,6 +159,8 @@
                                                             <option value="3" <%if (order.getStatusID() == 3) {%>selected <%}%>>Đang giao</option>
                                                             <option value="4" <%if (order.getStatusID() == 4) {%>selected <%}%>>Đã giao</option>
                                                             <option value="5" <%if (order.getStatusID() == 5) {%>selected <%}%>>Đã hủy</option>
+                                                            <option value="6" <%if (order.getStatusID() == 6) {%>selected <%}%>>Chờ hoàn tiền</option>
+                                                            <option value="7" <%if (order.getStatusID() == 7) {%>selected <%}%>>Đã hoàn tiền</option>
                                                         </select> 
                                                     </div>
 
@@ -202,7 +204,28 @@
                                                 </div>
 
                                             </div>
+                                            <div class="row">
+                                                
+                                                <div class="col-md-6 mb-4 pb-2">
 
+                                                    <div class="form-outline">
+                                                        <label class="form-label" for="trackingID">Pay type</label>
+                                                        <input type="text" name="payType" readonly="" value="<%= order.getPayType()%>" id="payType" class="form-control form-control-lg" />
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-md-6 mb-4 pb-2">
+
+                                                    <div class="form-outline">
+                                                        <label class="form-label" for="trackingID">Tracking ID</label>
+                                                        <input type="text" name="trackingID" value="<%= order.getTrackingID()%>" id="trackingID" class="form-control form-control-lg" />
+                                                    </div>
+
+                                                </div>
+                                                <!--thêm icon edit ở đây-->
+                                                
+                                                
+                                            </div>
                                             <div class="row">
                                                 <div class="col-md-12 mb-4">
                                                     <label class="form-label" for="">Chi tiết đơn hàng</label>
@@ -242,17 +265,7 @@
                                                 </div>
 
                                             </div>
-                                            <div class="row">
-                                                <div class="col-md-12 mb-4">
-
-                                                    <div class="form-outline">
-                                                        <label class="form-label" for="trackingID">Tracking ID</label>
-                                                        <input type="text" name="trackingID" value="<%= order.getTrackingID()%>" id="trackingID" class="form-control form-control-lg" />
-                                                    </div>
-
-                                                </div>
-                                                    <!--t //hêm icon edit ở đây-->
-                                            </div>
+                                            
                                         </div>
                                         <div class="modal-footer">
                                             <button class="btn btn-default" type="submit" name="action" value="UpdateOrder">Cập nhật</button>

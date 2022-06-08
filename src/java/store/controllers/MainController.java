@@ -6,6 +6,7 @@ import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 @MultipartConfig(
         fileSizeThreshold = 1024 * 1024 * 1, // 1 MB
         maxFileSize = 1024 * 1024 * 10, // 10 MB
@@ -82,6 +83,10 @@ public class MainController extends HttpServlet {
     private static final String CHECKOUT_CONTROLLER = "CheckoutController";
     private static final String SUBSCRIBE = "Subscribe";
     private static final String SUBSCRIBE_CONTROLLER = "SubscribeController";
+    private static final String SEARCH_ORDER = "SearchOrder";
+    private static final String SEARCH_ORDER_CONTROLLER = "SearchOrderController";
+    private static final String UPDATE_ORDER = "UpdateOrder";
+    private static final String UPDATE_ORDER_CONTROLLER = "UpdateOrderController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -193,6 +198,12 @@ public class MainController extends HttpServlet {
                         break;
                     case SUBSCRIBE:
                         url = SUBSCRIBE_CONTROLLER;
+                        break;
+                    case SEARCH_ORDER:
+                        url = SEARCH_ORDER_CONTROLLER;
+                        break;
+                    case UPDATE_ORDER:
+                        url = UPDATE_ORDER_CONTROLLER;
                         break;
                     default:
                         break;

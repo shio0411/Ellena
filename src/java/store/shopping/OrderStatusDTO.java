@@ -5,15 +5,25 @@ import java.text.SimpleDateFormat;
 
 public class OrderStatusDTO {
 
+    private int statusID;
     private Timestamp updateDate;
     private String statusName;
 
     public OrderStatusDTO() {
     }
 
-    public OrderStatusDTO(Timestamp updateDate, String statusName) {
+    public OrderStatusDTO(int statusID, Timestamp updateDate, String statusName) {
+        this.statusID = statusID;
         this.updateDate = updateDate;
         this.statusName = statusName;
+    }
+
+    public int getStatusID() {
+        return statusID;
+    }
+
+    public void setStatusID(int statusID) {
+        this.statusID = statusID;
     }
 
     public String getUpdateDate() {

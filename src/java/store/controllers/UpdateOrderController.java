@@ -21,8 +21,9 @@ public class UpdateOrderController extends HttpServlet {
         try {
             int orderID = Integer.parseInt(request.getParameter("orderID"));
             int statusID = Integer.parseInt(request.getParameter("statusID"));
+            String trackingID = request.getParameter("trackingID");
             OrderDAO dao = new OrderDAO();
-            boolean check = dao.updateOrderStatus(orderID, statusID);
+            boolean check = dao.updateOrderStatus(orderID, statusID) && dao.updateOrderTrackingID(orderID, trackingID);            
             if (check) {
                 url = SUCCESS;
                 request.setAttribute("MESSAGE", "Cập nhật thành công");
