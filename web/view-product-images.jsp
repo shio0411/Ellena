@@ -37,18 +37,44 @@
                 z-index: 100;
 
             }
-            
+
             .nav-pills > li.active > a {
                 background: #fbe2d6;
             }
         </style>
+        <%ProductDTO product = (ProductDTO) request.getAttribute("PRODUCT_DETAIL");
+            Set<String> colorList = product.getColorImage().keySet();
+            String message = (String) request.getAttribute("MESSAGE");
+            if (message != null) {
+        %>
+
+        <!-- Pop-up thông báo cập nhật thành công -->
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Thông báo</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                    </div>
+                    <div class="modal-body">
+                        <p><%=message%></p>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="MainController?action=ViewImages&productID=<%=product.getProductID()%>"><button type="button" class="btn btn-default">Đóng</button></a>
+                    </div>
+                </div>
+
+            </div>
+        </div> <%}%>
         <div class="sidenav">
             <a href="ManagerStatisticController"><i class="fa fa-bar-chart fa-lg"></i>Số liệu thống kê</a>
             <a href="ManagerShowProductController" style="color: #873e23; font-weight: bold;"><i class="fa fa-archive fa-lg"></i>Quản lí sản phẩm</a>
             <a href="manager-order.jsp"><i class="fa fa-cart-plus fa-lg"></i>Quản lí đơn hàng</a>
         </div>
-        <% ProductDTO product = (ProductDTO) request.getAttribute("PRODUCT_DETAIL");
-            Set<String> colorList = product.getColorImage().keySet();%>
+
         <div class='main'>
             <div class="row">
                 <div class="col-md-12 mb-4">
@@ -60,7 +86,7 @@
                                 for (String color : colorList) {
                             %>
                             <li class='nav-item <%if (t == 1) { %> active <%}%>'><a data-toggle="tab" href="#<%= color%>"><%= color%></a></li>
-                            <% t++;
+                                <% t++;
                                 } %>                             
                         </ul>
 
@@ -78,29 +104,29 @@
                                     <button class="close" type="button" data-toggle="modal" data-target="#<%=color%>Modal<%=k%>">&times;</button>
                                     <img style="height: 280px; width: 280px;" src="<%= product.getColorImage().get(color).get(k)%>.jpg"/>
                                     <div class="modal fade" id="<%=color%>Modal<%=k%>" role="dialog">
-                                    <div class="modal-dialog">
+                                        <div class="modal-dialog">
 
-                                        <!-- Modal content-->
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h4 class="modal-title">Xoá ảnh</h4>
-                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <!-- Modal content-->
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Xoá ảnh</h4>
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
 
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Bạn có chắc muốn xoá ảnh này?</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type='button' class='btn btn-default' data-dismiss="modal">Huỷ</button>
+                                                    <a href="MainController?action=DeleteImage&productID=<%=product.getProductID()%>&imageName=<%= product.getColorImage().get(color).get(k)%>"><button type="button" class="btn btn-danger">Xoá</button></a>
+                                                </div>
                                             </div>
-                                            <div class="modal-body">
-                                                <p>Bạn có chắc muốn xoá ảnh này?</p>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type='button' class='btn btn-default' data-dismiss="modal">Huỷ</button>
-                                                <a href="MainController?action=DeleteImage&productID=<%=product.getProductID()%>&imageName=<%= product.getColorImage().get(color).get(k)%>"><button type="button" class="btn btn-danger">Xoá</button></a>
-                                            </div>
+
                                         </div>
-
                                     </div>
                                 </div>
-                                </div>
 
-                                
+
                                 <%++imagesNumber;%>
 
                                 <%}%>
@@ -139,6 +165,10 @@
                 </div>
             </div>
         </div>
-
+    <script>
+            $(document).ready(function () {
+                $("#myModal").modal();
+            });
+        </script>
     </body>
 </html>

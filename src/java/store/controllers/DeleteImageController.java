@@ -36,7 +36,6 @@ public class DeleteImageController extends HttpServlet {
         String url = ERROR;
         try {
             String image = request.getParameter("imageName");
-            int productID = Integer.parseInt(request.getParameter("productID"));
             ProductDAO dao = new ProductDAO();
             boolean check = dao.deleteImage(image);
             if (check) {
