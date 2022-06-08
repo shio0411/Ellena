@@ -82,7 +82,9 @@ public class MainController extends HttpServlet {
     private static final String CHECKOUT_CONTROLLER = "CheckoutController";
     private static final String SUBSCRIBE = "Subscribe";
     private static final String SUBSCRIBE_CONTROLLER = "SubscribeController";
-
+    private static final String VIEW_IMAGES = "ViewImages";
+    private static final String VIEW_IMAGES_CONTROLLER = "ViewImagesController";
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
@@ -193,6 +195,9 @@ public class MainController extends HttpServlet {
                         break;
                     case SUBSCRIBE:
                         url = SUBSCRIBE_CONTROLLER;
+                        break;
+                    case VIEW_IMAGES:
+                        url = VIEW_IMAGES_CONTROLLER;
                         break;
                     default:
                         break;
