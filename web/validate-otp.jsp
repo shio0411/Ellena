@@ -1,6 +1,6 @@
 <%-- 
-    Document   : forgot-password
-    Created on : Jun 5, 2022, 12:22:19 AM
+    Document   : validate-otp
+    Created on : Jun 9, 2022, 3:31:25 PM
     Author     : Jason 2.0
 --%>
 
@@ -9,7 +9,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Forgot Password</title>
+        <title>Validate OTP</title>
         <jsp:include page="meta.jsp" flush="true"/>
     </head>
     <body>
@@ -93,8 +93,7 @@
             </div>
         </header>
         <!-- Header Section End -->
-        
-        
+
         
         <section class="vh-100 gradient-custom">
             <div class="container py-5 h-100">
@@ -102,15 +101,14 @@
                     <div class="col-12 col-lg-9 col-xl-7">
                         <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
                             <div class="card-body p-4 p-md-5">
-                                <h3 class="mb-4 pb-2 pb-md-0 mb-md-5" style="text-align: center;">Đặt lại mật khẩu</h3>
+                                <h3 class="mb-4 pb-2 pb-md-0 mb-md-5" style="text-align: center;">Xác nhận OTP</h3>
                                 <form action="MainController" method="post">
                                     <div class="row">
                                         <div class="col-md-12 mb-4">
 
                                             <div class="form-outline">
-                                                <label class="form-label" for="userID">Tên đăng nhập</label>
-                                                <input type="text" name="userID" class="form-control" placeholder="example@email.com" id="username">                                                
-
+                                                <label class="form-label" for="userID">Mã OTP</label>
+                                                <input type="number" name="otpInputValue" class="form-control" placeholder="123456" id="otpInputValue">   
                                             </div>
 
                                         </div>
@@ -118,22 +116,25 @@
                                     </div>
                                     <!--ERROR message-->
                                     <p style="color: red">${requestScope.ERROR}</p>
-                                    
+
                                     <div>
-                                        <button class="primary-btn" type="submit" name="action" value="ForgotPassword" >Gửi mail xác nhận mã OTP</button>
+                                        <button class="primary-btn" type="submit" name="action" value="ValidateOtp" >Xác nhận mã OTP</button>
                                     </div>
 
                                 </form>
-                                    
-                                    
+
+
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-                                    
-                                    
+
+
+
+
+
         <script src="js/jquery-3.3.1.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
         <script src="js/jquery.magnific-popup.min.js"></script>

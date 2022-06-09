@@ -69,6 +69,10 @@ public class MainController extends HttpServlet {
     private static final String MANAGER_UPDATE_PRODUCT_CONTROLLER = "ManagerUpdateProductController";
     private static final String FORGOT_PASSWORD = "ForgotPassword";
     private static final String FORGOT_PASSWORD_CONTROLLER = "ForgotPasswordController";
+    private static final String VALIDATE_OTP = "ValidateOtp";
+    private static final String VALIDATE_OTP_CONTROLLER = "ValidateOtpController";
+    private static final String RESET_PASSWORD = "ResetPassword";
+    private static final String RESET_PASSWORD_CONTROLLER = "ResetPasswordController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -164,6 +168,12 @@ public class MainController extends HttpServlet {
                     break;
                 case FORGOT_PASSWORD:
                     url = FORGOT_PASSWORD_CONTROLLER;
+                    break;
+                case VALIDATE_OTP:
+                    url = VALIDATE_OTP_CONTROLLER;
+                    break;
+                case RESET_PASSWORD:
+                    url = RESET_PASSWORD_CONTROLLER;
                     break;
                 default:
                     break;

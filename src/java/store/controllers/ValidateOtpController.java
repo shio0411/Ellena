@@ -11,52 +11,52 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import store.user.UserDAO;
-import store.utils.JavaMailUtils;
 
 /**
  *
  * @author Jason 2.0
  */
-@WebServlet(name = "ForgotPasswordController", urlPatterns = {"/ForgotPasswordController"})
-public class ForgotPasswordController extends HttpServlet {
+@WebServlet(name = "ValidateOtpController", urlPatterns = {"/ValidateOtpController"})
+public class ValidateOtpController extends HttpServlet {
 
-    private static final String ERROR = "forgot-password.jsp";
-    private static final String SUCCESS = "validate-otp.jsp";
+    private static final String ERROR = "validate-otp.jsp";
+    private static final String OUT_OF_ATTEMPS = "forgot-password.jsp";
+    private static final String SUCCESS = "reset-password.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
+
         try {
-            String userID = request.getParameter("userID");
-            UserDAO dao = new UserDAO();
             HttpSession session = request.getSession();
-            boolean checkDuplicate = dao.checkDuplicate(userID);
-            if (checkDuplicate) {// true == there's a valid email in database
+            int otpExpectedValue = (int) session.getAttribute("OTP_EXPECTED");
+            int otpInputValue = Integer.parseInt(request.getParameter("otpInputValue"));
+            int inputAttempts = (int) session.getAttribute("INPUT_ATTEMPS");
+            
 
-                try {
-                    JavaMailUtils.sendMail(userID, "ForgotPasswordOTP");
-                    
-                    session.setAttribute("USER_ID", userID);// pass userID to reset-password.jsp page
-                    session.setAttribute("OTP_EXPECTED", JavaMailUtils.getOtpValue());// give expected OTP value to ValidateOtpController
-                    session.setAttribute("OTP_CHECK", false);// OTP check for reset-password.jsp page
-                    session.setAttribute("INPUT_ATTEMPS", 3);// set number of allow attemps to input OTP
-                    
+            if (inputAttempts > 0) {//check inputAttempts
+                
+                if (otpInputValue == otpExpectedValue) {//check OTP
                     url = SUCCESS;
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    session.setAttribute("OTP_CHECK", true);
+                } else {
+                    request.setAttribute("ERROR", "Sai mã OTP! Bạn còn "+ inputAttempts + " lượt nhập mã OTP còn lại!");
+                    session.setAttribute("INPUT_ATTEMPS", --inputAttempts);
                 }
-
-            } else {// false == there's no valid email in database
-                request.setAttribute("ERROR", "Bạn nhập sai ID hoặc bạn chưa có tài khoản!");
+                
+            }else{
+                url = OUT_OF_ATTEMPS;
+                request.setAttribute("ERROR", "Hết lượt nhập mã OTP!");
             }
-
+            
+            
         } catch (Exception e) {
-            log("ERROR at ForgotPasswordController : " + toString());
+            log("Error at ValidateOtpController : " + toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

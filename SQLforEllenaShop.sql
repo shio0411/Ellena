@@ -32,18 +32,27 @@ CREATE TABLE tblOrderStatus(
 	statusID int PRIMARY KEY,
 	statusName nvarchar(50)
 )
-
+-----tblOrderStatus(statusID, statusName)---------
 GO
 
 CREATE TABLE tblOrder(
-	orderID   int PRIMARY KEY,
+	orderID   int identity(1,1) PRIMARY KEY,
 	orderDate date,
 	total     int,
 	userID    char(100) REFERENCES tblUsers(userID),
-	statusID  int REFERENCES tblOrderStatus(statusID)
+	trackingID varchar(40)
 )
-
+------tblOrder(orderID{identity}, orderDate, total, userID, trackingID)-------
 GO
+
+
+CREATE TABLE tblOrderStatusUpdate(
+	ID int identity(1,1) PRIMARY KEY,
+	statusID int REFERENCES tblOrderStatus(statusID),
+	orderID int REFERENCES tblOrder(orderID),
+	updateDate smalldatetime
+)
+----tblOrderStatusUpdate(ID{identity}, statusID, orderID, updateDate)----
 
 CREATE TABLE tblCategory(
 	categoryID   int identity(1,1) PRIMARY KEY,
@@ -55,36 +64,53 @@ CREATE TABLE tblCategory(
 GO
 
 CREATE TABLE tblProduct(
-	productID       		int PRIMARY KEY,
+	productID       		int identity(1,1) PRIMARY KEY,
 	productName		nvarchar(50),
 	[description]		nvarchar(500),
 	price			int,
 	categoryID		int REFERENCES tblCategory(categoryID),
+	discount		float,
+	lowStockLimit 		int, 
 	[status]			bit
 )
+----tblProduct(productID{identity}, productName, [description], price, categoryID, discount, lowStockLimit, [status])--------
 
 GO
 
-CREATE TABLE tblProductDetail(
+CREATE TABLE tblProductColors(
+	productColorID int identity(1,1) PRIMARY KEY,
 	productID int REFERENCES tblProduct(productID),
-	size	varchar(50),
-	color	nvarchar(50),
-	[image] varchar(200),
-	quantity int,
-	importDate      date,
-	PRIMARY KEY(productID, size, color)
+color nvarchar(50)
+)
+--tblProductColors(productColorID  [identity] , productID , color )----
+GO
 
+CREATE TABLE tblColorImage(
+	colorImageID int identity(1,1) PRIMARY KEY,
+	productColorID int REFERENCES tblProductColors(productColorID),
+	[image] nvarchar(250)
+)
+	--tblColorImage(colorImageID   [identity] , productColorID , [image])----
+
+CREATE TABLE tblColorSizes(
+	colorSizeID int identity(1,1) PRIMARY KEY,
+	productColorID int REFERENCES tblProductColors(productColorID),
+	size	varchar(50),
+	quantity int,
 )
 
+--tblColorSizes(colorSizeID , productColorID, size, quantity)----
 GO
 
 CREATE TABLE tblRating(
+	id	int identity(1,1) PRIMARY KEY,
 	productID	int REFERENCES tblProduct(productID),	
 	userID 		char(100) REFERENCES tblUsers(userID),
 	content	nvarchar(500),
-	star		int
-	PRIMARY KEY (productID, userID)
+	star		int,
+	rateDate	date
 )
+---tblRating(id [identity], productID, userID, content, star, rateDate)----
 
 GO
 
@@ -98,6 +124,7 @@ CREATE TABLE tblOrderDetail(
 	productID 	int REFERENCES tblProduct(productID),
 )
 GO
+---tblOrderDetail(detailID la tu tang, price, quantity, size, color, orderID, productID)----
 
 INSERT INTO tblRoles VALUES
 ('AD', 'Admin', 1),
@@ -108,7 +135,7 @@ INSERT INTO tblRoles VALUES
 GO
 
 INSERT INTO tblUsers VALUES
-('ellena_admin@gmail.com', N'Phạm Trung Nguyên', '12345', 1, 'AD', 'Vinhome Nguyễn Xiển, Quận 9, TP.HCM', '1992/01/09', '0922882738', 1),
+('ellena_admin@gmail.com', N'Phạm Trung Nguyên', '12345', 1, 'AD', N'Vinhome Nguyễn Xiển, Quận 9, TP.HCM', '1992/01/09', '0922882738', 1),
 ('khanhtran@gmail.com', N'Trần Thị Vân Khánh', '12345', 0, 'MN', N'30 Trần Phú, Đông Hà, Quảng Trị', '2002/12/16', '0945167243', 1),
 ('giaman@gmail.com', N'Hồ Gia Mẫn', '12345', 0, 'MN', N'73 Nguyễn Xiển Quận 9, TP.HCM', '2002/12/17', '0973472223', 1),
 ('lamduy@gmail.com', N'Lê Vũ Lâm Duy', 'duy12345', 1, 'MN', N'89/112 Đỗ Xuân Hợp Quận 9, TP.HCM', '2002/05/10', '093672627', 1),
@@ -129,300 +156,471 @@ INSERT INTO tblUsers VALUES
 GO
 
 INSERT INTO tblOrderStatus VALUES
-(1, 'Chưa xác nhận'),
-(2, 'Đã xác nhận'),
-(3, 'Đang giao'),
-(4, 'Đã giao'),
-(5, 'Đã hủy')
+(1, N'Chưa xác nhận'),
+(2, N'Đã xác nhận'),
+(3, N'Đang giao'),
+(4, N'Đã giao'),
+(5, N'Đã hủy')
 --tblOrderStatus(statusID,statusName)-------
 
 GO
 
 GO
 INSERT INTO tblOrder VALUES 
-(190, '2022/05/02', 100000, 'harrypotter12@gmail.com', 3),
-(191, '2022/05/03', 1230000, 'monicaluv@gmail.com', 2),
-(192, '2022/05/03', 120000, 'kobi@gmail.com', 3),
-(193, '2022/05/03', 350000, 'monicaluv@gmail.com', 4),
-(194, '2022/05/03', 540000, 'martin1221@gmail.com', 4),
-(195, '2022/05/03', 130000, 'maitran21@gmail.com', 2),
-(196, '2022/05/03', 560000, 'haunguyen@gmail.com', 2),
-(197, '2022/05/04', 430000, 'godrick888@gmail.com', 3),
-(198, '2022/05/04', 290000, 'maitran21@gmail.com', 1),
-(199, '2022/05/04', 210000, 'godrick888@gmail.com', 1),
-(200, '2022/05/04', 310000, 'hanguyenanh@gmail.com', 1)
+('2022/05/02', 100000, 'harrypotter12@gmail.com', 'SSLVN4454497778797641810'),
+('2022/05/04', 1230000, 'monicaluv@gmail.com', 'SSLVN37480191943152553458'),
+('2022/05/05', 120000, 'kobi@gmail.com', 'SSLVN36160885032451795902'),
+('2022/05/06', 350000, 'monicaluv@gmail.com', 'SSLVN80743025514474155713'),
+('2022/05/07', 540000, 'martin1221@gmail.com', 'SSLVN11371807270314380917'),
+('2022/05/23', 130000, 'maitran21@gmail.com', 'SSLVN21085947711528507560'),
+('2022/05/23', 560000, 'haunguyen@gmail.com', 'SSLVN11187708803131808013'),
+('2022/05/21', 430000, 'godrick888@gmail.com', 'SSLVN54103113879066105821'),
+('2022/05/20', 290000, 'maitran21@gmail.com', 'SSLVN11341725634716085101'),
+('2022/05/22', 210000, 'godrick888@gmail.com', 'SSLVN37490191625152553458'),
+('2022/05/04', 310000, 'hanguyenanh@gmail.com', 'SSLVN76091081515898125245'),
+('2022/05/06', 130000, 'maitran21@gmail.com', 'SSLVN76091081721838125245'),
+('2022/05/07', 560000, 'haunguyen@gmail.com', 'SSLVN87237126686276585086'),
+('2022/05/10', 430000, 'godrick888@gmail.com', 'SSLVN81526126686276585086'),
+('2022/05/12', 290000, 'maitran21@gmail.com', 'SSLVN61405555828311583407'),
+('2022/05/15', 210000, 'godrick888@gmail.com', 'SSLVN32401242828311583407'),
+('2022/05/17', 310000, 'hanguyenanh@gmail.com', 'SSLVN38070795908852759427'),
+('2022/05/12', 130000, 'maitran21@gmail.com', 'SSLVN97480191943152553458'),
+('2022/05/20', 560000, 'haunguyen@gmail.com', 'SSLVN66561052929520581017'),
+('2022/05/21', 430000, 'godrick888@gmail.com', 'SSLVN51811923132770990465'),
+('2022/05/07', 290000, 'maitran21@gmail.com', 'SSLVN55011923132770990465'),
+('2022/05/08', 210000, 'godrick888@gmail.com', 'SSLVN27991671134443514734'),
+('2022/05/09', 310000, 'hanguyenanh@gmail.com', 'SSLVN21426471134443514734'),
+('2022/01/02', 100000, 'harrypotter12@gmail.com', 'SSLVN4454497778791641810'),
+('2022/02/03', 1230000, 'monicaluv@gmail.com', 'SSLVN37480191943152653458'),
+('2022/03/03', 120000, 'kobi@gmail.com', 'SSLVN36160885032451795952'),
+('2022/01/03', 350000, 'monicaluv@gmail.com', 'SSLVN80743025514477155713'),
+('2022/02/03', 540000, 'martin1221@gmail.com', 'SSLVN11371807270384380917'),
+('2022/03/23', 130000, 'maitran21@gmail.com', 'SSLVN21085947711520507560'),
+('2022/04/23', 560000, 'haunguyen@gmail.com', 'SSLVN11187708803141808013'),
+('2022/01/21', 430000, 'godrick888@gmail.com', 'SSLVN54103113879076105821'),
+('2022/02/20', 290000, 'maitran21@gmail.com', 'SSLVN11341725634719085101'),
+('2022/03/22', 210000, 'godrick888@gmail.com', 'SSLVN3749019162512553458'),
+('2022/05/04', 310000, 'hanguyenanh@gmail.com', 'SSLVN76091081545898125245'),
+('2022/01/06', 130000, 'maitran21@gmail.com', 'SSLVN76091081721838125245'),
+('2022/02/07', 560000, 'haunguyen@gmail.com', 'SSLVN87237126686476585086'),
+('2022/03/10', 430000, 'godrick888@gmail.com', 'SSLVN81526126686576585086'),
+('2022/04/12', 290000, 'maitran21@gmail.com', 'SSLVN61405555828361583407'),
+('2022/05/15', 210000, 'godrick888@gmail.com', 'SSLVN32401242828711583407'),
+('2022/01/17', 310000, 'hanguyenanh@gmail.com', 'SSLVN38070795988852759427'),
+('2022/01/12', 130000, 'maitran21@gmail.com', 'SSLVN97480191943192553458'),
+('2022/02/20', 560000, 'haunguyen@gmail.com', 'SSLVN66561052929020581017'),
+('2022/03/21', 430000, 'godrick888@gmail.com', 'SSLVN51811923139770990465'),
+('2022/04/07', 290000, 'maitran21@gmail.com', 'SSLVN55011923132070990465'),
+('2022/05/08', 210000, 'godrick888@gmail.com', 'SSLVN27991671133443514734'),
+('2022/03/09', 310000, 'hanguyenanh@gmail.com', 'SSLVN21426471133443514734'),
+('2021/06/02', 100000, 'harrypotter12@gmail.com', 'SSLVN4454437778791641810'),
+('2021/07/03', 1230000, 'monicaluv@gmail.com', 'SSLVN37480196943152653458'),
+('2021/08/03', 120000, 'kobi@gmail.com', 'SSLVN36160885032458795952'),
+('2021/09/03', 350000, 'monicaluv@gmail.com', 'SSLVN80743025114477155713'),
+('2021/07/03', 540000, 'martin1221@gmail.com', 'SSLVN11371805270384380917'),
+('2021/07/23', 130000, 'maitran21@gmail.com', 'SSLVN21085947811520507560'),
+('2021/08/23', 560000, 'haunguyen@gmail.com', 'SSLVN11187404803141808013'),
+('2021/09/21', 430000, 'godrick888@gmail.com', 'SSLVN54103516879076105821'),
+('2021/01/20', 290000, 'maitran21@gmail.com', 'SSLVN11341765614719085101'),
+('2021/05/22', 210000, 'godrick888@gmail.com', 'SSLVN3749018112512553458'),
+('2021/07/04', 310000, 'hanguyenanh@gmail.com', 'SSLVN76061081545898125245'),
+('2021/11/06', 130000, 'maitran21@gmail.com', 'SSLVN76091081721838125245'),
+('2021/10/07', 560000, 'haunguyen@gmail.com', 'SSLVN87237156686476585086'),
+('2021/12/10', 430000, 'godrick888@gmail.com', 'SSLVN81526166686576585086'),
+('2021/10/12', 290000, 'maitran21@gmail.com', 'SSLVN61405554828361583407'),
+('2021/11/15', 210000, 'godrick888@gmail.com', 'SSLVN3240112828711583407'),
+('2021/12/17', 310000, 'hanguyenanh@gmail.com', 'SSLVN38070795988852759427'),
+('2021/12/12', 130000, 'maitran21@gmail.com', 'SSLVN97480191943192553458'),
+('2021/11/20', 560000, 'haunguyen@gmail.com', 'SSLVN66561752929020581017'),
+('2021/12/21', 430000, 'godrick888@gmail.com', 'SSLVN51811123139770990465'),
+('2021/11/07', 290000, 'maitran21@gmail.com', 'SSLVN55011953132070990465'),
+('2021/10/08', 210000, 'godrick888@gmail.com', 'SSLVN27991871133443514734'),
+('2021/09/09', 310000, 'hanguyenanh@gmail.com', 'SSLVN21426471133443514734')
 
 
-----tblOrder(orderID, orderDate, total, userID, statusID)---------
+
+------tblOrder(orderID{identity}, orderDate, total, userID, trackingID)------- NEW*
 
 GO
 
 INSERT INTO tblCategory
 VALUES
 (N'Áo khoác', 1, 1),
-(N'Váy đầm mẹ và bé', 2, 1),
-(N'Quần short', 3, 1),
-(N'Áo sơ mi', 4, 1),
-(N'Quần dài', 5, 1),
-(N'Áo thun', 6, 1),
-(N'Váy oversize', 7, 1),
-(N'Váy đầm dự tiệc', 8, 1),
-(N'Váy công sở', 9, 1),
-(N'Chân váy', 10, 1);
+(N'Quần short', 2, 1),
+(N'Áo sơ mi', 3, 1),
+(N'Quần dài', 4, 1),
+(N'Áo thun', 5, 1),
+(N'Váy đầm', 6, 1),
+(N'Áo vest', 7, 1),
+(N'Chân váy', 8, 1)
 ---tblCategory(categoryID, categoryName, order, [status])--------
 
 GO
 
 INSERT INTO tblProduct
 VALUES 
-(120, N'ÁO THUN TAY NGẮN CỔ V.', N'Form dáng basic, hiện đại dễ kết hợp với các item khác nhau hòa nhịp với xu hướng thời trang Hàn Quốc.',  216000, 6, 1),
-(121, N'QUẦN JEANS SKINNY', N'Chiếc quần được thiết kế ôm vừa vặn, phom quần lửng, dáng quần được nghiên cứu hiện đại, thoải mái từ phần hông cho tới phần cẳng chân, giúp tôn đôi chân thon dài của khách hàng.', 424000, 5, 1),
-(122, N'ĐẦM TAY NGẮN KHOÉT TH N SAU', N'Là chiếc đầm bằng vải voan nhẹ nhàng, tay áo lựng có độ phồng nhẹ. Thiết kế trang trí nơ trước ngực, tăng thêm nét dịu dàng cho bạn nữ. Là một chiếc đầm phù hợp cho bạn diện ở nhiều trường hợp khác nhau như đi làm, đi chơi, dạo phố,…', 389000, 2, 1),
-(123, N'ÁO KIỂU TAY DÀI NHÚN THUN VAI ', N'Chiếc áo kiểu này là một nét đẹp nữ tính cho các bạn nữ  yêu thích sự nhẹ nhàng. Với chất vải mềm mại kết hợp cùng thiết kế tay áo rộng.', 299000, 5, 1),
-(124, N'ÁO KHOÁC DENIM NỮ CORDUROY TÚI ĐẮP.', N'Áo khoác denim cổ ve lật, dài tay, cổ tay bo và cài khuy. Có hai túi có nắp trước ngực và túi may viền hai bên hông. Vải hiệu ứng bạc màu. Cài khuy phía trước.', 460000, 1, 1),
-(125, N'QUẦN KAKI CARROT', N'',  320000, 5, 1),
-(126, N'ÁO DỆT KIM TAY NGẮN', N'', 495000, 6, 1),
-(127, N'QUẦN SHORT TÚI XÉO 2 NÚT', N'', 520000, 7, 1),
-(128, N'ĐẦM CARO RÚT NGỰC', N'', 520000, 8, 1),
-(129, N'ÁO IN CHỮ LOANG ', N'', 185000, 6, 1),
-(130, N'ÁO KHOÁC JEANS CƠ BẢN', N'', 595000, 9, 1),
-(131, N'ĐẦM SUÔNG BUỘC EO', N'', 495000, 2, 1),
-(132, N'ĐẦM SUÔNG BUỘC EO', N'', 495000, 2, 1),
-(133, N'CH N VÁY RÚT D Y', N'', 285000, 7, 1),
-(134, N'VÁY RÚT D Y', N'', 285000, 7, 1);
+(N'ÁO THUN TAY NGẮN CỔ V', N'Form dáng basic, hiện đại dễ kết hợp với các item khác nhau hòa nhịp với xu hướng thời trang Hàn Quốc.',  216000, 5, 0.6, 10, 1),
+(N'QUẦN JEANS SKINNY', N'Chiếc quần được thiết kế ôm vừa vặn, phom quần lửng, dáng quần được nghiên cứu hiện đại, thoải mái từ phần hông cho tới phần cẳng chân, giúp tôn đôi chân thon dài của khách hàng.', 424000, 2, 0.3, 10, 1),
+(N'ĐẦM TAY NGẮN KHOÉT EO', N'Là chiếc đầm bằng vải voan nhẹ nhàng, tay áo lựng có độ phồng nhẹ. Thiết kế trang trí nơ trước ngực, tăng thêm nét dịu dàng cho bạn nữ. Là một chiếc đầm phù hợp cho bạn diện ở nhiều trường hợp khác nhau như đi làm, đi chơi, dạo phố,…', 389000, 6, 0, 10, 1),
+(N'ÁO KIỂU TAY DÀI NHÚN THUN VAI', N'Chiếc áo kiểu này là một nét đẹp nữ tính cho các bạn nữ  yêu thích sự nhẹ nhàng. Với chất vải mềm mại kết hợp cùng thiết kế tay áo rộng.', 299000, 3, 0.3, 10, 1),
+(N'ÁO KHOÁC DENIM NỮ CORDUROY TÚI ĐẮP.', N'Áo khoác denim cổ ve lật, dài tay, cổ tay bo và cài khuy. Có hai túi có nắp trước ngực và túi may viền hai bên hông. Vải hiệu ứng bạc màu. Cài khuy phía trước.', 460000, 1, 0.2, 10, 1),
+(N'QUẦN KAKI CARROT', N'Form quần carrot vừa xuất hiện đã thu hút giới trẻ bởi phong cách năng động và hiện đại, dễ dàng mix-match và làm mới phong cách của riêng bạn.',  320000, 2, 0.5, 10,1),
+(N'ÁO DỆT KIM TAY NGẮN', N'Chất liệu dệt kim đem lại form cảm giác thoải mái khi mặc. Kích thước phù hợp cho các bạn nữ <55kg, form xuông mặc rất cá tính, thoải mái và dễ phối đồ. Sản phẩm có thể phối với chân váy hoặc quần cạp cao sẽ trở thành nột set đồ lí tưởng cho chị em.', 495000, 3, 0.25, 10,1),
+(N'QUẦN SHORT TÚI XÉO 2 NÚT', N'Quần được thiết kế với hình dáng khỏe khoắn, mang lại cho các bạn nữ một ngoại hình sảng khoái và phá cách.', 520000, 2, 0.15, 10,1),
+(N'ĐẦM CARO RÚT NGỰC', N'Đầm caro rút ngực tay phồng với tay phồng nhún nhẹ nhàng. Điểm nhấn phá cách bằng dây rút tạo nhún ngay ngực, sexy mà vẫn không hở hang.', 520000, 6, 0, 10,1),
+(N'ÁO IN CHỮ LOANG ', N'Sắc màu cực tươi và sáng, họa tiết in hình sau lưng đang xu hướng. Kiểu dáng form rộng năng động cá tính. Dáng áo cực dễ phối đồ, quần short hay quần jean đều hợp. Chất liệu vải mềm mịn.', 185000, 5, 0.25, 10,1),
+(N'ÁO KHOÁC JEANS CƠ BẢN', N'Áo khoác jeans form cơ bản, có nút ở giữa, áo wash rách ở ngực bên trái, tạo kiểu, áo rã đô, có 2 túi 2 bên ngực, có túi mổ bên hông, áo wash rách thân sau tạo kiểu.', 595000, 1, 0.2, 10, 1),
+(N'ĐẦM SUÔNG BUỘC EO', N'Đầm form suông, bâu danton, tay ngắn, xếp ly nhún ở cửa tay, viền cửa tay khoảng 1cm, thân sau có xẻ tà, đần kèm dây thắt đai eo, không dây kéo.', 495000, 2, 0.3, 10, 1),
+(N'ĐẦM SƠ MI PHỐI BÈO', N'Đầm form A nhẹ, cổ tròn, không tay, phối bèo tạo kiểu, giữa đầm có nút giả, dây kéo phía sau, cổ sau có khuy nút tháo mở được.', 285000, 2, 0.1, 10,1),
+(N'VÁY RÚT D Y', N'Chiếc váy mang đậm phong cách nữ tính, dễ thương và duyên dáng, được rất nhiều chị em yêu thích bởi sự đơn giản và tạo sự thoải mái khi diện bộ trang phục này. Với tạng người dù cao, thấp hay ốm đều có thể tự tin khi diện.', 285000, 8, 0.2, 10, 1),
+(N'ÁO KHOÁC JEANS PHỐI TÚI', N'Áo khoác jeans form croptop, có nút ở giữa, tay dài phối măng sết, bản măng sết khoảng 4cm có nút cài, áo rã đô, rã cách điệu tạo kiểu, ở trước 2 bên ngực có túi hộp, phần lai áo tua rua tạo kiểu.', 312000, 1, 0.14, 10, 1),
+(N'ÁO VEST BLAZER', N'Áo vest blazer, tay dài, cửa tay có xẻ khoảng 11cm, có 3 nút trang trí, phía trước có mổ túi giả, phía sau có xẻ khoảng 18cm.', 665000, 7, 1, 10, 1),
+(N'VÁY BÚT CHÌ TÚI ĐẮP', N'Chân váy bút chì, lưng liền, phía trước có 2 túi đắp, trên túi có nút nhựa, đây kéo phía sau, xẻ tà đắp khoảng 21cm', 265000, 8, 0.08, 5, 1),
+(N'ÁO CỔ TIM SỌC NGANG', N'Áo thun form ôm, cổ tim, tay ngắn, siêu đáng yêu.', 145000, 5, 0.15, 5, 1),
+(N'ÁO SƠ MI GIẤU NÚT', N'Áo sơ mi form cơ bản, tay dài, bản măng sết khoảng 3.5cm, phần nẹp áo là nẹp che giấu nút, thân sau có xếp ly', 300000, 3, 0.05, 10, 1),
+(N'ÁO THẮT NƠ TAY PHỒNG', N'Áo sơ mi chui đầu, cổ tim, cổ có dây nơ tạo kiểu, tay dài, có măng sết khoảng 6cm, có 2 nút nhựa cài.', 300000, 3, 0, 10, 1)
 
----tblProduct (productID, productName, [description], price, categoryID, [status] )---
+
+
+----tblProduct(productID{identity}, productName, [description], price, categoryID, discount, lowStockLimit, [status])--------
 
 GO
 
-INSERT INTO tblProductDetail
+INSERT INTO tblProductColors
 VALUES 
-(120, 'S', N'Trắng', '', 230, '2022/02/01'),
-(120, 'M', N'Trắng', '', 187, '2022/02/04'),
-(120, 'L', N'Trắng', '', 150, '2022/02/04'),
-(120, 'S', N'Đen', '', 210, '2022/02/04'),
-(120, 'M', N'Đen', '', 157, '2022/02/05'),
-(120, 'L', N'Đen', '', 142, '2022/02/05'),
-(120, 'S', N'Be', '', 112, '2022/02/07'),
-(120, 'M', N'Be', '', 133, '2022/02/08'),
-(120, 'L', N'Be', '', 190, '2022/02/10'),
-(120, 'M', N'Nâu', '', 133, '2022/02/10'),
-(120, 'L', N'Nâu', '', 190, '2022/02/11'),
-(120, 'S', N'Nâu', '', 190, '2022/02/11'),
-(121, '26', N'Xanh Blue', '', 133, '2022/02/08'),
-(121, '27', N'Xanh Blue', '', 190, '2022/02/10'),
-(121, '28', N'Xanh Blue', '', 133, '2022/02/10'),
-(121, '29', N'Xanh Blue', '', 140, '2022/02/11'),
-(121, '30', N'Xanh Blue', '', 130, '2022/02/11'),
-(122, 'XS', N'Xanh nhạt', '', 138, '2022/02/12'),
-(122, 'S', N'Xanh nhạt', '', 144, '2022/02/13'),
-(122, 'M', N'Xanh nhạt', '', 240, '2022/02/13'),
-(123, 'XS', N'Be', '', 138, '2022/03/15'),
-(123, 'S', N'Be', '', 144, '2022/03/15'),
-(123, 'M', N'Be', '', 240, '2022/03/15'),
-(123, 'L', N'Be', '', 240, '2022/03/15'),
-(124, 'S', N'Xanh Olive', '', 131, '2022/03/15'),
-(124, 'M', N'Xanh Olive', '', 50, '2022/03/15'),
-(124, 'L', N'Xanh Olive', '', 77, '2022/03/15'),
-(125, 'S', N'Đen', '', 240, '2022/03/14'),
-(125, 'M', N'Đen', '', 131, '2022/03/14'),
-(125, 'S', N'Be', '', 50, '2022/03/15'),
-(125, 'M', N'Be', '', 77, '2022/03/16'),
-(126, 'S', N'Nâu', '', 77, '2022/03/16'),
-(126, 'M', N'Nâu', '', 127, '2022/03/16'),
-(126, 'L', N'Nâu', '', 90, '2022/03/16'),
-(127, 'S', N'Be', '', 240, '2022/03/14'),
-(127, 'M', N'Be', '', 123, '2022/03/14'),
-(127, 'L', N'Be', '', 56, '2022/03/14'),
-(128, 'M', N'Đen', '', 56, '2022/03/14'),
-(129, 'M', N'Xanh', '', 56, '2022/03/14'),
-(130, 'M', N'Đen', '', 56, '2022/03/14'),
-(131, 'M', N'Be', '', 56, '2022/03/14'),
-(132, 'M', N'Vàng', '', 56, '2022/03/14'),
-(133, 'M', N'Xám', '', 56, '2022/03/14'),
-(134, 'M', N'Be', '', 56, '2022/03/14')
+(1, N'Trắng'),
+(1, N'Đen'),
+(2, N'Trắng'),
+(2, N'Nâu'),
+(3, N'Nâu'),
+(3, N'Xanh nhạt'),
+(4, N'Đỏ'),
+(4, N'Nâu'),
+(5, N'Xanh rêu'),
+(6,  N'Kem'),
+(6, N'Bò'),
+(7, N'Đen'),
+(7, N'Be'),
+(8, N'Nâu'),
+(9, N'Be'),
+(10, N'Đen'),
+(10, N'Xanh'),
+(11, N'Be'),
+(11, N'Vàng'),
+(11, N'Xám'),
+(12, N'Be'),
+(13, N'Trắng'),
+(14, N'Đen'),
+(15, N'Xanh'),
+(15, N'Xanh nhạt'),
+(16, N'Đen'),
+(17, N'Đen'),
+(18, N'Be'),
+(18, N'Hồng'),
+(19, N'Trắng'),
+(20, N'Hồng'),
+(20, N'Xanh')
 
-
-
----tblProductDetail (productID, size, color, [image], quantity, importDate) ----
+--tblProductColors(productColorID [identity] , productID, color, [image])---- NEW*
 
 GO
 
-INSERT INTO tblOrderDetail
+INSERT INTO tblColorImage
 VALUES
-(216000, 2, 'S', N'Trắng', 190, 120),
-(216000, 1, 'M', N'Be', 190, 120),
-(185000, 1, 'S', N'Xanh nhạt', 190, 122),
-(185000, 1, 'M', N'Xanh nhạt', 190, 122),
-(185000, 1, 'M', N'Be', 190, 134),
-(185000, 1, 'M', N'Xanh nhạt', 191, 122),
-(299000, 2, 'XS', N'Be', 191, 123),
-(79000, 1, 'S', N'Đen', 192, 125),
-(79000, 2, 'M', N'Đen', 192, 128),
-(185000, 1, 'M', N'Xanh nhạt', 192, 122),
-(185000, 2, 'S', N'Xanh nhạt', 193, 122),
-(595000, 2,  'M', N'Đen', 193, 130),
-(495000, 1,  'M', N'Be', 194, 131),
-(520000, 1,  'L', N'Be', 194, 127),
-(216000, 1, 'L', N'Đen', 195, 120),
-(185000, 3, 'XS', N'Xanh nhạt', 195, 122),
-(424000, 3, '28', N'Xanh Blue', 196, 121),
-(179000, 1, 'L', N'Be', 197, 123),
-(199900, 1, 'L', N'Nâu', 197, 126),
-(139900, 1, 'M', N'Đen', 198, 125),
-(355000, 2, 'M', N'Be', 199, 127),
-(274000, 1, 'L', N'Be', 200, 123),
-(228000, 1,  'S', N'Be', 200, 123)
+(1, './images/ao-thun-tay-ngan-co-v-trang'),
+(1,  './images/ao-thun-tay-ngan-co-v-trang-1'),
+(2, './images/ao-thun-tay-ngan-co-v-den'),
+(3, './images/quan-jeans-skinny-trang'),
+(4, './images/quan-jeans-skinny-nau'),
+(5, './images/dam-tay-ngan-khoet-eo-nau'),
+(6, './images/dam-tay-ngan-khoet-eo-xanh-nhat'),
+(7, './images/ao-kieu-tay-dai-nhun-thun-vai-do'),
+(8, './images/ao-kieu-tay-dai-nhun-thun-vai-nau'),
+(9, './images/ao-khoac-denim-nu-corduroy-tui-dap-xanh-reu'),
+(10, './images/quan-kaki-carrot-kem'),
+(11, './images/quan-kaki-carrot-bo'),
+(12, './images/ao-det-kim-tay-ngan-den'),
+(13, './images/ao-det-kim-tay-ngan-be'),
+(14, './images/quan-shorts-tui-xeo-2-nut-nau'),
+(15, './images/dam-caro-rut-nguc-be'),
+(16, './images/ao-in-chu-loang-den'),
+(17, './images/ao-in-chu-loang-xanh'),
+(18, './images/ao-khoac-jeans-co-ban-be'),
+(19, './images/ao-khoac-jeans-co-ban-vang'),
+(20, './images/ao-khoac-jeans-co-ban-xam'),
+(21, './images/dam-suong-buoc-eo-be'),
+(22, './images/dam-so-mi-phoi-beo-trang'),
+(23, './images/cay-rut-day-den'),
+(24, './images/ao-khoac-jeans-phoi-tui-xanh'),
+(25, './images/ao-khoac-jeans-phoi-tui-xanh-nhat'),
+(26, './images/ao-vest-blazer-den'),
+(27, './images/vay-but-chi-tui-dap-den'),
+(28, './images/ap-co-tim-soc-ngang-be'),
+(29, './images/ap-co-tim-soc-ngang-hong'),
+(30, './images/ao-so-mi-giau-nut-trang'),
+(31, './images/ao-that-no-tay-phong-hong'),
+(32, './images/ao-that-no-tay-phong-xanh')
+
+
+
+GO
+--tblColorImage(colorImageID   [identity] , productColorID , [image])----
+
+
+INSERT INTO tblColorSizes(productColorID, size, quantity) VALUES
+(1, 'XS', 30),
+(1, 'S', 32),
+(2, 'XS', 230),
+(2, 'S', 30),
+(3, '27', 22),
+(3, '28', 154),
+(4, '27', 123),
+(4, '28', 23),
+(5,  'M', 56),
+(5, 'L', 70),
+(6,  'M', 56),
+(6, 'L', 74),
+(7, 'M', 93),
+(7, 'L', 10),
+(8, 'S', 13),
+(9, 'S', 39),
+(10, 'S', 30),
+(10, 'M', 2),
+(11, 'S', 102),
+(11, 'M', 59),
+(11, 'L', 71),
+(12, 'M', 45),
+(12, 'L', 45),
+(13, 'S', 83),
+(13, 'M', 83),
+(14, 'L', 70),
+(15, 'M', 79),
+(15, 'L', 34),
+(16, 'XS', 23),
+(16, 'S', 75),
+(16, 'M', 38),
+(17, 'L', 20),
+(18, 'S', 58),
+(18, 'L', 10),
+(19, 'L', 15),
+(20, 'S', 39),
+(20, 'K', 76),
+(21, 'L', 38),
+(21, 'M', 57),
+(22, 'S', 37),
+(22, 'M', 4),
+(23, 'L', 92),
+(23, 'M', 102),
+(24, 'S', 73),
+(24, 'M', 20),
+(25, 'S', 67),
+(25, 'M', 49),
+(26, 'L', 40),
+(26, 'M', 82),
+(27, 'S', 58),
+(28, 'M', 20),
+(28, 'L', 10),
+(29, 'M', 50),
+(29, 'L', 70),
+(30, 'S', 20),
+(30, 'M', 24),
+(31, 'M', 42),
+(31, 'L', 42),
+(32, 'M', 92),
+(32, 'L', 33),
+(32, 'XL', 34)
+--tblColorSizes(colorSizeID, productColorID, size, quantity)----
+
+GO
+
+INSERT INTO tblOrderDetail(price, quantity, size, color, orderID, productID)
+VALUES
+(216000, 2, 'S', N'Trắng', 1, 1),
+(216000, 1, 'M', N'Be', 1, 1),
+(185000, 1, 'S', N'Xanh nhạt', 1, 4),
+(185000, 1, 'M', N'Xanh nhạt', 1, 10),
+(185000, 1, 'M', N'Be', 1, 10),
+(185000, 1, 'M', N'Xanh nhạt', 2, 10),
+(299000, 2, 'XS', N'Be', 2, 4),
+(185000, 1, 'M', N'Xanh nhạt', 3, 10),
+(185000, 2, 'S', N'Xanh nhạt', 4, 10),
+(595000, 2,  'M', N'Đen', 5, 11),
+(495000, 1,  'M', N'Be', 5, 7),
+(520000, 1,  'L', N'Be', 5, 8),
+(216000, 1, 'L', N'Đen', 6, 1),
+(185000, 3, 'XS', N'Xanh nhạt', 6, 10),
+(424000, 3, '28', N'Xanh Blue', 7, 2),
+(285000, 1, 'L', N'Be', 8, 15),
+(185000, 1, 'M', N'Xanh nhạt', 9, 10),
+(185000, 2, 'S', N'Xanh nhạt', 10, 10),
+(595000, 2,  'M', N'Đen', 11, 11),
+(495000, 1,  'M', N'Be', 2, 7),
+(520000, 1,  'L', N'Be', 5, 8),
+(216000, 1, 'L', N'Đen', 6, 1),
+(185000, 3, 'XS', N'Xanh nhạt', 6, 10),
+(424000, 3, '28', N'Xanh Blue', 7, 2),
+(285000, 1, 'L', N'Be', 8, 15),
+(216000, 2, 'S', N'Trắng', 9, 1),
+(216000, 1, 'M', N'Be', 10, 1),
+(185000, 1, 'S', N'Xanh nhạt', 11, 4),
+(185000, 1, 'M', N'Xanh nhạt', 11, 10),
+(185000, 1, 'M', N'Be', 12, 10),
+(185000, 1, 'M', N'Xanh nhạt', 12, 10),
+(299000, 2, 'XS', N'Be', 13, 4),
+(185000, 1, 'M', N'Xanh nhạt', 14, 10),
+(185000, 2, 'S', N'Xanh nhạt', 14, 10),
+(595000, 2,  'M', N'Đen', 15, 11),
+(495000, 1,  'M', N'Be', 16, 7),
+(520000, 1,  'L', N'Be', 17, 8),
+(216000, 1, 'L', N'Đen', 18, 1),
+(185000, 3, 'XS', N'Xanh nhạt',18, 10),
+(424000, 3, '28', N'Xanh Blue', 19, 2),
+(285000, 1, 'L', N'Be', 19, 15),
+(185000, 1, 'M', N'Xanh nhạt', 20, 10),
+(185000, 2, 'S', N'Xanh nhạt', 21, 10),
+(595000, 2,  'M', N'Đen', 22, 11),
+(495000, 1,  'M', N'Be', 23, 7),
+(520000, 1,  'L', N'Be', 24, 8),
+(216000, 1, 'L', N'Đen', 25, 1),
+(185000, 3, 'XS', N'Xanh nhạt',26, 10),
+(424000, 3, '28', N'Xanh Blue', 27, 2),
+(285000, 1, 'L', N'Be', 28, 15),
+(185000, 1, 'M', N'Xanh nhạt', 29, 10),
+(185000, 2, 'S', N'Xanh nhạt', 30, 10),
+(595000, 2,  'M', N'Đen', 31, 11),
+(495000, 1,  'M', N'Be', 32, 7),
+(520000, 1,  'L', N'Be', 33, 8),
+(216000, 1, 'L', N'Đen', 34, 1),
+(185000, 3, 'XS', N'Xanh nhạt', 35, 10),
+(424000, 3, '28', N'Xanh Blue', 36, 2),
+(285000, 1, 'L', N'Be', 37, 15),
+(216000, 2, 'S', N'Trắng', 38, 1),
+(216000, 1, 'M', N'Be', 39, 1),
+(185000, 1, 'S', N'Xanh nhạt', 40, 4),
+(185000, 1, 'M', N'Xanh nhạt', 41, 10),
+(185000, 1, 'M', N'Be', 42, 10),
+(185000, 1, 'M', N'Xanh nhạt', 43, 10),
+(299000, 2, 'XS', N'Be', 43, 4),
+(185000, 1, 'M', N'Xanh nhạt', 44, 10),
+(185000, 2, 'S', N'Xanh nhạt', 45, 10),
+(595000, 2,  'M', N'Đen', 46, 11),
+(495000, 1,  'M', N'Be', 46, 7),
+(520000, 1,  'L', N'Be', 47, 8),
+(216000, 1, 'L', N'Đen', 48, 1),
+(185000, 3, 'XS', N'Xanh nhạt',49, 10),
+(424000, 3, '28', N'Xanh Blue', 50, 2),
+(285000, 1, 'L', N'Be', 51, 15),
+(185000, 1, 'M', N'Xanh nhạt', 52, 10),
+(185000, 2, 'S', N'Xanh nhạt', 53, 10),
+(595000, 2,  'M', N'Đen', 54, 11),
+(495000, 1,  'M', N'Be', 55, 7),
+(520000, 1,  'L', N'Be', 56, 8),
+(216000, 1, 'L', N'Đen', 57, 1),
+(185000, 3, 'XS', N'Xanh nhạt',58, 10),
+(424000, 3, '28', N'Xanh Blue', 59, 2),
+(285000, 1, 'L', N'Be', 60, 15),
+(495000, 1,  'M', N'Be', 61, 7),
+(520000, 1,  'L', N'Be', 62, 8),
+(216000, 1, 'L', N'Đen', 63, 1),
+(185000, 3, 'XS', N'Xanh nhạt',64, 10),
+(424000, 3, '28', N'Xanh Blue', 65, 2),
+(285000, 1, 'L', N'Be', 66, 15)
 ---tblOrderDetail(detailID la tu tang, price, quantity, size, color, orderID, productID)----
 
 GO
 
-CREATE FUNCTION [dbo].[fuChuyenCoDauThanhKhongDau]
-(
-      @strInput NVARCHAR(4000)
-)
-RETURNS NVARCHAR(4000)
-AS
-BEGIN    
-    IF @strInput IS NULL RETURN @strInput
-    IF @strInput = '' RETURN @strInput
-    DECLARE @RT NVARCHAR(4000)
-    DECLARE @SIGN_CHARS NCHAR(136)
-    DECLARE @UNSIGN_CHARS NCHAR (136)
- 
-    SET @SIGN_CHARS = N'ăâđêôơưàảãạáằẳẵặắầẩẫậấèẻẽẹéềểễệế
-                 ìỉĩịíòỏõọóồổỗộốờởỡợớùủũụúừửữựứỳỷỹỵý
-                 Ă ĐÊÔƠƯÀẢÃẠÁẰẲẴẶẮẦẨẪẬẤÈẺẼẸÉỀỂỄỆẾÌỈĨỊÍ
-                 ÒỎÕỌÓỒỔỖỘỐỜỞỠỢỚÙỦŨỤÚỪỬỮỰỨỲỶỸỴÝ'
-                  +NCHAR(272)+ NCHAR(208)
-    SET @UNSIGN_CHARS = N'aadeoouaaaaaaaaaaaaaaaeeeeeeeeee
-                 iiiiiooooooooooooooouuuuuuuuuuyyyyy
-                 AADEOOUAAAAAAAAAAAAAAAEEEEEEEEEEIIIII
-                 OOOOOOOOOOOOOOOUUUUUUUUUUYYYYYDD'
- 
-    DECLARE @COUNTER INT
-    DECLARE @COUNTER1 INT
-    SET @COUNTER = 1
- 
-    WHILE (@COUNTER <=LEN(@strInput))
-    BEGIN  
-      SET @COUNTER1 = 1
-      --Tìm trong chuỗi mẫu
-       WHILE (@COUNTER1 <=LEN(@SIGN_CHARS)+1)
-       BEGIN
-     IF UNICODE(SUBSTRING(@SIGN_CHARS, @COUNTER1,1))
-            = UNICODE(SUBSTRING(@strInput,@COUNTER ,1) )
-     BEGIN          
-          IF @COUNTER=1
-              SET @strInput = SUBSTRING(@UNSIGN_CHARS, @COUNTER1,1)
-              + SUBSTRING(@strInput, @COUNTER+1,LEN(@strInput)-1)                  
-          ELSE
-              SET @strInput = SUBSTRING(@strInput, 1, @COUNTER-1)
-              +SUBSTRING(@UNSIGN_CHARS, @COUNTER1,1)
-              + SUBSTRING(@strInput, @COUNTER+1,LEN(@strInput)- @COUNTER)
-              BREAK
-               END
-             SET @COUNTER1 = @COUNTER1 +1
-       END
-      --Tìm tiếp
-       SET @COUNTER = @COUNTER +1
-    END
-    RETURN @strInput
-END
-
-GO 
-
-CREATE FUNCTION [dbo].[fuChuyenCoDauThanhKhongDauThemGach]
-(
-      @strInput NVARCHAR(4000)
-)
-RETURNS NVARCHAR(4000)
-AS
-BEGIN    
-    IF @strInput IS NULL RETURN @strInput
-    IF @strInput = '' RETURN @strInput
-    DECLARE @RT NVARCHAR(4000)
-    DECLARE @SIGN_CHARS NCHAR(136)
-    DECLARE @UNSIGN_CHARS NCHAR (136)
- 
-    SET @SIGN_CHARS = N'ăâđêôơưàảãạáằẳẵặắầẩẫậấèẻẽẹéềểễệế
-                 ìỉĩịíòỏõọóồổỗộốờởỡợớùủũụúừửữựứỳỷỹỵý
-                 Ă ĐÊÔƠƯÀẢÃẠÁẰẲẴẶẮẦẨẪẬẤÈẺẼẸÉỀỂỄỆẾÌỈĨỊÍ
-                 ÒỎÕỌÓỒỔỖỘỐỜỞỠỢỚÙỦŨỤÚỪỬỮỰỨỲỶỸỴÝ'
-                  +NCHAR(272)+ NCHAR(208)
-    SET @UNSIGN_CHARS = N'aadeoouaaaaaaaaaaaaaaaeeeeeeeeee
-                 iiiiiooooooooooooooouuuuuuuuuuyyyyy
-                 AADEOOUAAAAAAAAAAAAAAAEEEEEEEEEEIIIII
-                 OOOOOOOOOOOOOOOUUUUUUUUUUYYYYYDD'
- 
-    DECLARE @COUNTER INT
-    DECLARE @COUNTER1 INT
-    SET @COUNTER = 1
- 
-    WHILE (@COUNTER <=LEN(@strInput))
-    BEGIN  
-      SET @COUNTER1 = 1
-      --Tìm trong chuỗi mẫu
-       WHILE (@COUNTER1 <=LEN(@SIGN_CHARS)+1)
-       BEGIN
-     IF UNICODE(SUBSTRING(@SIGN_CHARS, @COUNTER1,1))
-            = UNICODE(SUBSTRING(@strInput,@COUNTER ,1) )
-     BEGIN          
-          IF @COUNTER=1
-              SET @strInput = SUBSTRING(@UNSIGN_CHARS, @COUNTER1,1)
-              + SUBSTRING(@strInput, @COUNTER+1,LEN(@strInput)-1)                  
-          ELSE
-              SET @strInput = SUBSTRING(@strInput, 1, @COUNTER-1)
-              +SUBSTRING(@UNSIGN_CHARS, @COUNTER1,1)
-              + SUBSTRING(@strInput, @COUNTER+1,LEN(@strInput)- @COUNTER)
-              BREAK
-               END
-             SET @COUNTER1 = @COUNTER1 +1
-       END
-      --Tìm tiếp
-       SET @COUNTER = @COUNTER +1
-    END
-	SET @strInput = REPLACE(@strInput, ' ', '-')
-    RETURN @strInput
-END
+INSERT INTO tblRating VALUES
+(1, 'maitran21@gmail.com', N'Mặc hợp dáng, vải mát ôm form thích lắm luôn. Cho shop 5 sao <3', 5, '2022/05/04'),
+(2, 'hanguyenanh@gmail.com', N'Áo đẹp, lần sau mua lại', 5, '2022/05/04'),
+(3, 'godrick888@gmail.com', N'Mua cho con bạn thân. Nó review ok.', 4, '2022/05/04'),
+(4, 'maitran21@gmail.com', N'Hàng đi kèm giấy cảm ơn của shop đáng yêu quá đi. Lần sau sẽ ủng hộ tiếp <333', 5, '2022/05/04'),
+(5, 'maitran21@gmail.com', N'Không đẹp như tưởng tượng', 2, '2022/05/04'),
+(6, 'monicaluv@gmail.com', N'Hôm qua đặt hôm nay có luôn. Áo đẹp không phàn nàn gì về chất lượng cả.', 5, '2022/05/04'),
+(7, 'maitran21@gmail.com', N'Sản phẩm đáng mua, với giá tiền này thì không có gì để chê cả', 5, '2022/05/12'),
+(8, 'hanguyenanh@gmail.com', N'Hài lòng về chất liệu và giá thành, giao hàng nhanh', 5, '2022/05/04'),
+(10, 'godrick888@gmail.com', N'Vải dày, đường may đẹp, thời gian giao hàng rất nhanh', 4, '2022/05/30'),
+(11, 'maitran21@gmail.com', N'Hàng đẹp, vải khá thoáng, hàng giao nhanh sẽ ủng hộ ', 5, '2022/05/18'),
+(9, 'maitran21@gmail.com', N'Vải nóng, mặc chỗ nào có điều hòa thôi, ra đường thì chịu', 2, '2022/05/15'),
+(20, 'haunguyen@gmail.com', N'Đường chỉ bên tay trái bị lỗi khì nó nhăn khá xấu.', 3, '2022/05/17'),
+(12, 'monicaluv@gmail.com', N'Hàng cotton mặc mát. Giặt cũng không bị nhăn. Hợp cho các bạn đi làm', 5, '2022/05/04'),
+(10, 'maitran21@gmail.com', N'Sản phẩm đáng mua, với giá tiền này thì không có gì để chê cả', 5, '2022/05/12'),
+(11, 'hanguyenanh@gmail.com', N'Nay buồn nên cho 1 sao nha shop =))', 5, '2022/05/04'),
+(13, 'godrick888@gmail.com', N'Váy khá ổn, chất vải mỏng nhưng vẫn không lộ, giao hơi lâu, mặc size S 1m47 37kg oke', 4, '2022/05/30'),
+(12, 'maitran21@gmail.com', N'Sản phẩm tốt đồ đẹp, y như hình, chất lượng cao, sẽ ủng hộ shop lần sau', 5, '2022/05/18'),
+(9, 'maitran21@gmail.com', N'Mua cho mẹ nhân Ngày của Mẹ. Mẹ khen con gái có mắt nhìn :D', 5, '2022/05/15'),
+(8, 'haunguyen@gmail.com', N'Đồ xinh lắm. Vải đẹp. Đường may cẩn thận. K chỉ thừa.', 3, '2022/05/17')
 
 
---------------------------------------------------------------------------
+---tblRating(id [identity], productID, userID, content, star, rateDate)----
 
-with subTable as(
-	SELECT A.productID, productName, image, description, size, color, price, quantity, categoryID, importDate, status, ROW_NUMBER() over(ORDER BY A.productID ASC) as row# 
-	FROM tblProduct A inner join tblProductDetail B on (A.productID = B.productID)
-	) 
-		select productID, productName, image, description, size, color, price, quantity, categoryID, importDate, status, row# 
-		from subTable 
-		where row# between 0 and 10
+GO
 
----------Order by none ( ROW_NUMBER() over(ORDER BY (SELECT NULL)) as row# )
 
-with subTable as(
-	SELECT productID, productName, categoryID, status, ROW_NUMBER() over(ORDER BY productID ASC) as row# 
-	FROM tblProduct
-	) 
-		select productID, productName, categoryID, status, row# 
-		from subTable 
-		where row# between 0 and 10
+INSERT INTO tblOrderStatusUpdate(statusID, orderID, updateDate)
+VALUES
+(1, 1, '2022-05-07 13:43'),
+(2, 1, '2022-05-08 07:33'),
+(3, 1, '2022-05-09 09:22'),
+(4, 1, '2022-05-11 20:13'),
+(5, 1, '2022-05-12 15:53'),
+(1, 2, '2022-05-07 13:43'),
+(2, 2, '2022-05-08 07:33'),
+(3, 2, '2022-05-09 09:22'),
+(4, 2, '2022-05-11 20:13'),
+(1, 3, '2022-05-07 13:43'),
+(2, 3, '2022-05-08 07:33'),
+(3, 3, '2022-05-09 09:22'),
+(1, 4, '2022-05-11 20:13'),
+(1, 5, '2022-05-12 15:53'),
+(2, 5, '2022-05-08 07:33'),
+(3, 5, '2022-05-09 09:22'),
+(1, 6, '2022-05-10 09:22'),
+(2, 6, '2022-05-11 20:13'),
+(1, 7, '2022-05-17 13:43'),
+(1, 8, '2022-05-10 09:22'),
+(1, 9, '2022-05-17 21:13'),
+(2, 9, '2022-05-18 16:43')
 
-select Top 1 COUNT (*) OVER () AS ROW_COUNT from tblProduct
+
+----tblOrderStatusUpdate(ID{identity}, statusID, orderID, updateDate)----
+
+GO
+
+CREATE FUNCTION [dbo].[fuChuyenCoDauThanhKhongDau] (@text nvarchar(max)) 
+RETURNS nvarchar(max) 
+AS 
+BEGIN 	
+SET @text = LOWER(@text) 	
+DECLARE @textLen int = LEN(@text) 	
+IF @textLen > 0 	
+BEGIN 		
+DECLARE @index int = 1 		
+DECLARE @lPos int 		
+DECLARE @SIGN_CHARS nvarchar(100) = N'ăâđêôơưàảãạáằẳẵặắầẩẫậấèẻẽẹéềểễệếìỉĩịíòỏõọóồổỗộốờởỡợớùủũụúừửữựứỳỷỹỵýđð' 		
+DECLARE @UNSIGN_CHARS varchar(100) = 'aadeoouaaaaaaaaaaaaaaaeeeeeeeeeeiiiiiooooooooooooooouuuuuuuuuuyyyyydd' WHILE @index <= @textLen 
+BEGIN 			
+SET @lPos = CHARINDEX(SUBSTRING(@text,@index,1),@SIGN_CHARS) 	
+IF @lPos > 0 	
+BEGIN 			
+SET @text = STUFF(@text,@index,1,SUBSTRING(@UNSIGN_CHARS,@lPos,1)) 		
+END 			
+SET @index = @index + 1
+ 	END 
+END 
+RETURN @text
+ END
+
+
+go
+CREATE VIEW orderReview AS
+SELECT t2.ID, t1.orderID, orderDate, total, t1.userID, t4.fullName, t2.statusID, statusName, [dbo].[fuChuyenCoDauThanhKhongDau](fullName) as [TenKhongDau], trackingID 
+FROM ((tblOrder t1 JOIN tblOrderStatusUpdate t2 ON t1.orderID = t2.orderID) JOIN tblOrderStatus t3 ON t2.statusID = t3.statusID) JOIN tblUsers t4 ON t1.userID = t4.userID;
+
+go
+CREATE VIEW currentStatusRow AS
+SELECT MAX(ID) as ID
+FROM tblOrderStatusUpdate
+GROUP BY orderID
 
 
 
-WITH subTable AS(SELECT productID, productName, categoryID, status, ROW_NUMBER() OVER(ORDER BY productID ASC) as row# FROM tblProduct) SELECT productID, productName, categoryID, status, row# FROM subTable WHERE row# between 0 and 10
-
-
-
-WITH subTable AS(
-				SELECT productID, productName, categoryID, status, ROW_NUMBER() OVER(ORDER BY (SELECT NULL) ASC) as row# 
-				FROM tblProduct
-				WHERE productName LIKE '%a%' AND status=1
-				)
-		SELECT productID, productName, categoryID, status, row# 
-		FROM subTable 
-		WHERE row# BETWEEN 1 AND 5
-
-
-SELECT Top 1 COUNT (*) OVER () AS ROW_COUNT FROM tblProduct WHERE productName LIKE '%v%' AND status=1
