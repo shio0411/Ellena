@@ -16,10 +16,26 @@ public class ProductDTO {
     private int lowStockLimit;
     private String categoryName;
     private boolean status;
-
+    private int categoryID;
+        
     public ProductDTO() {
         
     }
+
+    public ProductDTO(int productID, String productName, String description, Map<String, List<String>> colorImage, Map<List<String>, Integer> colorSizeQuantity, int price, float discount, int lowStockLimit, boolean status, int categoryID) {
+        this.productID = productID;
+        this.productName = productName;
+        this.description = description;
+        this.colorImage = colorImage;
+        this.colorSizeQuantity = colorSizeQuantity;
+        this.price = price;
+        this.discount = discount;
+        this.lowStockLimit = lowStockLimit;
+        this.status = status;
+        this.categoryID = categoryID;
+    }
+
+    
 
     public ProductDTO(int productID, String productName, String description, Map<String, List<String>> colorImage, int price, int quantity, float discount, int lowStockLimit, String categoryName, boolean status) {
         this.productID = productID;
@@ -56,6 +72,14 @@ public class ProductDTO {
         this.lowStockLimit = lowStockLimit;
         this.categoryName = categoryName;
         this.status = status;
+    }
+
+    public int getCategoryID() {
+        return categoryID;
+    }
+
+    public void setCategoryID(int categoryID) {
+        this.categoryID = categoryID;
     }
 
    

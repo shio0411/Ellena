@@ -14,9 +14,10 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Hình ảnh sản phẩm</title>
-        <jsp:include page="meta.jsp" flush="true" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <jsp:include page="meta.jsp" flush="true" />
+
 
 
 
@@ -38,8 +39,9 @@
 
             }
 
-            .nav-pills > li.active > a {
-                background: #fbe2d6;
+            .nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover {
+                color: #fff;
+                background-color: #fbe2d6;
             }
         </style>
         <%ProductDTO product = (ProductDTO) request.getAttribute("PRODUCT_DETAIL");
@@ -87,7 +89,7 @@
                             %>
                             <li class='nav-item <%if (t == 1) { %> active <%}%>'><a data-toggle="tab" href="#<%= color%>"><%= color%></a></li>
                                 <% t++;
-                                } %>                             
+                                    } %>                             
                         </ul>
 
 
@@ -157,6 +159,7 @@
 
                                         document.querySelector('#file-input' + inputID).addEventListener("change", previewImages);
                                     }
+                                }
                             </script>
                             <% j++;
                                 }%>
@@ -165,7 +168,7 @@
                 </div>
             </div>
         </div>
-    <script>
+        <script>
             $(document).ready(function () {
                 $("#myModal").modal();
             });

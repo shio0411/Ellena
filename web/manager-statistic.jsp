@@ -38,7 +38,7 @@
     <div class="wrapper d-flex align-items-stretch">
         <nav class="side-nav color-3">
             <a href="ManagerStatisticController" style="color: #873e23; font-weight: bold;"><i class=""></i>Số liệu thống kê</a>
-            <a href="manager-product.jsp"><i class=""></i>Quản lí sản phẩm</a>
+            <a href="ManagerShowProductController"><i class=""></i>Quản lí sản phẩm</a>
             <a href="manager-order.jsp"><i class=""></i>Quản lí đơn hàng</a>
         </nav>
         <%

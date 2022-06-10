@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import store.utils.DBUtils;
 
 public class ProductDAO {
@@ -57,6 +58,12 @@ public class ProductDAO {
 "WHERE p.productID in (SELECT TOP 20 productID FROM tblProduct ORDER BY productID desc)\n" +
 "ORDER BY p.productID desc";
     private static final String DELETE_IMAGE = "DELETE FROM tblColorImage WHERE image=?";
+    private static final String INSERT_PRODUCT = "INSERT INTO tblProduct(productName, description, price, categoryID, discount, lowStockLimit, status) VALUES(?, ?, ?, ?, ?, ?, ?)";
+    private static final String INSERT_PRODUCT_COLORS = "INSERT INTO tblProductColors(productID, color) VALUES(?, ?)";
+    private static final String GET_PRODUCT_IDENTITY = "SELECT IDENT_CURRENT('tblProduct')";
+    private static final String GET_PRODUCT_COLOR_IDENTITY = "SELECT IDENT_CURRENT('tblProductColors')";
+    private static final String INSERT_COLOR_IMAGES = "INSERT INTO tblColorImage(productColorID, image) VALUES(?, ?)";
+    private static final String INSERT_COLOR_SIZES = "INSERT INTO tblColorSizes(productColorID, size, quantity) VALUES(?, ?, ?)";
     public List<ProductDTO> getAllProduct() throws SQLException {
         List<ProductDTO> listProduct = new ArrayList<>();
         Connection conn = null;
@@ -531,7 +538,7 @@ public class ProductDAO {
             ptm = conn.prepareStatement(DELETE_IMAGE);
             ptm.setString(1, image);
             
-            check = ptm.executeUpdate()>0?true: false;
+            check = ptm.executeUpdate()>0;
             
         } catch (Exception e) {
             e.printStackTrace();
@@ -546,4 +553,86 @@ public class ProductDAO {
         return check;
     }
 
+    public boolean addProduct(ProductDTO product) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DBUtils.getConnection();
+            conn.setAutoCommit(false);
+            ptm = conn.prepareStatement(INSERT_PRODUCT);
+            ptm.setString(1, product.getProductName());
+            ptm.setString(2, product.getDescription());
+            ptm.setInt(3, product.getPrice());
+            ptm.setInt(4, product.getCategoryID());
+            ptm.setDouble(5, product.getDiscount());
+            ptm.setInt(6, product.getLowStockLimit());
+            ptm.setBoolean(7, product.isStatus());
+            check = ptm.executeUpdate()>0;
+            
+            if (check) {
+                ptm = conn.prepareStatement(GET_PRODUCT_IDENTITY);
+                rs = ptm.executeQuery();
+                if (rs.next()){
+                    int productID = rs.getInt(1);
+                    for (String color: product.getColorImage().keySet()) {
+                        ptm = conn.prepareStatement(INSERT_PRODUCT_COLORS);
+                        ptm.setInt(1, productID);
+                        ptm.setString(2, color);
+                        check = ptm.executeUpdate()>0;
+                        if (check) {
+                            ptm = conn.prepareStatement(GET_PRODUCT_COLOR_IDENTITY);
+                            rs = ptm.executeQuery();
+                            if (rs.next()) {
+                                int productColorID = rs.getInt(1);
+                                for (String image: product.getColorImage().get(color)) {
+                                    ptm = conn.prepareStatement(INSERT_COLOR_IMAGES);
+                                    ptm.setInt(1, productColorID);
+                                    ptm.setString(2, image);
+                                    check = ptm.executeUpdate()>0;
+                                    if (!check) break;
+                                }
+                                for (List colorSize: product.getColorSizeQuantity().keySet()){
+                                    if (colorSize.get(0).equals(color)) {
+                                        ptm = conn.prepareStatement(INSERT_COLOR_SIZES);
+                                        ptm.setInt(1, productColorID);
+                                        ptm.setString(3, colorSize.get(1).toString());
+                                        ptm.setInt(2, product.getColorSizeQuantity().get(colorSize));
+                                        check = ptm.executeUpdate()>0;
+                                        if (!check) break;
+                                    }
+                                }
+                                
+                                
+                            }
+                        }
+                    }   
+                }
+            }
+            
+            
+        conn.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            try{
+                if(conn!=null)  conn.rollback();
+            }catch(SQLException se2){
+               se2.printStackTrace();
+            }
+         
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+            conn.setAutoCommit(true);
+        }
+        return check;
+    }
 }

@@ -42,6 +42,11 @@
         <location>/ExceptionHandlerController</location>  
     </error-page>  
     -->
+    
+    <context-param>
+        <param-name>uploadFolder</param-name>
+        <param-value>images/</param-value>
+    </context-param>
     <session-config>
         <session-timeout>
             30
