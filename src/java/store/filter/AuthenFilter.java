@@ -188,7 +188,10 @@ public class AuthenFilter implements Filter {
                             } else if (MN.equals(roleID) && MANAGER_FUNCTION.contains(resource)) {
                                 chain.doFilter(request, response);
                             } else {
-                                res.sendRedirect(HOME_PAGE);
+                                if (CM.equals(roleID))
+                                    res.sendRedirect(HOME_PAGE);
+                                else
+                                    res.sendRedirect("error.jsp");
                             }
 
                         }

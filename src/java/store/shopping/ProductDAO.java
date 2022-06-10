@@ -32,31 +32,31 @@ public class ProductDAO {
             + "AND p.productID = ?\n"
             + "JOIN tblColorSizes cs\n"
             + "ON cs.productColorID = pc.productColorID";
-    private static final String GET_TREND_LIST = "SELECT p.productID, p.productName, p.price, p.discount, i.image\n" +
-"FROM tblProduct p JOIN tblProductColors pc ON p.productID = pc.productID \n" +
-"JOIN tblColorImage i ON pc.productColorID = i.productColorID\n" +
-"INNER JOIN tblOrderDetail d ON p.productID = d.productID \n" +
-"JOIN tblOrder o ON d.orderID = o.orderID  \n" +
-"WHERE DATEDIFF(day,o.orderDate,GETDATE()) < 30 \n" +
-"GROUP BY p.productID, p.productName, p.price, p.discount, i.image\n" +
-"ORDER BY SUM(d.quantity) desc";
-    private static final String GET_BEST_SELLER_LIST = "SELECT p.productID, p.productName, p.price, p.discount, i.image\n" +
-"FROM tblProduct p JOIN tblProductColors pc ON p.productID = pc.productID \n" +
-"JOIN tblColorImage i ON pc.productColorID = i.productColorID\n" +
-"JOIN tblOrderDetail d ON p.productID = d.productID \n" +
-"JOIN tblOrder o ON d.orderID = o.orderID\n" +
-"GROUP BY p.productID, p.productName, p.price, p.discount, i.image\n" +
-"ORDER BY SUM(d.quantity) desc";
-    private static final String GET_SALE_LIST = "SELECT p.productID, p.productName, p.price, p.discount, i.image\n" +
-"FROM tblProduct p JOIN tblProductColors pc ON p.productID = pc.productID \n" +
-"JOIN tblColorImage i ON pc.productColorID = i.productColorID\n" +
-"WHERE p.discount <> 0\n" +
-"ORDER BY p.discount desc";
-    private static final String GET_NEW_ARRIVAL_LIST = "SELECT p.productID, p.productName, p.price, p.discount, i.image\n" +
-"FROM tblProduct p JOIN tblProductColors pc ON p.productID = pc.productID \n" +
-"JOIN tblColorImage i ON pc.productColorID = i.productColorID\n" +
-"WHERE p.productID in (SELECT TOP 20 productID FROM tblProduct ORDER BY productID desc)\n" +
-"ORDER BY p.productID desc";
+    private static final String GET_TREND_LIST = "SELECT p.productID, p.productName, p.price, p.discount, i.image\n"
+            + "FROM tblProduct p JOIN tblProductColors pc ON p.productID = pc.productID \n"
+            + "JOIN tblColorImage i ON pc.productColorID = i.productColorID\n"
+            + "INNER JOIN tblOrderDetail d ON p.productID = d.productID \n"
+            + "JOIN tblOrder o ON d.orderID = o.orderID  \n"
+            + "WHERE DATEDIFF(day,o.orderDate,GETDATE()) < 30 \n"
+            + "GROUP BY p.productID, p.productName, p.price, p.discount, i.image\n"
+            + "ORDER BY SUM(d.quantity) desc";
+    private static final String GET_BEST_SELLER_LIST = "SELECT p.productID, p.productName, p.price, p.discount, i.image\n"
+            + "FROM tblProduct p JOIN tblProductColors pc ON p.productID = pc.productID \n"
+            + "JOIN tblColorImage i ON pc.productColorID = i.productColorID\n"
+            + "JOIN tblOrderDetail d ON p.productID = d.productID \n"
+            + "JOIN tblOrder o ON d.orderID = o.orderID\n"
+            + "GROUP BY p.productID, p.productName, p.price, p.discount, i.image\n"
+            + "ORDER BY SUM(d.quantity) desc";
+    private static final String GET_SALE_LIST = "SELECT p.productID, p.productName, p.price, p.discount, i.image\n"
+            + "FROM tblProduct p JOIN tblProductColors pc ON p.productID = pc.productID \n"
+            + "JOIN tblColorImage i ON pc.productColorID = i.productColorID\n"
+            + "WHERE p.discount <> 0\n"
+            + "ORDER BY p.discount desc";
+    private static final String GET_NEW_ARRIVAL_LIST = "SELECT p.productID, p.productName, p.price, p.discount, i.image\n"
+            + "FROM tblProduct p JOIN tblProductColors pc ON p.productID = pc.productID \n"
+            + "JOIN tblColorImage i ON pc.productColorID = i.productColorID\n"
+            + "WHERE p.productID in (SELECT TOP 20 productID FROM tblProduct ORDER BY productID desc)\n"
+            + "ORDER BY p.productID desc";
     private static final String DELETE_IMAGE = "DELETE FROM tblColorImage WHERE image=?";
     private static final String INSERT_PRODUCT = "INSERT INTO tblProduct(productName, description, price, categoryID, discount, lowStockLimit, status) VALUES(?, ?, ?, ?, ?, ?, ?)";
     private static final String INSERT_PRODUCT_COLORS = "INSERT INTO tblProductColors(productID, color) VALUES(?, ?)";
@@ -64,6 +64,7 @@ public class ProductDAO {
     private static final String GET_PRODUCT_COLOR_IDENTITY = "SELECT IDENT_CURRENT('tblProductColors')";
     private static final String INSERT_COLOR_IMAGES = "INSERT INTO tblColorImage(productColorID, image) VALUES(?, ?)";
     private static final String INSERT_COLOR_SIZES = "INSERT INTO tblColorSizes(productColorID, size, quantity) VALUES(?, ?, ?)";
+
     public List<ProductDTO> getAllProduct() throws SQLException {
         List<ProductDTO> listProduct = new ArrayList<>();
         Connection conn = null;
@@ -297,9 +298,9 @@ public class ProductDAO {
                 float discount = 0;
                 Map<String, List<String>> image = new HashMap<>();
                 List<String> listImage = new ArrayList<>();
-                
+
                 while (rs.next()) {
-                    
+
                     int tempProductID = rs.getInt("productID");
                     String tempProductName = rs.getString("productName");
                     int tempPrice = rs.getInt("price");
@@ -309,7 +310,7 @@ public class ProductDAO {
                         if (productID != 0) {
                             image.put("key", listImage);
                             ProductDTO product = new ProductDTO(productID, productName, "", image, new HashMap<List<String>, Integer>(), price, 0, discount, 0, "", false);
-                            list.add(product);        
+                            list.add(product);
                         }
                         image = new HashMap<>();
                         listImage = new ArrayList<>();
@@ -325,7 +326,7 @@ public class ProductDAO {
                 }
                 image.put("key", listImage);
                 ProductDTO product = new ProductDTO(productID, productName, "", image, new HashMap<List<String>, Integer>(), price, 0, discount, 0, "", false);
-                list.add(product); 
+                list.add(product);
 
             }
         } catch (Exception e) {
@@ -343,6 +344,7 @@ public class ProductDAO {
 
         return list;
     }
+
     public List<ProductDTO> getBestSellerList() throws SQLException {
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -359,9 +361,9 @@ public class ProductDAO {
                 float discount = 0;
                 Map<String, List<String>> image = new HashMap<>();
                 List<String> listImage = new ArrayList<>();
-                
+
                 while (rs.next()) {
-                    
+
                     int tempProductID = rs.getInt("productID");
                     String tempProductName = rs.getString("productName");
                     int tempPrice = rs.getInt("price");
@@ -371,7 +373,7 @@ public class ProductDAO {
                         if (productID != 0) {
                             image.put("key", listImage);
                             ProductDTO product = new ProductDTO(productID, productName, "", image, new HashMap<List<String>, Integer>(), price, 0, discount, 0, "", false);
-                            list.add(product);        
+                            list.add(product);
                         }
                         image = new HashMap<>();
                         listImage = new ArrayList<>();
@@ -387,7 +389,7 @@ public class ProductDAO {
                 }
                 image.put("key", listImage);
                 ProductDTO product = new ProductDTO(productID, productName, "", image, new HashMap<List<String>, Integer>(), price, 0, discount, 0, "", false);
-                list.add(product); 
+                list.add(product);
 
             }
         } catch (Exception e) {
@@ -405,6 +407,7 @@ public class ProductDAO {
 
         return list;
     }
+
     public List<ProductDTO> getSaleList() throws SQLException {
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -421,9 +424,9 @@ public class ProductDAO {
                 float discount = 0;
                 Map<String, List<String>> image = new HashMap<>();
                 List<String> listImage = new ArrayList<>();
-                
+
                 while (rs.next()) {
-                    
+
                     int tempProductID = rs.getInt("productID");
                     String tempProductName = rs.getString("productName");
                     int tempPrice = rs.getInt("price");
@@ -433,7 +436,7 @@ public class ProductDAO {
                         if (productID != 0) {
                             image.put("key", listImage);
                             ProductDTO product = new ProductDTO(productID, productName, "", image, new HashMap<List<String>, Integer>(), price, 0, discount, 0, "", false);
-                            list.add(product);        
+                            list.add(product);
                         }
                         image = new HashMap<>();
                         listImage = new ArrayList<>();
@@ -449,7 +452,7 @@ public class ProductDAO {
                 }
                 image.put("key", listImage);
                 ProductDTO product = new ProductDTO(productID, productName, "", image, new HashMap<List<String>, Integer>(), price, 0, discount, 0, "", false);
-                list.add(product); 
+                list.add(product);
 
             }
         } catch (Exception e) {
@@ -467,6 +470,7 @@ public class ProductDAO {
 
         return list;
     }
+
     public List<ProductDTO> getNewArrivalList() throws SQLException {
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -483,9 +487,9 @@ public class ProductDAO {
                 float discount = 0;
                 Map<String, List<String>> image = new HashMap<>();
                 List<String> listImage = new ArrayList<>();
-                
+
                 while (rs.next()) {
-                    
+
                     int tempProductID = rs.getInt("productID");
                     String tempProductName = rs.getString("productName");
                     int tempPrice = rs.getInt("price");
@@ -495,7 +499,7 @@ public class ProductDAO {
                         if (productID != 0) {
                             image.put("key", listImage);
                             ProductDTO product = new ProductDTO(productID, productName, "", image, new HashMap<List<String>, Integer>(), price, 0, discount, 0, "", false);
-                            list.add(product);        
+                            list.add(product);
                         }
                         image = new HashMap<>();
                         listImage = new ArrayList<>();
@@ -511,7 +515,7 @@ public class ProductDAO {
                 }
                 image.put("key", listImage);
                 ProductDTO product = new ProductDTO(productID, productName, "", image, new HashMap<List<String>, Integer>(), price, 0, discount, 0, "", false);
-                list.add(product); 
+                list.add(product);
 
             }
         } catch (Exception e) {
@@ -529,7 +533,8 @@ public class ProductDAO {
 
         return list;
     }
-     public boolean deleteImage (String image) throws SQLException {
+
+    public boolean deleteImage(String image) throws SQLException {
         boolean check = false;
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -537,9 +542,9 @@ public class ProductDAO {
             conn = DBUtils.getConnection();
             ptm = conn.prepareStatement(DELETE_IMAGE);
             ptm.setString(1, image);
-            
-            check = ptm.executeUpdate()>0;
-            
+
+            check = ptm.executeUpdate() > 0;
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -569,58 +574,64 @@ public class ProductDAO {
             ptm.setDouble(5, product.getDiscount());
             ptm.setInt(6, product.getLowStockLimit());
             ptm.setBoolean(7, product.isStatus());
-            check = ptm.executeUpdate()>0;
-            
+            check = ptm.executeUpdate() > 0;
+
             if (check) {
                 ptm = conn.prepareStatement(GET_PRODUCT_IDENTITY);
                 rs = ptm.executeQuery();
-                if (rs.next()){
+                if (rs.next()) {
                     int productID = rs.getInt(1);
-                    for (String color: product.getColorImage().keySet()) {
+                    for (String color : product.getColorImage().keySet()) {
                         ptm = conn.prepareStatement(INSERT_PRODUCT_COLORS);
                         ptm.setInt(1, productID);
                         ptm.setString(2, color);
-                        check = ptm.executeUpdate()>0;
+                        check = ptm.executeUpdate() > 0;
                         if (check) {
                             ptm = conn.prepareStatement(GET_PRODUCT_COLOR_IDENTITY);
                             rs = ptm.executeQuery();
                             if (rs.next()) {
                                 int productColorID = rs.getInt(1);
-                                for (String image: product.getColorImage().get(color)) {
+                                for (String image : product.getColorImage().get(color)) {
                                     ptm = conn.prepareStatement(INSERT_COLOR_IMAGES);
                                     ptm.setInt(1, productColorID);
                                     ptm.setString(2, image);
-                                    check = ptm.executeUpdate()>0;
-                                    if (!check) break;
-                                }
-                                for (List colorSize: product.getColorSizeQuantity().keySet()){
-                                    if (colorSize.get(0).equals(color)) {
-                                        ptm = conn.prepareStatement(INSERT_COLOR_SIZES);
-                                        ptm.setInt(1, productColorID);
-                                        ptm.setString(3, colorSize.get(1).toString());
-                                        ptm.setInt(2, product.getColorSizeQuantity().get(colorSize));
-                                        check = ptm.executeUpdate()>0;
-                                        if (!check) break;
+                                    check = ptm.executeUpdate() > 0;
+                                    if (!check) {
+                                        break;
                                     }
                                 }
-                                
-                                
+                                if (check) {
+                                    for (List colorSize : product.getColorSizeQuantity().keySet()) {
+                                        if (colorSize.get(0).equals(color)) {
+                                            ptm = conn.prepareStatement(INSERT_COLOR_SIZES);
+                                            ptm.setInt(1, productColorID);
+                                            ptm.setString(2, colorSize.get(1).toString());
+                                            ptm.setInt(3, product.getColorSizeQuantity().get(colorSize));
+                                            check = ptm.executeUpdate() > 0;
+                                            if (!check) {
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+
                             }
                         }
-                    }   
+                    }
                 }
             }
-            
-            
-        conn.commit();
-        } catch (Exception e) {
+
+            conn.commit();
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
-            try{
-                if(conn!=null)  conn.rollback();
-            }catch(SQLException se2){
-               se2.printStackTrace();
+            try {
+                if (conn != null) {
+                    conn.rollback();
+                }
+            } catch (SQLException se2) {
+                se2.printStackTrace();
             }
-         
+
         } finally {
             if (rs != null) {
                 rs.close();
@@ -631,7 +642,7 @@ public class ProductDAO {
             if (conn != null) {
                 conn.close();
             }
-            conn.setAutoCommit(true);
+            
         }
         return check;
     }

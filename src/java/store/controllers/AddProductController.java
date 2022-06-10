@@ -93,17 +93,18 @@ public class AddProductController extends HttpServlet {
                 List<Part> fileParts = request.getParts().stream().filter(part -> colorFile.equals(part.getName()) && part.getSize() > 0).collect(Collectors.toList()); // Retrieves <input type="file" name="files" multiple="true">
                 for (Part image : fileParts) {
                     String fileNamePrefix = VNCharacterUtils.removeAccent(productName).trim().toLowerCase().replace(" ", "-");
-                    fileNamePrefix = "./" + uploadPath + "/" + fileNamePrefix + "-" + VNCharacterUtils.removeAccent(color[i]).toLowerCase().trim();
+                    fileNamePrefix = fileNamePrefix + "-" + VNCharacterUtils.removeAccent(color[i]).toLowerCase().trim();
                     String fileName = FilenameUtils.getName(image.getSubmittedFileName());
                     String fileNameSuffix = "." + FilenameUtils.getExtension(fileName);
                     File file = File.createTempFile(fileNamePrefix, fileNameSuffix, uploadFolder);
-                    images.add(file.getName());
+                    images.add("./" + uploadPath + file.getName());
                     image.write(file.getAbsolutePath());
+                    
                 }
                 colorImage.put(color[i], images);
             }
 
-            ProductDTO product = new ProductDTO(1, productName, description, colorImage, colorSizeQuantity, price, discount, lowStockLimit, true, categoryID);
+            ProductDTO product = new ProductDTO(1, productName, description, colorImage, colorSizeQuantity, price, discount, lowStockLimit, false, categoryID);
             ProductDAO dao = new ProductDAO();
             boolean check = dao.addProduct(product);
             
