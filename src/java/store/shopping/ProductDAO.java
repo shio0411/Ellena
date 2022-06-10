@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javafx.util.Pair;
 import store.utils.DBUtils;
 
 public class ProductDAO {
@@ -64,7 +65,11 @@ public class ProductDAO {
     private static final String GET_PRODUCT_COLOR_IDENTITY = "SELECT IDENT_CURRENT('tblProductColors')";
     private static final String INSERT_COLOR_IMAGES = "INSERT INTO tblColorImage(productColorID, image) VALUES(?, ?)";
     private static final String INSERT_COLOR_SIZES = "INSERT INTO tblColorSizes(productColorID, size, quantity) VALUES(?, ?, ?)";
-
+private static final String GET_NUMBER_OF_RATINGS = "SELECT COUNT(star) AS numberOfRatings FROM tblRating r JOIN tblProduct p ON r.productID = p.productID AND p.productID = ? GROUP BY p.productID";
+    private static final String GET_EACH_STAR_SUM = "SELECT star, COUNT(star) AS numberOfStarRating FROM tblRating r JOIN tblProduct p ON r.productID = p.productID AND p.productID = ? GROUP BY star";
+    private static final String CHECK_SIZE_QUANTITY = "SELECT size, quantity FROM tblProduct p JOIN tblProductColors pc \n"
+            + "ON p.productID = pc.productID AND p.productID=? AND color LIKE ?\n"
+            + "JOIN tblColorSizes cs ON cs.productColorID = pc.productColorID";
     public List<ProductDTO> getAllProduct() throws SQLException {
         List<ProductDTO> listProduct = new ArrayList<>();
         Connection conn = null;
@@ -105,6 +110,87 @@ public class ProductDAO {
         return listProduct;
     }
 
+    public int[] getProductRatingInfo(int productID) throws SQLException {
+        int[] ratingDetails = new int[2]; //first index is average star, second index is number of ratings
+        int numberOfStarRating;
+        int star;
+        int totalStarSum = 0;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_NUMBER_OF_RATINGS);
+                ptm.setInt(1, productID);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    ratingDetails[1] = rs.getInt("numberOfRatings");
+                }
+                ptm = conn.prepareStatement(GET_EACH_STAR_SUM);
+                ptm.setInt(1, productID);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    numberOfStarRating = rs.getInt("numberOfStarRating");
+                    star = rs.getInt("star");
+                    totalStarSum += star * numberOfStarRating;
+                }
+                if (ratingDetails[1] != 0) {
+                    ratingDetails[0] = totalStarSum / ratingDetails[1];
+                } else {
+                    ratingDetails[0] = 0;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return ratingDetails;
+    }
+    
+    public ArrayList<Pair<String, Integer>> checkSizeQuantity(int productID, String color) throws SQLException {
+        ArrayList<Pair<String, Integer>> sizeQuantityList = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(CHECK_SIZE_QUANTITY);
+                ptm.setInt(1, productID);
+                ptm.setString(2, color);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    String size = rs.getString("size");
+                    int quantity = rs.getInt("quantity");
+                    sizeQuantityList.add(new Pair<>(size, quantity));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return sizeQuantityList;
+    }
+    
     public List<ProductDTO> getListProduct(String search, String Status) throws SQLException {
         List<ProductDTO> listProduct = new ArrayList<>();
         Connection conn = null;

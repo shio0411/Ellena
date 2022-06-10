@@ -51,6 +51,11 @@ public class AuthenFilter implements Filter {
         CUSTOMER_FUNCTION.add("ViewHomeController");
         CUSTOMER_FUNCTION.add("contact.jsp");
         CUSTOMER_FUNCTION.add("category.jsp");
+        CUSTOMER_FUNCTION.add("new-arrival.jsp");
+        CUSTOMER_FUNCTION.add("sale-product.jsp");
+        CUSTOMER_FUNCTION.add("trend.jsp");
+        CUSTOMER_FUNCTION.add("customer-product-details.jsp");
+        CUSTOMER_FUNCTION.add("ProductRouteController");
 
         ADMIN_FUNCTION = new ArrayList<>();
         ADMIN_FUNCTION.add("admin.jsp");
@@ -164,7 +169,9 @@ public class AuthenFilter implements Filter {
                                 || uri.contains("sass") || uri.contains("error.jsp") || uri.contains("ViewHomeController")
                                 || uri.contains("register.jsp") || uri.contains("login.jsp") || uri.contains("MainController") || uri.contains("footer.jsp")
                                 || uri.contains("home.jsp") || uri.contains("meta.jsp") || uri.contains("contact.jsp") || uri.contains("category.jsp")
-                                || uri.contains("header.jsp") || uri.contains("new-arrival.jsp") || uri.contains("trend.jsp") || uri.contains("sale-product.jsp") || uri.contains("best-seller.jsp")) {
+                                || uri.contains("header.jsp") || uri.contains("new-arrival.jsp") || uri.contains("trend.jsp") || uri.contains("sale-product.jsp") || uri.contains("best-seller.jsp")
+                                || uri.contains("customer-product-details.jsp") || uri.contains("ProductRouteController")
+                            || uri.contains("CategoryRouteController") || uri.contains("CheckSizeQuantityController")) {
                             chain.doFilter(request, response);
                         } else if (!ADMIN_FUNCTION.contains(resource) && !CUSTOMER_FUNCTION.contains(resource) && !MANAGER_FUNCTION.contains(resource)) {
                             res.sendError(404);
