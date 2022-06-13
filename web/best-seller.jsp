@@ -29,6 +29,18 @@
     </head>
     <body>
         <jsp:include page="header.jsp" flush="true"/>
+        <div class="breadcrumb-option">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="breadcrumb__links">
+                            <a href="./"><i class="fa fa-home"></i> Home</a>
+                            <span>Bán chạy nhất</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <%
         List<ProductDTO> bestSellerList = (List<ProductDTO>) session.getAttribute("BEST_SELLER_LIST");
     %>
@@ -58,7 +70,7 @@
                                         for (String img : product.getColorImage().get("key")) {
                                     %>
                                     <div class="carousel-item">
-                                        <img class="d-block" src="<%=img%>.jpg">
+                                        <img class="d-block" src="<%=img%>.jpg" height="100%" width="100%">
                                     </div>
                                     <%
                                         }
@@ -75,7 +87,7 @@
                               </div>
                                   <%}else{
                                   %>
-                                  <img src="<%=product.getColorImage().get("key").get(0)%>.jpg">
+                                  <img src="<%=product.getColorImage().get("key").get(0)%>.jpg" height="100%" width="100%">
                                   <%
                                    }
                                   %>

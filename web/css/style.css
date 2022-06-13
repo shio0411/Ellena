@@ -3763,24 +3763,21 @@ ol {
     border-bottom: 2px #E5E5E5 solid; 
 }
 
-.color-1{
-    background: #873e23;
-}
+
 .color-2{
-    background: #93A3B1;
+   background: linear-gradient(to top right, #93a3b1 37%, #ccffff 119%);
 }
 .color-3{
-    background: #FCA17D;
+    background: linear-gradient(to top right, #fca17d 7%, #ffcccc 98%);
 }
 .color-4{
-    background: #344055;
+    background: linear-gradient(to top right, #344055 37%, #93a3b1 119%);
 }
-
 .color-5{
     background: #040F0F;
 }
 .color-bg{
-    background: #fbe2d6;
+    background: #ffffff;
 }
 
 .side-nav{
@@ -3788,7 +3785,7 @@ ol {
     max-width: 250px;
 }
 
-.content{
+#content{
     width: 100%;
     min-height: 100vh;
 }
@@ -3807,4 +3804,30 @@ ol {
     font-weight: 600;
     position: relative;
     cursor: pointer;
+}
+
+.text-color-primary{
+    color: #fbe2d6;
+}
+.text-color-dark{
+    color: #873e23;
+}
+.text-color-black{
+    color: #111111;
+}
+
+.bg-color-dark{
+    background: #873e23;
+}
+.bg-color-primary{
+    background: #fbe2d6;
+}
+
+.side-nav a{
+    margin: 6% 6%;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    color: #000000;
+    display: block;
 }

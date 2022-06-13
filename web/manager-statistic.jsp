@@ -21,12 +21,18 @@
     <jsp:include page="meta.jsp" flush="true" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
     </script>
     
 </head>
 
 <body>
+    <%!
+        public String addDot(Integer number){
+        String str = String.format("%,d", number);
+        return str;
+    }
+    %>
     <%
             UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
             String search = request.getParameter("search");
@@ -35,66 +41,103 @@
             }
             
         %>
+       
     <div class="wrapper d-flex align-items-stretch">
-        <nav class="side-nav color-3">
-            <a href="ManagerStatisticController" style="color: #873e23; font-weight: bold;"><i class=""></i>Số liệu thống kê</a>
-            <a href="manager-product.jsp"><i class=""></i>Quản lí sản phẩm</a>
-            <a href="manager-order.jsp"><i class=""></i>Quản lí đơn hàng</a>
+        <nav class="side-nav bg-color-primary d-flex flex-column p-3 shadow"> 
+            <img src="./img/ellena-logo-typo.png" class="img-fluid mx-auto" width="120px"/>
+            <a class="pt-5" href="ManagerStatisticController" style="color: #873e23; font-weight: bold;"><i style="color: #873e23;" class="fa fa-bar-chart fa-lg"></i>Số liệu thống kê</a>
+            <a href="ManagerShowProductController"><i class="fa fa-archive fa-lg"></i>Quản lí sản phẩm</a>
+            <a href="manager.jsp"><i class="fa fa-cart-plus fa-lg"></i>Quản lí đơn hàng</a>
         </nav>
         <%
-                    StatisticDTO today = (StatisticDTO)request.getAttribute("ORDER_STATISTIC_TODAY");                    
-                    %>
-        <div class="content" class="p-4 p-md-5">
-            <div class="container-fluid rounded color-bg p-3">
-                <div class=" justify-content-between">
-                    <div class="media col-sm-3 text-white align-items-center color-4 rounded py-3">
-                        <img class="img-fluid" width="50" src="img/shopping-cart.png" alt="Đơn hàng" />
-                        <div class="media-body text-right">
-                            <h1 class="mt-0 mb-0"><b>
-                                    <%=today.getOrderQuantity()%></b></h1>
-                            <p>Đơn hàng</p>
+            StatisticDTO today = (StatisticDTO)request.getAttribute("ORDER_STATISTIC_TODAY");                    
+        %>
+        <div id="content" class="p-3 px-5">
+            <form action="MainController" method="POST">  
+                <div class="row ml-5">
+                <h4 class="col-6">
+                    <b>Xin chào, </b>
+                        <a data-toggle="dropdown" role="button"><b class="text-color-dark"><%= loginUser.getFullName()%></b></a>
+                    <div class="dropdown-menu nav-tabs" role="tablist">
+                    <button class="dropdown-item btn" role="tab" type="button"><a class="text-dark" href="my-profile.jsp">Thông tin tài khoản</a></button>
+                    <input class=" dropdown-item btn" type="submit" name="action" value="Logout"/>
+                </div>
+                </h4>
+                
+           
+                </div>
+            </form>
+            <hr class="mx-5 mb-5"/>
+            <div class="container-fluid rounded p-3 mb-4 color-bg">
+                <h4 class="mb-4 text-center"><b>Thống kê hôm nay</b></h4>
+                <div class="d-flex flex-column flex-md-row justify-content-md-around">
+                    <div class="card col-12 col-md-3 color-4 shadow  text-white rounded border-0">
+                        <div class="row no-gutters">
+                            <div class="col-4 text-center">
+                                <img class="mt-4" height="50px" src="img/shopping-cart.png" alt="Đơn hàng" />
+                            </div>
+                            <div class="col-8 text-right">
+                                <h2 class="mt-4 mb-0 mr-4"><b>
+                                        <%=today.getOrderQuantity()%>
+                                    </b></h2>
+                                <p class="mb-4 mr-4">Đơn hàng</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="media col-sm-3 text-white align-items-center color-2 rounded py-3 mt-0">
-                        <img class="img-fluid" width="50" src="img/coins.png" alt="Đơn hàng" />
-                        <div class="media-body text-right">
-                            <h1 class="mt-0 mb-0"><b>
-                                    <%=today.getIncome()%></b></h1>
-                            <p>Doanh thu</p>
+                    <div class="card col-12 col-md-3 text-white shadow  color-2 rounded border-0">
+                        <div class="row no-gutters">
+                            <div class="col-4 text-center">
+                                <img class="mt-4" height="50px" src="img/coins.png" alt="Đơn hàng" />
+                            </div>
+                            <div class="col-8 text-right">
+                                <h2 class="mt-4 mb-0 mr-4"><b>
+                                        <%=today.getIncome()%>
+                                    </b></h2>
+                                <p class="mb-4 mr-4">Doanh thu</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="media col-sm-3 text-white align-items-center color-3 rounded py-3 mt-0">
-                        <img class="img-fluid" width="50" src="img/clothes.png" alt="Đơn hàng" />
-                        <div class="media-body text-right">
-                            <h1 class="mt-0 mb-0"><b>
-                                    <%=today.getProductQuantity()%></b></h1>
-                            <p>Sản phẩm bán ra</p>
+                    <div class="card col-12 col-md-3 text-white shadow  color-3 rounded border-0">
+                        <div class="row no-gutters">
+                            <div class="col-4 text-center">
+                                <img class="mt-4" height="50px" src="img/clothes.png" alt="Đơn hàng" />
+                            </div>
+                            <div class="col-8 text-right">
+                                <h2 class="mt-4 mb-0 mr-4"><b>
+                                        <%=today.getProductQuantity()%>
+                                    </b></h2>
+                                <p class="mb-4 mr-4">Sản phẩm</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="container-fluid nav-item dropdown">
-                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button">Thời gian</a>
-                <div class="dropdown-menu nav-tabs" role="tablist">
-                    <button class="dropdown-item nav-link btn btn-light" role="tab" type="button" data-toggle="tab" data-target="#chart1">7 ngày gần đây</button>
-                    <button class="dropdown-item nav-link btn btn-light" role="tab" type="button" data-toggle="tab" data-target="#chart2">4 tuần gần đây</button>
-                    <button class="dropdown-item nav-link btn btn-light" role="tab" type="button" data-toggle="tab" data-target="#chart3">12 tháng gần đây</button>
+            <hr class="mx-5 mb-5"/>
+            <div class="rounded color-bg p-3 tab-content mb-4">
+                <div class="container-fluid nav-item p-0 pr-4">
+                    <h4 class="mb-4 text-center"><b> Số lượng đơn hàng, doanh thu và sản phẩm bán được</b></h4>
+                    <div class="text-right" role="tablist">
+                        <button class="btn btn-light border" role="tab" type="button" data-toggle="tab" data-target="#chart1">7
+                            ngày</button>
+                        <button class="btn btn-light border" role="tab" type="button" data-toggle="tab" data-target="#chart2">4
+                            tuần</button>
+                        <button class=" btn btn-light border" role="tab" type="button" data-toggle="tab" data-target="#chart3">12
+                            tháng</button>
+                    </div>
                 </div>
+             
+                    <div id="chart1" class="col-10 tab-pane fade active in m-auto" role="tabpanel">
+                        <canvas id="7DayChart"></canvas>
+                    </div>
+                    <div id="chart2" class="col-10 tab-pane fade m-auto" role="tabpanel">
+                        <canvas id="4WeekChart"></canvas>
+                    </div>
+                    <div id="chart3" class="col-10 tab-pane fade m-auto" role="tabpanel">
+                        <canvas id="1YearChart"></canvas>
+                    </div>
+                
             </div>
-            <div class="container-fluid tab-content">
-                <div id="chart1" class="tab-pane fade active in" role="tabpanel">
-                    <h3>Số liệu 7 ngày gần đây</h3>
-                    <canvas id="7DayChart"></canvas>
-                </div>
-                <div id="chart2" class="tab-pane fade" role="tabpanel">
-                    <h3>Số liệu 4 tuần gần đây</h3>
-                    <canvas id="4WeekChart"></canvas>
-                </div>
-                <div id="chart3" class="tab-pane fade" role="tabpanel">
-                    <h3>Số liệu 12 tháng gần đây</h3>
-                    <canvas id="1YearChart"></canvas>
-                </div>
-            </div>
+            <hr class="mx-5 mb-5"/>
             <%
                     Map<String, StatisticDTO> orderStatistic7Day = (Map<String, StatisticDTO>) request.getAttribute("ORDER_STATISTIC_7DAY");
                     Map<String, StatisticDTO> orderStatistic4Week = (Map<String, StatisticDTO>) request.getAttribute("ORDER_STATISTIC_4WEEK");
@@ -112,49 +155,49 @@
                     Collections.sort(list1year);                            
 
                 %>
-            <div class="container-fluid">
-                <h2>Sản phẩm bán chạy nhất:</h2>
-                <div class="row row-content align-items-center">
+            <div class="container-fluid rounded color-bg p-3 mb-4">
+                <h4 class="text-center"><b>Sản phẩm bán chạy nhất</b></h4>
+                <div class="row p-4">
                     <%
                 int cnt = 1;
                 for(Pair<String, StatisticDTO> p : bestSeller){
                     %>
-                    <div class="card rounded ml-2 py-5 col-12 col-md-2">
-                        <div class="card-header ">
-                            <span class="badge badge-primary">
-                                <%=cnt++%></span>
-                            <h4 class=""><b>
-                                    <%=p.getKey()%></b></h4>
-                        </div>
-                        <div class="card-body">
-                            <div>Mã sản phẩm:
-                                <%=p.getValue().getOrderQuantity()%>
+                    <div class="card ml-4 p-0 col-12 col-sm border-0 shadow rounded">
+                        <div class="card-block text-center">
+                            <div class="color-<%=2+(cnt+1)%3%> text-white p-2 mb-3">
+                                <h3><b><%=p.getValue().getIncome()%></b></h3>
+                                <span>Sản phẩm bán được</span>
                             </div>
-                            <div>Số lượng bán được:
-                                <%=p.getValue().getIncome()%>
+                            <div class="px-3 ">
+                                <h6 class="card-title mb-2"><b><%cnt++;%><%=p.getKey()%></b></h6>
+                                <p class="card-text mb-0">Mã sản phẩm: <%=p.getValue().getOrderQuantity()%></p>
                             </div>
                         </div>
                     </div>
+                           
                     <%
                 }
             %>
                 </div>
-                <h2>Sản phẩm có doanh thu cao nhất:</h2>
-                <div class="row row-content align-items-center">
+            </div>
+            <hr class="mx-5 mb-5"/>
+            <div class="container-fluid rounded color-bg p-3 mb-4">
+                <h4 class="text-center"><b>Sản phẩm có doanh thu cao nhất</b></h4>
+                <div class="row p-4">
                     <%
                 cnt = 1;
                 for(Pair<String, StatisticDTO> p : bestIncome){
                     %>
-                    <div class="col-12 col-sm-2">
-                        <span class="badge badge-primary">
-                            <%=cnt++%></span>
-                        <h4><b>
-                                <%=p.getKey()%></b></h4>
-                        <div>Mã sản phẩm:
-                            <%=p.getValue().getOrderQuantity()%>
-                        </div>
-                        <div>Doanh thu:
-                            <%=p.getValue().getProductQuantity()%>
+                    <div class="card ml-4 p-0 col-12 col-sm rounded border-0 shadow">
+                        <div class="card-block text-center">
+                            <div class="color-<%=2+(cnt+1)%3%> text-white p-2 mb-3">
+                                <h4><b><%=addDot(p.getValue().getProductQuantity())%>đ</b></h4>
+                                <span>Doanh thu</span>
+                            </div>
+                                <div class="px-3 ">
+                            <h6 class="card-title mb-2"><b><%cnt++;%><%=p.getKey()%></b></h6>
+                            <p class="card-text mb-0">Mã sản phẩm: <%=p.getValue().getOrderQuantity()%></p>
+                                </div>
                         </div>
                     </div>
                     <%
@@ -168,6 +211,24 @@
     /*$("[data-target="#30DayChart"]").on       $("#orderchat")*/
     </script>
     <script type="text/javascript">
+        var canvas = document.getElementById('7DayChart');
+        var ctx = canvas.getContext('2d');
+
+        // Create a linear gradient
+        // The start gradient point is at x=20, y=0
+        // The end gradient point is at x=220, y=0
+        var gradient1 = ctx.createLinearGradient(500,0, 500, 500);
+        var gradient2 = ctx.createLinearGradient(500,0, 500, 500);
+        var gradient3 = ctx.createLinearGradient(500,0, 500, 500);
+        // Add three color stops
+        gradient1.addColorStop(0, '#344055');
+        gradient1.addColorStop(1, '#93a3b1');
+
+        gradient2.addColorStop(0.5, '#93a3b1');
+        gradient2.addColorStop(1, '#ccffff');
+
+        gradient3.addColorStop(0, '#fca17d');
+        gradient3.addColorStop(1, '#ffcccc');
     var ctx = document.getElementById("7DayChart");
     var myChart = new Chart(ctx, {
         type: 'bar',
@@ -178,39 +239,39 @@
                 <%}%>
             ],
             datasets: [{
-                    label: 'Order quantity',
+                    label: 'Đơn hàng',
                     data: [<%for (String key : list7day) {
                                         %>
                         "<%=orderStatistic7Day.get(key).getOrderQuantity()%>",
                         <%}%>
                     ],
-                    backgroundColor: "#873e23",
+                    backgroundColor: gradient1,
                     borderColor: [
 
                     ],
                     borderWidth: 1
                 },
                 {
-                    label: 'income',
+                    label: 'Doanh thu(VNĐ)',
                     data: [<%for (String key : list7day) {
                                         %>
                         "<%=orderStatistic7Day.get(key).getIncome()%>",
                         <%}%>
                     ],
-                    backgroundColor: "#93A3B1",
+                    backgroundColor: gradient2,
                     borderColor: [
 
                     ],
                     borderWidth: 1
                 },
                 {
-                    label: 'Product quantity',
+                    label: 'Số sản phẩm',
                     data: [<%for (String key : list7day) {
                                         %>
                         "<%=orderStatistic7Day.get(key).getProductQuantity()%>",
                         <%}%>
                     ],
-                    backgroundColor: "#FCA17D",
+                    backgroundColor: gradient3,
                     borderColor: [
 
                     ],
@@ -230,13 +291,44 @@
 
                 }]
             },
-            interaction: {
-                mode: 'point'
+            legend:{
+                    onClick:function(t,e){
+                    var index =e.datasetIndex,o=this.chart;
+                    for(n=0,i=(o.data.datasets||[]).length;n<i;++n){
+                        if(n!=index){
+                        a=o.getDatasetMeta(n);
+                        a.hidden=true;
+                    }else{
+                        a=o.getDatasetMeta(n);
+                        a.hidden=false;
+                    }
+                    o.update();
+                    }
+                    
+                }
             }
         }
     });
     </script>
     <script type="text/javascript">
+    var canvas = document.getElementById('4WeekChart');
+    var ctx = canvas.getContext('2d');
+
+    // Create a linear gradient
+    // The start gradient point is at x=20, y=0
+    // The end gradient point is at x=220, y=0
+    var gradient1 = ctx.createLinearGradient(500,0, 500, 500);
+    var gradient2 = ctx.createLinearGradient(500,0, 500, 500);
+    var gradient3 = ctx.createLinearGradient(500,0, 500, 500);
+    // Add three color stops
+    gradient1.addColorStop(0, '#344055');
+    gradient1.addColorStop(1, '#93a3b1');
+
+    gradient2.addColorStop(0.5, '#93a3b1');
+    gradient2.addColorStop(1, '#ccffff');
+
+    gradient3.addColorStop(0, '#fca17d');
+    gradient3.addColorStop(1, '#ffcccc');
     var ctx = document.getElementById("4WeekChart");
     var myChart = new Chart(ctx, {
         type: 'bar',
@@ -247,39 +339,39 @@
                 <%}%>
             ],
             datasets: [{
-                    label: 'Order quantity',
+                    label: 'Đơn hàng',
                     data: [<%for (String key : list4week) {
                                         %>
                         "<%=orderStatistic4Week.get(key).getOrderQuantity()%>",
                         <%}%>
                     ],
-                    backgroundColor: "#873e23",
+                    backgroundColor: gradient1,
                     borderColor: [
 
                     ],
                     borderWidth: 1
                 },
                 {
-                    label: 'income',
+                    label: 'Doanh thu(VNĐ)',
                     data: [<%for (String key : list4week) {
                                         %>
                         "<%=orderStatistic4Week.get(key).getIncome()%>",
                         <%}%>
                     ],
-                    backgroundColor: "#93A3B1",
+                    backgroundColor: gradient2,
                     borderColor: [
 
                     ],
                     borderWidth: 1
                 },
                 {
-                    label: 'Product quantity',
+                    label: 'Số sản phẩm',
                     data: [<%for (String key : list4week) {
                                         %>
                         "<%=orderStatistic4Week.get(key).getProductQuantity()%>",
                         <%}%>
                     ],
-                    backgroundColor: "#FCA17D",
+                    backgroundColor: gradient3,
                     borderColor: [
 
                     ],
@@ -298,76 +390,129 @@
                 xAxes: [{
 
                 }]
+            },
+                legend:{
+                    onClick:function(t,e){
+                    var index =e.datasetIndex,o=this.chart;
+                    for(n=0,i=(o.data.datasets||[]).length;n<i;++n){
+                        if(n!=index){
+                        a=o.getDatasetMeta(n);
+                        a.hidden=true;
+                    }else{
+                        a=o.getDatasetMeta(n);
+                        a.hidden=false;
+                    }
+                    o.update();
+                    }
+                    
+                }
             }
         }
     });
     </script>
     <script type="text/javascript">
-    var ctx = document.getElementById("1YearChart");
-    var myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: [<%for (String key : list1year) {
-                            %>
-                "<%=key%>",
-                <%}%>
-            ],
-            datasets: [{
-                    label: 'Order quantity',
-                    data: [<%for (String key : list1year) {
-                                        %>
-                        "<%=orderStatistic1Year.get(key).getOrderQuantity()%>",
-                        <%}%>
-                    ],
-                    backgroundColor: "#873e23",
-                    borderColor: [
+        var canvas = document.getElementById('1YearChart');
+        var ctx = canvas.getContext('2d');
 
-                    ],
-                    borderWidth: 1
-                },
-                {
-                    label: 'income',
-                    data: [<%for (String key : list1year) {
-                                        %>
-                        "<%=orderStatistic1Year.get(key).getIncome()%>",
-                        <%}%>
-                    ],
-                    backgroundColor: "#93A3B1",
-                    borderColor: [
+        // Create a linear gradient
+        // The start gradient point is at x=20, y=0
+        // The end gradient point is at x=220, y=0
+        var gradient1 = ctx.createLinearGradient(500,0, 500, 500);
+        var gradient2 = ctx.createLinearGradient(500,0, 500, 500);
+        var gradient3 = ctx.createLinearGradient(500,0, 500, 500);
+        // Add three color stops
+        gradient1.addColorStop(0, '#344055');
+        gradient1.addColorStop(1, '#93a3b1');
+        
+        gradient2.addColorStop(0.5, '#93a3b1');
+        gradient2.addColorStop(1, '#ccffff');
+        
+        gradient3.addColorStop(0, '#fca17d');
+        gradient3.addColorStop(1, '#ffcccc');
+        
+        var ctx = document.getElementById("1YearChart");
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [<%for (String key : list1year) {
+                                %>
+                    "<%=key%>",
+                    <%}%>
+                ],
+                datasets: [{
+                        label: 'Đơn hàng',
+                        data: [<%for (String key : list1year) {
+                                            %>
+                            "<%=orderStatistic1Year.get(key).getOrderQuantity()%>",
+                            <%}%>
+                        ],
+                        backgroundColor: gradient1,
+                        borderColor: [
 
-                    ],
-                    borderWidth: 1
-                },
-                {
-                    label: 'Product quantity',
-                    data: [<%for (String key : list1year) {
-                                        %>
-                        "<%=orderStatistic1Year.get(key).getProductQuantity()%>",
-                        <%}%>
-                    ],
-                    backgroundColor: "#FCA17D",
-                    borderColor: [
+                        ],
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Doanh thu(VNĐ)',
+                        data: [<%for (String key : list1year) {
+                                            %>
+                            "<%=orderStatistic1Year.get(key).getIncome()%>",
+                            <%}%>
+                        ],
+                        backgroundColor: gradient2,
+                        borderColor: [
 
-                    ],
-                    borderWidth: 1
-                }
-            ]
-        },
-        options: {
-            scales: {
+                        ],
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Số sản phẩm',
+                        data: [<%for (String key : list1year) {
+                                            %>
+                            "<%=orderStatistic1Year.get(key).getProductQuantity()%>",
+                            <%}%>
+                        ],
+                        backgroundColor: gradient3,
+                        borderColor: [
 
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
+                        ],
+                        borderWidth: 1
                     }
-                }],
-                xAxes: [{
+                ]
+            },
+        
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }],
+                    xAxes: [{
 
-                }]
-            }
-        }
-    });
+                    }]
+                },
+                legend:{
+                    onClick:function(t,e){
+                    var index =e.datasetIndex,o=this.chart;
+                    for(n=0,i=(o.data.datasets||[]).length;n<i;++n){
+                        if(n!=index){
+                        a=o.getDatasetMeta(n);
+                        a.hidden=true;
+                    }else{
+                        a=o.getDatasetMeta(n);
+                        a.hidden=false;
+                    }
+                    o.update();
+                    }
+                    
+                }
+                }
+            }             
+            
+        });
     </script>
+    
 </body>
 
 </html>
