@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import javafx.util.Pair;
 import store.utils.DBUtils;
 
@@ -58,6 +57,10 @@ public class ProductDAO {
             + "JOIN tblColorImage i ON pc.productColorID = i.productColorID\n"
             + "WHERE p.productID in (SELECT TOP 20 productID FROM tblProduct ORDER BY productID desc)\n"
             + "ORDER BY p.productID desc";
+    private static final String GET_SEARCH_CATALOG = "SELECT p.productID, p.productName, p.price, p.discount, i.image\n"
+            + "FROM tblProduct p JOIN tblProductColors pc ON p.productID = pc.productID \n"
+            + "JOIN tblColorImage i ON pc.productColorID = i.productColorID\n"
+            + "WHERE dbo.fuChuyenCoDauThanhKhongDau(p.productName) LIKE ?";
     private static final String DELETE_IMAGE = "DELETE FROM tblColorImage WHERE image=?";
     private static final String INSERT_PRODUCT = "INSERT INTO tblProduct(productName, description, price, categoryID, discount, lowStockLimit, status) VALUES(?, ?, ?, ?, ?, ?, ?)";
     private static final String INSERT_PRODUCT_COLORS = "INSERT INTO tblProductColors(productID, color) VALUES(?, ?)";
@@ -65,11 +68,12 @@ public class ProductDAO {
     private static final String GET_PRODUCT_COLOR_IDENTITY = "SELECT IDENT_CURRENT('tblProductColors')";
     private static final String INSERT_COLOR_IMAGES = "INSERT INTO tblColorImage(productColorID, image) VALUES(?, ?)";
     private static final String INSERT_COLOR_SIZES = "INSERT INTO tblColorSizes(productColorID, size, quantity) VALUES(?, ?, ?)";
-private static final String GET_NUMBER_OF_RATINGS = "SELECT COUNT(star) AS numberOfRatings FROM tblRating r JOIN tblProduct p ON r.productID = p.productID AND p.productID = ? GROUP BY p.productID";
+    private static final String GET_NUMBER_OF_RATINGS = "SELECT COUNT(star) AS numberOfRatings FROM tblRating r JOIN tblProduct p ON r.productID = p.productID AND p.productID = ? GROUP BY p.productID";
     private static final String GET_EACH_STAR_SUM = "SELECT star, COUNT(star) AS numberOfStarRating FROM tblRating r JOIN tblProduct p ON r.productID = p.productID AND p.productID = ? GROUP BY star";
     private static final String CHECK_SIZE_QUANTITY = "SELECT size, quantity FROM tblProduct p JOIN tblProductColors pc \n"
             + "ON p.productID = pc.productID AND p.productID=? AND color LIKE ?\n"
             + "JOIN tblColorSizes cs ON cs.productColorID = pc.productColorID";
+
     public List<ProductDTO> getAllProduct() throws SQLException {
         List<ProductDTO> listProduct = new ArrayList<>();
         Connection conn = null;
@@ -156,7 +160,7 @@ private static final String GET_NUMBER_OF_RATINGS = "SELECT COUNT(star) AS numbe
         }
         return ratingDetails;
     }
-    
+
     public ArrayList<Pair<String, Integer>> checkSizeQuantity(int productID, String color) throws SQLException {
         ArrayList<Pair<String, Integer>> sizeQuantityList = new ArrayList<>();
         Connection conn = null;
@@ -190,7 +194,7 @@ private static final String GET_NUMBER_OF_RATINGS = "SELECT COUNT(star) AS numbe
         }
         return sizeQuantityList;
     }
-    
+
     public List<ProductDTO> getListProduct(String search, String Status) throws SQLException {
         List<ProductDTO> listProduct = new ArrayList<>();
         Connection conn = null;
@@ -619,6 +623,70 @@ private static final String GET_NUMBER_OF_RATINGS = "SELECT COUNT(star) AS numbe
 
         return list;
     }
+    
+    public List<ProductDTO> getSearchCatalog(String search) throws SQLException {
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        List<ProductDTO> list = new ArrayList<>();
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_SEARCH_CATALOG);
+                ptm.setString(1, "%" + search + "%");
+                rs = ptm.executeQuery();
+                int productID = 0;
+                String productName = "";
+                int price = 0;
+                float discount = 0;
+                Map<String, List<String>> image = new HashMap<>();
+                List<String> listImage = new ArrayList<>();
+
+                while (rs.next()) {
+
+                    int tempProductID = rs.getInt("productID");
+                    String tempProductName = rs.getString("productName");
+                    int tempPrice = rs.getInt("price");
+                    float tempDiscount = rs.getFloat("discount");
+                    String tempImage = rs.getString("image");
+                    if (tempProductID != productID) {
+                        if (productID != 0) {
+                            image.put("key", listImage);
+                            ProductDTO product = new ProductDTO(productID, productName, "", image, new HashMap<List<String>, Integer>(), price, 0, discount, 0, "", false);
+                            list.add(product);
+                        }
+                        image = new HashMap<>();
+                        listImage = new ArrayList<>();
+                        listImage.add(tempImage);
+                        productID = tempProductID;
+                        productName = tempProductName;
+                        price = tempPrice;
+                        discount = tempDiscount;
+                    } else {
+                        listImage.add(tempImage);
+                    }
+
+                }
+                image.put("key", listImage);
+                ProductDTO product = new ProductDTO(productID, productName, "", image, new HashMap<List<String>, Integer>(), price, 0, discount, 0, "", false);
+                list.add(product);
+
+            }
+        } catch (Exception e) {
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+
+        return list;
+    }
 
     public boolean deleteImage(String image) throws SQLException {
         boolean check = false;
@@ -728,7 +796,7 @@ private static final String GET_NUMBER_OF_RATINGS = "SELECT COUNT(star) AS numbe
             if (conn != null) {
                 conn.close();
             }
-            
+
         }
         return check;
     }
