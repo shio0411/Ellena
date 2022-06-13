@@ -87,6 +87,11 @@ public class MainController extends HttpServlet {
     private static final String DELETE_IMAGE = "DeleteImage";
     private static final String DELETE_IMAGE_CONTROLLER = "DeleteImageController";
     
+    private static final String SEARCH_ORDER = "SearchOrder";
+    private static final String SEARCH_ORDER_CONTROLLER = "SearchOrderController";
+    private static final String UPDATE_ORDER = "UpdateOrder";
+    private static final String UPDATE_ORDER_CONTROLLER = "UpdateOrderController";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
@@ -203,6 +208,11 @@ public class MainController extends HttpServlet {
                         break;
                     case DELETE_IMAGE:
                         url = DELETE_IMAGE_CONTROLLER;
+                    case SEARCH_ORDER:
+                        url = SEARCH_ORDER_CONTROLLER;
+                        break;
+                    case UPDATE_ORDER:
+                        url = UPDATE_ORDER_CONTROLLER;
                         break;
                     default:
                         break;

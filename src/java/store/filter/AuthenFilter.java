@@ -80,6 +80,10 @@ public class AuthenFilter implements Filter {
         MANAGER_FUNCTION.add("add-variant.jsp");
         MANAGER_FUNCTION.add("AddProductController");
         MANAGER_FUNCTION.add("view-product-images.jsp");
+        MANAGER_FUNCTION.add("ManagerShowOrderController");
+        MANAGER_FUNCTION.add("UpdateOrderController");
+        MANAGER_FUNCTION.add("SearchOrderController");
+        MANAGER_FUNCTION.add("manager-order.jsp");
     }
 
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
@@ -172,7 +176,7 @@ public class AuthenFilter implements Filter {
                                 || uri.contains("header.jsp") || uri.contains("new-arrival.jsp") || uri.contains("trend.jsp") || uri.contains("sale-product.jsp") || uri.contains("best-seller.jsp")
                                 || uri.contains("customer-product-details.jsp") || uri.contains("ProductRouteController")
                                 || uri.contains("CategoryRouteController") || uri.contains("CheckSizeQuantityController")
-                                || uri.contains("search-catalog.jsp") ) {
+                                || uri.contains("search-catalog.jsp") || uri.contains("LoginGoogleController") || uri.contains("LoginFacebookController")) {
                             chain.doFilter(request, response);
                         } else if (!ADMIN_FUNCTION.contains(resource) && !CUSTOMER_FUNCTION.contains(resource) && !MANAGER_FUNCTION.contains(resource)) {
                             res.sendError(404);
