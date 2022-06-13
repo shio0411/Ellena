@@ -14,10 +14,11 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Hình ảnh sản phẩm</title>
-        <jsp:include page="meta.jsp" flush="true" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <jsp:include page="meta.jsp" flush="true" />
 
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 
     </head>
@@ -38,8 +39,28 @@
 
             }
 
-            .nav-pills > li.active > a {
-                background: #fbe2d6;
+            .nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover {
+                color: #fff;
+                background-color: #fbe2d6;
+            }
+            .add-image-frame{
+                width: 280px;
+                height: 280px;
+                border-radius: 5px;
+                border:  2px dashed #d5d5e1;
+                color: #c8c9dd;
+                font-size: 0.9rem;
+                font-weight: 500;
+                position: relative;
+                background: #dfe3f259;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                user-select: none;
+                margin-top: 20px;
+            }
+            .add-image-frame input{
+                display: none;
             }
         </style>
         <%ProductDTO product = (ProductDTO) request.getAttribute("PRODUCT_DETAIL");
@@ -87,7 +108,7 @@
                             %>
                             <li class='nav-item <%if (t == 1) { %> active <%}%>'><a data-toggle="tab" href="#<%= color%>"><%= color%></a></li>
                                 <% t++;
-                                } %>                             
+                                    } %>                             
                         </ul>
 
 
@@ -99,73 +120,78 @@
                             %>
                             <div id="<%= color%>" class="tab-pane fade <%if (j == 1) { %> in active <%}%>">
                                 <%  for (int k = 0; k < product.getColorImage().get(color).size(); k++) {%>
+
                                 <div class='img-wrap'>
 
                                     <button class="close" type="button" data-toggle="modal" data-target="#<%=color%>Modal<%=k%>">&times;</button>
                                     <img style="height: 280px; width: 280px;" src="<%= product.getColorImage().get(color).get(k)%>.jpg"/>
-                                    <div class="modal fade" id="<%=color%>Modal<%=k%>" role="dialog">
-                                        <div class="modal-dialog">
+                                </div>
+                                <div class="modal fade" id="<%=color%>Modal<%=k%>" role="dialog">
+                                    <div class="modal-dialog">
 
-                                            <!-- Modal content-->
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h4 class="modal-title">Xoá ảnh</h4>
-                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <!-- Modal content-->
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Xoá ảnh</h4>
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
 
-                                                </div>
-                                                <div class="modal-body">
-                                                    <p>Bạn có chắc muốn xoá ảnh này?</p>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type='button' class='btn btn-default' data-dismiss="modal">Huỷ</button>
-                                                    <a href="MainController?action=DeleteImage&productID=<%=product.getProductID()%>&imageName=<%= product.getColorImage().get(color).get(k)%>"><button type="button" class="btn btn-danger">Xoá</button></a>
-                                                </div>
                                             </div>
-
+                                            <div class="modal-body">
+                                                <p>Bạn có chắc muốn xoá ảnh này?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type='button' class='btn btn-default' data-dismiss="modal">Huỷ</button>
+                                                <a href="MainController?action=DeleteImage&productID=<%=product.getProductID()%>&imageName=<%= product.getColorImage().get(color).get(k)%>"><button type="button" class="btn btn-danger">Xoá</button></a>
+                                            </div>
                                         </div>
+
                                     </div>
                                 </div>
+
 
 
                                 <%++imagesNumber;%>
 
                                 <%}%>
-
-                                <a href="MainController?action=ViewImages&productID=<%=product.getProductID()%>"<button id="add" type="button" onClick="checkImages()">Add more images</button></a>
-
-
+                                <div class="add-image-frame">
+                                    <span class="inner">
+                                        <i class="fa fa-file-image-o fa-5x" aria-hidden="true"></i>
+                                        <input accept="image/*" type="file" name="files" onChange="previewImages(event)"/>
+                                </div>
                             </div>
-                            <script>
-                                function checkImages() {
-                                    if (<%=imagesNumber%> >= 3) {
-                                        return alert("Du roi nha!");
-                                    } else {
-                                        var container = document.createElement("div");
-                                        var input = document.createElement("input");
-                                        input.setAttribute("accept", "image/*");
-                                        input.setAttribute("type", "file");
-                                        input.setAttribute("name", "files");
-                                        input.setAttribute("id", "file-input" + inputID.toString());
-                                        input.setAttribute("class", "file-input");
-
-                                        var preview = document.createElement("div");
-                                        preview.setAttribute("id", "preview" + inputID.toString());
-
-                                        container.appendChild(input);
-                                        container.appendChild(preview);
-                                        document.getElementById(<%=color%>).appendChild(container);
-
-                                        document.querySelector('#file-input' + inputID).addEventListener("change", previewImages);
-                                    }
-                            </script>
-                            <% j++;
-                                }%>
                         </div>
-                    </div> 
-                </div>
+                        <script>
+                            function checkImages() {
+                                if (<%=imagesNumber%> >= 3) {
+                                    return alert("Du roi nha!");
+                                } else {
+                                    var container = document.createElement("div");
+                                    var input = document.createElement("input");
+                                    input.setAttribute("accept", "image/*");
+                                    input.setAttribute("type", "file");
+                                    input.setAttribute("name", "files");
+                                    input.setAttribute("id", "file-input" + inputID.toString());
+                                    input.setAttribute("class", "file-input");
+
+                                    var preview = document.createElement("div");
+                                    preview.setAttribute("id", "preview" + inputID.toString());
+
+                                    container.appendChild(input);
+                                    container.appendChild(preview);
+                                    document.getElementById(<%=color%>).appendChild(container);
+
+                                    document.querySelector('#file-input' + inputID).addEventListener("change", previewImages);
+                                }
+                            }
+                        </script>
+                        <% j++;
+                            }%>
+                    </div>
+                </div> 
             </div>
         </div>
-    <script>
+
+        <script>
             $(document).ready(function () {
                 $("#myModal").modal();
             });

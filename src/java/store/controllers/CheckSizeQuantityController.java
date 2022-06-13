@@ -6,7 +6,9 @@ package store.controllers;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
+import javafx.util.Pair;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,40 +16,34 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import store.shopping.ProductDAO;
 import store.shopping.ProductDTO;
-import store.utils.VNCharacterUtils;
 
 /**
  *
  * @author vankh
  */
-@WebServlet(name = "SearchCatalogController", urlPatterns = {"/SearchCatalogController"})
-public class SearchCatalogController extends HttpServlet {
+@WebServlet(name = "CheckSizeQuantityController", urlPatterns = {"/CheckSizeQuantityController"})
+public class CheckSizeQuantityController extends HttpServlet {
 
-    public static final String ERROR = "error.jsp";
-    public static final String SUCCESS = "search-catalog.jsp";
-
+    private static final String ERROR = "error.jsp";
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
-
         try {
+            String color = request.getParameter("color");
+            int productID = Integer.parseInt(request.getParameter("productID"));
             ProductDAO dao = new ProductDAO();
-            String search = VNCharacterUtils.removeAccent(request.getParameter("search"));
-
-            List<ProductDTO> listProduct = dao.getSearchCatalog(search);
-
-            if (listProduct.size() > 0) {
-                request.setAttribute("SEARCH_CATALOG", listProduct);
-                url = SUCCESS;
+            ArrayList<Pair<String, Integer>> sizeQuantityList = dao.checkSizeQuantity(productID, color);
+            if (sizeQuantityList.size() > 0) {
+                request.setAttribute("SIZE_QUANTITY", sizeQuantityList);
+                url = "ProductRouteController";
             }
-
         } catch (Exception e) {
-            log("Error at SearchCatalogController: " + toString());
+            log("Error at ManagerShowProductController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -97,7 +97,7 @@
                                         <div class="col-md-6 mb-4">
                                             <div class="form-outline">
                                                 <label class="form-label" for="discount">Giảm giá</label>
-                                                <input class="form-control form-control-lg" type="number" min="0" max="1" step="0.1" name="discount" id="discount" placeholder="Ví dụ: 0.6"/>
+                                                <input class="form-control form-control-lg" type="number" min="0" max="1" step="0.1" value="0" name="discount" id="discount"/>
                                             </div>
                                         </div>
 
@@ -132,7 +132,7 @@
 
                                                         </div>
                                                         <div class="modal-body">
-                                                            <div class="sq1">
+                                                            <div id="sq1">
                                                                 <div class="row" id="variant1">
                                                                     <div class="col-md-5 mb-4 pb-2">
                                                                         <div class="form-outline">
@@ -157,7 +157,7 @@
                                                             <div class="row">
                                                                 <div id="upload-image1" class="col-md-5 mb-4">
                                                                     <div>
-                                                                        <input accept="image/*" type="file" name="files" onChange="previewImages(event)"/>          
+                                                                        <input accept="image/*" type="file" name="files0" onChange="previewImages(event)"/>          
                                                                         <div id="preview" class="img-wrap"></div>
                                                                     </div>
                                                                 </div>
@@ -179,10 +179,10 @@
                                                                     var input = document.createElement("input");
                                                                     input.setAttribute("accept", "image/*");
                                                                     input.setAttribute("type", "file");
-                                                                    input.setAttribute("name", "files");
+                                                                    input.setAttribute("name", "files" + (id-1));
                                                                     input.setAttribute("onChange", "previewImages(event)");
 
-
+                                                                    console.log(input);
                                                                     var preview = document.createElement("div");
                                                                     preview.setAttribute("id", "preview");
                                                                     preview.setAttribute("class", "img-wrap");
@@ -272,7 +272,7 @@
                                     </div>
                                     <button class="mb-4" type="button" id="addColor" style="border: none; background: none"><i class="fa fa-plus-circle fa-lg"></i></button>
                                     <div>
-                                        <button class="primary-btn" type="submit" name="action" value="Add a product" >Tạo</button>
+                                        <button class="primary-btn" onClick="checkForm()" type="submit" name="action" value="Add a product" >Tạo</button>
                                     </div>
                                 </form>
                             </div>
@@ -300,7 +300,7 @@
                             '<h4 class="modal-title" id="myModalLabel">Chi tiết màu</h4>' +
                             '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div>' +
                             '<div class="modal-body">' +
-                            '<div class="sq' + newId + '">' +
+                            '<div id="sq' + newId + '">' +
                             '<div class="row" id="variant' + newId + '">' +
                             '<div class="col-md-5 mb-4 pb-2">' +
                             '<div class="form-outline">' +
@@ -315,7 +315,7 @@
                             '<button type="button" onclick="removeVariant(`variant' + newId + '`)" style="border: none; background: none;"><i class="fa fa-remove fa-lg"></i></button></div></div>' +
                             '<button class="mb-4" type="button" id="addVariant' + newId + '" style="border: none; background: none"><i class="fa fa-plus-circle fa-lg"></i></button>' +
                             '<div class="row"><div id="upload-image' + newId + '" class="col-md-5 mb-4">' +
-                            '<div><input accept="image/*" type="file" name="files" onChange="previewImages(event)"/>' +
+                            '<div><input accept="image/*" type="file" name="files'+(newId-1)+'" onChange="previewImages(event)"/>' +
                             '<div id="preview" class="img-wrap"></div></div></div></div>' +
                             '<button type="button" id="addImage' + newId + '" style="width: 25px; margin-left: 2.6%;" onClick="myFunction(event)">+</button></div>' +
                             '<div class="modal-footer">' +
@@ -332,7 +332,7 @@
                         document.getElementById("variantsCount" + modalId).setAttribute("value", variantsCount);
 
                         console.log(document.getElementById("variantsCount" + modalId).value);
-                        $(".sq" + modalId).append('<div class="row" id="' + modalId + 'variant' + newVariantId + '"><div class="col-md-5 mb-4"><div class="form-outline">' +
+                        $("#sq" + modalId).append('<div class="row" id="' + modalId + 'variant' + newVariantId + '"><div class="col-md-5 mb-4"><div class="form-outline">' +
                                 '<label class="form-label" for="size">Size</label>' +
                                 '<input class="form-control form-control-lg"  required="" type="text" name="size" placeholder="Ví dụ: XL"/></div></div>' +
                                 '<div class="col-md-5 mb-4"><div class="form-outline">' +
@@ -363,7 +363,7 @@
                     variantsCount += 1;
                     document.getElementById("variantsCount1").setAttribute("value", variantsCount);
                     console.log(document.getElementById("variantsCount1").value);
-                    $(".sq1").append('<div class="row" id="' + modalId + 'variant' + newVariantId + '"><div class="col-md-5 mb-4"><div class="form-outline">' +
+                    $("#sq1").append('<div class="row" id="' + modalId + 'variant' + newVariantId + '"><div class="col-md-5 mb-4"><div class="form-outline">' +
                             '<label class="form-label" for="size">Size</label>' +
                             '<input class="form-control form-control-lg"  required="" type="text" name="size" placeholder="Ví dụ: XL"/></div></div>' +
                             '<div class="col-md-5 mb-4"><div class="form-outline">' +
@@ -387,6 +387,42 @@
                 document.getElementById("variantsCount" + modalId).setAttribute("value", variantsCount);
                 element.remove();
 
+            }
+            console.log(newId);
+            function checkForm() {
+                var form = document.getElementById("myForm");
+                
+                
+                var stored = [];
+                
+                stored = [];
+                console.log(newId);
+                for (var i = 1; i < newId; i++) {
+                    var variant = document.getElementById("sq"+i);
+                    var sizes = variant.querySelectorAll("input[name='size']");
+                    console.log(sizes);
+                    for (var size of sizes) {
+                        if (stored.includes(size.value)) 
+                            return alert("Không thể nhập size trùng nhau!");
+                        stored.push(size.value);
+                        
+                    }
+                    console.log(stored);
+                    stored = [];
+                    console.log(stored);
+                }
+                
+                for (var inputColor of form.color) {
+                    if (stored.includes(inputColor.value)) {
+                        return alert("Không thể nhập màu trùng nhau!");
+                        
+                    }
+                    
+                    stored.push(inputColor.value);
+                }
+                
+                
+                
             }
         </script>
 

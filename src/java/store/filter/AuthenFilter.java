@@ -51,7 +51,11 @@ public class AuthenFilter implements Filter {
         CUSTOMER_FUNCTION.add("ViewHomeController");
         CUSTOMER_FUNCTION.add("contact.jsp");
         CUSTOMER_FUNCTION.add("category.jsp");
-        
+        CUSTOMER_FUNCTION.add("new-arrival.jsp");
+        CUSTOMER_FUNCTION.add("sale-product.jsp");
+        CUSTOMER_FUNCTION.add("trend.jsp");
+        CUSTOMER_FUNCTION.add("customer-product-details.jsp");
+        CUSTOMER_FUNCTION.add("ProductRouteController");
 
         ADMIN_FUNCTION = new ArrayList<>();
         ADMIN_FUNCTION.add("admin.jsp");
@@ -63,8 +67,6 @@ public class AuthenFilter implements Filter {
         ADMIN_FUNCTION.add("ShowManagerController");
         ADMIN_FUNCTION.add("ShowCategoryController");
         ADMIN_FUNCTION.add("ShowAccountController");
-        
-       
 
         MANAGER_FUNCTION = new ArrayList<>();
         MANAGER_FUNCTION.add("manager-product.jsp");
@@ -153,47 +155,54 @@ public class AuthenFilter implements Filter {
                 res.sendRedirect("error.jsp");
             } else {
                 HttpSession session = req.getSession();
-                UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
-                String uri = req.getRequestURI();
-                int index = uri.lastIndexOf("/");
-                String resource = uri.substring(index + 1);
-                if (loginUser == null) {
-                    if (uri.equals("/Ellena/") || uri.contains("google") || uri.contains(".jpg") || uri.contains(".gif") || uri.contains(".png")
-                            || uri.contains("css") || uri.contains("fonts") || uri.contains("scss") || uri.contains("Ellena/js")
-                            || uri.contains("sass") || uri.contains("error.jsp") || uri.contains("ViewHomeController")
-                            || uri.contains("register.jsp") || uri.contains("login.jsp") || uri.contains("MainController") || uri.contains("footer.jsp")
-                            || uri.contains("home.jsp") || uri.contains("meta.jsp") || uri.contains("contact.jsp") || uri.contains("category.jsp")
-                            || uri.contains("header.jsp") || uri.contains("new-arrival.jsp") || uri.contains("trend.jsp") || uri.contains("sale-product.jsp") || uri.contains("best-seller.jsp")) {
-                        chain.doFilter(request, response);
-                    }
-                    else if (!ADMIN_FUNCTION.contains(resource) && !CUSTOMER_FUNCTION.contains(resource) && !MANAGER_FUNCTION.contains(resource)) {
-                        res.sendError(404);
-                    } else {
-                        res.sendRedirect(HOME_PAGE);
-                    }
-
-                } else if (session == null) {
-                    res.sendRedirect(HOME_PAGE);
+                if (session == null) {
                     request.setAttribute("ERROR", "Session timeout!");
+                    res.sendRedirect(HOME_PAGE);
                 } else {
-                    if (uri.contains(".jpg") || uri.contains(".gif") || uri.contains(".png")
-                            || uri.contains("css") || uri.contains("fonts") || uri.contains("scss") || uri.contains("Ellena/js")
-                            || uri.contains("sass") || uri.contains("error.jsp") || uri.contains("MainController")
-                            || uri.contains("meta.jsp")) {
-                        chain.doFilter(request, response);
-                    } else {
-
-                        String roleID = loginUser.getRoleID();
-                        if (AD.equals(roleID) && ADMIN_FUNCTION.contains(resource)) {
+                    UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
+                    String uri = req.getRequestURI();
+                    int index = uri.lastIndexOf("/");
+                    String resource = uri.substring(index + 1);
+                    if (loginUser == null) {
+                        if (uri.equals("/Ellena/") || uri.contains("google") || uri.contains(".jpg") || uri.contains(".gif") || uri.contains(".png")
+                                || uri.contains("css") || uri.contains("fonts") || uri.contains("scss") || uri.contains("Ellena/js")
+                                || uri.contains("sass") || uri.contains("error.jsp") || uri.contains("ViewHomeController")
+                                || uri.contains("register.jsp") || uri.contains("login.jsp") || uri.contains("MainController") || uri.contains("footer.jsp")
+                                || uri.contains("home.jsp") || uri.contains("meta.jsp") || uri.contains("contact.jsp") || uri.contains("category.jsp")
+                                || uri.contains("header.jsp") || uri.contains("new-arrival.jsp") || uri.contains("trend.jsp") || uri.contains("sale-product.jsp") || uri.contains("best-seller.jsp")
+                                || uri.contains("customer-product-details.jsp") || uri.contains("ProductRouteController")
+                                || uri.contains("CategoryRouteController") || uri.contains("CheckSizeQuantityController")
+                                || uri.contains("search-catalog.jsp") ) {
                             chain.doFilter(request, response);
-                        } else if (CM.equals(roleID) && CUSTOMER_FUNCTION.contains(resource)) {
-                            chain.doFilter(request, response);
-                        } else if (MN.equals(roleID) && MANAGER_FUNCTION.contains(resource)) {
-                            chain.doFilter(request, response);
+                        } else if (!ADMIN_FUNCTION.contains(resource) && !CUSTOMER_FUNCTION.contains(resource) && !MANAGER_FUNCTION.contains(resource)) {
+                            res.sendError(404);
                         } else {
                             res.sendRedirect(HOME_PAGE);
                         }
 
+                    } else {
+                        if (uri.contains(".jpg") || uri.contains(".gif") || uri.contains(".png")
+                                || uri.contains("css") || uri.contains("fonts") || uri.contains("scss") || uri.contains("Ellena/js")
+                                || uri.contains("sass") || uri.contains("error.jsp") || uri.contains("MainController")
+                                || uri.contains("meta.jsp")) {
+                            chain.doFilter(request, response);
+                        } else {
+
+                            String roleID = loginUser.getRoleID();
+                            if (AD.equals(roleID) && ADMIN_FUNCTION.contains(resource)) {
+                                chain.doFilter(request, response);
+                            } else if (CM.equals(roleID) && CUSTOMER_FUNCTION.contains(resource)) {
+                                chain.doFilter(request, response);
+                            } else if (MN.equals(roleID) && MANAGER_FUNCTION.contains(resource)) {
+                                chain.doFilter(request, response);
+                            } else {
+                                if (CM.equals(roleID))
+                                    res.sendRedirect(HOME_PAGE);
+                                else
+                                    res.sendRedirect("error.jsp");
+                            }
+
+                        }
                     }
                 }
             }

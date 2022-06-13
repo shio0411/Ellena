@@ -69,9 +69,9 @@
                         <div class="col-lg-6 col-md-6 col-sm-6 p-0">
                             <div class="categories__item set-bg" data-setbg="img/categories/category-5.jpg">
                                 <div class="categories__text">
-                                    <h4>Đặc Trưng</h4>
+                                    <h4>Khuyến Mãi</h4>
                                     <p>792 items</p>
-                                    <a href="#Dac-trung">Shop now</a>
+                                    <a href="#Khuyen-mai">Shop now</a>
                                 </div>
                             </div>
                         </div>
@@ -149,7 +149,7 @@
                             </ul>
                         </div>
                         <div class="product__item__text">
-                            <h6><a href="#">
+                            <h6><a href="ProductRouteController?productID=<%=product.getProductID()%>">
                                     <%=product.getProductName()%></a></h6>
                             <%
                                     if (product.getDiscount() != 0) {
@@ -277,7 +277,7 @@
                             </ul>
                         </div>
                         <div class="product__item__text">
-                            <h6><a href="#">
+                            <h6><a href="ProductRouteController?productID=<%=product.getProductID()%>">
                                     <%=product.getProductName()%></a></h6>
                             <%
                                 if (product.getDiscount() != 0) {
@@ -356,7 +356,7 @@
                             <%}%>
                         </div>
                         <div class="product__item__text">
-                            <h6><a href="#">
+                            <h6><a href="ProductRouteController?productID=<%=product.getProductID()%>">
                                     <%=product.getProductName()%></a></h6>
                             <%
                                 if (product.getDiscount() != 0) {
@@ -391,7 +391,7 @@
             <div class="row">
                 <div class="col-lg-4 col-md-4">
                     <div class="section-title">
-                        <h4 id="Dac-trung">Khuyến mãi</h4>
+                        <h4 id="Khuyen-mai">Khuyến mãi</h4>
                     </div>
                 </div>
                 <div class="col-lg-8 col-md-8">
@@ -450,7 +450,7 @@
                             </ul>
                         </div>
                         <div class="product__item__text">
-                            <h6><a href="#">
+                            <h6><a href="ProductRouteController?productID=<%=product.getProductID()%>">
                                     <%=product.getProductName()%></a></h6>
                             <%
                                 if (product.getDiscount() != 0) {
@@ -556,21 +556,6 @@
 
     <jsp:include page="footer.jsp" flush="true" />
 
-    <!--Start of Tawk.to Script-->
-    <script type="text/javascript">
-    var Tawk_API = Tawk_API || {},
-        Tawk_LoadStart = new Date();
-    (function() {
-        var s1 = document.createElement("script"),
-            s0 = document.getElementsByTagName("script")[0];
-        s1.async = true;
-        s1.src = 'https://embed.tawk.to/62986537b0d10b6f3e754a36/1g4hkmp1j';
-        s1.charset = 'UTF-8';
-        s1.setAttribute('crossorigin', '*');
-        s0.parentNode.insertBefore(s1, s0);
-    })();
-    </script>
-    <!--End of Tawk.to Script-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
     $(document).ready(function() {
