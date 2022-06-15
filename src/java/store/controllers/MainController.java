@@ -86,6 +86,8 @@ public class MainController extends HttpServlet {
     private static final String VIEW_IMAGES_CONTROLLER = "ViewImagesController";
     private static final String DELETE_IMAGE = "DeleteImage";
     private static final String DELETE_IMAGE_CONTROLLER = "DeleteImageController";
+    private static final String ADD_IMAGE = "AddImage";
+    private static final String ADD_IMAGE_CONTROLLER = "AddImageController";
     
     private static final String SEARCH_ORDER = "SearchOrder";
     private static final String SEARCH_ORDER_CONTROLLER = "SearchOrderController";
@@ -208,6 +210,10 @@ public class MainController extends HttpServlet {
                         break;
                     case DELETE_IMAGE:
                         url = DELETE_IMAGE_CONTROLLER;
+                        break;
+                    case ADD_IMAGE:
+                        url = ADD_IMAGE_CONTROLLER;
+                        break;    
                     case SEARCH_ORDER:
                         url = SEARCH_ORDER_CONTROLLER;
                         break;

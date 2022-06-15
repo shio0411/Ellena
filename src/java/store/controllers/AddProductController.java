@@ -97,7 +97,7 @@ public class AddProductController extends HttpServlet {
                     String fileName = FilenameUtils.getName(image.getSubmittedFileName());
                     String fileNameSuffix = "." + FilenameUtils.getExtension(fileName);
                     File file = File.createTempFile(fileNamePrefix, fileNameSuffix, uploadFolder);
-                    images.add("./" + uploadPath + file.getName());
+                    images.add("/" + uploadPath + file.getName());
                     image.write(file.getAbsolutePath());
                     
                 }
