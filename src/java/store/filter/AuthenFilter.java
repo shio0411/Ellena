@@ -33,6 +33,8 @@ public class AuthenFilter implements Filter {
     private static List<String> CUSTOMER_FUNCTION;
     private static List<String> ADMIN_FUNCTION;
     private static List<String> MANAGER_FUNCTION;
+    private static List<String> EMPLOYEE_FUNCTION;
+    private static final String EM = "EM";
     private static final String CM = "CM";
     private static final String AD = "AD";
     private static final String MN = "MN";
@@ -84,6 +86,12 @@ public class AuthenFilter implements Filter {
         MANAGER_FUNCTION.add("UpdateOrderController");
         MANAGER_FUNCTION.add("SearchOrderController");
         MANAGER_FUNCTION.add("manager-order.jsp");
+        
+        EMPLOYEE_FUNCTION = new ArrayList<>();
+        EMPLOYEE_FUNCTION.add("EmployeeShowOrderController");
+        EMPLOYEE_FUNCTION.add("UpdateOrderController");
+        EMPLOYEE_FUNCTION.add("SearchOrderController");
+        EMPLOYEE_FUNCTION.add("employee-order.jsp");
     }
 
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
@@ -199,7 +207,9 @@ public class AuthenFilter implements Filter {
                                 chain.doFilter(request, response);
                             } else if (MN.equals(roleID) && MANAGER_FUNCTION.contains(resource)) {
                                 chain.doFilter(request, response);
-                            } else {
+                            } else if (EM.equals(roleID) && EMPLOYEE_FUNCTION.contains(resource)) {
+                                chain.doFilter(request, response);
+                            }else {
                                 if (CM.equals(roleID))
                                     res.sendRedirect(HOME_PAGE);
                                 else

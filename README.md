@@ -1,36 +1,95 @@
-# update:
-
-- main controller: add 2 cases: search-order, update-order
-- private static final String SEARCH_ORDER = "SearchOrder";
-- private static final String SEARCH_ORDER_CONTROLLER = "SearchOrderController";
-- private static final String UPDATE_ORDER = "UpdateOrder";
-- private static final String UPDATE_ORDER_CONTROLLER = "UpdateOrderController";
 
 
+# Release Summary `Employee page`
+***Changes since last push from 14/6/2022 7:51PM***
+
+***Release date: 14/6/2022 9:15PM***
+
+## Milestones
+- [ ] add employee-order.jsp page
+- [ ] add employee-Q&A.jsp page
+
+## New files:
+- employee-order.jsp
+- `EmployeeShowOrderController`
+
+## Changes in code:
+- **`LoginController`**
+    - Change `EMPLOYEE_PAGE = "employee.jsp"; ` to `EMPLOYEE_PAGE = "EmployeeShowOrderController";`
+
+- **`AuthenFiller`**
+    - Add:
+        - Add list `EMPLOYEE_FUNCTION`
+            ```
+                private static List<String> EMPLOYEE_FUNCTION;
+                private static final String EM = "EM";
+            ```
+        - Add list page and controllers employee's role can access
+            ```
+                EMPLOYEE_FUNCTION = new ArrayList<>();
+                EMPLOYEE_FUNCTION.add("EmployeeShowOrderController");
+                EMPLOYEE_FUNCTION.add("UpdateOrderController");
+                EMPLOYEE_FUNCTION.add("SearchOrderController");
+                EMPLOYEE_FUNCTION.add("employee-order.jsp");
+            ```
+        - Add Role confirmation
+            ```
+                (...)
+                else if (EM.equals(roleID) && EMPLOYEE_FUNCTION.contains(resource)) {
+                                chain.doFilter(request, response);
+                            }
+                (...)           
+            ```
+
+- **`ShowOrderController`**
+    - Change from
+        ```
+            private static final String ERROR = "manager-order.jsp";
+            private static final String SUCCESS = "manager-order.jsp";
+        ```
+        to
+        ```
+            private static final String MANAGER_SUCCESS = "manager-order.jsp";
+        ```
+    - Add 
+        - Add new ERROR page url, employee success url and roles confirmation
+            ```
+                private static final String ERROR = "error.jsp";
+                (...)
+                private static final String EMPLOYEE_SUCCESS = "employee-order.jsp";
+                private static final String MN = "MN";
+                private static final String EM = "EM";
+            ```
+        - Get `LOGIN_USER` session
+            ```
+                HttpSession session = request.getSession();
+                UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
+            ```
+        - Roles confirmation
+            ```
+                switch (loginUser.getRoleID()) {
+                    case MN:
+                        url = MANAGER_SUCCESS;
+                        break;
+                    case EM:
+                        url = EMPLOYEE_SUCCESS;
+                        break;
+                    default:
+                        break;
+                }
+            ```
+    - Remove `url = SUCCESS;`
 
 
-# add new:
 
-- manager-order.jsp
-- UpdateOrderController.java
-- ShowOrderController.java
-- OrderDTO.java
-- OrderDAO.java
-- OrderDetailDTO.java
-- OrderStatusDTO.java
+## Discovered possible issues:
+ 1. 
 
-- LoginGoogleController
-- LoginFacebookController
+## Note for later version:
+- 
 
-- change link to manager-order in other 3 manager jsp
 
-- add restfb-2.3.0.jar
 
-# Filter
-- MANAGER_FUNCTION.add("ManagerShowOrderController");
-- MANAGER_FUNCTION.add("UpdateOrderController");
-- MANAGER_FUNCTION.add("manager-order.jsp");
-- add 2 uri :
-  + uri.contains("LoginGoogleController") || uri.contains("LoginFacebookController")
------------
+## Note considering for later version:
+- [Ternary conditional operators into if-else statements](https://converter.website-dev.eu/)
 
