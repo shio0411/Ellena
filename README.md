@@ -6,8 +6,8 @@
 ***Release date: 14/6/2022 10:05PM***
 
 ## Milestones
-- [ ] add employee-order.jsp page
-- [ ] add employee-Q&A.jsp page
+- [x] add employee-order.jsp page
+- [x] redirect employee to tawk.to page
 
 ## New files:
 - employee-order.jsp
