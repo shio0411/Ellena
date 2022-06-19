@@ -72,6 +72,7 @@
         <footer class="footer">
             <div class="container">
                 <div class="row">
+                    <!-- Address and Payments Section Begin -->
                     <div class="col-lg-4 col-md-6 col-sm-7">
                         <div class="footer__about">
                             <div class="footer__logo">
@@ -87,6 +88,8 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Address and Payments Section End -->
+                    <!-- About Us Section Begin -->
                     <div class="col-lg-2 col-md-3 col-sm-5">
                         <div class="footer__widget">
                             <h6>Về Ellena</h6>
@@ -97,6 +100,8 @@
                             </ul>
                         </div>
                     </div>
+                    <!-- About Us Section End -->
+                    <!-- Customer Support Section Begin -->
                     <div class="col-lg-2 col-md-3 col-sm-4">
                         <div class="footer__widget">
                             <h6>Hỗ trợ khách hàng</h6>
@@ -107,6 +112,8 @@
                             </ul>
                         </div>
                     </div>
+                    <!-- Customer Support Section End -->
+                    <!-- Email Subscription Section Begin -->
                     <div class="col-lg-4 col-md-8 col-sm-8">
                         <div class="footer__newslatter">
                             <h6>Đăng ký nhận ưu đãi</h6>
@@ -123,6 +130,7 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Email Subscription Section End -->
                 </div>
                 <div class="row">
                     <div class="col-lg-12">
