@@ -7,38 +7,37 @@ package store.controllers;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
-import org.apache.commons.io.FilenameUtils;
 import store.shopping.ProductDAO;
+import store.shopping.ProductDTO;
 import store.utils.VNCharacterUtils;
 
 /**
  *
  * @author giama
  */
-@MultipartConfig
-@WebServlet(name = "AddImageController", urlPatterns = {"/AddImageController"})
-public class AddImageController extends HttpServlet {
-
+@WebServlet(name = "ManagerUpdateProductController", urlPatterns = {"/ManagerUpdateProductController"})
+public class ManagerUpdateProductController extends HttpServlet {
     private static final String ERROR = "error.jsp";
-    private static final String SUCCESS = "MainController?action=ViewImages";
-
+    private static final String SUCCESS = "ManagerShowProductDetailController";
+    
     private File uploadFolder;
 
     @Override
     public void init() throws ServletException {
         uploadFolder = new File("D:\\images\\");
     }
-
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -53,34 +52,40 @@ public class AddImageController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
-            ProductDAO dao = new ProductDAO();
             int productID = Integer.parseInt(request.getParameter("productID"));
-            String productName = request.getParameter("productName");
-            String color = request.getParameter("color");
-
-            int productColorID = dao.getProductColorID(productID, color);
-            color = VNCharacterUtils.removeAccent(color).toLowerCase().trim();
-            String uploadPath = getServletContext().getInitParameter("uploadFolder");
-            List<Part> images = request.getParts().stream().filter(part -> "image".equals(part.getName()) && part.getSize() > 0).collect(Collectors.toList()); // Retrieves <input type="file" name="files" multiple="true">
-            String fileNamePrefix = VNCharacterUtils.removeAccent(productName).trim().toLowerCase().replace(" ", "-");
-            for (Part image : images) {
-                fileNamePrefix = fileNamePrefix + "-" + color;
-                String fileName = FilenameUtils.getName(image.getSubmittedFileName());
-                String fileNameSuffix = "." + FilenameUtils.getExtension(fileName);
-                File file = File.createTempFile(fileNamePrefix, fileNameSuffix, uploadFolder);
-                image.write(file.getAbsolutePath());
-
-                boolean check = dao.addImage(productColorID, "/" + uploadPath + file.getName());
-
-                if (check) {
-                    url = SUCCESS;
-                    request.setAttribute("MESSAGE", "Thêm ảnh thành công!");
-                } else {
-                    file.delete();
+            boolean status = Boolean.parseBoolean(request.getParameter("status"));
+            
+            int categoryID = Integer.parseInt(request.getParameter("categoryID"));
+            int lowStockLimit = Integer.parseInt(request.getParameter("lowStockLimit"));
+            int price = Integer.parseInt(request.getParameter("price"));
+            float discount = Float.parseFloat(request.getParameter("discount"));
+            String description = request.getParameter("description");
+            String oldProductName = request.getParameter("oldProductName");
+            String productName = request.getParameter("productName").toUpperCase();
+            ProductDTO product = new ProductDTO(productID, productName, description, price, discount, lowStockLimit, status, categoryID);
+            ProductDAO dao = new ProductDAO();
+            boolean check = dao.updateProduct(product);
+            if (check) {
+                if (!productName.equals(oldProductName)) {
+                    oldProductName = VNCharacterUtils.removeAccent(oldProductName).toLowerCase().trim().replace(" ", "-");
+                    productName = VNCharacterUtils.removeAccent(productName).toLowerCase().trim().replace(" ", "-");
+                    List<Integer> productColorIDs = dao.getProductColorIDList(productID);
+                    List<String> images = dao.getProductImages(productColorIDs);
+                    List<String> newImages = new ArrayList<>();
+                    for (String image: images) {
+                        newImages.add(image.replace(oldProductName, productName));
+                        
+                    }
+                    for (int i = 0; i < images.size(); i++) {
+                        Path source = Paths.get("D:\\"+ images.get(i));
+                        Files.move(source, source.resolveSibling(newImages.get(i)));
+                    }
+                    dao.updateImages(newImages, images);
                 }
+                request.setAttribute("MESSAGE", "Cập nhật thành công.");
+                url = SUCCESS;
             }
-
-        } catch (IOException | NumberFormatException | SQLException | ServletException e) {
+        } catch (NumberFormatException | SQLException e) {
             log("Error at ManagerShowProductDetailController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);

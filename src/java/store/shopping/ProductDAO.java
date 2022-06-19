@@ -64,6 +64,7 @@ public class ProductDAO {
     private static final String DELETE_IMAGE = "DELETE FROM tblColorImage WHERE image=?";
     private static final String INSERT_PRODUCT = "INSERT INTO tblProduct(productName, description, price, categoryID, discount, lowStockLimit, status) VALUES(?, ?, ?, ?, ?, ?, ?)";
     private static final String INSERT_PRODUCT_COLORS = "INSERT INTO tblProductColors(productID, color) VALUES(?, ?)";
+    private static final String GET_PRODUCT_COLORS = "SELECT color FROM tblProductColors WHERE productID=?";
     private static final String GET_PRODUCT_IDENTITY = "SELECT IDENT_CURRENT('tblProduct')";
     private static final String GET_PRODUCT_COLOR_IDENTITY = "SELECT IDENT_CURRENT('tblProductColors')";
     private static final String INSERT_COLOR_IMAGES = "INSERT INTO tblColorImage(productColorID, image) VALUES(?, ?)";
@@ -74,6 +75,15 @@ public class ProductDAO {
             + "ON p.productID = pc.productID AND p.productID=? AND color LIKE ?\n"
             + "JOIN tblColorSizes cs ON cs.productColorID = pc.productColorID";
     private static final String GET_PRODUCT_COLOR_ID = "SELECT productColorId FROM tblProductColors WHERE productID = ? AND color = ?";
+    private static final String DELETE_COLOR = "DELETE FROM tblColorImage WHERE productColorID=?;\n"
+            + "DELETE FROM tblColorSizes WHERE productColorID=?;\n"
+            + "DELETE FROM tblProductColors WHERE productColorID=?;\n";
+    private static final String DELETE_SIZE = "DELETE FROM tblColorSizes WHERE productColorID=? AND size=?";
+    private static final String UPDATE_SIZES_QUANTITY = "UPDATE tblColorSizes SET quantity = ? WHERE productColorID = ? AND size = ? ";
+    private static final String UPDATE_PRODUCT = "UPDATE tblProduct SET productName=?, description=?, price=?, categoryID=?, discount=?, lowStockLimit=?, status=? WHERE productID=?";
+    private static final String GET_PRODUCT_COLOR_ID_LIST = "SELECT productColorID FROM tblProductColors WHERE productID = ?";
+    private static final String UPDATE_IMAGES = "UPDATE tblColorImage SET image=? WHERE image=?";
+    
     public List<ProductDTO> getAllProduct() throws SQLException {
         List<ProductDTO> listProduct = new ArrayList<>();
         Connection conn = null;
@@ -317,19 +327,21 @@ public class ProductDAO {
                     lowStockLimit = rs.getInt("lowStockLimit");
                     status = rs.getBoolean("status");
                 }
-
+                ptm = conn.prepareStatement(GET_PRODUCT_COLORS);
+                ptm.setInt(1, productID);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    String color = rs.getString("color");
+                    colorImage.put(color, new ArrayList<>());
+                }
                 ptm = conn.prepareStatement(GET_PRODUCT_COLOR_IMAGES);
                 ptm.setInt(1, productID);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
                     String color = rs.getString("color");
                     String image = rs.getString("image");
-                    if (!colorImage.keySet().contains(color)) {
-                        colorImage.put(color, new ArrayList<>());
-                        colorImage.get(color).add(image);
-                    } else {
-                        colorImage.get(color).add(image);
-                    }
+                    colorImage.get(color).add(image);
+
                 }
 
                 ptm = conn.prepareStatement(GET_PRODUCT_COLOR_SIZES);
@@ -339,18 +351,8 @@ public class ProductDAO {
                     String color = rs.getString("color");
                     String size = rs.getString("size");
                     int quantity = rs.getInt("quantity");
-                    boolean check = false;
-                    if (colorSizeQuantity.isEmpty()) {
-                        check = true;
-                    } else {
-                        if (!colorSizeQuantity.keySet().contains(Arrays.asList(color, size))) {
-                            check = true;
-                        }
+                    colorSizeQuantity.put(Arrays.asList(color, size), quantity);
 
-                    }
-                    if (check) {
-                        colorSizeQuantity.put(Arrays.asList(color, size), quantity);
-                    }
 
                 }
                 product = new ProductDTO(productID, productName, description, colorImage, colorSizeQuantity, price, price, discount, lowStockLimit, categoryName, status);
@@ -623,7 +625,7 @@ public class ProductDAO {
 
         return list;
     }
-    
+
     public List<ProductDTO> getSearchCatalog(String search) throws SQLException {
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -800,7 +802,7 @@ public class ProductDAO {
         }
         return check;
     }
-    
+
     public int getProductColorID(int productID, String color) throws SQLException {
         int productColorID = 0;
         Connection conn = null;
@@ -834,7 +836,7 @@ public class ProductDAO {
         }
         return productColorID;
     }
-    
+
     public boolean addImage(int productColorID, String image) throws SQLException {
         boolean check = false;
         Connection conn = null;
@@ -847,8 +849,94 @@ public class ProductDAO {
 
             check = ptm.executeUpdate() > 0;
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (ClassNotFoundException | SQLException e) {
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+
+    public boolean deleteColor(int productColorID) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DBUtils.getConnection();
+            ptm = conn.prepareStatement(DELETE_COLOR);
+            ptm.setInt(1, productColorID);
+            ptm.setInt(2, productColorID);
+            ptm.setInt(3, productColorID);
+
+            check = ptm.executeUpdate() > 0;
+
+        } catch (ClassNotFoundException | SQLException e) {
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+
+    public boolean addColors(int productID, String[] colors) throws SQLException {
+        boolean check = false;
+        Connection conn = null; 
+        PreparedStatement ptm = null;
+        try {
+            conn = DBUtils.getConnection();
+            conn.setAutoCommit(false);
+            ptm = conn.prepareStatement(INSERT_PRODUCT_COLORS);
+            for (String color : colors) {
+                ptm.setInt(1, productID);
+                ptm.setString(2, color.substring(0, 1).toUpperCase() + color.substring(1));
+                ptm.addBatch();
+            }
+
+            int[] results = ptm.executeBatch();
+            for (int i = 0; i < results.length; i++) {
+                check = results[i] >= 0;
+            }
+            conn.commit();
+
+        } catch (ClassNotFoundException | SQLException e) {
+            try {
+                if (conn != null) {
+                    conn.rollback();
+                }
+            } catch (SQLException se2) {
+            }
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+
+    public boolean deleteSize(int productColorID, String size) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DBUtils.getConnection();
+            ptm = conn.prepareStatement(DELETE_SIZE);
+            ptm.setInt(1, productColorID);
+            ptm.setString(2, size);
+
+            check = ptm.executeUpdate() > 0;
+
+        } catch (ClassNotFoundException | SQLException e) {
         } finally {
             if (ptm != null) {
                 ptm.close();
@@ -860,4 +948,210 @@ public class ProductDAO {
         return check;
     }
     
+    public boolean addVariants(int productColorID, String[] sizes, int[] quantities) throws SQLException {
+        boolean check = false;
+        Connection conn = null; 
+        PreparedStatement ptm = null;
+        try {
+            conn = DBUtils.getConnection();
+            conn.setAutoCommit(false);
+            ptm = conn.prepareStatement(INSERT_COLOR_SIZES);
+            for (int i = 0; i < sizes.length; i++) {
+                ptm.setInt(1, productColorID);
+                ptm.setString(2, sizes[i].toUpperCase().trim());
+                ptm.setInt(3, quantities[i]);
+                ptm.addBatch();
+            }
+
+            int[] results = ptm.executeBatch();
+            for (int i = 0; i < results.length; i++) {
+                check = results[i] >= 0;
+            }
+            conn.commit();
+
+        } catch (ClassNotFoundException | SQLException e) {
+            try {
+                if (conn != null) {
+                    conn.rollback();
+                }
+            } catch (SQLException se2) {
+            }
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+    
+    public boolean updateVariants(int productColorID, String[] sizes, int[] quantities) throws SQLException {
+        boolean check = false;
+        Connection conn = null; 
+        PreparedStatement ptm = null;
+        try {
+            conn = DBUtils.getConnection();
+            conn.setAutoCommit(false);
+            ptm = conn.prepareStatement(UPDATE_SIZES_QUANTITY);
+            for (int i = 0; i < sizes.length; i++) {
+                ptm.setInt(1, quantities[i]);
+                ptm.setInt(2, productColorID);
+                ptm.setString(3, sizes[i]);
+                ptm.addBatch();
+            }
+
+            int[] results = ptm.executeBatch();
+            for (int i = 0; i < results.length; i++) {
+                check = results[i] >= 0;
+            }
+            conn.commit();
+
+        } catch (ClassNotFoundException | SQLException e) {
+            try {
+                if (conn != null) {
+                    conn.rollback();
+                }
+            } catch (SQLException se2) {
+            }
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+    
+    public boolean updateProduct(ProductDTO product) throws SQLException {
+        boolean check = false;
+        Connection conn = null; 
+        PreparedStatement ptm = null;
+        try {
+            conn = DBUtils.getConnection();
+            ptm = conn.prepareStatement(UPDATE_PRODUCT);
+            
+            ptm.setString(1, product.getProductName());
+            ptm.setString(2, product.getDescription());
+            ptm.setInt(3, product.getPrice());
+            ptm.setInt(4, product.getCategoryID());
+            ptm.setFloat(5, product.getDiscount());
+            ptm.setInt(6, product.getLowStockLimit());
+            ptm.setBoolean(7, product.isStatus());
+            ptm.setInt(8, product.getProductID());
+            
+            check = ptm.executeUpdate() > 0;
+            
+            
+
+        } catch (ClassNotFoundException | SQLException e) {
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+    
+    public List<Integer> getProductColorIDList(int productID) throws SQLException {
+        Connection conn = null; 
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        List<Integer> productColorIDs = new ArrayList<>();
+        try {
+            conn = DBUtils.getConnection();
+            ptm = conn.prepareStatement(GET_PRODUCT_COLOR_ID_LIST);
+            ptm.setInt(1, productID);
+            rs = ptm.executeQuery();
+            while(rs.next()) {
+                productColorIDs.add(rs.getInt(1));
+            }            
+
+        } catch (ClassNotFoundException | SQLException e) {
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return productColorIDs;
+    } 
+    
+    public List<String> getProductImages(List<Integer> productColorIDList) throws SQLException {
+        Connection conn = null; 
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        List<String> images = null;
+        try {
+            images = new ArrayList<>();
+            conn = DBUtils.getConnection();
+            StringBuilder sb = new StringBuilder("SELECT image FROM tblColorImage WHERE productColorID in (");
+            productColorIDList.forEach((Integer _item) -> {
+                sb.append("?, ");
+            });
+            sb.replace(sb.length()-2,sb.length()-1 , ")");
+            
+            ptm = conn.prepareStatement(sb.toString());
+            for (int i = 0; i < productColorIDList.size(); i++) {
+                ptm.setInt(i+1, productColorIDList.get(i));
+            }
+            
+            rs = ptm.executeQuery();
+            while(rs.next()) {
+                images.add(rs.getString("image"));
+            }            
+
+        } catch (ClassNotFoundException | SQLException e) {
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return images;
+    }
+    
+    public boolean updateImages(List<String> newImages, List<String> images) throws SQLException {
+        boolean check = false;
+        Connection conn = null; 
+        PreparedStatement ptm = null;
+        try {
+            conn = DBUtils.getConnection();
+            conn.setAutoCommit(false);
+            ptm = conn.prepareStatement(UPDATE_IMAGES);
+            for (int i = 0; i < images.size(); i++) {
+                ptm.setString(1, newImages.get(i));
+                ptm.setString(2, images.get(i));
+                ptm.addBatch();
+            }
+            
+            int[] results = ptm.executeBatch();
+            for (int i = 0; i < results.length; i++) {
+                check = results[i] >= 0;
+            }
+            conn.commit();
+            
+            
+
+        } catch (ClassNotFoundException | SQLException e) {
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
 }

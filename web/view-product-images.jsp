@@ -83,7 +83,7 @@
             if (message != null) {
         %>
 
-        <!-- Pop-up thông báo cập nhật thành công -->
+        <!-- Pop-up thông báo -->
         <div class="modal fade" id="myModal" role="dialog">
             <div class="modal-dialog">
 
@@ -195,14 +195,13 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <button type='button' class='btn btn-default' data-dismiss="modal">Huỷ</button>
-                                                <button type="submit" form="myForm" class="btn btn-danger">Thêm</button>
+                                                <button name="action" value="AddImage" type="submit" form="myForm" class="btn btn-danger">Thêm</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <input id="color" type="hidden" name="color" value=""/>
                                 <input type="hidden" name="productID" value="<%= product.getProductID()%>"/>
-                                <input type="hidden" name="action" value="AddImage"/>
                                 <input type="hidden" name="productName" value="<%=product.getProductName()%>"/>
                             </div>
                         </form>
@@ -250,7 +249,7 @@
                         preview.appendChild(image);
 
                     });
-
+                    
                     reader.readAsDataURL(file);
 
                 }

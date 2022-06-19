@@ -272,7 +272,7 @@
                                     </div>
                                     <button class="mb-4" type="button" id="addColor" style="border: none; background: none"><i class="fa fa-plus-circle fa-lg"></i></button>
                                     <div>
-                                        <button class="primary-btn" onClick="checkForm()" type="submit" name="action" value="Add a product" >Tạo</button>
+                                        <button class="primary-btn" onClick="checkForm(event)" type="submit" name="action" value="Add a product" >Tạo</button>
                                     </div>
                                 </form>
                             </div>
@@ -286,8 +286,8 @@
         <script>
             var newId = 2;
 
-            $(document).ready(function (e) {
-                $("#addColor").click(function (e) {
+            $(document).ready(function () {
+                $("#addColor").click(function () {
 
                     $(".color-container").append('<div class="row" id="color' + newId + '"><div class="col-md-4 mb-4"><div class="form-outline">' +
                             '<label class="form-label" for="color">Màu</label>' +
@@ -323,7 +323,7 @@
                             '<button type="button" data-toggle="modal" data-target="#myModal' + newId + '" style="border: none; background: none;"><i class="fa fa-edit fa-lg"></i></button>' +
                             '<button type="button" onclick="removeColor(`color' + newId + '`)" style="border: none; background: none;"><i class="fa fa-remove fa-lg"></i></button></div>');
 
-                    $("#addVariant" + newId).click(function (e) {
+                    $("#addVariant" + newId).click(function () {
 
                         var modalId = findAncestor(this, ".fade").id;
                         modalId = modalId.charAt(modalId.length - 1);
@@ -355,8 +355,8 @@
 
             var newVariantId = 2;
             var addVariantId = 1;
-            $(document).ready(function (e) {
-                $("#addVariant1").click(function (e) {
+            $(document).ready(function () {
+                $("#addVariant1").click(function () {
                     var modalId = findAncestor(this, ".fade").id;
                     modalId = modalId.charAt(modalId.length - 1);
                     var variantsCount = parseInt(document.getElementById("variantsCount1").value);
@@ -389,31 +389,29 @@
 
             }
             console.log(newId);
-            function checkForm() {
+            function checkForm(e) {
                 var form = document.getElementById("myForm");
                 
                 
                 var stored = [];
                 
-                stored = [];
-                console.log(newId);
                 for (var i = 1; i < newId; i++) {
                     var variant = document.getElementById("sq"+i);
                     var sizes = variant.querySelectorAll("input[name='size']");
-                    console.log(sizes);
                     for (var size of sizes) {
-                        if (stored.includes(size.value)) 
+                        if (stored.includes(size.value))  {
+                            e.preventDefault();
                             return alert("Không thể nhập size trùng nhau!");
+                        }
                         stored.push(size.value);
                         
                     }
-                    console.log(stored);
                     stored = [];
-                    console.log(stored);
                 }
                 
                 for (var inputColor of form.color) {
                     if (stored.includes(inputColor.value)) {
+                        e.preventDefault();
                         return alert("Không thể nhập màu trùng nhau!");
                         
                     }
