@@ -19,6 +19,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <!-- Css Styles -->
     <jsp:include page="meta.jsp" flush="true"/>
+    <jsp:include page="js-plugins.jsp" flush="true" />
+    
 </head>
 
 <body>
@@ -81,11 +83,13 @@
         </div>
     </section>
     <!-- Categories Section End -->
-
+   
+    
     <!-- Product Section Begin -->
     <%
         List<ProductDTO> newArrivalList = (List<ProductDTO>) session.getAttribute("NEW_ARRIVAL_LIST");
     %>
+    
     <section class="product spad">
         <div class="container">
             <div class="row">
@@ -101,12 +105,19 @@
                 </div>
             </div>
             <div class="row property__gallery">
-                <% for (int i = 0; i < 8; i++) {
+                <%int size = 8;
+                if(newArrivalList.size() < 8) size = newArrivalList.size();
+                 for (int i = 0; i < size; i++) {
                         ProductDTO product = newArrivalList.get(i);
                 %>
                 <div class="col-lg-3 col-md-4 col-sm-6 mix">
                     <div class="product__item">
-                        <div class="product__item__pic set-bg">
+                        <div class="product__item__pic">
+                            <ul class="product__hover">
+                                <li><a href="<%=product.getColorImage().get("key").get(0)%>" class="image-popup"><span class="arrow_expand"></span></a></li>
+                                <li><a href="#"><span class="icon_heart_alt"></span></a></li>
+                                <li><a href="#"><span class="icon_bag_alt"></span></a></li>
+                            </ul>
                             <%
                                 if(product.getColorImage().get("key").size() > 1)
                                 {
@@ -117,7 +128,7 @@
                                         for (String img : product.getColorImage().get("key")) {
                                     %>
                                     <div class="carousel-item">
-                                        <img class="d-block" src="<%=img%>.jpg" alt="First slide">
+                                        <img class="d-block" src="<%=img%>" alt="First slide">
                                     </div>
                                     <%
                                         }
@@ -135,18 +146,14 @@
                             <%
                             }else{
                               %>
-                            <img src="<%=product.getColorImage().get("key").get(0)%>.jpg">
+                            <img src="<%=product.getColorImage().get("key").get(0)%>">
                             <%}%>
                             <%
                                 if (product.getDiscount() != 0) {
                             %>
                             <div class="label sale">Sale</div>
                             <%}%>
-                            <ul class="product__hover">
-                                <li><a href="<%=product.getColorImage().get("key").get(0)%>.jpg" class="image-popup"><span class="arrow_expand"></span></a></li>
-                                <li><a href="#"><span class="icon_heart_alt"></span></a></li>
-                                <li><a href="#"><span class="icon_bag_alt"></span></a></li>
-                            </ul>
+                            
                         </div>
                         <div class="product__item__text">
                             <h6><a href="ProductRouteController?productID=<%=product.getProductID()%>">
@@ -228,7 +235,10 @@
                 </div>
             </div>
             <div class="row property__gallery">
-                <% for (int i = 0; i < 4; i++) {
+                <%
+                    size = 4;
+                    if(trendList.size() < 4) size = trendList.size();
+                    for (int i = 0; i < 4; i++) {
                         ProductDTO product = trendList.get(i);
                 %>
                 <div class="col-lg-3 col-md-4 col-sm-6 mix">
@@ -244,7 +254,7 @@
                                         for (String img : product.getColorImage().get("key")) {
                                     %>
                                     <div class="carousel-item">
-                                        <img class="d-block" src="<%=img%>.jpg" height="100%" width="100%">
+                                        <img class="d-block" src="<%=img%>" height="100%" width="100%">
                                     </div>
                                     <%
                                         }
@@ -261,7 +271,7 @@
                             </div>
                             <%}else{
                                   %>
-                            <img src="<%=product.getColorImage().get("key").get(0)%>.jpg">
+                            <img src="<%=product.getColorImage().get("key").get(0)%>">
                             <%
                                    }
                                   %>
@@ -271,7 +281,7 @@
                             <div class="label sale">Sale</div>
                             <%}%>
                             <ul class="product__hover">
-                                <li><a href="<%=product.getColorImage().get("key").get(0)%>.jpg" class="image-popup"><span class="arrow_expand"></span></a></li>
+                                <li><a href="<%=product.getColorImage().get("key").get(0)%>" class="image-popup"><span class="arrow_expand"></span></a></li>
                                 <li><a href="#"><span class="icon_heart_alt"></span></a></li>
                                 <li><a href="#"><span class="icon_bag_alt"></span></a></li>
                             </ul>
@@ -322,19 +332,22 @@
                 </div>
             </div>
             <div class="row property__gallery">
-                <% for (int i = 0; i < 4; i++) {
+                <%  
+                    size = 4;
+                    if(bestSellerList.size() < 4) size = bestSellerList.size();
+                    for (int i = 0; i < 4; i++) {
                         ProductDTO product = bestSellerList.get(i);
                 %>
                 <div class="col-lg-3 col-md-4 col-sm-6 mix women">
                     <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="<%=product.getColorImage().get("key").get(0)%>.jpg">
+                        <div class="product__item__pic set-bg" data-setbg="<%=product.getColorImage().get("key").get(0)%>">
                             <div id="new-product-<%=product.getProductID()%>" class="carousel slide" data-ride="carousel" data-interval="false">
                                 <div class="carousel-inner">
                                     <%
                                         for (String img : product.getColorImage().get("key")) {
                                     %>
                                     <div class="carousel-item">
-                                        <img class="d-block" src="<%=img%>.jpg" height="100%" width="100%">
+                                        <img class="d-block" src="<%=img%>" height="100%" width="100%">
                                     </div>
                                     <%
                                         }
@@ -401,7 +414,10 @@
                 </div>
             </div>
             <div class="row property__gallery">
-                <% for (int i = 0; i < 4; i++) {
+                <%  
+                    size = 4;
+                    if(saleList.size() < 4) size = saleList.size();
+                    for (int i = 0; i < size; i++) {
                         ProductDTO product = saleList.get(i);
                 %>
                 <div class="col-lg-3 col-md-4 col-sm-6 mix women">
@@ -417,7 +433,7 @@
                                         for (String img : product.getColorImage().get("key")) {
                                     %>
                                     <div class="carousel-item">
-                                        <img class="d-block" src="<%=img%>.jpg" height="100%" width="100%">
+                                        <img class="d-block" src="<%=img%>" height="100%" width="100%">
                                     </div>
                                     <%
                                         }
@@ -434,7 +450,7 @@
                             </div>
                             <%}else{
                                   %>
-                            <img src="<%=product.getColorImage().get("key").get(0)%>.jpg" height="100%" width="100%">
+                            <img src="<%=product.getColorImage().get("key").get(0)%>" height="100%" width="100%">
                             <%
                                    }
                                   %>
@@ -444,7 +460,7 @@
                             <div class="label sale">Sale</div>
                             <%}%>
                             <ul class="product__hover">
-                                <li><a href="<%=product.getColorImage().get("key").get(0)%>.jpg" class="image-popup"><span class="arrow_expand"></span></a></li>
+                                <li><a href="<%=product.getColorImage().get("key").get(0)%>" class="image-popup"><span class="arrow_expand"></span></a></li>
                                 <li><a href="#"><span class="icon_heart_alt"></span></a></li>
                                 <li><a href="#"><span class="icon_bag_alt"></span></a></li>
                             </ul>
@@ -555,7 +571,7 @@
     <!-- Services Section End -->
 
     <jsp:include page="footer.jsp" flush="true" />
-
+    
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
     $(document).ready(function() {
