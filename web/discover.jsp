@@ -1,29 +1,28 @@
+<%-- 
+    Document   : discover
+    Created on : Jun 17, 2022, 11:49:34 PM
+    Author     : vankh
+--%>
+
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Iterator"%>
-<%@page import="store.shopping.ProductDTO"%>
 <%@page import="java.util.List"%>
-<%@page import="store.shopping.CategoryDTO"%>
+<%@page import="store.shopping.ProductDTO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Home Page</title>
-
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Khám phá</title>
         <!-- Google Font -->
         <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
               rel="stylesheet">
 
-        <!-- Css Styles -->
-        <jsp:include page="meta.jsp" flush="true"/>
+        <jsp:include page="meta.jsp" flush="true" />
     </head>
-
     <body>
-        <jsp:include page="header.jsp" flush="true" />                          
-
+        <jsp:include page="header.jsp" flush="true" />
         <!-- Breadcrumb Begin -->
         <div class="breadcrumb-option">
             <div class="container">
@@ -31,13 +30,13 @@
                     <div class="col-lg-12">
                         <div class="breadcrumb__links">
                             <a href="./"><i class="fa fa-home"></i> Trang chủ</a>
-                            <% String category = request.getParameter("category"); %>
-                            <span><%= category %></span>
+                            <span>Khám phá</span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        
         <!-- Shop Section Begin -->
         <section class="shop spad">
             <div class="container">
@@ -52,7 +51,7 @@
                                     </div>
                                     <form action="MainController">
                                         <div class="filter-range-wrap">
-                                            
+
                                             <div class="price-range ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content"
                                                  data-min="100000" data-max="1000000"></div>
 
@@ -70,33 +69,71 @@
                                 </div>
                                 <div class="sidebar__sizes">
                                     <div class="section-title">
-                                        <h4>Kích cỡ</h4>
-                                    </div>
-                                    <div class="size__list filter__controls">
-                                        <ul>
-                                            <li style="float: left;" data-filter="*" class="active">Tất cả</li><br>
-                                            <li style="float: left;" data-filter=".XS">XS</li><br>
-                                            <li style="float: left" data-filter=".S">S</li><br>
-                                            <li style="float: left" data-filter=".M">M</li><br>
-                                            <li style="float: left" data-filter=".L">L</li><br>
-                                            <li style="float: left" data-filter=".XL">XL</li><br>
-                                        </ul>
-                                    </div>
-                                </div>
-
-                                <div class="sidebar__color">
-                                    <div class="section-title">
                                         <h4>Màu sắc</h4>
                                     </div>
-                                    <div class="size__list color__list filter__controls">
-                                        <ul>
-                                            <li style="float: left;" data-filter="*" class="active">Tất cả</li><br>
-                                            <li style="float: left;" data-filter=".Đen">Đen</li><br>
-                                            <li style="float: left" data-filter=".Đỏ">Đỏ</li><br>
-                                            <li style="float: left" data-filter=".Xanh">Xanh</li><br>
-                                            <li style="float: left" data-filter=".Xanh nhạt">Xanh nhạt</li><br>
-                                            <li style="float: left" data-filter=".Trắng">Trắng</li><br>
-                                            <li style="float: left" data-filter=".Be">Be</li><br>
+                                    <div>
+                                        <ul id="filters" style="list-style: none;">
+                                            <li>
+                                                <input type="checkbox" value="Đen" id="Đen"/>                                               
+                                                <label for="Đen">Đen</label>
+                                            </li>
+                                            <li>
+                                                <input type="checkbox" value="Hồng" id="Hồng"/>   
+                                                <label for="Hồng">Hồng</label>
+                                            </li>
+                                            <li>
+                                                <input type="checkbox" value="Đỏ" id="Đỏ"/>
+                                                <label for="Đỏ">Đỏ</label>
+                                            </li>
+                                            <li>
+
+                                                <input type="checkbox" value="Xanh" id="Xanh"/>
+                                                <label for="Xanh">Xanh</label>
+                                            </li>
+                                            <li>
+
+                                                <input type="checkbox" value="Xanhnhạt" id="Xanh nhạt"/>
+                                                <label for="Xanh nhạt">Xanh nhạt</label>
+                                            </li>
+                                            <li>
+
+                                                <input type="checkbox" value="Trắng" id="Trắng"/>
+                                                <label for="Trắng">Trắng</label>
+                                            </li>
+                                            <li>
+
+                                                <input type="checkbox" value="Be" id="Be"/>
+                                                <label for="Be">Be</label>
+                                            </li><br>
+                                            <div class="section-title">
+                                                <h4>Kích cỡ</h4>
+                                            </div>
+                                            <li>
+
+                                                <input type="checkbox" value="XS" id="XS"/>
+                                                <label for="XS">XS</label>
+                                            </li>
+                                            <li>
+
+                                                <input type="checkbox" value="S" id="S"/>
+                                                <label for="S">S</label>
+                                            </li
+                                            <li>
+
+                                                <input type="checkbox" value="M" id="M"/>
+                                                <label for="M">M</label>
+                                            </li>
+                                            <li>
+
+                                                <input type="checkbox" value="L" id="L"/>
+                                                <label for="L">L</label>
+                                            </li>
+                                            <li>
+
+                                                <input type="checkbox" value="XL" id="XL"/>
+                                                <label for="XL">XL</label>
+                                            </li>
+
                                         </ul>
                                     </div>
                                 </div>
@@ -110,7 +147,7 @@
 
                         %>
                         <div class="col-lg-9 col-md-9">
-                            <div class="row property__gallery" id="itemsToFilter">
+                            <div class="row property__gallery">
                                 <% for (int i = 0; i < searchCatalog.size(); i++) {
                                         ProductDTO product = searchCatalog.get(i);
                                         Iterator<List<String>> key = product.getColorSizeQuantity().keySet().iterator();
@@ -119,7 +156,7 @@
                                             colorSize = key.next();
                                         }
                                 %>
-                                <div class="col-lg-4 col-md-6 mix <%for (String s : colorSize) {%><%=s%> <%}%>">
+                                <div class="col-lg-4 col-md-6 all mix <%for (String s : colorSize) {%><%= s.replaceAll("\\s", "") %> <%}%>">
                                     <div class="product__item">
                                         <div class="product__item__pic set-bg">
                                             <%
@@ -193,8 +230,7 @@
                     </div>
             </div>
         </section>
-
-        <!-- Shop Section End -->
+        
         <jsp:include page="footer.jsp" flush="true" />
 
 
@@ -228,6 +264,18 @@
         <jsp:include page="js-plugins.jsp" flush="true" />
         <script>
             $(".carousel-inner").children(".carousel-item:first-child").addClass("active");
+        </script>
+        <script>
+            $("#filters :checkbox").click(function () {
+                $("div.all").hide();
+                if ($('#filters :checkbox:checked').length > 0) {
+                    $("#filters :checkbox:checked").each(function () {
+                        $("." + $(this).val()).show();
+                    });
+                } else {
+                    $("div.all").show();
+                }
+            });
         </script>
     </body>
 </html>

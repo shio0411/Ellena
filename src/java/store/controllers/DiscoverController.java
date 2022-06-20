@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 package store.controllers;
 
@@ -15,42 +14,36 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import store.shopping.ProductDAO;
 import store.shopping.ProductDTO;
-import store.utils.VNCharacterUtils;
 
 /**
  *
- * @author giama
+ * @author vankh
  */
-@WebServlet(name = "CategoryRouteController", urlPatterns = {"/CategoryRouteController"})
-public class CategoryRouteController extends HttpServlet {
-    private static final String ERROR = "error.jsp";
-    
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+@WebServlet(name = "DiscoverController", urlPatterns = {"/DiscoverController"})
+public class DiscoverController extends HttpServlet {
+
+    public static final String ERROR = "error.jsp";
+    public static final String SUCCESS = "discover.jsp";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
+
         try {
-            String category = VNCharacterUtils.removeAccent(request.getParameter("category"));
             ProductDAO dao = new ProductDAO();
+            String search = "";
+            List<ProductDTO> listProduct = dao.getSearchCatalog(search);
             HttpSession session = request.getSession();
-            List<ProductDTO> searchCatalog = dao.getProductByCategory(category);
-            session.setAttribute("SEARCH_CATALOG", searchCatalog);
-            url = "./category/" + category;
+            session.setAttribute("SEARCH_CATALOG", listProduct);
+            url = SUCCESS;
 
         } catch (Exception e) {
-            log("Error at CategoryRouteController: " + e.toString());
+            log("Error at DiscoverController: " + toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

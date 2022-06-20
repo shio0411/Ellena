@@ -5,13 +5,13 @@
 package store.controllers;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import store.shopping.ProductDAO;
 import store.shopping.ProductDTO;
 import store.utils.VNCharacterUtils;
@@ -34,13 +34,10 @@ public class SearchCatalogController extends HttpServlet {
         try {
             ProductDAO dao = new ProductDAO();
             String search = VNCharacterUtils.removeAccent(request.getParameter("search"));
-
             List<ProductDTO> listProduct = dao.getSearchCatalog(search);
-
-            if (listProduct.size() > 0) {
-                request.setAttribute("SEARCH_CATALOG", listProduct);
-                url = SUCCESS;
-            }
+            HttpSession session = request.getSession();
+            session.setAttribute("SEARCH_CATALOG", listProduct);
+            url = SUCCESS;
 
         } catch (Exception e) {
             log("Error at SearchCatalogController: " + toString());
