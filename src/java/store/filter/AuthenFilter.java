@@ -185,7 +185,8 @@ public class AuthenFilter implements Filter {
                                 || uri.contains("header.jsp") || uri.contains("new-arrival.jsp") || uri.contains("trend.jsp") || uri.contains("sale-product.jsp") || uri.contains("best-seller.jsp")
                                 || uri.contains("customer-product-details.jsp") || uri.contains("ProductRouteController") || uri.contains("DiscoverController")
                                 || uri.contains("CategoryRouteController") || uri.contains("CheckSizeQuantityController") || uri.contains("discover.jsp")
-                                || uri.contains("search-catalog.jsp") || uri.contains("LoginGoogleController") || uri.contains("LoginFacebookController")) {
+                                || uri.contains("search-catalog.jsp") || uri.contains("LoginGoogleController") || uri.contains("LoginFacebookController")
+                                || uri.contains("about-us.jsp") || uri.contains("faq.jsp") ) {
                             chain.doFilter(request, response);
                         } else if (!ADMIN_FUNCTION.contains(resource) && !CUSTOMER_FUNCTION.contains(resource) && !MANAGER_FUNCTION.contains(resource)) {
                             res.sendError(404);
@@ -222,7 +223,7 @@ public class AuthenFilter implements Filter {
                 }
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
