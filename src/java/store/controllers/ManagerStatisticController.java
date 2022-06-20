@@ -37,8 +37,19 @@ public class ManagerStatisticController extends HttpServlet {
             Map<String, StatisticDTO> orderStatistic4Week = dao.getStatisticOrder4Week();
             Map<String, StatisticDTO> orderStatistic1Year = dao.getStatisticOrder1Year();
             StatisticDTO today = dao.getStatisticOrderToday();
-            List<Pair<String, StatisticDTO>> bestSeller = dao.getBestSeller();
-            List<Pair<String, StatisticDTO>> bestIncome = dao.getBestIncome();
+            String str1 = request.getParameter("sellerDuration");
+            String str2 = request.getParameter("incomeDuration");
+            int durationBestSeller = Integer.MAX_VALUE;
+            int durationBestIncome = Integer.MAX_VALUE;
+            String empty = "";
+            if(str1 != null && str1 != empty){
+                durationBestSeller = Integer.parseInt(str1);
+            }
+            if(str2 != null && str2 != empty){
+                durationBestIncome = Integer.parseInt(str2);
+            }
+            List<Pair<String, StatisticDTO>> bestSeller = dao.getBestSeller(durationBestSeller);
+            List<Pair<String, StatisticDTO>> bestIncome = dao.getBestIncome(durationBestIncome);
             if (orderStatistic7Day.size() > 0) {
                 request.setAttribute("ORDER_STATISTIC_7DAY", orderStatistic7Day);
                 request.setAttribute("ORDER_STATISTIC_4WEEK", orderStatistic4Week);

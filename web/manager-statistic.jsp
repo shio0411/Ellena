@@ -23,6 +23,18 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
     </script>
+    <style>
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            /* display: none; <- Crashes Chrome on hover */
+            -webkit-appearance: none;
+            margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+input[type=number] {
+    -moz-appearance:textfield; /* Firefox */
+}
+    </style>
     
 </head>
 
@@ -44,11 +56,11 @@
        
     <div class="wrapper d-flex align-items-stretch">
         <nav class="side-nav bg-color-primary d-flex flex-column p-3 shadow"> 
-            <img src="./img/ellena-logo-typo.png" class="img-fluid mx-auto" width="120px"/>
             <a class="pt-5" href="ManagerStatisticController" style="color: #873e23; font-weight: bold;"><i style="color: #873e23;" class="fa fa-bar-chart fa-lg"></i>Số liệu thống kê</a>
             <a href="ManagerShowProductController"><i class="fa fa-archive fa-lg"></i>Quản lí sản phẩm</a>
             <a href="ManagerShowOrderController"><i class="fa fa-cart-plus fa-lg"></i>Quản lí đơn hàng</a>
         </nav>
+        
         <%
             StatisticDTO today = (StatisticDTO)request.getAttribute("ORDER_STATISTIC_TODAY");                    
         %>
@@ -112,7 +124,114 @@
                     </div>
                 </div>
             </div>
+            
             <hr class="mx-5 mb-5"/>
+            <%
+                    Map<String, StatisticDTO> orderStatistic7Day = (Map<String, StatisticDTO>) request.getAttribute("ORDER_STATISTIC_7DAY");
+                    Map<String, StatisticDTO> orderStatistic4Week = (Map<String, StatisticDTO>) request.getAttribute("ORDER_STATISTIC_4WEEK");
+                    Map<String, StatisticDTO> orderStatistic1Year = (Map<String, StatisticDTO>) request.getAttribute("ORDER_STATISTIC_1YEAR");
+                    List<Pair<String, StatisticDTO>> bestSeller = (List<Pair<String, StatisticDTO>>) request.getAttribute("BEST_SELLER");
+                    List<Pair<String, StatisticDTO>> bestIncome = (List<Pair<String, StatisticDTO>>) request.getAttribute("BEST_INCOME");  
+                    Set<String> set7day = orderStatistic7Day.keySet();
+                    Set<String> set4week = orderStatistic4Week.keySet();
+                    Set<String> set1year = orderStatistic1Year.keySet();
+                    List<String> list7day = new ArrayList<String>(set7day);
+                    List<String> list4week = new ArrayList<String>(set4week);
+                    List<String> list1year = new ArrayList<String>(set1year);
+                    Collections.sort(list7day);
+                    Collections.sort(list4week);
+                    Collections.sort(list1year);      
+                    String sellerDuration = (String)request.getParameter("sellerDuration");
+                    if(sellerDuration == null){
+                        sellerDuration = "";
+                    }
+                    String incomeDuration = (String)request.getParameter("incomeDuration");
+                    if(incomeDuration == null){
+                        incomeDuration = "";
+                    }
+
+                %>
+            <div class="container-fluid rounded color-bg p-3 mb-4">
+                 
+                <h4 class="text-center"><b>Sản phẩm bán chạy nhất</b></h4>
+                <div class="text-right" >
+                    <form action="ManagerStatisticController" method="post">
+                        <span>Trong</span>
+                        
+                    <input class="mr-0" type="number" min="1" max="365" name="sellerDuration" value="<%=sellerDuration%>"/>
+                    <span class="mr-4">ngày</span>
+                    <button class="btn btn-light border" type="submit">Xem</button>
+                    </form>
+                </div>
+                <div class="row p-4">
+                    <%
+                        if(bestSeller.size() > 0){
+                        int cnt = 1;
+                         for(Pair<String, StatisticDTO> p : bestSeller){
+                          %>
+                            <a href="ManagerShowProductDetailController?productID=<%=p.getValue().getOrderQuantity()%>" class="card ml-4 p-0 col-12 col-sm border-0 shadow rounded">
+                                <div class="card-block text-center">
+                                    <div class="color-<%=2+(cnt+1)%3%> text-white p-2 mb-3">
+                                        <h3><b><%=p.getValue().getIncome()%></b></h3>
+                                        <span>Sản phẩm bán được</span>
+                                    </div>
+                                    <div class="px-3 ">
+                                        <h6 class="card-title mb-2"><b><%cnt++;%><%=p.getKey()%></b></h6>
+                                        <p class="card-text mb-0">Mã sản phẩm: <%=p.getValue().getOrderQuantity()%></p>
+                                    </div>
+                                </div>
+                            </a>
+
+                            <%
+                        }
+                        }else{
+                        %>
+                        <h6 class="text-center"><b>Không có dữ liệu</b></h6>
+                        <%
+                        }
+                    %>
+                </div>
+            </div>
+            <hr class="mx-5 mb-5"/>
+            <div class="container-fluid rounded color-bg p-3 mb-4">
+                <div class="text-right" role="">
+                    <form action="ManagerStatisticController" method="post">
+                        <span>Trong</span>                       
+                        <input class="mr-0" type="number" min="1" max="365" name="incomeDuration" value="<%=incomeDuration%>"/>
+                        <span class="mr-4">ngày</span>
+                        <button class="btn btn-light border" type="submit">Xem</button>
+                    </form>
+                </div>
+                <h4 class="text-center"><b>Sản phẩm có doanh thu cao nhất</b></h4>
+                <div class="row p-4">
+                    <%
+                        if(bestIncome.size() > 0){
+                        int cnt = 1;
+                        for(Pair<String, StatisticDTO> p : bestIncome){
+                            %>
+                            <a href="ManagerShowProductDetailController?productID=<%=p.getValue().getOrderQuantity()%>" class="card ml-4 p-0 col-12 col-sm rounded border-0 shadow">
+                                <div class="card-block text-center">
+                                    <div class="color-<%=2+(cnt+1)%3%> text-white p-2 mb-3">
+                                        <h4><b><%=addDot(p.getValue().getProductQuantity())%>đ</b></h4>
+                                        <span>Doanh thu</span>
+                                    </div>
+                                        <div class="px-3 ">
+                                    <h6 class="card-title mb-2"><b><%cnt++;%><%=p.getKey()%></b></h6>
+                                    <p class="card-text mb-0">Mã sản phẩm: <%=p.getValue().getOrderQuantity()%></p>
+                                        </div>
+                                </div>
+                            </a>
+                            <%
+                        }}else{
+                        %>
+                        <h6 class="text-center"><b>Không có dữ liệu</b></h6>
+                        <%
+                        }
+                    %>
+                </div>
+               
+            </div>
+                 <hr class="mx-5 mb-5"/>
             <div class="rounded color-bg p-3 tab-content mb-4">
                 <div class="container-fluid nav-item p-0 pr-4">
                     <h4 class="mb-4 text-center"><b> Số lượng đơn hàng, doanh thu và sản phẩm bán được</b></h4>
@@ -137,75 +256,8 @@
                     </div>
                 
             </div>
-            <hr class="mx-5 mb-5"/>
-            <%
-                    Map<String, StatisticDTO> orderStatistic7Day = (Map<String, StatisticDTO>) request.getAttribute("ORDER_STATISTIC_7DAY");
-                    Map<String, StatisticDTO> orderStatistic4Week = (Map<String, StatisticDTO>) request.getAttribute("ORDER_STATISTIC_4WEEK");
-                    Map<String, StatisticDTO> orderStatistic1Year = (Map<String, StatisticDTO>) request.getAttribute("ORDER_STATISTIC_1YEAR");
-                    List<Pair<String, StatisticDTO>> bestSeller = (List<Pair<String, StatisticDTO>>) request.getAttribute("BEST_SELLER");
-                    List<Pair<String, StatisticDTO>> bestIncome = (List<Pair<String, StatisticDTO>>) request.getAttribute("BEST_INCOME");  
-                    Set<String> set7day = orderStatistic7Day.keySet();
-                    Set<String> set4week = orderStatistic4Week.keySet();
-                    Set<String> set1year = orderStatistic1Year.keySet();
-                    List<String> list7day = new ArrayList<String>(set7day);
-                    List<String> list4week = new ArrayList<String>(set4week);
-                    List<String> list1year = new ArrayList<String>(set1year);
-                    Collections.sort(list7day);
-                    Collections.sort(list4week);
-                    Collections.sort(list1year);                            
-
-                %>
-            <div class="container-fluid rounded color-bg p-3 mb-4">
-                <h4 class="text-center"><b>Sản phẩm bán chạy nhất</b></h4>
-                <div class="row p-4">
-                    <%
-                int cnt = 1;
-                for(Pair<String, StatisticDTO> p : bestSeller){
-                    %>
-                    <div class="card ml-4 p-0 col-12 col-sm border-0 shadow rounded">
-                        <div class="card-block text-center">
-                            <div class="color-<%=2+(cnt+1)%3%> text-white p-2 mb-3">
-                                <h3><b><%=p.getValue().getIncome()%></b></h3>
-                                <span>Sản phẩm bán được</span>
-                            </div>
-                            <div class="px-3 ">
-                                <h6 class="card-title mb-2"><b><%cnt++;%><%=p.getKey()%></b></h6>
-                                <p class="card-text mb-0">Mã sản phẩm: <%=p.getValue().getOrderQuantity()%></p>
-                            </div>
-                        </div>
-                    </div>
-                           
-                    <%
-                }
-            %>
-                </div>
-            </div>
-            <hr class="mx-5 mb-5"/>
-            <div class="container-fluid rounded color-bg p-3 mb-4">
-                <h4 class="text-center"><b>Sản phẩm có doanh thu cao nhất</b></h4>
-                <div class="row p-4">
-                    <%
-                cnt = 1;
-                for(Pair<String, StatisticDTO> p : bestIncome){
-                    %>
-                    <div class="card ml-4 p-0 col-12 col-sm rounded border-0 shadow">
-                        <div class="card-block text-center">
-                            <div class="color-<%=2+(cnt+1)%3%> text-white p-2 mb-3">
-                                <h4><b><%=addDot(p.getValue().getProductQuantity())%>đ</b></h4>
-                                <span>Doanh thu</span>
-                            </div>
-                                <div class="px-3 ">
-                            <h6 class="card-title mb-2"><b><%cnt++;%><%=p.getKey()%></b></h6>
-                            <p class="card-text mb-0">Mã sản phẩm: <%=p.getValue().getOrderQuantity()%></p>
-                                </div>
-                        </div>
-                    </div>
-                    <%
-                }
-            %>
-                </div>
-            </div>
         </div>
+                
     </div>
     <script>
     /*$("[data-target="#30DayChart"]").on       $("#orderchat")*/
