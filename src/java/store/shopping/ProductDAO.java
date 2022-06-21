@@ -57,9 +57,10 @@ public class ProductDAO {
             + "JOIN tblColorImage i ON pc.productColorID = i.productColorID\n"
             + "WHERE p.productID in (SELECT TOP 20 productID FROM tblProduct ORDER BY productID desc)\n"
             + "ORDER BY p.productID desc";
-    private static final String GET_SEARCH_CATALOG = "SELECT p.productID, p.productName, p.price, p.discount, i.image\n"
+    private static final String GET_SEARCH_CATALOG = "SELECT p.productID, p.productName, p.price, p.discount, i.image, color, size\n"
             + "FROM tblProduct p JOIN tblProductColors pc ON p.productID = pc.productID \n"
             + "JOIN tblColorImage i ON pc.productColorID = i.productColorID\n"
+            + "JOIN tblColorSizes cs ON cs.productColorID = pc.productColorID\n"
             + "WHERE dbo.fuChuyenCoDauThanhKhongDau(p.productName) LIKE ?";
     private static final String DELETE_IMAGE = "DELETE FROM tblColorImage WHERE image=?";
     private static final String INSERT_PRODUCT = "INSERT INTO tblProduct(productName, description, price, categoryID, discount, lowStockLimit, status) VALUES(?, ?, ?, ?, ?, ?, ?)";
