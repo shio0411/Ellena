@@ -1,6 +1,6 @@
 
 
-# Release Summary 
+# Release Summary footer pages
 ***Changes since last push from 20/6/2022 10:123PM***
 
 ***Release date: 21/6/2022 12:06AM***
@@ -9,8 +9,9 @@
 - 
 
 ## New files:
-- about-us.jsp
-- faq.jsp
+- payment-policy.jsp
+- return-policy.jsp
+
 
 ## Changes in code:
 - `AuthenFilter`
@@ -18,16 +19,12 @@
         ```java
             (
             (...)
-                || uri.contains("about-us.jsp") || uri.contains("faq.jsp") ) 
+                || uri.contains("choose-size.jsp") || uri.contains("payment-policy.jsp") || uri.contains("return-policy.jsp") ) 
             (...)
         ```
-
 - footer.jsp
     - fix hyperlink to the correct pages
-    - add more comments
 
-- `project.properties`
-    - Clean duy's merge conflict messages
 
 ## Discovered possible issues:
  1. 

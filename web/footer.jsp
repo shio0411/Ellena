@@ -106,9 +106,9 @@
                         <div class="footer__widget">
                             <h6>Hỗ trợ khách hàng</h6>
                             <ul>
-                                <li><a href="#">Hướng dẫn chọn size</a></li>
-                                <li><a href="#">Chính sách thanh toán</a></li>
-                                <li><a href="#">Chính sách đổi trả</a></li>
+                                <li><a href="choose-size.jsp">Hướng dẫn chọn size</a></li>
+                                <li><a href="payment-policy.jsp">Chính sách thanh toán</a></li>
+                                <li><a href="return-policy.jsp">Chính sách đổi trả</a></li>
                             </ul>
                         </div>
                     </div>
