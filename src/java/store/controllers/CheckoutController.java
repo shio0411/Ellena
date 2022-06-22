@@ -47,6 +47,11 @@ public class CheckoutController extends HttpServlet {
             int total = Integer.parseInt(request.getParameter("total"));
             String fullname = request.getParameter("fullname");
 
+            if (cart == null || cart.isEmpty()) {
+                url = "home.jsp";
+                return;
+            }
+            
             int provinceIndex = Integer.parseInt(request.getParameter("calc_shipping_provinces"));
             String[] provinces = new String[]{"An Giang", "Bà Rịa - Vũng Tàu", "Bạc Liêu", "Bắc Kạn", "Bắc Giang", "Bắc Ninh", "Bến Tre", "Bình Dương", "Bình Định", "Bình Phước", "Bình Thuận", "Cà Mau", "Cao Bằng", "Cần Thơ", "Đà Nẵng", "Đắk Lắk", "Đắk Nông", "Đồng Nai", "Đồng Tháp", "Điện Biên", "Gia Lai", "Hà Giang", "Hà Nam", "Hà Nội", "Hà Tĩnh", "Hải Dương", "Hải Phòng", "Hòa Bình", "Hậu Giang", "Hưng Yên", "Thành phố Hồ Chí Minh", "Khánh Hòa", "Kiên Giang", "Kon Tum", "Lai Châu", "Lào Cai", "Lạng Sơn", "Lâm Đồng", "Long An", "Nam Định", "Nghệ An", "Ninh Bình", "Ninh Thuận", "Phú Thọ", "Phú Yên", "Quảng Bình", "Quảng Nam", "Quảng Ngãi", "Quảng Ninh", "Quảng Trị", "Sóc Trăng", "Sơn La", "Tây Ninh", "Thái Bình", "Thái Nguyên", "Thanh Hóa", "Thừa Thiên - Huế", "Tiền Giang", "Trà Vinh", "Tuyên Quang", "Vĩnh Long", "Vĩnh Phúc", "Yên Bái"};
 
@@ -58,6 +63,7 @@ public class CheckoutController extends HttpServlet {
 
             //check valid email, phone number
             boolean checkQuantity = true;
+            boolean checkStatus = true;
             ProductDAO pdao = new ProductDAO();
             for (CartProduct item : cart) {
                 List<String> colorSize = new ArrayList<>();
@@ -65,9 +71,10 @@ public class CheckoutController extends HttpServlet {
                 colorSize.add(item.getSize());
                 int maxQuantity = pdao.getProductDetail(item.getProductID()).getColorSizeQuantity().get(colorSize);
                 checkQuantity = checkQuantity && (maxQuantity >= item.getQuantity());
+                checkStatus = checkStatus && (pdao.getProductStatus(item.getProductID()) > 0);
             }
 
-            if (checkQuantity) {
+            if (checkQuantity && checkStatus) {
                 OrderDAO odao = new OrderDAO();
                 odao.insertOrder(order, user.getUserID());
                 int orderID = odao.getOrderID(user.getUserID());
