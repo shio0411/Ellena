@@ -94,9 +94,9 @@
                         <div class="footer__widget">
                             <h6>Về Ellena</h6>
                             <ul>
-                                <li><a href="#">Giới thiệu</a></li>
-                                <li><a href="#">Liên hệ</a></li>
-                                <li><a href="#">FAQ</a></li>
+                                <li><a href="about-us.jsp">Giới thiệu</a></li>
+                                <li><a href="contact.jsp">Liên hệ</a></li>
+                                <li><a href="faq.jsp">FAQ</a></li>
                             </ul>
                         </div>
                     </div>
@@ -106,9 +106,9 @@
                         <div class="footer__widget">
                             <h6>Hỗ trợ khách hàng</h6>
                             <ul>
-                                <li><a href="#">Hướng dẫn chọn size</a></li>
-                                <li><a href="#">Chính sách thanh toán</a></li>
-                                <li><a href="#">Chính sách đổi trả</a></li>
+                                <li><a href="choose-size.jsp">Hướng dẫn chọn size</a></li>
+                                <li><a href="payment-policy.jsp">Chính sách thanh toán</a></li>
+                                <li><a href="return-policy.jsp">Chính sách đổi trả</a></li>
                             </ul>
                         </div>
                     </div>
@@ -132,6 +132,7 @@
                     </div>
                     <!-- Email Subscription Section End -->
                 </div>
+                <!-- Copyright template Begin -->
                 <div class="row">
                     <div class="col-lg-12">
                         <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
@@ -141,6 +142,7 @@
                         <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                     </div>
                 </div>
+                <!-- Copyright template End -->
             </div>
         </footer>
         <!-- Footer Section End -->

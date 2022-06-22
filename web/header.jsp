@@ -84,7 +84,7 @@
                                                 }%>
                                     </ul>
                                 </li>
-                                <li id="browse"><a href="./blog.html">Khám phá</a></li>
+                                <li id="browse"><a href="DiscoverController">Khám phá</a></li>
                                 <li id="contact"><a href="./contact.jsp">Liên hệ</a></li>
                             </ul>
                         </nav>

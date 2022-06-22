@@ -58,6 +58,7 @@ public class AuthenFilter implements Filter {
         CUSTOMER_FUNCTION.add("trend.jsp");
         CUSTOMER_FUNCTION.add("customer-product-details.jsp");
         CUSTOMER_FUNCTION.add("ProductRouteController");
+        CUSTOMER_FUNCTION.add("CheckSizeQuantityController");
 
         ADMIN_FUNCTION = new ArrayList<>();
         ADMIN_FUNCTION.add("admin.jsp");
@@ -182,9 +183,10 @@ public class AuthenFilter implements Filter {
                                 || uri.contains("register.jsp") || uri.contains("login.jsp") || uri.contains("MainController") || uri.contains("footer.jsp")
                                 || uri.contains("home.jsp") || uri.contains("meta.jsp") || uri.contains("contact.jsp") || uri.contains("category.jsp")
                                 || uri.contains("header.jsp") || uri.contains("new-arrival.jsp") || uri.contains("trend.jsp") || uri.contains("sale-product.jsp") || uri.contains("best-seller.jsp")
-                                || uri.contains("customer-product-details.jsp") || uri.contains("ProductRouteController")
-                                || uri.contains("CategoryRouteController") || uri.contains("CheckSizeQuantityController")
-                                || uri.contains("search-catalog.jsp") || uri.contains("LoginGoogleController") || uri.contains("LoginFacebookController")) {
+                                || uri.contains("customer-product-details.jsp") || uri.contains("ProductRouteController") || uri.contains("DiscoverController")
+                                || uri.contains("CategoryRouteController") || uri.contains("CheckSizeQuantityController") || uri.contains("discover.jsp")
+                                || uri.contains("search-catalog.jsp") || uri.contains("LoginGoogleController") || uri.contains("LoginFacebookController")
+                                || uri.contains("about-us.jsp") || uri.contains("faq.jsp") || uri.contains("choose-size.jsp") || uri.contains("payment-policy.jsp") || uri.contains("return-policy.jsp")) {
                             chain.doFilter(request, response);
                         } else if (!ADMIN_FUNCTION.contains(resource) && !CUSTOMER_FUNCTION.contains(resource) && !MANAGER_FUNCTION.contains(resource)) {
                             res.sendError(404);
@@ -221,7 +223,7 @@ public class AuthenFilter implements Filter {
                 }
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
