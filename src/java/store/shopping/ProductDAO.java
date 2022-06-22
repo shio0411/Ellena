@@ -37,7 +37,7 @@ public class ProductDAO {
             + "JOIN tblColorImage i ON pc.productColorID = i.productColorID\n"
             + "INNER JOIN tblOrderDetail d ON p.productID = d.productID \n"
             + "JOIN tblOrder o ON d.orderID = o.orderID  \n"
-            + "WHERE DATEDIFF(day,o.orderDate,GETDATE()) < 30 \n"
+            + "WHERE DATEDIFF(day,o.orderDate,GETDATE()) < 50 \n" // old value : 30
             + "GROUP BY p.productID, p.productName, p.price, p.discount, i.image\n"
             + "ORDER BY SUM(d.quantity) desc";
     private static final String GET_BEST_SELLER_LIST = "SELECT p.productID, p.productName, p.price, p.discount, i.image\n"
