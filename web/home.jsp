@@ -238,7 +238,7 @@
                 <%
                     size = 4;
                     if(trendList.size() < 4) size = trendList.size();
-                    for (int i = 0; i < 4; i++) {
+                    for (int i = 0; i < size; i++) {
                         ProductDTO product = trendList.get(i);
                 %>
                 <div class="col-lg-3 col-md-4 col-sm-6 mix">

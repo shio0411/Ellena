@@ -56,7 +56,7 @@
                                         for (String image : v) {
                                 %>                                       
                                 <a class="pt <%if (z == 1) {%> active <%}%>" href="#product-<%= z%>">
-                                    <img src="<%= image%>.jpg" alt="<%= product.getProductName()%>">
+                                    <img src="<%= image%>" alt="<%= product.getProductName()%>">
                                 </a>
                                 <% z++;
                                         }
@@ -69,7 +69,7 @@
                                         for (List<String> v : values) {
                                             for (String image : v) {
                                     %>   
-                                    <img data-hash="product-<%= q%>" class="product__big__img" src="<%=image%>.jpg" alt="<%= product.getProductName()%>">
+                                    <img data-hash="product-<%= q%>" class="product__big__img" src="<%=image%>" alt="<%= product.getProductName()%>">
                                     <% q++;
                                             }
                                         }%>
