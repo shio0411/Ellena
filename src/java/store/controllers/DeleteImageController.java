@@ -6,7 +6,6 @@
 package store.controllers;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -37,7 +36,7 @@ public class DeleteImageController extends HttpServlet {
         String url = ERROR;
         try {
             String image = request.getParameter("imageName");
-            
+
             ProductDAO dao = new ProductDAO();
             boolean check = dao.deleteImage(image);
             if (check) {

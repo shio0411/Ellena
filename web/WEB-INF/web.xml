@@ -20,6 +20,14 @@
         <servlet-name>category</servlet-name>
         <url-pattern>/category/*</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>product</servlet-name>
+        <jsp-file>/customer-product-details.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>product</servlet-name>
+        <url-pattern>/product/*</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>MainController</servlet-name>
         <url-pattern>/MainController</url-pattern>
@@ -42,6 +50,11 @@
         <location>/ExceptionHandlerController</location>  
     </error-page>  
     -->
+    
+    <context-param>
+        <param-name>uploadFolder</param-name>
+        <param-value>images/</param-value>
+    </context-param>
     <session-config>
         <session-timeout>
             30

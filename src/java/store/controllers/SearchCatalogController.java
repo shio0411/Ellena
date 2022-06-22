@@ -6,11 +6,15 @@ package store.controllers;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import store.shopping.ProductDAO;
+import store.shopping.ProductDTO;
+import store.utils.VNCharacterUtils;
 
 /**
  *
@@ -19,30 +23,31 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "SearchCatalogController", urlPatterns = {"/SearchCatalogController"})
 public class SearchCatalogController extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    public static final String ERROR = "error.jsp";
+    public static final String SUCCESS = "search-catalog.jsp";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet SearchCatalogController</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet SearchCatalogController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        String url = ERROR;
+
+        try {
+            ProductDAO dao = new ProductDAO();
+            String search = VNCharacterUtils.removeAccent(request.getParameter("search"));
+
+            List<ProductDTO> listProduct = dao.getSearchCatalog(search);
+
+            if (listProduct.size() > 0) {
+                request.setAttribute("SEARCH_CATALOG", listProduct);
+                url = SUCCESS;
+            }
+
+        } catch (Exception e) {
+            log("Error at SearchCatalogController: " + toString());
+        } finally {
+            request.getRequestDispatcher(url).forward(request, response);
         }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -4,29 +4,44 @@
  */
 package store.controllers;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import javafx.util.Pair;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
+import org.apache.commons.io.FilenameUtils;
 import store.shopping.ProductDAO;
 import store.shopping.ProductDTO;
+import store.utils.VNCharacterUtils;
 
 /**
  *
  * @author vankh
  */
+@MultipartConfig
 @WebServlet(name = "AddProductController", urlPatterns = {"/AddProductController"})
 public class AddProductController extends HttpServlet {
 
     private static final String ERROR = "add-product.jsp";
     private static final String SUCCESS = "ManagerShowProductController";
-    
+
+    private File uploadFolder;
+
+    @Override
+    public void init() throws ServletException {
+        uploadFolder = new File("D:\\images\\");
+    }
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -39,45 +54,69 @@ public class AddProductController extends HttpServlet {
             float discount = Float.parseFloat(request.getParameter("discount"));
             String description = request.getParameter("description");
             String[] color = request.getParameterValues("color");
-            
+
             String[] variantsCountString = request.getParameterValues("variantsCount");
             int[] variantsCount = new int[variantsCountString.length];
             for (int i = 0; i < variantsCountString.length; i++) {
                 variantsCount[i] = Integer.parseInt(variantsCountString[i]);
             }
+            List<Pair<String, Integer>> colorVariants = new ArrayList<>();
+            for (int i = 0; i < color.length; i++) {
+                colorVariants.add(new Pair<>(color[i], variantsCount[i]));
+            }
+
             String[] size = request.getParameterValues("size");
-            
+
             String[] quantityString = request.getParameterValues("quantity");
             int[] quantity = new int[quantityString.length];
             for (int i = 0; i < quantityString.length; i++) {
                 quantity[i] = Integer.parseInt(quantityString[i]);
             }
-            
-            Map<List<String>, Integer> colorSizeQuantity = new HashMap<>();
-            
-            for(int i =0; i< color.length; i++){
-                List<String> colorSize = new ArrayList<>();
-                colorSize.add(color[i].substring(0, 1).toUpperCase() + color[i].substring(1)); //capitalize the string
-                colorSize.add(size[i].toUpperCase());
-                colorSizeQuantity.put(colorSize, quantity[i]);
-            }
-            
-            Map<String, List<String>> colorImage = new HashMap<>();
-            
-            
-            boolean check = true;
-            ProductDAO dao = new ProductDAO();
 
+            Map<List<String>, Integer> colorSizeQuantity = new HashMap<>();
+
+            for (Pair<String, Integer> pair : colorVariants) {
+                int count = 0;
+                for (int i = 0; i < pair.getValue(); i++) {
+                    List<String> colorSize = new ArrayList<>();
+                    colorSize.add(pair.getKey().substring(0, 1).toUpperCase() + pair.getKey().substring(1)); //capitalize the string
+                    colorSize.add(size[count].toUpperCase());
+                    colorSizeQuantity.put(colorSize, quantity[count++]);
+
+                }
+            }
+            String uploadPath = getServletContext().getInitParameter("uploadFolder");
+            Map<String, List<String>> colorImage = new HashMap<>();
+            for (int i = 0; i < color.length; i++) {
+                List<String> images = new ArrayList<>();
+                String colorFile = "files" + String.valueOf(i);
+                List<Part> fileParts = request.getParts().stream().filter(part -> colorFile.equals(part.getName()) && part.getSize() > 0).collect(Collectors.toList()); // Retrieves <input type="file" name="files" multiple="true">
+                for (Part image : fileParts) {
+                    String fileNamePrefix = VNCharacterUtils.removeAccent(productName).trim().toLowerCase().replace(" ", "-");
+                    fileNamePrefix = fileNamePrefix + "-" + VNCharacterUtils.removeAccent(color[i]).toLowerCase().trim();
+                    String fileName = FilenameUtils.getName(image.getSubmittedFileName());
+                    String fileNameSuffix = "." + FilenameUtils.getExtension(fileName);
+                    File file = File.createTempFile(fileNamePrefix, fileNameSuffix, uploadFolder);
+                    images.add("./" + uploadPath + file.getName());
+                    image.write(file.getAbsolutePath());
+                    
+                }
+                colorImage.put(color[i], images);
+            }
+
+            ProductDTO product = new ProductDTO(1, productName, description, colorImage, colorSizeQuantity, price, discount, lowStockLimit, false, categoryID);
+            ProductDAO dao = new ProductDAO();
+            boolean check = dao.addProduct(product);
+            
             if (check) {
-                ProductDTO product = new ProductDTO();
+                url = SUCCESS;
 //                boolean checkInsert = dao.addUser(user);
 //                if (checkInsert) {
 //                    url = SUCCESS;
 //                }
-
             } else {
-               // request.setAttribute("USER_ERROR", userError);
-
+                // request.setAttribute("USER_ERROR", userError);
+                //for push
             }
         } catch (Exception e) {
             log("Error at AddProductController: " + e.toString());

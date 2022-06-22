@@ -6,7 +6,6 @@ import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 @MultipartConfig(
         fileSizeThreshold = 1024 * 1024 * 1, // 1 MB
         maxFileSize = 1024 * 1024 * 10, // 10 MB
@@ -83,11 +82,16 @@ public class MainController extends HttpServlet {
     private static final String CHECKOUT_CONTROLLER = "CheckoutController";
     private static final String SUBSCRIBE = "Subscribe";
     private static final String SUBSCRIBE_CONTROLLER = "SubscribeController";
+    private static final String VIEW_IMAGES = "ViewImages";
+    private static final String VIEW_IMAGES_CONTROLLER = "ViewImagesController";
+    private static final String DELETE_IMAGE = "DeleteImage";
+    private static final String DELETE_IMAGE_CONTROLLER = "DeleteImageController";
     private static final String SEARCH_ORDER = "SearchOrder";
     private static final String SEARCH_ORDER_CONTROLLER = "SearchOrderController";
     private static final String UPDATE_ORDER = "UpdateOrder";
     private static final String UPDATE_ORDER_CONTROLLER = "UpdateOrderController";
-
+    private static final String DETELE_CART_ITEM = "DeleteCartItem";
+    private static final String DETELE_CART_ITEM_CONTROLLER = "DeleteCartItemController";
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
@@ -199,11 +203,20 @@ public class MainController extends HttpServlet {
                     case SUBSCRIBE:
                         url = SUBSCRIBE_CONTROLLER;
                         break;
+                    case VIEW_IMAGES:
+                        url = VIEW_IMAGES_CONTROLLER;
+                        break;
+                    case DELETE_IMAGE:
+                        url = DELETE_IMAGE_CONTROLLER;
+                        break;
                     case SEARCH_ORDER:
                         url = SEARCH_ORDER_CONTROLLER;
                         break;
                     case UPDATE_ORDER:
                         url = UPDATE_ORDER_CONTROLLER;
+                        break;
+                    case DETELE_CART_ITEM:
+                        url = DETELE_CART_ITEM_CONTROLLER;
                         break;
                     default:
                         break;

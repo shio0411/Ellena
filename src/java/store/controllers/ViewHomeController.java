@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import store.shopping.CategoryDAO;
 import store.shopping.CategoryDTO;
+import store.shopping.ProductDAO;
+import store.shopping.ProductDTO;
 
 /**
  *
@@ -38,8 +40,17 @@ public class ViewHomeController extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             if (session != null) {
-                CategoryDAO dao = new CategoryDAO();
-                List<CategoryDTO> listCategory = dao.getListCategory("", "true");
+                CategoryDAO cateDao = new CategoryDAO();
+                ProductDAO  prodDao = new ProductDAO();
+                List<CategoryDTO> listCategory = cateDao.getListCategory("", "true");
+                List<ProductDTO> trendList = prodDao.getTrendList();
+                List<ProductDTO> bestSellerList = prodDao.getBestSellerList();
+                List<ProductDTO> saleList = prodDao.getSaleList();
+                List<ProductDTO> newList = prodDao.getNewArrivalList();
+                session.setAttribute("TREND_LIST", trendList);
+                session.setAttribute("BEST_SELLER_LIST", bestSellerList);
+                session.setAttribute("SALE_LIST", saleList);
+                session.setAttribute("NEW_ARRIVAL_LIST", newList);
                 session.setAttribute("LIST_CATEGORY", listCategory);
                 url = SUCCESS;
             }

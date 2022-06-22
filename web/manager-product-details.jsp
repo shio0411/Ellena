@@ -13,7 +13,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Chi tiết sản phẩm</title>
-
+        
         <jsp:include page="meta.jsp" flush="true" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -182,7 +182,7 @@
                                         }
                                         for (String color : colorList) {
                                     %>
-                                    <div id="<%= color%>-size" class="tab-pane fade <%if (g == 1) { %> in active <%}%>">
+                                    <div id="<%=color%>-size" class="tab-pane fade <%if (g == 1) { %> in active <%}%>">
 
                                         <table>
                                             <tr>
@@ -202,12 +202,12 @@
                                             <% }
                                                 } %>
                                         </table>
+                                    <button class="mb-4" type="button" name="<%=color%>-size" onClick="addVariants(event)" style="border: none; background: none"><i class="fa fa-plus-circle fa-lg"></i></button>
 
                                     </div>
                                     <% g++;
                                         }%>
                                 </div>          
-
                             </div>
                         </div> 
                     </div>    

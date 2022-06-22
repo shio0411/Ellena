@@ -2198,6 +2198,19 @@ ol {
 	margin-right: -4px;
 }
 
+.shop__cart__table tbody tr .cart__color {
+	font-size: 16px;
+	color: #ca1515;
+	font-weight: 600;
+	width: 190px;
+        
+}.shop__cart__table tbody tr .cart__size {
+	font-size: 16px;
+	color: #ca1515;
+	font-weight: 600;
+	width: 190px;
+}
+
 .shop__cart__table tbody tr .cart__price {
 	font-size: 16px;
 	color: #ca1515;
@@ -3761,4 +3774,73 @@ ol {
 
 .profile tr{
     border-bottom: 2px #E5E5E5 solid; 
+}
+
+
+.color-2{
+   background: linear-gradient(to top right, #93a3b1 37%, #ccffff 119%);
+}
+.color-3{
+    background: linear-gradient(to top right, #fca17d 7%, #ffcccc 98%);
+}
+.color-4{
+    background: linear-gradient(to top right, #344055 37%, #93a3b1 119%);
+}
+.color-5{
+    background: #040F0F;
+}
+.color-bg{
+    background: #ffffff;
+}
+
+.side-nav{
+    min-width: 250px;
+    max-width: 250px;
+}
+
+#content{
+    width: 100%;
+    min-height: 100vh;
+}
+
+.original-price{
+    font-weight: 100; 
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
+.show-more{
+    font-size: 16px;
+    list-style: none;
+    display: inline-block;
+    color: #111111;
+    font-weight: 600;
+    position: relative;
+    cursor: pointer;
+}
+
+.text-color-primary{
+    color: #fbe2d6;
+}
+.text-color-dark{
+    color: #873e23;
+}
+.text-color-black{
+    color: #111111;
+}
+
+.bg-color-dark{
+    background: #873e23;
+}
+.bg-color-primary{
+    background: #fbe2d6;
+}
+
+.side-nav a{
+    margin: 6% 6%;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    color: #000000;
+    display: block;
 }

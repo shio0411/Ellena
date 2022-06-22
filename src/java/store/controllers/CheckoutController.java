@@ -1,0 +1,132 @@
+package store.controllers;
+
+import java.io.IOException;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import store.shopping.CartProduct;
+import store.shopping.OrderDAO;
+import store.shopping.OrderDTO;
+import store.shopping.ProductDAO;
+import store.user.UserDTO;
+
+/**
+ *
+ * @author DuyLVL
+ */
+@WebServlet(name = "CheckoutController", urlPatterns = {"/CheckoutController"})
+public class CheckoutController extends HttpServlet {
+
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    private static final String ERROR = "checkout.jsp";
+    private static final String SUCCESS = "home.jsp"; //đổi thành trang thanh toán
+
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        String url = ERROR;
+        try {
+            HttpSession session = request.getSession();
+            List<CartProduct> cart = (List<CartProduct>) session.getAttribute("CART");
+            UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
+            int total = Integer.parseInt(request.getParameter("total"));
+            String fullname = request.getParameter("fullname");
+
+            int provinceIndex = Integer.parseInt(request.getParameter("calc_shipping_provinces"));
+            String[] provinces = new String[]{"An Giang", "Bà Rịa - Vũng Tàu", "Bạc Liêu", "Bắc Kạn", "Bắc Giang", "Bắc Ninh", "Bến Tre", "Bình Dương", "Bình Định", "Bình Phước", "Bình Thuận", "Cà Mau", "Cao Bằng", "Cần Thơ", "Đà Nẵng", "Đắk Lắk", "Đắk Nông", "Đồng Nai", "Đồng Tháp", "Điện Biên", "Gia Lai", "Hà Giang", "Hà Nam", "Hà Nội", "Hà Tĩnh", "Hải Dương", "Hải Phòng", "Hòa Bình", "Hậu Giang", "Hưng Yên", "Thành phố Hồ Chí Minh", "Khánh Hòa", "Kiên Giang", "Kon Tum", "Lai Châu", "Lào Cai", "Lạng Sơn", "Lâm Đồng", "Long An", "Nam Định", "Nghệ An", "Ninh Bình", "Ninh Thuận", "Phú Thọ", "Phú Yên", "Quảng Bình", "Quảng Nam", "Quảng Ngãi", "Quảng Ninh", "Quảng Trị", "Sóc Trăng", "Sơn La", "Tây Ninh", "Thái Bình", "Thái Nguyên", "Thanh Hóa", "Thừa Thiên - Huế", "Tiền Giang", "Trà Vinh", "Tuyên Quang", "Vĩnh Long", "Vĩnh Phúc", "Yên Bái"};
+
+            String address = request.getParameter("address") + ", " + request.getParameter("calc_shipping_district") + ", " + provinces[provinceIndex - 1];
+            String phone = request.getParameter("phone");
+            String email = request.getParameter("email");
+            String note = request.getParameter("note");
+            OrderDTO order = new OrderDTO(Date.valueOf(LocalDate.now()), total, user.getFullName(), 1, "Chưa xác nhận", ""/*payType*/, fullname, address, phone, email, note);
+
+            //check valid email, phone number
+            boolean checkQuantity = true;
+            ProductDAO pdao = new ProductDAO();
+            for (CartProduct item : cart) {
+                List<String> colorSize = new ArrayList<>();
+                colorSize.add(item.getColor());
+                colorSize.add(item.getSize());
+                int maxQuantity = pdao.getProductDetail(item.getProductID()).getColorSizeQuantity().get(colorSize);
+                checkQuantity = checkQuantity && (maxQuantity >= item.getQuantity());
+            }
+
+            if (checkQuantity) {
+                OrderDAO odao = new OrderDAO();
+                odao.insertOrder(order, user.getUserID());
+                int orderID = odao.getOrderID(user.getUserID());
+                //insert order detail
+                for (CartProduct item : cart) {
+                    int productColorID = pdao.getProductColorID(item.getProductID(), item.getColor());
+                    if (productColorID > 0) {
+                        pdao.updateProductQuantity(item.getQuantity(), productColorID);
+                    }
+                }
+                odao.insertOrderDetail(orderID, cart);
+                request.setAttribute("CHECKOUT_MESSAGE", "Đặt hàng thành công!");
+                session.removeAttribute("CART");
+                url = SUCCESS;
+            }
+        } catch (Exception e) {
+            log("Error at CheckoutController: " + e.toString());
+        } finally {
+            request.getRequestDispatcher(url).forward(request, response);
+        }
+    }
+
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
+
+}
