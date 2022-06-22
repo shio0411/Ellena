@@ -79,9 +79,12 @@ public class CheckoutController extends HttpServlet {
                     }
                 }
                 odao.insertOrderDetail(orderID, cart);
-                request.setAttribute("CHECKOUT_MESSAGE", "Đặt hàng thành công!");
-                session.removeAttribute("CART");
-                url = SUCCESS;
+                odao.updateOrderStatus(orderID, 1);
+                if (orderID > 0) {
+                    request.setAttribute("CHECKOUT_MESSAGE", "Đặt hàng thành công!");
+                    session.removeAttribute("CART");
+                    url = SUCCESS;
+                }
             }
         } catch (Exception e) {
             log("Error at CheckoutController: " + e.toString());
