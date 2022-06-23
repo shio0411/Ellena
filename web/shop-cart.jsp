@@ -17,12 +17,25 @@
     </head>
     <body>
         <jsp:include page="header.jsp" flush="true"/>
-
+        <%
+            // get cart message
+            String message = (String) request.getAttribute("CART_MESSAGE");
+            if (message == null) {
+                message = "";
+            }
+        %>
 
 
         <!-- Breadcrumb Begin -->
         <div class="breadcrumb-option">
             <div class="container">
+                <!--Message row-->
+                <div class="row">
+                    <div class="col-12" style="text-align: center;">
+                        <%= message%>
+                    </div>
+                </div>
+                    
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="breadcrumb__links">
@@ -216,36 +229,36 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script>
 
-            $(document).ready(function () {
-                // Add smooth scrolling to all links
-                $("a").on('click', function (event) {
+                                $(document).ready(function () {
+                                    // Add smooth scrolling to all links
+                                    $("a").on('click', function (event) {
 
-                    // Make sure this.hash has a value before overriding default behavior
-                    if (this.hash !== "") {
-                        // Prevent default anchor click behavior
-                        event.preventDefault();
+                                        // Make sure this.hash has a value before overriding default behavior
+                                        if (this.hash !== "") {
+                                            // Prevent default anchor click behavior
+                                            event.preventDefault();
 
-                        // Store hash
-                        var hash = this.hash;
+                                            // Store hash
+                                            var hash = this.hash;
 
-                        // Using jQuery's animate() method to add smooth page scroll
-                        // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
-                        $('html, body').animate({
-                            scrollTop: $(hash).offset().top
-                        }, 800, function () {
+                                            // Using jQuery's animate() method to add smooth page scroll
+                                            // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
+                                            $('html, body').animate({
+                                                scrollTop: $(hash).offset().top
+                                            }, 800, function () {
 
-                            // Add hash (#) to URL when done scrolling (default click behavior)
-                            window.location.hash = hash;
-                        });
-                    } // End if
-                });
-            });
-            function sendForm() {
-                for (var i = 0; i < document.getElementsByClassName('cart__color').length; i++) {
-                    document.getElementById('quantity#' + (i + 1)).value = document.getElementById('_quantity#' + (i + 1)).value;
-                }
-                document.getElementById('cartForm').submit();
-            }
+                                                // Add hash (#) to URL when done scrolling (default click behavior)
+                                                window.location.hash = hash;
+                                            });
+                                        } // End if
+                                    });
+                                });
+                                function sendForm() {
+                                    for (var i = 0; i < document.getElementsByClassName('cart__color').length; i++) {
+                                        document.getElementById('quantity#' + (i + 1)).value = document.getElementById('_quantity#' + (i + 1)).value;
+                                    }
+                                    document.getElementById('cartForm').submit();
+                                }
         </script>
         <!-- Js Plugins -->
         <jsp:include page="js-plugins.jsp" flush="true" />

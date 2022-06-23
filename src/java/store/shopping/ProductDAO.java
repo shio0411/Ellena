@@ -73,7 +73,7 @@ public class ProductDAO {
     private static final String CHECK_SIZE_QUANTITY = "SELECT size, quantity FROM tblProduct p JOIN tblProductColors pc \n"
             + "ON p.productID = pc.productID AND p.productID=? AND color LIKE ?\n"
             + "JOIN tblColorSizes cs ON cs.productColorID = pc.productColorID";
-    private static final String UPDATE_PRODUCT_QUANTITY = "UPDATE tblColorSizes SET quantity = ? WHERE productColorID = ?";
+    private static final String UPDATE_PRODUCT_QUANTITY = "UPDATE tblColorSizes SET quantity = ? WHERE productColorID = ? AND size LIKE ?";
     private static final String GET_PRODUCTCOLORID = "SELECT pc.productColorID, color FROM tblProduct p JOIN tblProductColors pc ON p.productID = pc.productID WHERE p.productID = ? AND color LIKE ?";
     private static final String GET_PRODUCT_STATUS = "SELECT [status] FROM tblProduct WHERE productID = ?";
     
@@ -111,7 +111,7 @@ public class ProductDAO {
         return status;
     }
     
-    public boolean updateProductQuantity(int quantity, int productColorID) throws SQLException{
+    public boolean updateProductQuantity(int quantity, int productColorID, String size) throws SQLException{
         boolean result = false;
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -123,6 +123,7 @@ public class ProductDAO {
                 ptm = conn.prepareStatement(UPDATE_PRODUCT_QUANTITY);
                 ptm.setInt(1, quantity);
                 ptm.setInt(2, productColorID);
+                ptm.setString(3, size);
                 result = ptm.executeUpdate() > 0;
             }
 
