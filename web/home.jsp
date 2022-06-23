@@ -113,11 +113,7 @@
                 <div class="col-lg-3 col-md-4 col-sm-6 mix">
                     <div class="product__item">
                         <div class="product__item__pic">
-                            <ul class="product__hover">
-                                <li><a href="<%=product.getColorImage().get("key").get(0)%>" class="image-popup"><span class="arrow_expand"></span></a></li>
-                                <li><a href="#"><span class="icon_heart_alt"></span></a></li>
-                                <li><a href="#"><span class="icon_bag_alt"></span></a></li>
-                            </ul>
+                            
                             <%
                                 if(product.getColorImage().get("key").size() > 1)
                                 {
@@ -153,7 +149,11 @@
                             %>
                             <div class="label sale">Sale</div>
                             <%}%>
-                            
+                            <ul class="product__hover">
+                                <li><a href="<%=product.getColorImage().get("key").get(0)%>" class="image-popup"><span class="arrow_expand"></span></a></li>
+                                <li><a href="#"><span class="icon_heart_alt"></span></a></li>
+                                <li><a href="#"><span class="icon_bag_alt"></span></a></li>
+                            </ul>
                         </div>
                         <div class="product__item__text">
                             <h6><a href="ProductRouteController?productID=<%=product.getProductID()%>">

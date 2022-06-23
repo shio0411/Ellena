@@ -17,7 +17,29 @@
         <jsp:include page="meta.jsp" flush="true" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-
+        <style>
+            #product-details{
+                margin-bottom: 7rem;
+            }
+            .nav:after {
+                content: none;
+            }
+            .nav:before {
+                content: none;
+            }
+            .nav-tabs{
+                border-bottom: 1px solid #dee2e6;
+                margin-bottom:0;
+                justify-content: flex-start;
+            }
+            
+            #addColorButton{
+                position: absolute;
+                top: 1.5rem;
+                right:0;
+                z-index: 1;
+            }
+        </style>
     </head>
     <body>
         <%
@@ -53,6 +75,7 @@
         </div>
 
         <div class="main">
+            <!--Welcome and Logout-->
             <div class="row">
                 <form action="MainController" method="POST" class="col-12 text-right"">                
                     Xin chào, <a href="my-profile.jsp"><%= loginUser.getFullName()%></a>
@@ -60,15 +83,19 @@
                 </form>
 
             </div>
-            <h3>Chi tiết sản phẩm</h3> 
-            <div class="row">
-
+            <!-- Chi tiet san phan  -->
+            <div id="product-details" class="d-flex flex-column align-items-center">
+            
+            <div class="col-12 col-md-7">
+                 
                 <%
 
                     List<CategoryDTO> listCategory = (List<CategoryDTO>) session.getAttribute("LIST_CATEGORY");
 
                 %>
-                <form action="MainController" method="POST" style="margin-left: 1.7%;">
+                
+                <form class="mt-0 mb-4" action="MainController" method="POST" >
+                    <label class="h2 h2 form-label" for="productDetail">Chi tiết sản phẩm</label> <br/>
                     <div class="row">
                         <div class="col-md-6 mb-4">
 
@@ -146,23 +173,30 @@
 
 
                     <div class="row">
-                        <div class="col-md-6 mb-4">
+                        <div class="col-12 mb-4">
                             <div class="form-outline" >
                                 <label class="form-label" for="description">Mô tả sản phẩm</label>
-                                <textarea class="form-control form-control-lg" name="description" id="productID" style="resize: vertical; overflow: auto; width: 436.28px; height: 100px;"><%= product.getDescription()%></textarea>
+                                <textarea class="form-control form-control-lg" name="description" id="productID" style="resize: vertical; overflow: auto; width: 100%; height: 100px;"><%= product.getDescription()%></textarea>
                             </div> 
                         </div>
                     </div>
-                    <button class="btn btn-default" type="submit" name="action" value="ManagerUpdateProduct">Cập nhật</button>
+                            <button class="btn btn-default bg-color-primary border-0" type="submit" name="action" value="ManagerUpdateProduct"><b>Cập nhật</b></button>
                 </form>
-            </div>                   
-            <div class="row">
-                <div class="col-md-12 mb-4">
+            </div>
+        
+                
+             
+            </div>
+            
+            <div class="d-flex flex-column align-items-center">
+                <div class="col-md-7 mb-4">
                     <div class="form-outline" >
 
-                        <label class="form-label" for="colorSizeQuantity">Quản lý số lượng</label>
-                        <button type="button" style="float: right" data-toggle="modal" data-target="#editColorModal">Chỉnh sửa</button>
-                        <ul class="nav nav-tabs">
+                        <label class="h2 h2 form-label" for="colorSizeQuantity">Quản lý số lượng</label> <br/>
+                       
+                            <button id="addColorButton" type="button" class="btn  bg-color-primary border-0 my-3"  data-toggle="modal" data-target="#editColorModal">Thêm/xóa màu</button>
+                       
+                        <ul class="mt-2 mb-5 nav nav-tabs">
 
                             <% Iterator<String> it = product.getColorImage().keySet().iterator();
                                 int i = 1;
@@ -171,7 +205,7 @@
                                     String color = it.next();
                                     colorList.add(color);  %>      
 
-                                    <li <%if ((i == 1 && activeColor == null)  || color.equalsIgnoreCase(activeColor)) { %> class="active" <%}%>><a data-toggle="tab" href="#<%= color%>-size"><%= color%></a></li>
+                                    <li <%if ((i == 1 && activeColor == null)  || color.equalsIgnoreCase(activeColor)) { %> class="active" <%}%>><a class="p-2 px-4" data-toggle="tab" href="#<%= color%>-size"><%= color%></a></li>
 
                             <% i++;
                                 }%>                             
@@ -203,15 +237,15 @@
 
                                         <tr>
 
-                                            <td><input type="text" name="size" value="<%= key.get(z + 1)%>" readonly maxlength="50" style="width: 60px"/></td>
+                                            <td><input class="form-control form-control-lg" type="text" name="size" value="<%= key.get(z + 1)%>" readonly maxlength="50" style="width: 100px"/></td>
                                                 <% List<String> colorSize = new ArrayList<>();
                                                     colorSize.add(key.get(z));
                                                     colorSize.add(key.get(z + 1));
                                                 %>
-                                            <td><input type="number" name="quantity" value="<%= product.getColorSizeQuantity().get(colorSize)%>"></td>
+                                            <td ><input class="form-control form-control-lg" type="number" name="quantity" value="<%= product.getColorSizeQuantity().get(colorSize)%>"></td>
 
-                                            <td>                                        
-                                                <button type="button" style="border: none; background: none;" data-toggle="modal" data-target="#delete<%=color%><%=key.get(z + 1)%>Modal"><i class="fa fa-remove fa-lg"></i></button>
+                                            <td class="pl-2">                                        
+                                                <button  type="button" style="border: none; background: none;" data-toggle="modal" data-target="#delete<%=color%><%=key.get(z + 1)%>Modal"><i class="fa fa-remove fa-lg"></i></button>
                                             </td>
 
                                         <div class="modal fade" id="delete<%=color%><%=key.get(z + 1)%>Modal" role="dialog">
@@ -238,7 +272,7 @@
                                             }%>
                                     </table>
                                 </form>
-                                <button class="mb-4" type="button" data-toggle="modal" data-target="#add<%=color%>VariantsModal" style="border: none; background: none"><i class="fa fa-plus-circle fa-lg"></i></button>
+                                <button class="my-3" type="button" data-toggle="modal" data-target="#add<%=color%>VariantsModal" style="border: none; background: none"><i class="fa fa-plus-circle fa-lg"></i></button>
                                 <div class="row ml-2">
                                     <button type="submit" class="btn btn-default" name="action" form="update<%=color%>VariantsForm" value="UpdateVariants">Cập nhật</button>
                                 </div>
@@ -284,12 +318,12 @@
                         </div>          
                     </div>
                 </div> 
-            </div>    
-            <div class="row">
-                <div class="col-md-12 mb-4">
+            </div>  
+            <div class="d-flex flex-column align-items-center">
+                <div class="col-md-7 mb-4">
                     <div class="form-outline" >
-                        <label class="form-label" for="colorImage">Hình ảnh sản phẩm</label>
-                        <a href="MainController?action=ViewImages&productID=<%=product.getProductID()%>"<button id="add" type="button" onClick="checkImages()">Add more images</button></a>
+                        <label class=" h2 h2 form-label" for="colorImage">Hình ảnh sản phẩm</label><br/>
+                        <a class="btn btn-default" href="MainController?action=ViewImages&productID=<%=product.getProductID()%>"<button id="add" type="button" onClick="checkImages()">Thêm/xóa ảnh</button></a>
                     </div>
                     <!-- Pop-up chỉnh sửa màu -->
                     <div class="modal fade" id="editColorModal" role="dialog">
