@@ -36,19 +36,6 @@ public class ProductDTO {
         this.categoryID = categoryID;
     }
 
-    public ProductDTO(int productID, String productName, String description, Map<String, List<String>> colorImage, Map<List<String>, Integer> colorSizeQuantity, int price, float discount, int lowStockLimit, boolean status, int categoryID) {
-        this.productID = productID;
-        this.productName = productName;
-        this.description = description;
-        this.colorImage = colorImage;
-        this.colorSizeQuantity = colorSizeQuantity;
-        this.price = price;
-        this.discount = discount;
-        this.lowStockLimit = lowStockLimit;
-        this.status = status;
-        this.categoryID = categoryID;
-    }
-
     public ProductDTO(int productID, String productName, String description, int price, float discount, int lowStockLimit, boolean status, int categoryID) {
         this.productID = productID;
         this.productName = productName;

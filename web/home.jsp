@@ -115,8 +115,7 @@
                         <div class="product__item__pic">
                             <ul class="product__hover">
                                 <li><a href="<%=product.getColorImage().get("key").get(0)%>" class="image-popup"><span class="arrow_expand"></span></a></li>
-                                <li><a href="#"><span class="icon_heart_alt"></span></a></li>
-                                <li><a href="#"><span class="icon_bag_alt"></span></a></li>
+                                <li><a href="ProductRouteController?productID=<%=product.getProductID()%>"><span class="icon_bag_alt"></span></a></li>
                             </ul>
                             <%
                                 if(product.getColorImage().get("key").size() > 1)
@@ -154,11 +153,10 @@
                             <div class="label sale">Sale</div>
                             <%}%>
                             
-                            <!--<ul class="product__hover">
+                            <ul class="product__hover">
                                 <li><a href="<%=product.getColorImage().get("key").get(0)%>" class="image-popup"><span class="arrow_expand"></span></a></li>
-                                <li><a href="#"><span class="icon_heart_alt"></span></a></li>
                                 <li><a href="ProductRouteController?productID=<%=product.getProductID()%>"><span class="icon_bag_alt"></span></a></li>
-                            </ul> later***--> 
+                            </ul>
                         </div>
                         <div class="product__item__text">
                             <h6><a href="ProductRouteController?productID=<%=product.getProductID()%>">
@@ -287,7 +285,6 @@
                             <%}%>
                             <ul class="product__hover">
                                 <li><a href="<%=product.getColorImage().get("key").get(0)%>" class="image-popup"><span class="arrow_expand"></span></a></li>
-                                <li><a href="#"><span class="icon_heart_alt"></span></a></li>
                                 <li><a href="ProductRouteController?productID=<%=product.getProductID()%>"><span class="icon_bag_alt"></span></a></li>
                             </ul>
                         </div>
@@ -374,7 +371,6 @@
                             <%}%>
                             <ul class="product__hover">
                                 <li><a href="<%=product.getColorImage().get("key").get(0)%>" class="image-popup"><span class="arrow_expand"></span></a></li>
-                                <li><a href="#"><span class="icon_heart_alt"></span></a></li>
                                 <li><a href="ProductRouteController?productID=<%=product.getProductID()%>"><span class="icon_bag_alt"></span></a></li>
                             </ul>
                         </div>
@@ -471,7 +467,6 @@
                             <%}%>
                             <ul class="product__hover">
                                 <li><a href="<%=product.getColorImage().get("key").get(0)%>" class="image-popup"><span class="arrow_expand"></span></a></li>
-                                <li><a href="#"><span class="icon_heart_alt"></span></a></li>
                                 <li><a href="ProductRouteController?productID=<%=product.getProductID()%>"><span class="icon_bag_alt"></span></a></li>
                             </ul>
                         </div>
