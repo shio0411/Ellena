@@ -2198,6 +2198,19 @@ ol {
 	margin-right: -4px;
 }
 
+.shop__cart__table tbody tr .cart__color {
+	font-size: 16px;
+	color: #ca1515;
+	font-weight: 600;
+	width: 190px;
+        
+}.shop__cart__table tbody tr .cart__size {
+	font-size: 16px;
+	color: #ca1515;
+	font-weight: 600;
+	width: 190px;
+}
+
 .shop__cart__table tbody tr .cart__price {
 	font-size: 16px;
 	color: #ca1515;

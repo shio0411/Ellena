@@ -4,6 +4,7 @@
     Author     : giama
 --%>
 
+<%@page import="store.shopping.CartProduct"%>
 <%@page import="java.util.Collections"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="store.user.UserDTO"%>
@@ -17,10 +18,13 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Header Page</title>
         <jsp:include page="meta.jsp" flush="true"/>
+        
     </head>
     <body>
         <% List<CategoryDTO> listCategory = (List<CategoryDTO>) session.getAttribute("LIST_CATEGORY");
             UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
+            List<CartProduct> cart = (List<CartProduct>) session.getAttribute("CART");
+
             ArrayList<Integer> categoryOrder = new ArrayList();
             for (CategoryDTO cat : listCategory) {
                 categoryOrder.add(cat.getOrder());
@@ -42,7 +46,7 @@
                 <li><a href="#"><span class="icon_heart_alt"></span>
                         <div class="tip">2</div>
                     </a></li>
-                <li><a href="#"><span class="icon_bag_alt"></span>
+                <li><a href="shop-cart.jsp"><span class="icon_bag_alt"></span>
                         <div class="tip">2</div>
                     </a></li>
             </ul>
@@ -103,8 +107,23 @@
                             <%}%>
                             <ul class="header__right__widget">
                                 <li><span class="icon_search search-switch"></span></li>
-                                <li><a href="#"><span class="icon_bag_alt"></span>
-                                        <div class="tip">2</div>
+                                <li>
+                                    <% if (user == null) { %>
+                                    
+                                    <a href="login.jsp">
+                                    <%} else { %>
+                                    
+                                    <a href="shop-cart.jsp">
+                                    <%}%>
+                                    <span class="icon_bag_alt"></span>
+                                        <% if (cart != null) {
+                                                if (cart.size() > 0) {
+                                        %>
+                                        <div class="tip"><%= cart.size()%></div>
+                                        <%
+                                                }
+                                            }
+                                        %>
                                     </a></li>
                             </ul>
                         </div>

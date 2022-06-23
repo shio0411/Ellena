@@ -59,6 +59,13 @@ public class AuthenFilter implements Filter {
         CUSTOMER_FUNCTION.add("customer-product-details.jsp");
         CUSTOMER_FUNCTION.add("ProductRouteController");
         CUSTOMER_FUNCTION.add("CheckSizeQuantityController");
+        CUSTOMER_FUNCTION.add("shop-cart.jsp");
+        CUSTOMER_FUNCTION.add("AddToCartController");
+        CUSTOMER_FUNCTION.add("CheckSizeQuantityController");
+        CUSTOMER_FUNCTION.add("best-seller.jsp");
+        CUSTOMER_FUNCTION.add("DeleteCartItemController");
+        CUSTOMER_FUNCTION.add("UpdateCartItemQuantityController");
+        CUSTOMER_FUNCTION.add("checkout.jsp");
 
         ADMIN_FUNCTION = new ArrayList<>();
         ADMIN_FUNCTION.add("admin.jsp");
@@ -185,7 +192,7 @@ public class AuthenFilter implements Filter {
                                 || uri.contains("header.jsp") || uri.contains("new-arrival.jsp") || uri.contains("trend.jsp") || uri.contains("sale-product.jsp") || uri.contains("best-seller.jsp")
                                 || uri.contains("customer-product-details.jsp") || uri.contains("ProductRouteController") || uri.contains("DiscoverController")
                                 || uri.contains("CategoryRouteController") || uri.contains("CheckSizeQuantityController") || uri.contains("discover.jsp")
-                                || uri.contains("search-catalog.jsp") || uri.contains("LoginGoogleController") || uri.contains("LoginFacebookController")
+                                || uri.contains("search-catalog.jsp") || uri.contains("LoginGoogleController") || uri.contains("LoginFacebookController") || uri.contains("AddToCartController")
                                 || uri.contains("about-us.jsp") || uri.contains("faq.jsp") || uri.contains("choose-size.jsp") || uri.contains("payment-policy.jsp") || uri.contains("return-policy.jsp")) {
                             chain.doFilter(request, response);
                         } else if (!ADMIN_FUNCTION.contains(resource) && !CUSTOMER_FUNCTION.contains(resource) && !MANAGER_FUNCTION.contains(resource)) {

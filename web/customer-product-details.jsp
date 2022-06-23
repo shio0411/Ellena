@@ -43,6 +43,7 @@
             </div>
         </div>
 
+        <% session.setAttribute("productID", product.getProductID()); %>
         <!-- Product Details Section Begin -->
         <section class="product-details spad">
             <div class="container">
@@ -96,6 +97,7 @@
                             </div>
                             <%
 
+                                
                                 if (product.getDiscount() != 0) {
                             %>
                             <div class="product__details__price"><%= (int) (product.getPrice() / 1000 * (1 - product.getDiscount()))%>.000đ<span><%=product.getPrice() / 1000%>.000đ </span></div>
@@ -106,16 +108,22 @@
                                 <%=product.getPrice() / 1000%>.000đ</div>
                                 <%}%>
                             <p><%= product.getDescription()%></p>
+
                             <div class="product__details__button">
+
                                 <div class="quantity">
                                     <span>Số lượng</span>
                                     <div class="pro-qty">
-                                        <input type="text" value="1">
+                                        <input name="_quantity" id="_quantity" type="text" value="1">
                                     </div>
                                 </div>
-                                <a href="#" class="cart-btn"><span class="icon_bag_alt"></span>Thêm vào giỏ hàng</a>
 
+                                <a href="#" class="cart-btn" id="add-to-cart-hyperlink" onclick="sendQuantity()">
+                                    <span class="icon_bag_alt"></span>
+                                    Thêm vào giỏ hàng
+                                </a>
                             </div>
+
 
                             <div class="product__details__widget">
                                 <ul>
@@ -132,6 +140,7 @@
                                                         String color = it.next();
                                                         colorList.add(color);
 
+                                                        
                                                     }
                                                     if (currentColor == null) {
                                                         currentColor = colorList.get(0);
@@ -139,56 +148,70 @@
                                                     for (String color : colorList) {
                                                 %>   
                                                 <label for="color<%=i%>" style="margin-right:1%">
-                                                    <input type="radio" name="color" id="color<%=i%>" value="<%= color%>" <% if (color.equalsIgnoreCase(currentColor)) { %> checked="" <%}%>/> <%= color%>
+                                                    <input type="radio" name="color" id="color<%=i%>" value="<%= color%>" 
+                                                           <% if (color.equalsIgnoreCase(currentColor)) {
+                                                                   session.setAttribute("color", color);
+                                                           %> checked="" <%}%>/> <%= color%>
                                                 </label>     
                                                 <% i++;
                                                     }%> 
                                                 <input type="hidden" name="productID" value="<%= product.getProductID()%>" />
                                             </div>
                                         </form>
+
                                     </li>
 
                                     <li>
-                                        <span>Size:</span>
-                                        <div class="size__btn">
-                                            <% ArrayList<Pair<String, Integer>> sizeQuantityList = (ArrayList<Pair<String, Integer>>) request.getAttribute("SIZE_QUANTITY");
-                                                int x = 1;
-                                                if (sizeQuantityList != null) {
-                                                    for (Pair<String, Integer> sizeQuantity : sizeQuantityList) {
-                                                        if (sizeQuantity.getValue() > 0) {
-                                            %>
-                                            <label for="size<%=x%>" <%if (x == 1) {%>class="active"<%}%>>
-                                                <input type="radio" id="size<%=x%>" name="size">
-                                                <%= sizeQuantity.getKey()%>
-                                            </label>
-                                            <% } else {%>
-                                            <label for="size<%=x%>">
-                                                <input type="radio" id="size<%=x%>" name="size" disabled="">
-                                                <%= sizeQuantity.getKey()%>
-                                            </label>
-                                            <% }
-                                                    x++;
-                                                }
-                                            } else {
-                                             Iterator<List<String>> it1 = product.getColorSizeQuantity().keySet().iterator();
-                                                int g = 1;
-                                                List<String> key = new ArrayList<>();
-                                                while (it1.hasNext()) {
-                                                    for (String n : it1.next()) {
-                                                        key.add(n);
+                                        <form action="AddToCartController" id="getSizeForm">
+                                            <span>Size:</span>
+                                            <div class="size__btn">
+                                                <% ArrayList<Pair<String, Integer>> sizeQuantityList = (ArrayList<Pair<String, Integer>>) request.getAttribute("SIZE_QUANTITY");
+                                                    int x = 1;
+                                                    if (sizeQuantityList != null) {
+                                                        for (Pair<String, Integer> sizeQuantity : sizeQuantityList) {
+                                                            if (sizeQuantity.getValue() > 0) {
+                                                %>
+                                                <label for="size<%=x%>" <%if (x == 1) {
+                                                        session.setAttribute("size", sizeQuantity.getKey());
+                                                       %>class="active"<%}%>>
+                                                    <input type="radio" id="size<%=x%>" name="size" value="<%= sizeQuantity.getKey()%>" <%if (x == 1) {%> checked <%}%>>
+                                                    <%= sizeQuantity.getKey()%>
+                                                </label>
+                                                <% } else {%>
+                                                <label for="size<%=x%>">
+                                                    <input type="radio" id="size<%=x%>" name="size" disabled="">
+                                                    <%= sizeQuantity.getKey()%>
+                                                </label>
+                                                <% }
+                                                        x++;
                                                     }
-                                                }
-                                                for (int a = 0; a < key.size(); a += 2) {
-                                                    if (colorList.get(0).equalsIgnoreCase(key.get(a))) {%>
-                                            <label for="size<%=g%>" <%if (g == 1) {%> class="active" <%}%>>
-                                                <input type="radio" id="size<%=g%>" name="size" >  
-                                                <%= key.get(a + 1)%>
-                                                
-                                            </label>
-                                            <%} g++;} }%>
-                                        </div>
+                                                } else {
+                                                    Iterator<List<String>> it1 = product.getColorSizeQuantity().keySet().iterator();
+                                                    int g = 1;
+                                                    List<String> key = new ArrayList<>();
+                                                    while (it1.hasNext()) {
+                                                        for (String n : it1.next()) {
+                                                            key.add(n);
+                                                        }
+                                                    }
+                                                    for (int a = 0; a < key.size(); a += 2) {
+                                                        if (colorList.get(0).equalsIgnoreCase(key.get(a))) {%>
+                                                <label for="size<%=g%>" <%if (g == 1) {
+                                                                
+                                                       %>class="active"<%}%>>
+                                                    <input type="radio" id="size<%=g%>" name="size" value="<%= key.get(a + 1)%>" <%if (g == 1) {%> checked <%}%>>  
+                                                    <%= key.get(a + 1)%>
+                                                </label>
+                                                <%}
+                                                            g++;
+                                                        }
+                                                    }%>
+                                            </div>  
+
+                                            <input type="hidden" name="quantity" id="quantity" value=""/>
+                                        </form>
                                     </li>
-                                    
+
                                     <li style="margin-top: 4%;">
                                         <span>Giảm giá:</span>
                                         <p><%= (int) (product.getDiscount() * 100)%>%</p>
@@ -210,9 +233,9 @@
                             <div class="tab-content">
                                 <div class="tab-pane active" id="tabs-1" role="tabpanel">
                                     <h6>MÔ TẢ SẢN PHẨM</h6>
-                                    <p><%= product.getDescription() %></p>
+                                    <p><%= product.getDescription()%></p>
                                 </div>
-                             
+
                                 <div class="tab-pane" id="tabs-2" role="tabpanel">
                                     <h6>ĐÁNH GIÁ (<%= ratingDetails[1]%>)</h6>
                                     <% List<RatingDTO> ratingList = (List<RatingDTO>) request.getAttribute("RATING_LIST");
@@ -251,6 +274,15 @@
                     document.getElementById('sizeQuantityForm').submit();
                 });
             }
+            
+            
+            function sendQuantity() {
+//                $.post("AddToCartController", {quantity: document.getElementById('quantity').value});
+                document.getElementById('quantity').value = document.getElementById('_quantity').value;
+                document.getElementById('getSizeForm').submit();
+            }
+            
+            
         </script>
         <jsp:include page="footer.jsp" flush="true"/>
 
