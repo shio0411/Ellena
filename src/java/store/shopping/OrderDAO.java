@@ -94,7 +94,7 @@ public class OrderDAO {
         PreparedStatement stm = null;
         try {
             conn = DBUtils.getConnection();
-            if (conn != null) {
+            conn.setAutoCommit(false);
                 for (CartProduct item : cart) {
                     stm = conn.prepareStatement(INSERT_ORDER_DETAIL);
                     stm.setInt(1, item.getPrice());
@@ -105,9 +105,15 @@ public class OrderDAO {
                     stm.setInt(6, item.getProductID());
                     result = result && stm.executeUpdate() > 0;
                 }
-            }
+            conn.commit();
         } catch (Exception e) {
             e.printStackTrace();
+            try {
+                if (conn != null) {
+                    conn.rollback();
+                }
+            } catch (SQLException e2) {
+            }
         } finally {
             if (stm != null) {
                 stm.close();
@@ -127,21 +133,31 @@ public class OrderDAO {
         PreparedStatement stm = null;
         try {
             conn = DBUtils.getConnection();
-            if (conn != null) {
-                stm = conn.prepareStatement(INSERT_ORDER);
-                stm.setDate(1, Date.valueOf(LocalDate.now()));
-                stm.setInt(2, order.getTotal());
-                stm.setString(3, userID);
-                stm.setString(4, order.getPayType());
-                stm.setString(5, order.getFullName());
-                stm.setString(6, order.getAddress());
-                stm.setString(7, order.getPhone());
-                stm.setString(8, order.getEmail());
-                stm.setString(9, order.getNote());
-                result = stm.executeUpdate() > 0;
-            }
+            conn.setAutoCommit(false);
+
+            stm = conn.prepareStatement(INSERT_ORDER);
+            stm.setDate(1, Date.valueOf(LocalDate.now()));
+            stm.setInt(2, order.getTotal());
+            stm.setString(3, userID);
+            stm.setString(4, order.getPayType());
+            stm.setString(5, order.getFullName());
+            stm.setString(6, order.getAddress());
+            stm.setString(7, order.getPhone());
+            stm.setString(8, order.getEmail());
+            stm.setString(9, order.getNote());
+            result = stm.executeUpdate() > 0;
+
+            conn.commit();
+
         } catch (Exception e) {
             e.printStackTrace();
+            try {
+                if (conn != null) {
+                    conn.rollback();
+                }
+            } catch (SQLException e2) {
+                e2.printStackTrace();
+            }
         } finally {
             if (stm != null) {
                 stm.close();
@@ -319,21 +335,27 @@ public class OrderDAO {
 
         try {
             List<OrderStatusDTO> list = getUpdateStatusHistory(orderID);
-            int currentStatusID = list.get(list.size() - 1).getStatusID();
+            int currentStatusID = list.get(list.size() - 1).getStatusID();// got ArrayIndexOutOfBoundsException for new product add in with no previous history so list = 0 and can't -1
             if (currentStatusID != statusID) {
                 conn = DBUtils.getConnection();
-                if (conn != null) {
+                conn.setAutoCommit(false);
                     ptm = conn.prepareStatement(UPDATE_ORDER_STATUS);
                     ptm.setInt(1, statusID);
                     ptm.setInt(2, orderID);
 
                     check = ptm.executeUpdate() > 0;
-                }
+                conn.commit();
             } else {
                 check = true;
             }
         } catch (Exception e) {
             e.printStackTrace();
+            try {
+                if (conn != null) {
+                    conn.rollback();
+                }
+            } catch (SQLException e2) {
+            }
         } finally {
 
             if (ptm != null) {

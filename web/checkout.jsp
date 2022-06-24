@@ -1,3 +1,4 @@
+<%@page import="store.shopping.OrderError"%>
 <%@page import="store.user.UserDTO"%>
 <%@page import="store.shopping.CartProduct"%>
 <%@page import="java.util.List"%>
@@ -19,8 +20,12 @@
     </head>
     <body>
         <jsp:include page="header.jsp" flush="true"/>
-        <% List<CartProduct> cart = (List<CartProduct>) session.getAttribute("CART"); 
+        <% List<CartProduct> cart = (List<CartProduct>) session.getAttribute("CART");
             UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
+            OrderError orderError = (OrderError) request.getAttribute("ORDER_ERROR");
+            if (orderError == null) {
+                orderError = new OrderError();
+            }
         %>
         <!-- Checkout Section Begin -->
         <section class="checkout spad">
@@ -35,40 +40,55 @@
                                 <div class="col-lg-12">
                                     <div class="checkout__form__input">
                                         <p>Full name <span>*</span></p>
-                                        <input type="text" name="fullname" value="<%= loginUser.getFullName()%>" required="">
+                                        <input type="text" name="fullname" value="<%= loginUser.getFullName()%>" placeholder="Họ và Tên">
+                                        <div class="row">    
+                                            <p style="color: red"><%= orderError.getFullName()%></p>
+                                        </div>
                                     </div>
                                     <div class="checkout__form__input">
                                         <p>Town/City <span>*</span></p>
                                         <div class="col-lg-6 col-md-6 col-sm-6" style="padding: 0; padding-right: 15px;">
-                                            <select style="width: 100%; height: 50px; margin: 0 4% 25px 0; padding: 1px 2px 1px 20px;" name="calc_shipping_provinces" required="">
+                                            <select style="width: 100%; height: 50px; margin: 0 4% 25px 0; padding: 1px 2px 1px 20px;" name="calc_shipping_provinces">
                                                 <option value="">Tỉnh / Thành phố</option>
                                             </select>
                                         </div>
                                         <div class="col-lg-6 col-md-6 col-sm-6" style="padding: 0; padding-left: 15px;">
-                                            <select style="width: 100%; height: 50px; margin: 0 4% 25px 0; padding: 1px 2px 1px 20px;" name="calc_shipping_district" required="">
+                                            <select style="width: 100%; height: 50px; margin: 0 4% 25px 0; padding: 1px 2px 1px 20px;" name="calc_shipping_district">
                                                 <option value="">Quận / Huyện</option>
                                             </select>
                                         </div>
                                         <input class="billing_address_1" name="" type="hidden" value="">
                                         <input class="billing_address_2" name="" type="hidden" value="">
+                                        <div class="row">
+                                            <p style="color: red"><%= orderError.getShippingProvinces()%></p>
+                                        </div>
                                     </div>
                                     <div class="checkout__form__input">
                                         <p>Address <span>*</span></p>
-                                        <input type="text" name="address" placeholder="Số nhà, tên đường, phường/ xã" required="">
+                                        <input type="text" name="address" placeholder="Số nhà, tên đường, phường/ xã">
+                                        <div class="row">
+                                            <p style="color: red"><%= orderError.getAddress()%></p>
+                                        </div>
                                     </div>
-                                    
+
 
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-6">
                                     <div class="checkout__form__input">
                                         <p>Phone <span>*</span></p>
-                                        <input type="text" name="phone" value="<%= loginUser.getPhone()%>" required="">
+                                        <input type="text" name="phone" value="<%= loginUser.getPhone()%>" placeholder="Số điện thoại liên lạc">
+                                        <div class="row">
+                                            <p style="color: red"><%= orderError.getPhone()%></p>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-6">
                                     <div class="checkout__form__input">
                                         <p>Email <span>*</span></p>
-                                        <input type="text" name="email" value="<%= loginUser.getUserID()%>" required="">
+                                        <input type="text" name="email" value="<%= loginUser.getUserID()%>" placeholder="Email liên lạc/xác nhận đơn hàng">
+                                        <div class="row">
+                                            <p style="color: red"><%= orderError.getEmail()%></p>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
@@ -84,7 +104,7 @@
                             <div class="checkout__order">
                                 <h5>Your order</h5>
                                 <div class="checkout__order__product">
-                                    
+
                                     <div class="row product-details" style="padding-top: 20px;">
                                         <div class="col-md-6" style="font-weight: bold; margin-bottom: 10px;">
                                             Sản phẩm
@@ -98,10 +118,10 @@
                                         <div class="col-md-2" style="font-weight: bold;">
                                             Thành tiền
                                         </div>
-                                        
+
                                         <%  int total = 0;
                                             for (CartProduct item : cart) {
-                                                total += (int) (item.getPrice() * (1 - item.getDiscount()) * item.getQuantity()); 
+                                                total += (int) (item.getPrice() * (1 - item.getDiscount()) * item.getQuantity());
                                         %>
                                         <div class="col-md-6" style="margin-bottom: 10px;">
                                             <div class="row">
@@ -113,10 +133,10 @@
                                                     <span><%= item.getColor()%>/ <%= item.getSize()%></span>
                                                 </div>
                                             </div>
-                                            
+
                                         </div>
-                                                
-                                                
+
+
                                         <div class="col-md-2">
                                             <%= (int) (item.getPrice() * (1 - item.getDiscount()))%>
                                         </div>
@@ -126,12 +146,12 @@
                                         <div class="col-md-2">
                                             <%= (int) ((item.getPrice() * (1 - item.getDiscount()) * item.getQuantity()) / 1000)%>.000
                                         </div>        
-                                        
-                                        
-                                        
+
+
+
                                         <% }%>
                                     </div>
-                                    
+
                                 </div>
                                 <div>
 

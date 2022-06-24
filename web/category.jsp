@@ -131,7 +131,7 @@
                                                         for (String img : product.getColorImage().get("key")) {
                                                     %>
                                                     <div class="carousel-item">
-                                                        <img class="d-block" src="<%=img%>.jpg">
+                                                        <img class="d-block" src="<%=img%>">
                                                     </div>
                                                     <%
                                                         }
@@ -148,7 +148,7 @@
                                             </div>
                                             <%} else {
                                             %>
-                                            <img src="<%=product.getColorImage().get("key").get(0)%>.jpg">
+                                            <img src="<%=product.getColorImage().get("key").get(0)%>">
                                             <%
                                                 }
                                             %>
