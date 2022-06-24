@@ -19,6 +19,7 @@ public class LoginController extends HttpServlet {
     private static final String ERROR = "login.jsp";
     private static final String ADMIN_PAGE = "ShowAccountController";
     private static final String CUSTOMER_PAGE = "ViewHomeController";
+    private static final String CONTINUE_SHOPPING_PAGE = "ProductRouteController?productID=";
     private static final String MANAGER_PAGE = "ManagerStatisticController";
     private static final String EMPLOYEE_PAGE = "EmployeeShowOrderController";
     private static final String CM = "CM";
@@ -36,6 +37,10 @@ public class LoginController extends HttpServlet {
             UserDAO dao = new UserDAO();
             UserDTO user = dao.checkLogin(userID, password);
             HttpSession session = request.getSession();
+            int productID = 0;
+            if (session.getAttribute("productID") != null) {
+                productID = (int) session.getAttribute("productID");
+            }
             if (null != user) {
                 session.setAttribute("LOGIN_USER", user);
                 String roleID = user.getRoleID();
@@ -47,7 +52,11 @@ public class LoginController extends HttpServlet {
                             url = ADMIN_PAGE;
                             break;
                         case CM:
-                            url = CUSTOMER_PAGE;
+                            if (productID != 0) {
+                                url = CONTINUE_SHOPPING_PAGE + productID;
+                            } else {
+                                url = CUSTOMER_PAGE;
+                            }
                             break;
                         case MN:
                             url = MANAGER_PAGE;

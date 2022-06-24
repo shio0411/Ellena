@@ -282,8 +282,7 @@
                             <%}%>
                             <ul class="product__hover">
                                 <li><a href="<%=product.getColorImage().get("key").get(0)%>" class="image-popup"><span class="arrow_expand"></span></a></li>
-                                <li><a href="#"><span class="icon_heart_alt"></span></a></li>
-                                <li><a href="#"><span class="icon_bag_alt"></span></a></li>
+                                <li><a href="ProductRouteController?productID=<%=product.getProductID()%>"><span class="icon_bag_alt"></span></a></li>
                             </ul>
                         </div>
                         <div class="product__item__text">
@@ -367,6 +366,10 @@
                             %>
                             <div class="label sale">Sale</div>
                             <%}%>
+                            <ul class="product__hover">
+                                <li><a href="<%=product.getColorImage().get("key").get(0)%>" class="image-popup"><span class="arrow_expand"></span></a></li>
+                                <li><a href="ProductRouteController?productID=<%=product.getProductID()%>"><span class="icon_bag_alt"></span></a></li>
+                            </ul>
                         </div>
                         <div class="product__item__text">
                             <h6><a href="ProductRouteController?productID=<%=product.getProductID()%>">
@@ -461,8 +464,7 @@
                             <%}%>
                             <ul class="product__hover">
                                 <li><a href="<%=product.getColorImage().get("key").get(0)%>" class="image-popup"><span class="arrow_expand"></span></a></li>
-                                <li><a href="#"><span class="icon_heart_alt"></span></a></li>
-                                <li><a href="#"><span class="icon_bag_alt"></span></a></li>
+                                <li><a href="ProductRouteController?productID=<%=product.getProductID()%>"><span class="icon_bag_alt"></span></a></li>
                             </ul>
                         </div>
                         <div class="product__item__text">
@@ -571,7 +573,6 @@
     <!-- Services Section End -->
 
     <jsp:include page="footer.jsp" flush="true" />
-    
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
     $(document).ready(function() {

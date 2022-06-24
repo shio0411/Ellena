@@ -87,12 +87,11 @@
                             <%}%>
                             <ul class="product__hover">
                                 <li><a href="<%=product.getColorImage().get("key").get(0)%>" class="image-popup"><span class="arrow_expand"></span></a></li>
-                                <li><a href="#"><span class="icon_heart_alt"></span></a></li>
-                                <li><a href="#"><span class="icon_bag_alt"></span></a></li>
+                                <li><a href="ProductRouteController?productID=<%=product.getProductID()%>"><span class="icon_bag_alt"></span></a></li>
                             </ul>
                         </div>
                         <div class="product__item__text">
-                            <h6><a href="#"><%=product.getProductName()%></a></h6>
+                            <h6><a href="ProductRouteController?productID=<%=product.getProductID()%>"><%=product.getProductName()%></a></h6>
                             <%
                                 if(product.getDiscount() != 0){
                                     %>

@@ -3,8 +3,8 @@ package store.shopping;
 import java.util.List;
 import java.util.Map;
 
-
 public class ProductDTO {
+
     private int productID;
     private String productName;
     private String description;
@@ -17,9 +17,10 @@ public class ProductDTO {
     private String categoryName;
     private boolean status;
     private int categoryID;
+
         
     public ProductDTO() {
-        
+
     }
 
     public ProductDTO(int productID, String productName, String description, Map<String, List<String>> colorImage, Map<List<String>, Integer> colorSizeQuantity, int price, float discount, int lowStockLimit, boolean status, int categoryID) {
@@ -137,8 +138,6 @@ public class ProductDTO {
         this.colorSizeQuantity = colorSizeQuantity;
     }
 
-    
-
     public int getPrice() {
         return price;
     }
@@ -187,13 +186,4 @@ public class ProductDTO {
         this.status = status;
     }
 
-    
-
-    
-
-    
-
-    
-    
-    
 }

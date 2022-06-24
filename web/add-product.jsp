@@ -145,7 +145,7 @@
 
                                                                         <div class="form-outline">
                                                                             <label class="form-label" for="quantity">Số lượng</label>
-                                                                            <input class="form-control form-control-lg" required="" type="number" min="0" name="quantity" placeholder="Ví dụ: 300"/>
+                                                                            <input class="form-control form-control-lg" required="" type="number" min="0" name="quantity" value="0"/>
                                                                         </div>
                                                                     </div>
                                                                     <button type="button" onclick="removeVariant('variant1')" style="border: none; background: none;"><i class="fa fa-remove fa-lg"></i></button>
@@ -399,24 +399,24 @@
                     var variant = document.getElementById("sq"+i);
                     var sizes = variant.querySelectorAll("input[name='size']");
                     for (var size of sizes) {
-                        if (stored.includes(size.value))  {
+                        if (stored.includes(size.value.toLowerCase()))  {
                             e.preventDefault();
                             return alert("Không thể nhập size trùng nhau!");
                         }
-                        stored.push(size.value);
+                        stored.push(size.value.toLowerCase());
                         
                     }
                     stored = [];
                 }
                 
                 for (var inputColor of form.color) {
-                    if (stored.includes(inputColor.value)) {
+                    if (stored.includes(inputColor.value.toLowerCase())) {
                         e.preventDefault();
                         return alert("Không thể nhập màu trùng nhau!");
                         
                     }
                     
-                    stored.push(inputColor.value);
+                    stored.push(inputColor.value.toLowerCase());
                 }
                 
                 

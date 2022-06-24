@@ -106,7 +106,8 @@ public class MainController extends HttpServlet {
     private static final String UPDATE_VARIANTS_CONTROLLER = "UpdateVariantsController";
     private static final String MANAGER_UPDATE_PRODUCT = "ManagerUpdateProduct";
     private static final String MANAGER_UPDATE_PRODUCT_CONTROLLER = "ManagerUpdateProductController";
-
+    private static final String DETELE_CART_ITEM = "DeleteCartItem";
+    private static final String DETELE_CART_ITEM_CONTROLLER = "DeleteCartItemController";
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
@@ -253,6 +254,8 @@ public class MainController extends HttpServlet {
                         break;
                     case MANAGER_UPDATE_PRODUCT:
                         url = MANAGER_UPDATE_PRODUCT_CONTROLLER;
+                    case DETELE_CART_ITEM:
+                        url = DETELE_CART_ITEM_CONTROLLER;
                         break;
                     default:
                         break;

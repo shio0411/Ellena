@@ -75,7 +75,6 @@ public class ProductDAO {
     private static final String CHECK_SIZE_QUANTITY = "SELECT size, quantity FROM tblProduct p JOIN tblProductColors pc \n"
             + "ON p.productID = pc.productID AND p.productID=? AND color LIKE ?\n"
             + "JOIN tblColorSizes cs ON cs.productColorID = pc.productColorID";
-    private static final String GET_PRODUCT_COLOR_ID = "SELECT productColorId FROM tblProductColors WHERE productID = ? AND color = ?";
     private static final String DELETE_COLOR = "DELETE FROM tblColorImage WHERE productColorID=?;\n"
             + "DELETE FROM tblColorSizes WHERE productColorID=?;\n"
             + "DELETE FROM tblProductColors WHERE productColorID=?;\n";
@@ -91,6 +90,108 @@ public class ProductDAO {
             + "JOIN tblCategory c ON c.categoryID = p.categoryID\n"
             + "WHERE dbo.fuChuyenCoDauThanhKhongDau(categoryName) LIKE ?";
     
+    private static final String UPDATE_PRODUCT_QUANTITY = "UPDATE tblColorSizes SET quantity = ? WHERE productColorID = ? AND size LIKE ?";
+    private static final String GET_PRODUCTCOLORID = "SELECT pc.productColorID, color FROM tblProduct p JOIN tblProductColors pc ON p.productID = pc.productID WHERE p.productID = ? AND color LIKE ?";
+    private static final String GET_PRODUCT_STATUS = "SELECT [status] FROM tblProduct WHERE productID = ?";
+    
+    public int getProductStatus(int productID) throws SQLException{
+        int status = -1;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_PRODUCT_STATUS);
+                ptm.setInt(1, productID);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    status = rs.getInt("status");
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+
+        return status;
+    }
+    
+    public boolean updateProductQuantity(int quantity, int productColorID, String size) throws SQLException{
+        boolean result = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        
+
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(UPDATE_PRODUCT_QUANTITY);
+                ptm.setInt(1, quantity);
+                ptm.setInt(2, productColorID);
+                ptm.setString(3, size);
+                result = ptm.executeUpdate() > 0;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+
+        return result;
+    }
+    public int getProductColorID(int productID, String color) throws SQLException {
+        int colorSizeID = 0;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_PRODUCTCOLORID);
+                ptm.setInt(1, productID);
+                ptm.setString(2, color);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    colorSizeID = rs.getInt("productColorID");
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+
+        return colorSizeID;
+    }
+
     public List<ProductDTO> getAllProduct() throws SQLException {
         List<ProductDTO> listProduct = new ArrayList<>();
         Connection conn = null;
@@ -934,40 +1035,6 @@ public class ProductDAO {
 
         }
         return check;
-    }
-
-    public int getProductColorID(int productID, String color) throws SQLException {
-        int productColorID = 0;
-        Connection conn = null;
-        PreparedStatement ptm = null;
-        ResultSet rs = null;
-
-        try {
-            conn = DBUtils.getConnection();
-            if (conn != null) {
-                ptm = conn.prepareStatement(GET_PRODUCT_COLOR_ID);
-                ptm.setInt(1, productID);
-                ptm.setString(2, color);
-                rs = ptm.executeQuery();
-                if (rs.next()) {
-                    productColorID = rs.getInt("productColorID");
-                }
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (rs != null) {
-                rs.close();
-            }
-            if (ptm != null) {
-                ptm.close();
-            }
-            if (conn != null) {
-                conn.close();
-            }
-        }
-        return productColorID;
     }
 
     public boolean addImage(int productColorID, String image) throws SQLException {

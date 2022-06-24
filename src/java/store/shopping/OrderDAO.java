@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import store.utils.DBUtils;
@@ -46,6 +47,112 @@ public class OrderDAO {
 
     //Order status
     private static final String SEARCH_ORDER_STATUS = "SELECT t1.statusID, updateDate, statusName FROM tblOrderStatusUpdate t1 JOIN tblOrderStatus t2 ON t1.statusID = t2.statusID WHERE orderID = ?";
+
+    private static final String INSERT_ORDER = "INSERT INTO tblOrder(orderDate, total, userID, payType, fullName, [address], phone, email, note) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+    private static final String INSERT_ORDER_DETAIL = "INSERT INTO tblOrderDetail(price, quantity, size, color, orderID, productID) VALUES(?, ?, ?, ?, ?, ?)";
+
+    private static final String GET_ORDER_ID = "SELECT TOP 1 orderID FROM tblOrder WHERE userID LIKE ? + '%' ORDER BY orderID DESC";
+
+    public int getOrderID(String userID) throws SQLException {
+        int orderID = 0;
+
+        Connection conn = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                stm = conn.prepareStatement(GET_ORDER_ID);
+                stm.setString(1, userID);
+                rs = stm.executeQuery();
+                while (rs.next()) {
+                    orderID = rs.getInt("orderID");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+
+        return orderID;
+    }
+
+    public boolean insertOrderDetail(int orderID, List<CartProduct> cart) throws SQLException {
+        boolean result = true;
+
+        Connection conn = null;
+        PreparedStatement stm = null;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                for (CartProduct item : cart) {
+                    stm = conn.prepareStatement(INSERT_ORDER_DETAIL);
+                    stm.setInt(1, item.getPrice());
+                    stm.setInt(2, item.getQuantity());
+                    stm.setString(3, item.getSize());
+                    stm.setString(4, item.getColor());
+                    stm.setInt(5, orderID);
+                    stm.setInt(6, item.getProductID());
+                    result = result && stm.executeUpdate() > 0;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+
+        return result;
+    }
+
+    public boolean insertOrder(OrderDTO order, String userID) throws SQLException {
+        boolean result = false;
+
+        Connection conn = null;
+        PreparedStatement stm = null;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                stm = conn.prepareStatement(INSERT_ORDER);
+                stm.setDate(1, Date.valueOf(LocalDate.now()));
+                stm.setInt(2, order.getTotal());
+                stm.setString(3, userID);
+                stm.setString(4, order.getPayType());
+                stm.setString(5, order.getFullName());
+                stm.setString(6, order.getAddress());
+                stm.setString(7, order.getPhone());
+                stm.setString(8, order.getEmail());
+                stm.setString(9, order.getNote());
+                result = stm.executeUpdate() > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+
+        return result;
+    }
 
     public List<OrderDetailDTO> getOrderDetail(int orderID) throws SQLException {
         List<OrderDetailDTO> list = new ArrayList<>();

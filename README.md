@@ -1,37 +1,35 @@
+# Release summary Update Checkout
+***Changes since last push from 23/6/2022 6:54 AM***
 
+***Release date: 23/6/2022 4:23 PM***
 
-# Release Summary footer pages
-***Changes since last push from 21/6/2022 12:46***
-
-***Release date: 21/6/2022 23:18***
-
-## Milestones
-- 
-
-## New files:
-- payment-policy.jsp
-- return-policy.jsp
-
-
-## Changes in code:
-- `AuthenFilter`
-    - Add uri for none login user:
-        ```java
-            (
-            (...)
-                || uri.contains("choose-size.jsp") || uri.contains("payment-policy.jsp") || uri.contains("return-policy.jsp") ) 
-            (...)
-        ```
-- footer.jsp
-    - fix hyperlink to the correct pages
-
-
-## Discovered possible issues:
- 1. 
-
-## Note for later version:
-- 
-
-## Note considering for later version:
-- [Ternary conditional operators into if-else statements](https://converter.website-dev.eu/)
-
+## Change in Files:
+- shop-cart.jsp
+	- Add get CART_MESSAGE
+		```java
+			// get cart message
+			String message = (String) request.getAttribute("CART_MESSAGE");
+            if (message == null) {
+                message = "";
+            }
+		```
+	- Add message row
+		```jsp
+			<!--Message row-->
+                <div class="row">
+                    <div class="col-12" style="text-align: center;">
+                        <%= message%>
+                    </div>
+                </div>
+		```
+- `ProductDAO`
+	- Update UPDATE_PRODUCT_QUANTITY Query
+		```java
+			private static final String UPDATE_PRODUCT_QUANTITY = "UPDATE tblColorSizes SET quantity = ? WHERE productColorID = ? AND size LIKE ?";
+		```
+	- Update updateProductQuantity() function to get size
+- `CheckoutController`
+	- Add check cart
+	- Add check email pattern
+	- Add check quantity return message
+	- Add check status return message

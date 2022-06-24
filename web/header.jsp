@@ -4,6 +4,7 @@
     Author     : giama
 --%>
 
+<%@page import="store.shopping.CartProduct"%>
 <%@page import="java.util.Collections"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="store.user.UserDTO"%>
@@ -17,10 +18,13 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Header Page</title>
         <jsp:include page="meta.jsp" flush="true"/>
+        
     </head>
     <body>
         <% List<CategoryDTO> listCategory = (List<CategoryDTO>) session.getAttribute("LIST_CATEGORY");
             UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
+            List<CartProduct> cart = (List<CartProduct>) session.getAttribute("CART");
+
             ArrayList<Integer> categoryOrder = new ArrayList();
             for (CategoryDTO cat : listCategory) {
                 categoryOrder.add(cat.getOrder());
@@ -42,7 +46,7 @@
                 <li><a href="#"><span class="icon_heart_alt"></span>
                         <div class="tip">2</div>
                     </a></li>
-                <li><a href="#"><span class="icon_bag_alt"></span>
+                <li><a href="shop-cart.jsp"><span class="icon_bag_alt"></span>
                         <div class="tip">2</div>
                     </a></li>
             </ul>
@@ -69,8 +73,8 @@
                     <div class="col-xl-6 col-lg-7" >
                         <nav class="header__menu">
                             <ul id="menu">
-                                <li id="home"><a href="./">Trang chủ</a></li>
-                                <li id="category"><a>Thời trang</a>
+                                <li id="home" class="header__menu_item"><a href="./">Trang chủ</a></li>
+                                <li id="category" class="header__menu_item"><a>Thời trang</a>
                                     <ul class="dropdown">
                                         <%
                                             for (int i : categoryOrder) {
@@ -84,8 +88,8 @@
                                                 }%>
                                     </ul>
                                 </li>
-                                <li id="browse"><a href="DiscoverController">Khám phá</a></li>
-                                <li id="contact"><a href="./contact.jsp">Liên hệ</a></li>
+                                <li id="discover" class="header__menu_item"><a href="DiscoverController">Khám phá</a></li>
+                                <li id="contact" class="header__menu_item"><a href="./contact.jsp">Liên hệ</a></li>
                             </ul>
                         </nav>
                     </div>
@@ -103,8 +107,23 @@
                             <%}%>
                             <ul class="header__right__widget">
                                 <li><span class="icon_search search-switch"></span></li>
-                                <li><a href="#"><span class="icon_bag_alt"></span>
-                                        <div class="tip">2</div>
+                                <li>
+                                    <% if (user == null) { %>
+                                    
+                                    <a href="login.jsp">
+                                    <%} else { %>
+                                    
+                                    <a href="shop-cart.jsp">
+                                    <%}%>
+                                    <span class="icon_bag_alt"></span>
+                                        <% if (cart != null) {
+                                                if (cart.size() > 0) {
+                                        %>
+                                        <div class="tip"><%= cart.size()%></div>
+                                        <%
+                                                }
+                                            }
+                                        %>
                                     </a></li>
                             </ul>
                         </div>
@@ -130,17 +149,18 @@
         <script>
             // Add active class to the current button (highlight it)
             var header = document.getElementById("menu");
-            var btns = header.getElementsByTagName("li");
-            var path = window.location.href;
+            var btns = header.querySelectorAll(".header__menu_item");
+            var path = window.location.href.toLowerCase();
             var check = true;
+            console.log(btns);
             for (var i = btns.length - 1; i > 0; i--) {
                 if (path.includes(btns[i].id)) {
                     btns[i].className += " active";
                     check = false;
                 }
-                if (check)
-                    btns[0].className += " active";
             }
+            if (check)
+                    btns[0].className += " active";
         </script>
         <!--Start of Tawk.to Script-->
         <script type="text/javascript">
