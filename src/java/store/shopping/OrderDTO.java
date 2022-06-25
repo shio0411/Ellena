@@ -18,7 +18,7 @@ public class OrderDTO {
     private String phone;
     private String email;
     private String note;
-    private int transactionNumber;
+    private String transactionNumber;
 
     public OrderDTO() {
     }
@@ -156,13 +156,15 @@ public class OrderDTO {
         this.note = note;
     }
 
-    public int getTransactionNumber() {
+    public String getTransactionNumber() {
         return transactionNumber;
     }
 
-    public void setTransactionNumber(int transactionNumber) {
+    public void setTransactionNumber(String transactionNumber) {
         this.transactionNumber = transactionNumber;
     }
+
+    
     
 
 }

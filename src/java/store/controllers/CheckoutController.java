@@ -45,14 +45,13 @@ public class CheckoutController extends HttpServlet {
                 String statusErrorMessage = "Những món hàng: ";
                 OrderError orderError = new OrderError();
                 Boolean check = true;
-                
+
                 UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
                 int total = Integer.parseInt(request.getParameter("total"));
                 String fullname = request.getParameter("fullname");
                 int provinceIndex = 1; // at least 1 so array is not out of bound
                 String phone = request.getParameter("phone");
                 String note = request.getParameter("note");
-                
 
                 // check fullName is empty or ""
                 if (fullname.isEmpty() || fullname.equals("")) {
@@ -60,33 +59,32 @@ public class CheckoutController extends HttpServlet {
                     check = false;
                     orderError.setFullName("Xin quý khách hãy điền đầy đủ Họ và Tên!");
                 }
-                
+
                 // check calc_shipping_district is empty or ""
                 if (request.getParameter("calc_shipping_provinces").isEmpty() || request.getParameter("calc_shipping_provinces").equals("")) {
                     url = INPUT_ERROR;
                     check = false;
                     orderError.setShippingProvinces("Xin quý khách hãy chọn Tỉnh/Thành Phố - Phường/Huyện nơi giao hàng!");
-                } else{
+                } else {
                     provinceIndex = Integer.parseInt(request.getParameter("calc_shipping_provinces"));
                 }
                 String[] provinces = new String[]{"An Giang", "Bà Rịa - Vũng Tàu", "Bạc Liêu", "Bắc Kạn", "Bắc Giang", "Bắc Ninh", "Bến Tre", "Bình Dương", "Bình Định", "Bình Phước", "Bình Thuận", "Cà Mau", "Cao Bằng", "Cần Thơ", "Đà Nẵng", "Đắk Lắk", "Đắk Nông", "Đồng Nai", "Đồng Tháp", "Điện Biên", "Gia Lai", "Hà Giang", "Hà Nam", "Hà Nội", "Hà Tĩnh", "Hải Dương", "Hải Phòng", "Hòa Bình", "Hậu Giang", "Hưng Yên", "Thành phố Hồ Chí Minh", "Khánh Hòa", "Kiên Giang", "Kon Tum", "Lai Châu", "Lào Cai", "Lạng Sơn", "Lâm Đồng", "Long An", "Nam Định", "Nghệ An", "Ninh Bình", "Ninh Thuận", "Phú Thọ", "Phú Yên", "Quảng Bình", "Quảng Nam", "Quảng Ngãi", "Quảng Ninh", "Quảng Trị", "Sóc Trăng", "Sơn La", "Tây Ninh", "Thái Bình", "Thái Nguyên", "Thanh Hóa", "Thừa Thiên - Huế", "Tiền Giang", "Trà Vinh", "Tuyên Quang", "Vĩnh Long", "Vĩnh Phúc", "Yên Bái"};
                 String address = request.getParameter("address") + ", " + request.getParameter("calc_shipping_district") + ", " + provinces[provinceIndex - 1];
-                
-                
+
                 // check address is empty or ""
                 if (request.getParameter("address").isEmpty() || request.getParameter("address").equals("")) {
                     url = INPUT_ERROR;
                     check = false;
                     orderError.setAddress("Xin quý khách hãy nhập địa chỉ giao hàng!");
                 }
-                
+
                 // check phone is empty or ""
                 if (phone.isEmpty() || phone.equals("")) {
                     url = INPUT_ERROR;
                     check = false;
                     orderError.setPhone("Xin quý khách hãy nhập vào số điện thoại liên lạc!");
                 }
-                
+
                 // check valid email and check empty or ""
                 if (Pattern.matches(EMAIL_PATTERN, email) || email.equals("") || email.isEmpty()) {
                     url = INPUT_ERROR;
@@ -94,13 +92,11 @@ public class CheckoutController extends HttpServlet {
                     orderError.setEmail("Email quý khách nhập không hợp lệ!");
 //                    request.setAttribute("CART_MESSAGE", "Email quý khách nhập không hợp lệ!");
                 }
-                
-                // check payType
 
-                
+                // check payType
                 // store value
                 OrderDTO order = new OrderDTO(Date.valueOf(LocalDate.now()), total, user.getFullName(), 1, "Chưa xác nhận", ""/*payType*/, fullname, address, phone, email, note);
-                
+
                 // check quantity and status
                 boolean checkQuantity = true;
                 boolean checkStatus = true;
@@ -137,10 +133,9 @@ public class CheckoutController extends HttpServlet {
 
                 // insert order only if check quantity and status and checkInputs == true
                 if (checkQuantity && checkStatus && check) {
+                    // new insert order
                     OrderDAO odao = new OrderDAO();
-                    odao.insertOrder(order, user.getUserID());
-                    int orderID = odao.getOrderID(user.getUserID());
-                    //insert order detail
+                    // update product quantity
                     for (CartProduct item : cart) {
                         int productColorID = pdao.getProductColorID(item.getProductID(), item.getColor());
                         List<String> colorSize = new ArrayList<>();
@@ -148,17 +143,23 @@ public class CheckoutController extends HttpServlet {
                         colorSize.add(item.getSize());
                         int maxQuantity = pdao.getProductDetail(item.getProductID()).getColorSizeQuantity().get(colorSize);
                         if (productColorID > 0) {
-                            pdao.updateProductQuantity(maxQuantity - item.getQuantity(), productColorID, item.getSize());// trừ luôn 2 cái
+                            pdao.updateProductQuantity(maxQuantity - item.getQuantity(), productColorID, item.getSize());
                         }
                     }
-                    odao.insertOrderDetail(orderID, cart);
-                    odao.updateOrderStatus(orderID, 1); // update mean insert into tblOrderStatusUpdate
-                    if (orderID > 0) {
-                        request.setAttribute("CART_MESSAGE", "Đặt hàng thành công! Mã đơn hàng của bạn là " + orderID);
-                        session.removeAttribute("CART");
-                        url = SUCCESS;
+                    boolean checkAddOrder = odao.addOrder(order, user.getUserID(), cart);
+                    if (checkAddOrder) {
+                        int orderID = odao.getOrderID(user.getUserID());
+                        if (orderID > 0) {
+                            request.setAttribute("CART_MESSAGE", "Đặt hàng thành công! Mã đơn hàng của bạn là " + orderID);
+                            session.removeAttribute("CART");
+                            url = SUCCESS;
+                        }
+                    } else {
+                        request.setAttribute("CART_MESSAGE", "Đặt hàng không thành công!");
+                        url = CART_ERROR;
                     }
-                }else{
+
+                } else {
                     request.setAttribute("ORDER_ERROR", orderError);
                 }
 
