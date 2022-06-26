@@ -59,13 +59,15 @@ public class CheckoutController extends HttpServlet {
                     session.setAttribute("EMAIL", request.getParameter("email"));
                     session.setAttribute("PAY_TYPE", request.getParameter("payType"));
                 }
-                boolean paidStatus = Boolean.parseBoolean((String) session.getAttribute("PAID_STATUS"));
+                boolean paidStatus = false;
                 List<CartProduct> cart = (List<CartProduct>) session.getAttribute("CART");
                 // check cart
                 if (cart != null) {
+                    paidStatus = Boolean.parseBoolean((String) session.getAttribute("PAID_STATUS"));
                     if (!"COD".equalsIgnoreCase(payType) && paidStatus == false) {
                         url = "vnpay.jsp";
                     } else {
+                        String transactionNumber = "";
                         Map fields = new HashMap();
                         for (Enumeration params = request.getParameterNames(); params.hasMoreElements();) {
                             String fieldName = (String) params.nextElement();
@@ -74,9 +76,7 @@ public class CheckoutController extends HttpServlet {
                                 fields.put(fieldName, fieldValue);
                             }
                         }
-
-                        String transactionNumber = request.getParameter("vnp_TransactionNo");
-
+                        transactionNumber = request.getParameter("vnp_TransactionNo");
                         String vnp_SecureHash = request.getParameter("vnp_SecureHash");
                         if (fields.containsKey("vnp_SecureHashType")) {
                             fields.remove("vnp_SecureHashType");
@@ -85,115 +85,122 @@ public class CheckoutController extends HttpServlet {
                             fields.remove("vnp_SecureHash");
                         }
                         String signValue = Config.hashAllFields(fields);
-                        String email = request.getParameter("email");
-                        String quantityErrorMessage = "Số lượng của những món hàng: ";
-                        String statusErrorMessage = "Những món hàng: ";
 
-                        Boolean check = true;
-                        UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
-                        int total = Integer.parseInt(session.getAttribute("TOTAL").toString());
-
-                        String fullname, address, phone, note;
-                        int provinceIndex;
-                        String[] provinces = new String[]{"An Giang", "Bà Rịa - Vũng Tàu", "Bạc Liêu", "Bắc Kạn", "Bắc Giang", "Bắc Ninh", "Bến Tre", "Bình Dương", "Bình Định", "Bình Phước", "Bình Thuận", "Cà Mau", "Cao Bằng", "Cần Thơ", "Đà Nẵng", "Đắk Lắk", "Đắk Nông", "Đồng Nai", "Đồng Tháp", "Điện Biên", "Gia Lai", "Hà Giang", "Hà Nam", "Hà Nội", "Hà Tĩnh", "Hải Dương", "Hải Phòng", "Hòa Bình", "Hậu Giang", "Hưng Yên", "Thành phố Hồ Chí Minh", "Khánh Hòa", "Kiên Giang", "Kon Tum", "Lai Châu", "Lào Cai", "Lạng Sơn", "Lâm Đồng", "Long An", "Nam Định", "Nghệ An", "Ninh Bình", "Ninh Thuận", "Phú Thọ", "Phú Yên", "Quảng Bình", "Quảng Nam", "Quảng Ngãi", "Quảng Ninh", "Quảng Trị", "Sóc Trăng", "Sơn La", "Tây Ninh", "Thái Bình", "Thái Nguyên", "Thanh Hóa", "Thừa Thiên - Huế", "Tiền Giang", "Trà Vinh", "Tuyên Quang", "Vĩnh Long", "Vĩnh Phúc", "Yên Bái"};
-                        //if return from ajaxServlet (the vnpay servlet)
-                        if (payType == null) {
-                            email = session.getAttribute("EMAIL").toString();
-                            fullname = session.getAttribute("FULL_NAME").toString();
-                            provinceIndex = Integer.parseInt(session.getAttribute("PROVINCE").toString());
-                            address = session.getAttribute("ADDRESS").toString() + ", " + session.getAttribute("DISTRICT").toString() + ", " + provinces[provinceIndex - 1];
-                            phone = session.getAttribute("PHONE").toString();
-                            note = session.getAttribute("NOTE").toString();
-                            payType = session.getAttribute("PAY_TYPE").toString();
+                        //if customer tries to return to checkout.jsp after they canceled paying
+                        if (transactionNumber == null && paidStatus == true) {
+                            url = "vnpay.jsp";
                         } else {
-                            fullname = request.getParameter("fullname");
-                            provinceIndex = Integer.parseInt(request.getParameter("calc_shipping_provinces"));;
-                            phone = request.getParameter("phone");
-                            note = request.getParameter("note");
-                            address = request.getParameter("address") + ", " + request.getParameter("calc_shipping_district") + ", " + provinces[provinceIndex - 1];
-                        }
+                            String email = request.getParameter("email");
+                            String quantityErrorMessage = "Số lượng của những món hàng: ";
+                            String statusErrorMessage = "Những món hàng: ";
 
-                        // check valid email and check empty or ""
-                        if (Pattern.matches(EMAIL_PATTERN, email)) {
-                            url = INPUT_ERROR;
-                            check = false;
-                            orderError.setEmail("Email quý khách nhập không hợp lệ!");
+                            Boolean check = true;
+                            UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
+                            int total = Integer.parseInt(session.getAttribute("TOTAL").toString());
+
+                            String fullname, address, phone, note;
+                            int provinceIndex;
+                            String[] provinces = new String[]{"An Giang", "Bà Rịa - Vũng Tàu", "Bạc Liêu", "Bắc Kạn", "Bắc Giang", "Bắc Ninh", "Bến Tre", "Bình Dương", "Bình Định", "Bình Phước", "Bình Thuận", "Cà Mau", "Cao Bằng", "Cần Thơ", "Đà Nẵng", "Đắk Lắk", "Đắk Nông", "Đồng Nai", "Đồng Tháp", "Điện Biên", "Gia Lai", "Hà Giang", "Hà Nam", "Hà Nội", "Hà Tĩnh", "Hải Dương", "Hải Phòng", "Hòa Bình", "Hậu Giang", "Hưng Yên", "Thành phố Hồ Chí Minh", "Khánh Hòa", "Kiên Giang", "Kon Tum", "Lai Châu", "Lào Cai", "Lạng Sơn", "Lâm Đồng", "Long An", "Nam Định", "Nghệ An", "Ninh Bình", "Ninh Thuận", "Phú Thọ", "Phú Yên", "Quảng Bình", "Quảng Nam", "Quảng Ngãi", "Quảng Ninh", "Quảng Trị", "Sóc Trăng", "Sơn La", "Tây Ninh", "Thái Bình", "Thái Nguyên", "Thanh Hóa", "Thừa Thiên - Huế", "Tiền Giang", "Trà Vinh", "Tuyên Quang", "Vĩnh Long", "Vĩnh Phúc", "Yên Bái"};
+                            //if return from ajaxServlet (the vnpay servlet)
+                            if (payType == null) {
+                                email = session.getAttribute("EMAIL").toString();
+                                fullname = session.getAttribute("FULL_NAME").toString();
+                                provinceIndex = Integer.parseInt(session.getAttribute("PROVINCE").toString());
+                                address = session.getAttribute("ADDRESS").toString() + ", " + session.getAttribute("DISTRICT").toString() + ", " + provinces[provinceIndex - 1];
+                                phone = session.getAttribute("PHONE").toString();
+                                note = session.getAttribute("NOTE").toString();
+                                payType = session.getAttribute("PAY_TYPE").toString();
+                            } else {
+                                fullname = request.getParameter("fullname");
+                                provinceIndex = Integer.parseInt(request.getParameter("calc_shipping_provinces"));;
+                                phone = request.getParameter("phone");
+                                note = request.getParameter("note");
+                                address = request.getParameter("address") + ", " + request.getParameter("calc_shipping_district") + ", " + provinces[provinceIndex - 1];
+                            }
+
+                            // check valid email and check empty or ""
+                            if (Pattern.matches(EMAIL_PATTERN, email)) {
+                                url = INPUT_ERROR;
+                                check = false;
+                                orderError.setEmail("Email quý khách nhập không hợp lệ!");
 //                    request.setAttribute("CART_MESSAGE", "Email quý khách nhập không hợp lệ!");
-                        }
-
-                        OrderDTO order = new OrderDTO(Date.valueOf(LocalDate.now()), total, user.getFullName(), 1, "Chưa xác nhận", payType, fullname, address, phone, email, note, transactionNumber);
-
-                        // check quantity and status
-                        boolean checkQuantity = true;
-                        boolean checkStatus = true;
-                        ProductDAO pdao = new ProductDAO();
-                        for (CartProduct item : cart) {
-                            List<String> colorSize = new ArrayList<>();
-                            colorSize.add(item.getColor());
-                            colorSize.add(item.getSize());
-                            int maxQuantity = pdao.getProductDetail(item.getProductID()).getColorSizeQuantity().get(colorSize);
-                            checkQuantity = checkQuantity && (maxQuantity >= item.getQuantity());
-                            // record which product quantity is larger than DB stock
-                            if (!checkQuantity) {
-                                quantityErrorMessage += item.getProductName() + " size " + item.getSize() + " màu " + item.getColor() + ", \n";
                             }
-                            checkStatus = checkStatus && (pdao.getProductStatus(item.getProductID()) > 0);
-                            // record which product status not availiable for purchase (Manager change status while product is in Customer cart) 
-                            if (!checkStatus) {
-                                statusErrorMessage += item.getProductName() + " size " + item.getSize() + " màu " + item.getColor() + ", \n";
-                            }
-                        }
 
-                        // check quantity
-                        if (!checkQuantity) {
-                            url = CART_ERROR;
-                            quantityErrorMessage += "Bạn chọn hiện Shop không còn đủ để đáp ứng nhu cầu, xin quý khách cập nhật lại giỏ hàng!";
-                            request.setAttribute("CART_MESSAGE", quantityErrorMessage);
-                        }
-                        // check status
-                        if (!checkStatus) {
-                            url = CART_ERROR;
-                            statusErrorMessage += "Bạn chọn hiện Shop không còn bán nữa, xin quý khách cập nhật lại giỏ hàng!";
-                            request.setAttribute("CART_MESSAGE", statusErrorMessage);
-                        }
+                            OrderDTO order = new OrderDTO(Date.valueOf(LocalDate.now()), total, user.getFullName(), 1, "Chưa xác nhận", payType, fullname, address, phone, email, note, transactionNumber);
 
-                        // insert order only if check quantity and status and checkInputs == true
-                        if (checkQuantity && checkStatus && check) {
-                            // new insert order
-                            OrderDAO odao = new OrderDAO();
-                            // update product quantity
+                            // check quantity and status
+                            boolean checkQuantity = true;
+                            boolean checkStatus = true;
+                            ProductDAO pdao = new ProductDAO();
                             for (CartProduct item : cart) {
-                                int productColorID = pdao.getProductColorID(item.getProductID(), item.getColor());
                                 List<String> colorSize = new ArrayList<>();
                                 colorSize.add(item.getColor());
                                 colorSize.add(item.getSize());
                                 int maxQuantity = pdao.getProductDetail(item.getProductID()).getColorSizeQuantity().get(colorSize);
-                                if (productColorID > 0) {
-                                    pdao.updateProductQuantity(maxQuantity - item.getQuantity(), productColorID, item.getSize());
+                                checkQuantity = checkQuantity && (maxQuantity >= item.getQuantity());
+                                // record which product quantity is larger than DB stock
+                                if (!checkQuantity) {
+                                    quantityErrorMessage += item.getProductName() + " size " + item.getSize() + " màu " + item.getColor() + ", \n";
                                 }
-                            }
-                            boolean checkAddOrder = odao.addOrder(order, user.getUserID(), cart);
-                            if (checkAddOrder) {
-                                int orderID = odao.getOrderID(user.getUserID());
-                                if (orderID > 0) {
-                                    request.setAttribute("CART_MESSAGE", "Đặt hàng thành công! Mã đơn hàng của bạn là " + orderID);
-                                    session.removeAttribute("CART");
-                                    url = SUCCESS;
-                                    session.removeAttribute("PAID_STATUS");
+                                checkStatus = checkStatus && (pdao.getProductStatus(item.getProductID()) > 0);
+                                // record which product status not availiable for purchase (Manager change status while product is in Customer cart) 
+                                if (!checkStatus) {
+                                    statusErrorMessage += item.getProductName() + " size " + item.getSize() + " màu " + item.getColor() + ", \n";
                                 }
-                            } else {
-                                request.setAttribute("CART_MESSAGE", "Đặt hàng không thành công!");
-                                url = CART_ERROR;
                             }
 
-                        } else {
-                            request.setAttribute("ORDER_ERROR", orderError);
+                            // check quantity
+                            if (!checkQuantity) {
+                                url = CART_ERROR;
+                                quantityErrorMessage += "Bạn chọn hiện Shop không còn đủ để đáp ứng nhu cầu, xin quý khách cập nhật lại giỏ hàng!";
+                                request.setAttribute("CART_MESSAGE", quantityErrorMessage);
+                            }
+                            // check status
+                            if (!checkStatus) {
+                                url = CART_ERROR;
+                                statusErrorMessage += "Bạn chọn hiện Shop không còn bán nữa, xin quý khách cập nhật lại giỏ hàng!";
+                                request.setAttribute("CART_MESSAGE", statusErrorMessage);
+                            }
+
+                            // insert order only if check quantity and status and checkInputs == true
+                            if (checkQuantity && checkStatus && check) {
+                                // new insert order
+                                OrderDAO odao = new OrderDAO();
+                                // update product quantity
+                                for (CartProduct item : cart) {
+                                    int productColorID = pdao.getProductColorID(item.getProductID(), item.getColor());
+                                    List<String> colorSize = new ArrayList<>();
+                                    colorSize.add(item.getColor());
+                                    colorSize.add(item.getSize());
+                                    int maxQuantity = pdao.getProductDetail(item.getProductID()).getColorSizeQuantity().get(colorSize);
+                                    if (productColorID > 0) {
+                                        pdao.updateProductQuantity(maxQuantity - item.getQuantity(), productColorID, item.getSize());
+                                    }
+                                }
+                                boolean checkAddOrder = odao.addOrder(order, user.getUserID(), cart);
+                                if (checkAddOrder) {
+                                    int orderID = odao.getOrderID(user.getUserID());
+                                    if (orderID > 0) {
+                                        request.setAttribute("CART_MESSAGE", "Đặt hàng thành công! Mã đơn hàng của bạn là " + orderID);
+                                        session.removeAttribute("CART");
+                                        url = SUCCESS;
+                                        session.removeAttribute("PAID_STATUS");
+                                    }
+                                } else {
+                                    request.setAttribute("CART_MESSAGE", "Đặt hàng không thành công!");
+                                    url = CART_ERROR;
+                                }
+
+                            } else {
+                                request.setAttribute("ORDER_ERROR", orderError);
+                            }
                         }
                     }
                 } else {
                     url = CART_ERROR;
                     request.setAttribute("CART_MESSAGE", "Ở đây chúng tôi không chơi chạy link vào thẳng Check Out >:( ");
                 }
+
             }
         } catch (Exception e) {
             log("Error at CheckoutController: " + e.toString());
