@@ -31,7 +31,7 @@
         <section class="checkout spad">
             <div class="container">
 
-                <form action="MainController" class="checkout__form">
+                <form action="MainController" class="checkout__form" method="POST">
                     <div class="row">
                         <div class="col-lg-12">
                             <h5>Địa chỉ nhận hàng</h5>
@@ -40,10 +40,7 @@
                                 <div class="col-lg-12">
                                     <div class="checkout__form__input">
                                         <p>Full name <span>*</span></p>
-                                        <input type="text" name="fullname" value="<%= loginUser.getFullName()%>" placeholder="Họ và Tên">
-                                        <div class="row">    
-                                            <p style="color: red"><%= orderError.getFullName()%></p>
-                                        </div>
+                                        <input type="text" name="fullname" value="<%= loginUser.getFullName()%>" placeholder="Họ và Tên" required="">
                                     </div>
                                     <div class="checkout__form__input">
                                         <p>Town/City <span>*</span></p>
@@ -59,16 +56,15 @@
                                         </div>
                                         <input class="billing_address_1" name="" type="hidden" value="">
                                         <input class="billing_address_2" name="" type="hidden" value="">
-                                        <div class="row">
+                                        
+                                    </div>
+                                    <div class="row">
                                             <p style="color: red"><%= orderError.getShippingProvinces()%></p>
                                         </div>
-                                    </div>
                                     <div class="checkout__form__input">
                                         <p>Address <span>*</span></p>
-                                        <input type="text" name="address" placeholder="Số nhà, tên đường, phường/ xã">
-                                        <div class="row">
-                                            <p style="color: red"><%= orderError.getAddress()%></p>
-                                        </div>
+                                        <input type="text" name="address" placeholder="Số nhà, tên đường, phường/ xã" required="">
+                                       
                                     </div>
 
 
@@ -76,10 +72,8 @@
                                 <div class="col-lg-6 col-md-6 col-sm-6">
                                     <div class="checkout__form__input">
                                         <p>Phone <span>*</span></p>
-                                        <input type="text" name="phone" value="<%= loginUser.getPhone()%>" placeholder="Số điện thoại liên lạc">
-                                        <div class="row">
-                                            <p style="color: red"><%= orderError.getPhone()%></p>
-                                        </div>
+                                        <input type="text" name="phone" value="<%= loginUser.getPhone()%>" placeholder="Số điện thoại liên lạc" required="">
+                                        
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-6">
@@ -161,18 +155,19 @@
                                         <li>Subtotal <span></span></li>
                                         <li>Total <span><%= (int) (total / 1000)%>.000</span></li>
                                         <input type="hidden" name="total" value="<%= ((int) (total / 1000)) * 1000%>"/>
+                                        <% session.setAttribute("TOTAL", ((int) (total / 1000)) * 1000); %>
                                     </ul>
                                 </div>
                                 <div class="checkout__order__widget">
 
-                                    <label for="check-payment">
+                                    <label for="COD">
                                         COD
-                                        <input type="checkbox" id="check-payment">
+                                        <input type="radio" id="COD" name="payType" checked="" value="COD">
                                         <span class="checkmark"></span>
                                     </label>
-                                    <label for="paypal">
-                                        PayPal
-                                        <input type="checkbox" id="paypal">
+                                    <label for="VNPay">
+                                        VNPay
+                                        <input type="radio" id="VNPay" name="payType" value="VNPay">
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>

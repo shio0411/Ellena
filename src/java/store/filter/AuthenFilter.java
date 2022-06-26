@@ -38,7 +38,6 @@ public class AuthenFilter implements Filter {
     private static final String CM = "CM";
     private static final String AD = "AD";
     private static final String MN = "MN";
-    private static final String LOGIN_PAGE = "login.jsp";
     private static final String HOME_PAGE = "./";
     private static final boolean debug = true;
     // The filter configuration object we are associated with.  If
@@ -66,6 +65,9 @@ public class AuthenFilter implements Filter {
         CUSTOMER_FUNCTION.add("DeleteCartItemController");
         CUSTOMER_FUNCTION.add("UpdateCartItemQuantityController");
         CUSTOMER_FUNCTION.add("checkout.jsp");
+        CUSTOMER_FUNCTION.add("vnpay.jsp");
+        CUSTOMER_FUNCTION.add("ajaxServlet");
+        CUSTOMER_FUNCTION.add("CheckoutController");
 
         ADMIN_FUNCTION = new ArrayList<>();
         ADMIN_FUNCTION.add("admin.jsp");

@@ -35,8 +35,8 @@ public class OrderDTO {
         this.trackingID = trackingID;
     }
 
-    // normal constructor with no transactionNumber, orderID, trackingID
-    public OrderDTO(Date orderDate, int total, String userName, int statusID, String statusName, String payType, String fullName, String address, String phone, String email, String note) {
+    // normal constructor with no orderID, trackingID
+    public OrderDTO(Date orderDate, int total, String userName, int statusID, String statusName, String payType, String fullName, String address, String phone, String email, String note, String transactionNumber) {
         this.orderDate = orderDate;
         this.total = total;
         this.userName = userName;
@@ -48,6 +48,7 @@ public class OrderDTO {
         this.phone = phone;
         this.email = email;
         this.note = note;
+        this.transactionNumber = transactionNumber;
     }
     
 
