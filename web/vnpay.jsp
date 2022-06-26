@@ -15,18 +15,18 @@
         <meta name="description" content="">
         <meta name="author" content="">
         <title>Thanh toán VNPay</title>
-        <link href="/vnpay_jsp/assets/bootstrap.min.css" rel="stylesheet"/>
+        <jsp:include page="meta.jsp" flush="true" />
         <!-- Custom styles for this template -->
-        <link href="/vnpay_jsp/assets/jumbotron-narrow.css" rel="stylesheet">      
-        <script src="/vnpay_jsp/assets/jquery-1.11.3.min.js"></script>
+        <link href="css/jumbotron-narrow.css" rel="stylesheet">      
+        <script src="js/jquery-1.11.3.min.js"></script>
     </head>
 
     <body>
 
         <div class="container">
-            <div class="header clearfix">
+            <div class="mb-lg-5">
 
-                <h3 class="text-muted">THANH TOÁN VỚI VNPAY</h3>
+                <h3 class="text-uppercase text-primary" style="font-weight: bold">Thanh toán với VNPay</h3>
             </div>
             <h3>Nhập thông tin thanh toán</h3>
             <div class="table-responsive">
@@ -37,7 +37,7 @@
   
                     </div>
                     <div class="form-group">
-                        <label >Email (*)</label>
+                        <label >Email</label>
                         <input class="form-control" id="txt_billing_email"
                                name="txt_billing_email" type="text" value="<%= request.getParameter("email") %>" />   
                     </div>
@@ -76,9 +76,9 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Họ tên</label>
+                        <label>Họ tên (*)</label>
                         <input class="form-control" id="txt_billing_fullname"
-                               name="txt_billing_fullname" type="text" value="<%= request.getParameter("fullname").toUpperCase() %>"/>             
+                               name="txt_billing_fullname" type="text" value="<%= request.getParameter("fullname").toUpperCase() %>" required=""/>             
                     </div>
 
                     <button type="submit" class="btn btn-default">Thanh toán</button>
@@ -87,9 +87,7 @@
             <p>
                 &nbsp;
             </p>
-            <footer class="footer">
-                <p>&copy; VNPAY 2015</p>
-            </footer>
+
         </div>  
         <link href="https://pay.vnpay.vn/lib/vnpay/vnpay.css" rel="stylesheet" />
         <script src="https://pay.vnpay.vn/lib/vnpay/vnpay.min.js"></script>
