@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 package store.controllers;
 
@@ -12,42 +11,32 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import store.shopping.ProductDAO;
-import store.shopping.ProductDTO;
-import store.utils.VNCharacterUtils;
+import store.shopping.OrderDAO;
+import store.shopping.OrderDTO;
 
 /**
  *
- * @author giama
+ * @author ASUS
  */
-@WebServlet(name = "CategoryRouteController", urlPatterns = {"/CategoryRouteController"})
-public class CategoryRouteController extends HttpServlet {
-    private static final String ERROR = "error.jsp";
+@WebServlet(name = "EmployeeShowOrderController", urlPatterns = {"/EmployeeShowOrderController"})
+public class EmployeeShowOrderController extends HttpServlet {
+
+    private static final String ERROR = "employee-order.jsp";
+    private static final String SUCCESS = "employee-order.jsp";
     
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
-            String category = VNCharacterUtils.removeAccent(request.getParameter("category"));
-            ProductDAO dao = new ProductDAO();
-            HttpSession session = request.getSession();
-            List<ProductDTO> searchCatalog = dao.getProductByCategory(category);
-            session.setAttribute("SEARCH_CATALOG", searchCatalog);
-            url = "./category/" + category;
-
+            OrderDAO dao = new OrderDAO();
+            List<OrderDTO> listOrder = dao.getAllOrder();
+            if (listOrder.size() > 0) {
+                request.setAttribute("LIST_ORDER", listOrder);
+                url = SUCCESS;
+            }
         } catch (Exception e) {
-            log("Error at CategoryRouteController: " + e.toString());
+            log("Error at ShowOrderController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

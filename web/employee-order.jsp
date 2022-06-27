@@ -1,6 +1,12 @@
-<%@page import="store.shopping.OrderDAO"%>
+<%-- 
+    Document   : employee-order
+    Created on : Jun 15, 2022, 4:02:08 PM
+    Author     : ASUS
+--%>
+
 <%@page import="store.shopping.OrderStatusDTO"%>
 <%@page import="store.shopping.OrderDetailDTO"%>
+<%@page import="store.shopping.OrderDAO"%>
 <%@page import="store.shopping.OrderDTO"%>
 <%@page import="java.util.List"%>
 <%@page import="store.user.UserDTO"%>
@@ -9,19 +15,22 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Quản lí đơn hàng | Manager</title>
+        <title>Quản lí đơn hàng | Employee</title>
         <jsp:include page="meta.jsp" flush="true"/>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     </head>
     <body>
-
         <%
             UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
             String search = request.getParameter("search");
             if (search == null) {
                 search = "";
+            }
+            if (loginUser == null || !"EM".equals(loginUser.getRoleID())) {
+                response.sendRedirect("login.jsp");
+                return;
             }
 
             String message = (String) request.getAttribute("MESSAGE");
@@ -53,9 +62,8 @@
         %>
 
         <div class="sidenav">
-            <a href="ManagerStatisticController"><i class="fa fa-bar-chart fa-lg"></i>Số liệu thống kê</a>
-            <a href="ManagerShowProductController"><i class="fa fa-archive fa-lg"></i>Quản lí sản phẩm</a>
-            <a href="ManagerShowOrderController" style="color: #873e23; font-weight: bold;"><i class="fa fa-cart-plus fa-lg"></i>Quản lí đơn hàng</a>
+            <a href="EmployeeShowOrderController" style="color: #873e23; font-weight: bold;"><i class="fa fa-cart-plus fa-lg"></i>Quản lí đơn hàng</a>
+            <a href="https://www.tawk.to/"><i class="fa fa-archive fa-lg"></i>Quản lí Q&A</a>
         </div> 
 
         <div class="main">
@@ -69,19 +77,21 @@
                 <input type="text" name="search" value="<%= search%>" placeholder="Tìm kiếm đơn hàng">
                 Trạng thái
                 <select name="statusID">
-                    <option value="" selected hidden>Chọn một trạng thái</option>
+                    <option value="%" selected hidden>Chọn một trạng thái</option>
                     <option value="1">Chưa xác nhận</option>
                     <option value="2">Đã xác nhận</option>
                     <option value="3">Đang giao</option>
                     <option value="4">Đã giao</option>
                     <option value="5">Đã hủy</option>
-                    <option value="6">Chờ hoàn tiền</option>
-                    <option value="7">Đã hoàn tiền</option>
                 </select>
-                Từ
-                <input type="date" name="dateFrom" value=""/>
-                đến
-                <input type="date" name="dateTo" value=""/>
+                Thời gian
+                <select name="numberOfWeek">
+                    <option value="%" selected hidden>Chọn khoảng thời gian</option>
+                    <option value="3">3 tuần trước</option>
+                    <option value="2">2 tuần trước</option>
+                    <option value="1">Tuần trước</option>
+                    <option value="0">Tuần này</option>
+                </select>
                 <button type="submit" name="action" value="SearchOrder" class="btn-outline-dark" style="width: 15%; padding: 0.5% 0.1%;"><i class="fa fa-search fa-lg"></i>Search</button>
             </form>   
             ${requestScope.EMPTY_LIST_MESSAGE}
@@ -123,20 +133,20 @@
                     <td>
                         <div class="modal fade" id="myModal<%=id%>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                             <div class="modal-dialog" id="<%=id%>" >
-                                <div class="modal-content">
+                                <div class="modal-content" >
                                     <div class="modal-header">
                                         <h4 class="modal-title" id="myModalLabel">Chỉnh sửa đơn hàng</h4>
                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
                                     </div>
                                     <form action="MainController">
-                                        <div class="modal-body" >
+                                        <div class="modal-body">
 
                                             <div class="row">
                                                 <div class="col-md-6 mb-4 pb-2">
 
                                                     <div class="form-outline">
-                                                        <label class="form-label" for="orderID">ID đơn hàng</label>
+                                                        <label class="form-label" for="orderID">Order ID</label>
                                                         <input type="text" readonly="" name="orderID" value="<%= order.getOrderID()%>" id="orderID" class="form-control form-control-lg" />
                                                     </div>
 
@@ -146,7 +156,7 @@
                                                 <div class="col-md-6 mb-4 pb-2">
 
                                                     <div class="form-outline">
-                                                        <label class="form-label" for="statusID">Trạng thái</label>
+                                                        <label class="form-label" for="statusID">Status</label>
                                                         <select class="form-control form-control-lg" name="statusID">
                                                             <option value="1" <%if (order.getStatusID() == 1) {%>selected <%}%>>Chưa xác nhận</option>
                                                             <option value="2" <%if (order.getStatusID() == 2) {%>selected <%}%>>Đã xác nhận</option>  
@@ -166,7 +176,7 @@
                                                 <div class="col-md-12 mb-4">
 
                                                     <div class="form-outline">
-                                                        <label class="form-label" for="fullName">User name</label>
+                                                        <label class="form-label" for="fullName">Full name</label>
                                                         <input type="text" name="fullName" value="<%= order.getUserName()%>" readonly="" id="userID" class="form-control form-control-lg" />
                                                     </div>
 
@@ -179,7 +189,7 @@
                                                 <div class="col-md-6 mb-4 pb-2">
 
                                                     <div class="form-outline">
-                                                        <label class="form-label" for="orderDate">Ngày đặt hàng</label>
+                                                        <label class="form-label" for="orderDate">Order date</label>
                                                         <input type="text" readonly="" name="orderDate" value="<%= order.getOrderDate()%>" id="orderDate" class="form-control form-control-lg" />
 
                                                     </div>
@@ -190,7 +200,7 @@
                                                 <div class="col-md-6 mb-4 pb-2">
 
                                                     <div class="form-outline">
-                                                        <label class="form-label" for="total">Tổng tiền</label>
+                                                        <label class="form-label" for="total">Total</label>
                                                         <input type="text" readonly="" name="total" value="<%= order.getTotal()%>" id="total" class="form-control form-control-lg" />
 
                                                     </div>
@@ -199,11 +209,11 @@
 
                                             </div>
                                             <div class="row">
-
+                                                
                                                 <div class="col-md-6 mb-4 pb-2">
 
                                                     <div class="form-outline">
-                                                        <label class="form-label" for="payType">Hình thức thanh toán</label>
+                                                        <label class="form-label" for="trackingID">Pay type</label>
                                                         <input type="text" name="payType" readonly="" value="<%= order.getPayType()%>" id="payType" class="form-control form-control-lg" />
                                                     </div>
 
@@ -217,110 +227,50 @@
 
                                                 </div>
                                                 <!--thêm icon edit ở đây-->
-
+                                                
+                                                
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-12 mb-4">
                                                     <label class="form-label" for="">Chi tiết đơn hàng</label>
+                                                    <table border="1">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Product name</th>
+                                                                <th>Price</th>
+                                                                <th>Quantity</th>
+                                                                <th>Size</th>
+                                                                <th>Color</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <%
+                                                                List<OrderDetailDTO> orderDetailList = dao.getOrderDetail(order.getOrderID());
+                                                                for (OrderDetailDTO orderDetail : orderDetailList) {
+
+
+                                                            %>
+
+
+                                                            <tr>
+                                                                <td><%= orderDetail.getProductName()%></td>
+                                                                <td><%= orderDetail.getPrice()%></td>
+                                                                <td><%= orderDetail.getQuantity()%></td>
+                                                                <td><%= orderDetail.getSize()%></td>
+                                                                <td><%= orderDetail.getColor()%></td>
+                                                            </tr>
+
+                                                            <%
+                                                                }
+                                                            %>
+                                                        </tbody>
+                                                    </table>
+
                                                 </div>
+
                                             </div>
-                                            <div class="row">
-                                                <div class="col-md-6 mb-4 pb-2">
-                                                    <div class="form-outline">
-                                                        <label class="form-label" for="fullname">Người nhận</label>
-                                                        <input type="text" value="<%= order.getFullName()%>" readonly="" class="form-control form-control-lg"/>
-                                                    </div>
-                                                </div>
-
-
-
-
-                                                <div class="col-md-6 mb-4 pb-2">
-                                                    <div class="form-outline">
-                                                        <label class="form-label" for="fullname">Số điện thoại</label>
-                                                        <input type="text" value="<%= order.getPhone()%>" readonly="" class="form-control form-control-lg"/>
-                                                    </div>
-                                                    
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-12 mb-4 pb-2">
-                                                    <div class="form-outline">
-                                                        <label class="form-label" for="address">Địa chỉ giao hàng</label>
-                                                        <input type="text" value="<%= order.getAddress()%>" readonly="" class="form-control form-control-lg"/>
-                                                    </div>
-                                                    
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-6 mb-4 pb-2">
-                                                    <div class="form-outline">
-                                                        <label class="form-label" for="email">Email</label>
-                                                        <input type="text" value="<%= order.getEmail()%>" readonly="" class="form-control form-control-lg"/>
-                                                    </div>
-                                                    
-                                                </div>
-                                                <div class="col-md-6 mb-4 pb-2">
-                                                    <div class="form-outline">
-                                                        <label class="form-label" for="transactionNumber">Mã giao dịch</label>
-                                                        <input type="text" <% if (!order.getPayType().equals("COD")) {%>value="<%= order.getTransactionNumber()%>" <%} else {%> value="" <%}%> readonly="" class="form-control form-control-lg"/>
-                                                    </div>
-                                                    
-                                                </div>
-                                            </div>
-                                                    
-                                                    <!--sửa if chỗ này thành [is not empty]-->
-                                        <% if (order.getNote() != null) { %> 
-                                            <div class="row">
-                                                <div class="col-md-12 mb-4 pb-2">
-                                                    <div class="form-outline">
-                                                        <label class="form-label" for="note">Ghi chú</label>
-                                                        <input type="text" value="<%= order.getNote()%>" readonly="" class="form-control form-control-lg"/>
-                                                    </div>
-                                                    
-                                                </div>
-                                            </div>
-                                        <%}%>
-                                            <table border="1">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Product name</th>
-                                                        <th>Price</th>
-                                                        <th>Quantity</th>
-                                                        <th>Size</th>
-                                                        <th>Color</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <%
-                                                        List<OrderDetailDTO> orderDetailList = dao.getOrderDetail(order.getOrderID());
-                                                        for (OrderDetailDTO orderDetail : orderDetailList) {
-
-
-                                                    %>
-
-                                                    <tr>
-                                                        <td><%= orderDetail.getProductName()%></td>
-                                                        <td><%= orderDetail.getPrice()%></td>
-                                                        <td><%= orderDetail.getQuantity()%></td>
-                                                        <td><%= orderDetail.getSize()%></td>
-                                                        <td><%= orderDetail.getColor()%></td>
-                                                    </tr>
-
-                                                    <%
-                                                        }
-                                                    %>
-                                                </tbody>
-                                            </table>
-
-
-
-
-
+                                            
                                         </div>
-                                        <input type="hidden" name="payType" value="<%= order.getPayType()%>"/>
-                                        <input type="hidden" name="userID" value="<%= loginUser.getUserID()%>"/>
-                                        <input type="hidden" name="roleID" value="<%= loginUser.getRoleID()%>"/>
                                         <div class="modal-footer">
                                             <button class="btn btn-default" type="submit" name="action" value="UpdateOrder">Cập nhật</button>
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
@@ -349,8 +299,6 @@
                                                 <tr>
                                                     <th>Trạng thái</th>
                                                     <th>Ngày</th>
-                                                    <th>Chỉnh sửa bởi</th>
-                                                    <th>RoleID</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -361,8 +309,6 @@
                                                 <tr>
                                                     <td><%= orderStatus.getStatusName()%></td>
                                                     <td><%= orderStatus.getUpdateDate()%></td>
-                                                    <td><%= orderStatus.getUserID()%></td>
-                                                    <td><%= orderStatus.getRoleID()%></td>
                                                 </tr>
                                                 <%
                                                     }
@@ -385,6 +331,7 @@
                         }%>
             </table>
         </div>
+        
         <script>
             $(document).ready(function () {
                 $("#myModal").modal();

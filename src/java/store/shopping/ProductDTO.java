@@ -18,6 +18,7 @@ public class ProductDTO {
     private boolean status;
     private int categoryID;
 
+        
     public ProductDTO() {
 
     }
@@ -34,6 +35,21 @@ public class ProductDTO {
         this.status = status;
         this.categoryID = categoryID;
     }
+
+    public ProductDTO(int productID, String productName, String description, int price, float discount, int lowStockLimit, boolean status, int categoryID) {
+        this.productID = productID;
+        this.productName = productName;
+        this.description = description;
+        this.price = price;
+        this.discount = discount;
+        this.lowStockLimit = lowStockLimit;
+        this.status = status;
+        this.categoryID = categoryID;
+    }
+
+    
+
+    
 
     public ProductDTO(int productID, String productName, String description, Map<String, List<String>> colorImage, int price, int quantity, float discount, int lowStockLimit, String categoryName, boolean status) {
         this.productID = productID;
@@ -79,6 +95,8 @@ public class ProductDTO {
     public void setCategoryID(int categoryID) {
         this.categoryID = categoryID;
     }
+
+   
 
     public int getProductID() {
         return productID;

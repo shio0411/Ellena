@@ -14,15 +14,37 @@ import javafx.util.Pair;
 import store.utils.DBUtils;
 
 public class StatisticDAO {
-    private static final String STATISTIC_ORDER_7DAY = "SELECT orderDate, COUNT(*) AS [orderQuantity], SUM(total) AS [income], SUM(quantity) as [productQuantity] FROM tblOrder o JOIN tblOrderDetail d ON o.orderID = d.orderID WHERE DATEDIFF(day,orderDate,GETDATE()) < 7 GROUP BY orderDate ORDER BY orderDate asc";
+    private static final String STATISTIC_ORDER_7DAY = "SELECT orderDate, COUNT(*) AS [orderQuantity], SUM(total) AS [income], SUM(quantity) as [productQuantity] \n" +
+"FROM tblOrder o JOIN tblOrderDetail d ON o.orderID = d.orderID \n" +
+"WHERE DATEDIFF(day,orderDate,GETDATE()) < 7 AND o.orderID IN (SELECT orderID FROM tblOrderStatusUpdate WHERE statusID = '4')\n" +
+"GROUP BY orderDate \n" +
+"ORDER BY orderDate asc";
     private static final String STATISTIC_ORDER_4WEEK = "SELECT 'Week ' + LTRIM(STR(DATEDIFF(day,orderDate,GETDATE())/7+1)) AS [Week], COUNT(*) AS [orderQuantity], SUM(total) AS [income], SUM(quantity) as [productQuantity] \n" +
-                                                        "FROM tblOrder o JOIN tblOrderDetail d ON o.orderID = d.orderID \n" +
-                                                        "WHERE DATEDIFF(day,orderDate,GETDATE()) < 29 \n" +
-                                                        "GROUP BY DATEDIFF(day,orderDate,GETDATE())/7";
-    private static final String STATISTIC_ORDER_1YEAR = "SELECT LTRIM(STR(year(orderDate)))+'-'+LTRIM(STR(month(orderDate))) AS [Month], COUNT(*) AS [orderQuantity], SUM(total) AS [income], SUM(quantity) as [productQuantity] FROM tblOrder o JOIN tblOrderDetail d ON o.orderID = d.orderID WHERE DATEDIFF(month, orderDate, GETDATE()) < 12 GROUP BY year(orderDate),month(orderDate) ORDER BY year(orderDate) asc";
-    private static final String STATISTIC_ORDER_TODAY = "SELECT COUNT(*) AS [orderQuantity], SUM(total) AS [income], SUM(quantity) as [productQuantity] FROM tblOrder o JOIN tblOrderDetail d ON o.orderID = d.orderID WHERE DATEDIFF(day,orderDate,GETDATE()) < 1 GROUP BY orderDate";
-    private static final String STATISTIC_BEST_SELLER = "SELECT TOP 5 p.productID, p.productName, SUM(d.quantity) AS [sale], SUM(d.price*d.quantity) AS [income] FROM tblProduct p JOIN tblOrderDetail d ON p.productID = d.productID GROUP BY p.productID, p.productName ORDER BY Sale desc";
-    private static final String STATISTIC_BEST_INCOME = "SELECT TOP 5 p.productID, p.productName, SUM(d.quantity) AS [sale], SUM(d.price*d.quantity) AS [income] FROM tblProduct p JOIN tblOrderDetail d ON p.productID = d.productID GROUP BY p.productID, p.productName ORDER BY income desc";
+"FROM tblOrder o JOIN tblOrderDetail d ON o.orderID = d.orderID \n" +
+"WHERE DATEDIFF(day,orderDate,GETDATE()) < 28 AND o.orderID IN (SELECT orderID FROM tblOrderStatusUpdate WHERE statusID = '4')\n" +
+"GROUP BY DATEDIFF(day,orderDate,GETDATE())/7";
+    private static final String STATISTIC_ORDER_1YEAR = "SELECT LTRIM(STR(year(orderDate)))+'-'+LTRIM(STR(month(orderDate))) AS [Month], COUNT(*) AS [orderQuantity], SUM(total) AS [income], SUM(quantity) as [productQuantity] \n" +
+"FROM tblOrder o JOIN tblOrderDetail d ON o.orderID = d.orderID \n" +
+"WHERE DATEDIFF(month, orderDate, GETDATE()) < 12  AND o.orderID IN (SELECT orderID FROM tblOrderStatusUpdate WHERE statusID = '4')\n" +
+"GROUP BY year(orderDate),month(orderDate) \n" +
+"ORDER BY year(orderDate) asc";
+    private static final String STATISTIC_ORDER_TODAY = "SELECT COUNT(*) AS [orderQuantity], SUM(total) AS [income], SUM(quantity) as [productQuantity] \n" +
+"FROM tblOrder o JOIN tblOrderDetail d ON o.orderID = d.orderID \n" +
+"WHERE DATEDIFF(day,orderDate,GETDATE()) < 1 AND o.orderID IN (SELECT orderID FROM tblOrderStatusUpdate WHERE statusID = '4')\n" +
+"GROUP BY orderDate \n" +
+"ORDER BY orderDate asc";
+    private static final String STATISTIC_BEST_SELLER = "SELECT TOP 5 p.productID, p.productName, SUM(d.quantity) AS [sale], SUM(d.price*d.quantity) AS [income] \n" +
+"FROM tblProduct p JOIN tblOrderDetail d ON p.productID = d.productID \n" +
+"JOIN tblOrder o ON d.orderID = o.orderID\n" +
+"WHERE DATEDIFF(day, o.orderDate,GETDATE()) < ? AND o.orderID IN (SELECT orderID FROM tblOrderStatusUpdate WHERE statusID = '4')\n" +
+"GROUP BY p.productID, p.productName \n" +
+"ORDER BY Sale desc";
+    private static final String STATISTIC_BEST_INCOME = "SELECT TOP 5 p.productID, p.productName, SUM(d.quantity) AS [sale], SUM(d.price*d.quantity) AS [income] \n" +
+"FROM tblProduct p JOIN tblOrderDetail d ON p.productID = d.productID \n" +
+"JOIN tblOrder o ON d.orderID = o.orderID\n" +
+"WHERE DATEDIFF(day, o.orderDate,GETDATE()) < ? AND o.orderID IN (SELECT orderID FROM tblOrderStatusUpdate WHERE statusID = '4')\n" +
+"GROUP BY p.productID, p.productName \n" +
+"ORDER BY Sale desc";
     public Map<String, StatisticDTO> getStatisticOrder7Day() throws SQLException {
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -170,7 +192,7 @@ public class StatisticDAO {
         }
         return today;
     }  
-    public List<Pair<String, StatisticDTO>> getBestSeller() throws SQLException {
+    public List<Pair<String, StatisticDTO>> getBestSeller(int duration) throws SQLException {
         Connection conn = null;
         PreparedStatement ptm = null;
         ResultSet rs = null;
@@ -179,6 +201,7 @@ public class StatisticDAO {
             conn = DBUtils.getConnection();
             if (conn != null) {
                 ptm = conn.prepareStatement(STATISTIC_BEST_SELLER);
+                ptm.setInt(1, duration);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
                     int productID = rs.getInt("productID");
@@ -205,7 +228,7 @@ public class StatisticDAO {
         }
         return list;
     }  
-    public List<Pair<String, StatisticDTO>> getBestIncome() throws SQLException {
+    public List<Pair<String, StatisticDTO>> getBestIncome(int duration) throws SQLException {
         Connection conn = null;
         PreparedStatement ptm = null;
         ResultSet rs = null;
@@ -214,6 +237,7 @@ public class StatisticDAO {
             conn = DBUtils.getConnection();
             if (conn != null) {
                 ptm = conn.prepareStatement(STATISTIC_BEST_INCOME);
+                ptm.setInt(1, duration);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
                     int productID = rs.getInt("productID");

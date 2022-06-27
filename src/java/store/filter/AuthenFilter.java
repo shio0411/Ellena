@@ -33,6 +33,8 @@ public class AuthenFilter implements Filter {
     private static List<String> CUSTOMER_FUNCTION;
     private static List<String> ADMIN_FUNCTION;
     private static List<String> MANAGER_FUNCTION;
+    private static List<String> EMPLOYEE_FUNCTION;
+    private static final String EM = "EM";
     private static final String CM = "CM";
     private static final String AD = "AD";
     private static final String MN = "MN";
@@ -56,6 +58,7 @@ public class AuthenFilter implements Filter {
         CUSTOMER_FUNCTION.add("trend.jsp");
         CUSTOMER_FUNCTION.add("customer-product-details.jsp");
         CUSTOMER_FUNCTION.add("ProductRouteController");
+        CUSTOMER_FUNCTION.add("CheckSizeQuantityController");
         CUSTOMER_FUNCTION.add("shop-cart.jsp");
         CUSTOMER_FUNCTION.add("AddToCartController");
         CUSTOMER_FUNCTION.add("CheckSizeQuantityController");
@@ -91,6 +94,12 @@ public class AuthenFilter implements Filter {
         MANAGER_FUNCTION.add("UpdateOrderController");
         MANAGER_FUNCTION.add("SearchOrderController");
         MANAGER_FUNCTION.add("manager-order.jsp");
+        
+        EMPLOYEE_FUNCTION = new ArrayList<>();
+        EMPLOYEE_FUNCTION.add("EmployeeShowOrderController");
+        EMPLOYEE_FUNCTION.add("UpdateOrderController");
+        EMPLOYEE_FUNCTION.add("SearchOrderController");
+        EMPLOYEE_FUNCTION.add("employee-order.jsp");
     }
 
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
@@ -181,9 +190,10 @@ public class AuthenFilter implements Filter {
                                 || uri.contains("register.jsp") || uri.contains("login.jsp") || uri.contains("MainController") || uri.contains("footer.jsp")
                                 || uri.contains("home.jsp") || uri.contains("meta.jsp") || uri.contains("contact.jsp") || uri.contains("category.jsp")
                                 || uri.contains("header.jsp") || uri.contains("new-arrival.jsp") || uri.contains("trend.jsp") || uri.contains("sale-product.jsp") || uri.contains("best-seller.jsp")
-                                || uri.contains("customer-product-details.jsp") || uri.contains("ProductRouteController")
-                                || uri.contains("CategoryRouteController") || uri.contains("CheckSizeQuantityController") || uri.contains("AddToCartController")
-                                || uri.contains("search-catalog.jsp") || uri.contains("LoginGoogleController") || uri.contains("LoginFacebookController")) {
+                                || uri.contains("customer-product-details.jsp") || uri.contains("ProductRouteController") || uri.contains("DiscoverController")
+                                || uri.contains("CategoryRouteController") || uri.contains("CheckSizeQuantityController") || uri.contains("discover.jsp")
+                                || uri.contains("search-catalog.jsp") || uri.contains("LoginGoogleController") || uri.contains("LoginFacebookController") || uri.contains("AddToCartController")
+                                || uri.contains("about-us.jsp") || uri.contains("faq.jsp") || uri.contains("choose-size.jsp") || uri.contains("payment-policy.jsp") || uri.contains("return-policy.jsp")) {
                             chain.doFilter(request, response);
                         } else if (!ADMIN_FUNCTION.contains(resource) && !CUSTOMER_FUNCTION.contains(resource) && !MANAGER_FUNCTION.contains(resource)) {
                             res.sendError(404);
@@ -206,7 +216,9 @@ public class AuthenFilter implements Filter {
                                 chain.doFilter(request, response);
                             } else if (MN.equals(roleID) && MANAGER_FUNCTION.contains(resource)) {
                                 chain.doFilter(request, response);
-                            } else {
+                            } else if (EM.equals(roleID) && EMPLOYEE_FUNCTION.contains(resource)) {
+                                chain.doFilter(request, response);
+                            }else {
                                 if (CM.equals(roleID))
                                     res.sendRedirect(HOME_PAGE);
                                 else
@@ -218,7 +230,7 @@ public class AuthenFilter implements Filter {
                 }
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 

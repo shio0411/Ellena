@@ -58,7 +58,7 @@ public class AddToCartController extends HttpServlet {
                 boolean checkQuantity = quantity <= maxQuantity && quantity > 0;
                 for (CartProduct item : cart) {
                     if (cp.equals(item)) {
-                        if ((quantity + item.getQuantity()) < maxQuantity) {
+                        if ((quantity + item.getQuantity()) <= maxQuantity) {
                             item.setQuantity(quantity + item.getQuantity());
                         } else {
                             checkQuantity = false;
@@ -75,8 +75,9 @@ public class AddToCartController extends HttpServlet {
 
                 if (checkQuantity) {
                     session.setAttribute("CART", cart);
+                    request.setAttribute("ADD_TO_CART_MESSAGE", "Thêm vào giỏ hàng thành công!");
                 } else {
-                    request.setAttribute("QUANTITY_MESSAGE", "Chỉ còn lại " + maxQuantity + " sản phẩm này!");
+                    request.setAttribute("QUANTITY_MESSAGE", "Thêm vào giỏ hàng thất bại. Chỉ còn lại " + maxQuantity + " sản phẩm này!");
                 }
 
                 url = SUCCESS + productID;

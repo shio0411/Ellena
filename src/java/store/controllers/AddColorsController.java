@@ -1,20 +1,27 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package store.controllers;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.SQLException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import store.shopping.CartProduct;
 import store.shopping.ProductDAO;
 
-@WebServlet(name = "UpdateCartItemQuantityController", urlPatterns = {"/UpdateCartItemQuantityController"})
-public class UpdateCartItemQuantityController extends HttpServlet {
-
+/**
+ *
+ * @author giama
+ */
+@WebServlet(name = "AddColorsController", urlPatterns = {"/AddColorsController"})
+public class AddColorsController extends HttpServlet {
+    private static final String ERROR = "error.jsp";
+    private static final String SUCCESS = "ManagerShowProductDetailController";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -24,47 +31,21 @@ public class UpdateCartItemQuantityController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private static final String ERROR = "shop-cart.jsp";
-    private static final String SUCCESS = "shop-cart.jsp";
-
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
-            HttpSession session = request.getSession();
-            List<CartProduct> cart = (List<CartProduct>) session.getAttribute("CART");
-            List<Integer> quantities = new ArrayList<>();
-            for (int i = 0; i < cart.size(); i++) {
-                quantities.add(Integer.parseInt(request.getParameter("quantity" + (i + 1))));
+            int productID = Integer.parseInt(request.getParameter("productID"));
+            String[] colors = request.getParameterValues("color");
+            ProductDAO dao = new ProductDAO();
+            boolean check = dao.addColors(productID, colors);
+            if (check) {
+                request.setAttribute("MESSAGE", "Cập nhật thành công.");
+                url = SUCCESS;
             }
-            boolean checkQuantity = true;
-            for (int i = 0; i < cart.size(); i++) {
-
-                ProductDAO dao = new ProductDAO();
-
-                List<String> colorSize = new ArrayList<>();
-                colorSize.add(cart.get(i).getColor());
-                colorSize.add(cart.get(i).getSize());
-
-                int maxQuantity = dao.getProductDetail(cart.get(i).getProductID()).getColorSizeQuantity().get(colorSize);
-
-                if (quantities.get(i) <= maxQuantity && quantities.get(i) > 0) {
-                    cart.get(i).setQuantity(quantities.get(i));
-                } else {
-                    checkQuantity = false;
-                }
-            }
-
-            session.setAttribute("CART", cart);
-            if (!checkQuantity) {
-                request.setAttribute("QUANTITY_MESSAGE_FAIL", "Số lượng sản phẩm không đủ");
-            } else {
-                request.setAttribute("QUANTITY_MESSAGE_SUCCESS", "Cập nhật giỏ hàng thành công!");
-            }
-            url = SUCCESS;
-        } catch (Exception e) {
-            log("Error at UpdateCartItemQuantityController: " + e.toString());
+        } catch (NumberFormatException | SQLException e) {
+            log("Error at ManagerShowProductDetailController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

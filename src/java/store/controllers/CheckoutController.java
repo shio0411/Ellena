@@ -115,7 +115,7 @@ public class CheckoutController extends HttpServlet {
                             }
                         }
                         odao.insertOrderDetail(orderID, cart);
-                        odao.updateOrderStatus(orderID, 1);
+                        odao.insertOrderStatus(orderID, 1);
                         if (orderID > 0) {
                             request.setAttribute("CART_MESSAGE", "Đặt hàng thành công! Mã đơn hàng của bạn là " + orderID );
                             session.removeAttribute("CART");

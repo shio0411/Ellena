@@ -7,14 +7,19 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import store.shopping.OrderDAO;
 import store.shopping.OrderDTO;
+import store.user.UserDTO;
 
 @WebServlet(name = "ShowOrderController", urlPatterns = {"/ShowOrderController"})
 public class ShowOrderController extends HttpServlet {
 
-    private static final String ERROR = "manager-order.jsp";
-    private static final String SUCCESS = "manager-order.jsp";
+    private static final String ERROR = "error.jsp";
+    private static final String MANAGER_SUCCESS = "manager-order.jsp";
+    private static final String EMPLOYEE_SUCCESS = "employee-order.jsp";
+    private static final String MN = "MN";
+    private static final String EM = "EM";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -23,9 +28,20 @@ public class ShowOrderController extends HttpServlet {
         try {
             OrderDAO dao = new OrderDAO();
             List<OrderDTO> listOrder = dao.getAllOrder();
+            HttpSession session = request.getSession();
+            UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
             if (listOrder.size() > 0) {
                 request.setAttribute("LIST_ORDER", listOrder);
-                url = SUCCESS;
+                switch (loginUser.getRoleID()) {
+                    case MN:
+                        url = MANAGER_SUCCESS;
+                        break;
+                    case EM:
+                        url = EMPLOYEE_SUCCESS;
+                        break;
+                    default:
+                        break;
+                }
             }
         } catch (Exception e) {
             log("Error at ShowOrderController: " + e.toString());

@@ -31,10 +31,16 @@ public class ManagerShowProductDetailController extends HttpServlet {
         String url = ERROR;
         try {
             ProductDAO dao = new ProductDAO();
+            String activeColor = request.getParameter("activeColor");
+            if ("null".equals(activeColor)) {
+                activeColor = null;
+            }
             int id = Integer.parseInt(request.getParameter("productID"));
             ProductDTO product = dao.getProductDetail(id);
             if (product != null) {
                 request.setAttribute("PRODUCT_DETAIL", product);
+                if (activeColor != null)
+                    request.setAttribute("ACTIVE_COLOR", activeColor);
                 url = SUCCESS;
             }
         } catch (Exception e) {

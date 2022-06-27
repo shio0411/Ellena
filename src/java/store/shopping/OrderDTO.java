@@ -18,6 +18,7 @@ public class OrderDTO {
     private String phone;
     private String email;
     private String note;
+    private String transactionNumber;
 
     public OrderDTO() {
     }
@@ -47,6 +48,40 @@ public class OrderDTO {
         this.note = note;
     }
 
+    public OrderDTO(Date orderDate, int total, String userName, int statusID, String statusName, String payType, String trackingID, String fullName, String address, String phone, String email, String note, String transactionNumber) {
+        this.orderDate = orderDate;
+        this.total = total;
+        this.userName = userName;
+        this.statusID = statusID;
+        this.statusName = statusName;
+        this.payType = payType;
+        this.trackingID = trackingID;
+        this.fullName = fullName;
+        this.address = address;
+        this.phone = phone;
+        this.email = email;
+        this.note = note;
+        this.transactionNumber = transactionNumber;
+    }
+
+    public OrderDTO(int orderID, Date orderDate, int total, String userName, int statusID, String statusName, String payType, String trackingID, String fullName, String address, String phone, String email, String note, String transactionNumber) {
+        this.orderID = orderID;
+        this.orderDate = orderDate;
+        this.total = total;
+        this.userName = userName;
+        this.statusID = statusID;
+        this.statusName = statusName;
+        this.payType = payType;
+        this.trackingID = trackingID;
+        this.fullName = fullName;
+        this.address = address;
+        this.phone = phone;
+        this.email = email;
+        this.note = note;
+        this.transactionNumber = transactionNumber;
+    }
+ 
+    
     public int getOrderID() {
         return orderID;
     }
@@ -150,6 +185,14 @@ public class OrderDTO {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public String getTransactionNumber() {
+        return transactionNumber;
+    }
+
+    public void setTransactionNumber(String transactionNumber) {
+        this.transactionNumber = transactionNumber;
     }
 
 }

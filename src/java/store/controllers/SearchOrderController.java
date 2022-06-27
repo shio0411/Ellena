@@ -1,6 +1,7 @@
 package store.controllers;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,10 +23,11 @@ public class SearchOrderController extends HttpServlet {
         String url = ERROR;
         try {
             String search = request.getParameter("search");
-            String sNumberOfWeek = request.getParameter("numberOfWeek");
-            String sStatusID = request.getParameter("statusID");
+            String dateFrom = request.getParameter("dateFrom");
+            String dateTo = request.getParameter("dateTo");
+            String statusID = request.getParameter("statusID");
             OrderDAO dao = new OrderDAO();
-            List<OrderDTO> listOrder = dao.getOrder(search, sNumberOfWeek, sStatusID);
+            List<OrderDTO> listOrder = dao.getOrder(search, dateFrom, dateTo, statusID);
 
             if (listOrder.size() > 0) {
                 request.setAttribute("LIST_ORDER", listOrder);

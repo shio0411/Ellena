@@ -5,26 +5,40 @@
  */
 package store.controllers;
 
+import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
+import org.apache.commons.io.FilenameUtils;
 import store.shopping.ProductDAO;
-import store.shopping.ProductDTO;
 import store.utils.VNCharacterUtils;
 
 /**
  *
  * @author giama
  */
-@WebServlet(name = "CategoryRouteController", urlPatterns = {"/CategoryRouteController"})
-public class CategoryRouteController extends HttpServlet {
+@MultipartConfig
+@WebServlet(name = "AddImageController", urlPatterns = {"/AddImageController"})
+public class AddImageController extends HttpServlet {
+
     private static final String ERROR = "error.jsp";
-    
+    private static final String SUCCESS = "MainController?action=ViewImages";
+
+    private File uploadFolder;
+
+    @Override
+    public void init() throws ServletException {
+        uploadFolder = new File("D:\\images\\");
+    }
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -39,15 +53,35 @@ public class CategoryRouteController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
-            String category = VNCharacterUtils.removeAccent(request.getParameter("category"));
             ProductDAO dao = new ProductDAO();
-            HttpSession session = request.getSession();
-            List<ProductDTO> searchCatalog = dao.getProductByCategory(category);
-            session.setAttribute("SEARCH_CATALOG", searchCatalog);
-            url = "./category/" + category;
+            int productID = Integer.parseInt(request.getParameter("productID"));
+            String productName = request.getParameter("productName");
+            String color = request.getParameter("color");
 
-        } catch (Exception e) {
-            log("Error at CategoryRouteController: " + e.toString());
+            int productColorID = dao.getProductColorID(productID, color);
+            color = VNCharacterUtils.removeAccent(color).toLowerCase().trim();
+            String uploadPath = getServletContext().getInitParameter("uploadFolder");
+            List<Part> images = request.getParts().stream().filter(part -> "image".equals(part.getName()) && part.getSize() > 0).collect(Collectors.toList()); // Retrieves <input type="file" name="files" multiple="true">
+            String fileNamePrefix = VNCharacterUtils.removeAccent(productName).trim().toLowerCase().replace(" ", "-");
+            for (Part image : images) {
+                fileNamePrefix = fileNamePrefix + "-" + color;
+                String fileName = FilenameUtils.getName(image.getSubmittedFileName());
+                String fileNameSuffix = "." + FilenameUtils.getExtension(fileName);
+                File file = File.createTempFile(fileNamePrefix, fileNameSuffix, uploadFolder);
+                image.write(file.getAbsolutePath());
+
+                boolean check = dao.addImage(productColorID, "/" + uploadPath + file.getName());
+
+                if (check) {
+                    url = SUCCESS;
+                    request.setAttribute("MESSAGE", "Thêm ảnh thành công!");
+                } else {
+                    file.delete();
+                }
+            }
+
+        } catch (IOException | NumberFormatException | SQLException | ServletException e) {
+            log("Error at ManagerShowProductDetailController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

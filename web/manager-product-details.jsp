@@ -23,26 +23,26 @@
         <%
             UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
             String message = (String) request.getAttribute("MESSAGE");
+            ProductDTO product = (ProductDTO) request.getAttribute("PRODUCT_DETAIL");
+            String activeColor = (String) request.getAttribute("ACTIVE_COLOR");
             if (message != null) {
         %>
         <div class="modal fade" id="myModal" role="dialog">
             <div class="modal-dialog">
-
                 <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title">Thông báo</h4>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+
 
                     </div>
                     <div class="modal-body">
                         <p><%=message%></p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                        <a href="ManagerShowProductDetailController?productID=<%=product.getProductID()%>&activeColor=<%=activeColor%>"><button type="button" class="btn btn-default">Đóng</button></a>
                     </div>
                 </div>
-
             </div>
         </div> <%}%>
 
@@ -64,7 +64,7 @@
             <div class="row">
 
                 <%
-                    ProductDTO product = (ProductDTO) request.getAttribute("PRODUCT_DETAIL");
+
                     List<CategoryDTO> listCategory = (List<CategoryDTO>) session.getAttribute("LIST_CATEGORY");
 
                 %>
@@ -94,6 +94,7 @@
                         <div class="col-md-12 mb-4">
                             <div class="form-outline">
                                 <label class="form-label" for="productName">Tên sản phẩm</label>
+                                <input type="hidden" name="oldProductName" value="<%= product.getProductName()%>"/>
                                 <input class="form-control form-control-lg" type="text" name="productName" id="productName" value="<%= product.getProductName()%>"/>
 
                             </div>
@@ -107,7 +108,7 @@
                                     <%
                                         for (CategoryDTO category : listCategory) {
                                     %>
-                                    <option value="<%= category.getCategoryName()%>" <%if (product.getCategoryName().equalsIgnoreCase(category.getCategoryName())) {%>selected <%}%>><%= category.getCategoryName()%></option>
+                                    <option value="<%= category.getCategoryID()%>" <%if (product.getCategoryName().equalsIgnoreCase(category.getCategoryName())) {%>selected <%}%>><%= category.getCategoryName()%></option>
                                     <%
                                         }
                                     %>
@@ -136,7 +137,7 @@
                         <div class="col-md-6 mb-4">
                             <div class="form-outline">
                                 <label class="form-label" for="discount">Giảm giá</label>
-                                <input class="form-control form-control-lg" type="number" min="0" max="1" step="0.1" name="discount" id="price" value="<%= product.getDiscount()%>"/>
+                                <input class="form-control form-control-lg" type="number" min="0" max="1" step="0.01" name="discount" id="price" value="<%= product.getDiscount()%>"/>
                             </div>
                         </div>
 
@@ -152,152 +153,311 @@
                             </div> 
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-12 mb-4">
-                            <div class="form-outline" >
-                                <label class="form-label" for="colorSizeQuantity">Quản lý số lượng</label>
-                                <ul class="nav nav-tabs">
-                                    <% Iterator<String> it = product.getColorImage().keySet().iterator();
-                                        int i = 1;
-                                        List<String> colorList = new ArrayList<>();
-                                        while (it.hasNext()) {
-                                            String color = it.next();
-                                            colorList.add(color);  %>      
+                    <button class="btn btn-default" type="submit" name="action" value="ManagerUpdateProduct">Cập nhật</button>
+                </form>
+            </div>                   
+            <div class="row">
+                <div class="col-md-12 mb-4">
+                    <div class="form-outline" >
 
-                                    <li <%if (i == 1) { %> class="active" <%}%>><a data-toggle="tab" href="#<%= color%>-size"><%= color%></a></li>
+                        <label class="form-label" for="colorSizeQuantity">Quản lý số lượng</label>
+                        <button type="button" style="float: right" data-toggle="modal" data-target="#editColorModal">Chỉnh sửa</button>
+                        <ul class="nav nav-tabs">
 
-                                    <% i++;
-                                        }%>                             
-                                </ul>
+                            <% Iterator<String> it = product.getColorImage().keySet().iterator();
+                                int i = 1;
+                                List<String> colorList = new ArrayList<>();
+                                while (it.hasNext()) {
+                                    String color = it.next();
+                                    colorList.add(color);  %>      
+
+                                    <li <%if ((i == 1 && activeColor == null)  || color.equalsIgnoreCase(activeColor)) { %> class="active" <%}%>><a data-toggle="tab" href="#<%= color%>-size"><%= color%></a></li>
+
+                            <% i++;
+                                }%>                             
+                        </ul>
 
 
-                                <div class="tab-content">
-                                    <%Iterator<List<String>> it1 = product.getColorSizeQuantity().keySet().iterator();
-                                        int g = 1;
-                                        List<String> key = new ArrayList<>();
-                                        while (it1.hasNext()) {
-                                            for (String n : it1.next()) {
-                                                key.add(n);
-                                            }
-                                        }
-                                        for (String color : colorList) {
-                                    %>
-                                    <div id="<%=color%>-size" class="tab-pane fade <%if (g == 1) { %> in active <%}%>">
+                        <div class="tab-content">
+                            <%Iterator<List<String>> it1 = product.getColorSizeQuantity().keySet().iterator();
+                                int g = 1;
+                                List<String> key = new ArrayList<>();
+                                while (it1.hasNext()) {
+                                    for (String n : it1.next()) {
+                                        key.add(n);
+                                    }
+                                }
+                                for (String color : colorList) {
+                            %>
+                            <div id="<%=color%>-size" class="tab-pane fade <%if ((g == 1 && activeColor == null) || color.equalsIgnoreCase(activeColor)) { %> in active <%}%>">
+                                <form action="MainController" id="update<%=color%>VariantsForm">
+                                    <input type="hidden" name="color" value="<%=color%>"/>
+                                    <input type="hidden" name="productID" value="<%=product.getProductID()%>"/>
+                                    <table>
+                                        <tr>
+                                            <th>Size</th>
+                                            <th>Số lượng</th>
+                                        </tr>
+                                        <% for (int z = 0; z < key.size(); z += 2) {
+                                                if (color.equalsIgnoreCase(key.get(z))) {%>
 
-                                        <table>
-                                            <tr>
-                                                <th>Size</th>
-                                                <th>Số lượng</th>
-                                            </tr>
-                                            <% for (int z = 0; z < key.size(); z += 2) {
-                                                    if (color.equalsIgnoreCase(key.get(z))) {%>
-                                            <tr>
-                                                <td><input type="text" name="size" value="<%= key.get(z + 1)%>" maxlength="50" style="width: 60px"/></td>
-                                                    <% List<String> colorSize = new ArrayList<>();
-                                                        colorSize.add(key.get(z));
-                                                        colorSize.add(key.get(z + 1));
-                                                    %>
-                                                <td><input type="number" name="quantity" value="<%= product.getColorSizeQuantity().get(colorSize)%>"></td>
-                                            </tr>
-                                            <% }
-                                                } %>
-                                        </table>
-                                    <button class="mb-4" type="button" name="<%=color%>-size" onClick="addVariants(event)" style="border: none; background: none"><i class="fa fa-plus-circle fa-lg"></i></button>
+                                        <tr>
 
+                                            <td><input type="text" name="size" value="<%= key.get(z + 1)%>" readonly maxlength="50" style="width: 60px"/></td>
+                                                <% List<String> colorSize = new ArrayList<>();
+                                                    colorSize.add(key.get(z));
+                                                    colorSize.add(key.get(z + 1));
+                                                %>
+                                            <td><input type="number" name="quantity" value="<%= product.getColorSizeQuantity().get(colorSize)%>"></td>
+
+                                            <td>                                        
+                                                <button type="button" style="border: none; background: none;" data-toggle="modal" data-target="#delete<%=color%><%=key.get(z + 1)%>Modal"><i class="fa fa-remove fa-lg"></i></button>
+                                            </td>
+
+                                        <div class="modal fade" id="delete<%=color%><%=key.get(z + 1)%>Modal" role="dialog">
+                                            <div class="modal-dialog">
+                                                <!-- Modal content-->
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Xoá size</h4>
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p>Bạn có chắc muốn xoá size này?</p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type='button' class='btn btn-default' data-dismiss="modal">Huỷ</button>
+                                                        <a href="MainController?action=DeleteSize&productID=<%=product.getProductID()%>&color=<%=color%>&size=<%=key.get(z + 1)%>"><button type="button" class="btn btn-danger">Xoá</button></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </tr>
+
+                                        <% }
+                                            }%>
+                                    </table>
+                                </form>
+                                <button class="mb-4" type="button" data-toggle="modal" data-target="#add<%=color%>VariantsModal" style="border: none; background: none"><i class="fa fa-plus-circle fa-lg"></i></button>
+                                <div class="row ml-2">
+                                    <button type="submit" class="btn btn-default" name="action" form="update<%=color%>VariantsForm" value="UpdateVariants">Cập nhật</button>
+                                </div>
+                                <div class="modal fade" id="add<%=color%>VariantsModal" role="dialog">
+                                    <div class="modal-dialog">
+                                        <!-- Modal content-->
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Thêm size</h4>
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="MainController" id="add<%=color%>VariantsForm">
+                                                    <input type="hidden" name="productID" value="<%=product.getProductID()%>"/>
+                                                    <input type="hidden" name="color" value="<%=color%>"/>
+                                                    <div class="row">
+                                                        <div class="col-md-3 mb-4 pb-2 ml-5">
+                                                            <div class="form-outline">
+                                                                <label class="form-label" for="size">Size</label>
+                                                                <input class="form-control form-control-sm" name="size" required="" type="text" placeholder="VD: XL"/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4 mb-4 pb-2 ml-5">
+                                                            <div class="form-outline">
+                                                                <label class="form-label" for="quantity">Số lượng</label>
+                                                                <input class="form-control form-control-lg" name="quantity" required="" type="number" step="1" value="0"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                <button class="mb-4 ml-5" type="button" onClick="addVariants(event)" style="border: none; background: none"><i style="pointer-events: none" class="fa fa-plus-circle fa-lg"></i></button>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" onClick="checkSize('<%=color%>', event)" name="action" value="AddVariants" class="btn btn-default" form="add<%=color%>VariantsForm">Xác nhận</button>
+                                                <button type='button' class='btn btn-default' data-dismiss="modal">Huỷ</button>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <% g++;
-                                        }%>
-                                </div>          
+                                </div>
                             </div>
-                        </div> 
-                    </div>    
-                    <div class="row">
-                        <div class="col-md-12 mb-4">
-                            <div class="form-outline" >
-                                <label class="form-label" for="colorImage">Hình ảnh sản phẩm</label>
-                                <ul class="nav nav-tabs">
-                                    <% int t = 1;
+                            <% g++;
+                                }%>
+                        </div>          
+                    </div>
+                </div> 
+            </div>    
+            <div class="row">
+                <div class="col-md-12 mb-4">
+                    <div class="form-outline" >
+                        <label class="form-label" for="colorImage">Hình ảnh sản phẩm</label>
+                        <a href="MainController?action=ViewImages&productID=<%=product.getProductID()%>"<button id="add" type="button" onClick="checkImages()">Add more images</button></a>
+                    </div>
+                    <!-- Pop-up chỉnh sửa màu -->
+                    <div class="modal fade" id="editColorModal" role="dialog">
+                        <div class="modal-dialog">
 
-                                        for (String color : colorList) {
-                                    %>
-                                    <li <%if (t == 1) { %> class="active" <%}%>><a data-toggle="tab" href="#<%= color%>"><%= color%></a></li>
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Chỉnh sửa màu</h4>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
 
-                                    <% t++;
-                                        } %>                             
-                                </ul>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="MainController" id="editColorForm">
+                                        <input type="hidden" name="productID" value="<%=product.getProductID()%>"/>
+                                        <input type="hidden" name="action" value="AddColors"/>
+                                        <% for (String color : colorList) {%>
 
+                                        <div class="row">
+                                            <div class="col-md-4 mb-4 pb-2 ml-5">
+                                                <div class="form-outline">
+                                                    <input class="form-control form-control-lg" readonly required="" type="text" value="<%=color%>"/>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 pl-0">
+                                                <button type="button" style="border: none; background: none;" data-toggle="modal" data-target="#delete<%=color%>Modal"><i class="fa fa-remove fa-lg"></i></button>
+                                            </div>
+                                            <div class="inner modal fade" id="delete<%=color%>Modal" role="dialog">
+                                                <div class="modal-dialog modal-sm   ">
+                                                    <!-- Modal content-->
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title">Xoá màu</h4>
+                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p>Bạn có chắc muốn xoá màu này?</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type='button' class='btn btn-default' data-dismiss-modal="innerModal">Huỷ</button>
+                                                            <a href="MainController?action=DeleteColor&productID=<%=product.getProductID()%>&color=<%=color%>"><button type="button" class="btn btn-danger">Xoá</button></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <%}%>
+                                    </form>
+                                    <button class="mb-4 ml-5" onClick="displayBtn()" type="button" id="addColor" style="border: none; background: none"><i style="pointer-events: none" class="fa fa-plus-circle fa-lg"></i></button>
 
-                                <div class="tab-content">
-                                    <% int j = 1;
-
-                                        for (String color : colorList) {
-                                            int imagesNumber = 0;
-                                    %>
-                                    <div id="<%= color%>" class="tab-pane fade <%if (j == 1) { %> in active <%}%>">
-                                        <%  for (int k = 0; k < product.getColorImage().get(color).size(); k++) {%>
-                                        <img style="height: 280px; width: 280px;" src="<%= product.getColorImage().get(color).get(k)%>.jpg"/>
-
-                                        <%++imagesNumber;%>
-
-                                        <%    }%>
-
-                                        <a href="MainController?action=ViewImages&productID=<%=product.getProductID()%>"<button id="add" type="button" onClick="checkImages()">Add more images</button></a>
-
-
-                                    </div>
-                                    <script>
-                                        function checkImages() {
-                                            if (<%=imagesNumber%> >= 3) {
-                                                return alert("Du roi nha!");
-                                            } else {
-                                                var container = document.createElement("div");
-                                                var input = document.createElement("input");
-                                                input.setAttribute("accept", "image/*");
-                                                input.setAttribute("type", "file");
-                                                input.setAttribute("name", "files");
-                                                input.setAttribute("id", "file-input" + inputID.toString());
-                                                input.setAttribute("class", "file-input");
-
-                                                var preview = document.createElement("div");
-                                                preview.setAttribute("id", "preview" + inputID.toString());
-
-                                                container.appendChild(input);
-                                                container.appendChild(preview);     
-                                                document.getElementById(<%=color%>).appendChild(container);
-
-                                                document.querySelector('#file-input' + inputID).addEventListener("change", previewImages);
-                                            }
-                                    </script>
-                                    <% j++;
-                                        }%>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" onClick="checkColorForm(event)" style="display: none" form="editColorForm"  class="btn btn-default">Xác nhận</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal" >Đóng</button>
                                 </div>
                             </div>
 
-
-
                         </div>
                     </div> 
-            </div>
 
-            <button class="btn btn-default" type="submit" name="action" value="ManagerUpdateProduct">Cập nhật</button>
-
+                </div>
+            </div> 
         </div>
-    </form>
-
-</div>
-</div>
-
-
-<script>
-        $(document).ready(function () {
-            $("#myModal").modal();
-        }
-        );
 
 
 
 
-</script>  
 
-</body>
+        <script>
+            $(document).ready(function () {
+                $("#myModal").modal();
+            }
+            );
+            $("button[data-dismiss-modal=innerModal]").click(function () {
+                $('.inner').modal('hide');
+            }
+            );
+            $("#addColor").click(function () {
+                $("#editColorForm").append('<div class="row">\n\
+                                                                        <div class="col-md-4 mb-4 pb-2 ml-5">\n\
+                                                                        <div class="form-outline">\n\
+                                                                        <input class="form-control form-control-lg" name="color" required="" type="text" placeholder="VD: Trắng"/>\n\
+                                                                        </div>\n\
+                                                                        </div>\n\
+                                                                        <div class="col-md-3 pl-0">\n\
+                                                                        <button type="button" onClick="removeColor(event)" style="border: none; background: none;" data-toggle="modal"><i style="pointer-events: none" class="fa fa-remove fa-lg"></i></button>\n\
+                                                                        </div></div>');
+            });
+
+
+            function addVariants(e) {
+                e.target.previousElementSibling.insertAdjacentHTML("beforeend", '<div class="row"><div class="col-md-3 mb-4 pb-2 ml-5"><div class="form-outline"><label class="form-label" for="size">Size</label><input class="form-control form-control-sm" name="size" required="" type="text" placeholder="VD: XL"/></div></div><div class="col-md-4 mb-4 pb-2 ml-5"><div class="form-outline"><label class="form-label" for="quantity">Số lượng</label><input class="form-control form-control-lg" name="quantity" required="" type="number" step="1" value="0"/></div></div><div class="col-md-3 pl-0">\n\
+                                                                        <button class="mt-5" type="button" onClick="removeVariant(event)" style="border: none; background: none;" data-toggle="modal"><i style="pointer-events: none" class="fa fa-remove fa-lg"></i></button>\n\
+                                                                        </div></div>');
+            }
+
+            function removeColor(e) {
+                var color = e.target.parentElement.parentElement;
+                color.remove();
+            }
+
+            function removeVariant(e) {
+                var variant = e.target.parentElement.parentElement;
+                variant.remove();
+            }
+            function displayBtn() {
+                document.querySelector("button[form='editColorForm']").style.display = "inline-block";
+            }
+
+            function checkColorForm(e) {
+                var existedColors = document.getElementById("editColorForm").querySelectorAll("input[readonly]");
+                var stored = [];
+                var form = document.getElementById("editColorForm");
+
+                if (existedColors.list === null) {
+                    stored.push(existedColors.value);
+                } else {
+                    for (var i = 0; i < existedColors.length; i++) {
+                        stored.push(existedColors[i].value);
+                    }
+                }
+
+                if (form.color.list === null) {
+                    if (stored.includes(form.color.value)) {
+                        e.preventDefault();
+                        return alert("Không thể nhập màu trùng nhau!");
+                    }
+                } else {
+                    for (var inputColor of form.color) {
+                        if (stored.includes(inputColor.value)) {
+                            e.preventDefault();
+                            return alert("Không thể nhập màu trùng nhau!");
+                        }
+                        stored.push(inputColor.value);
+                    }
+                }
+            }
+
+            function checkSize(color, e) {
+                var sizes = document.getElementById("add" + color + "VariantsForm").size;
+                console.log(sizes);
+                var existedSizes = document.getElementById("update" + color + "VariantsForm").size;
+                var stored = [];
+
+                if (existedSizes.list === null) {
+                    stored.push(existedSizes.value);
+                } else {
+                    for (var i = 0; i < existedSizes.length; i++) {
+                        stored.push(existedSizes[i].value);
+                    }
+                }
+
+                if (sizes.list === null) {
+                    if (stored.includes(sizes.value)) {
+                        e.preventDefault();
+                        return alert("Không thể nhập màu trùng nhau!");
+                    }
+                } else {
+                    for (var inputSize of sizes) {
+                        if (stored.includes(inputSize.value)) {
+                            e.preventDefault();
+                            return alert("Không thể nhập màu trùng nhau!");
+                        }
+                        stored.push(inputSize.value);
+                    }
+                }
+            }
+        </script>  
+
+    </body>
 </html>

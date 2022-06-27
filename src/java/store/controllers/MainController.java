@@ -28,6 +28,8 @@ public class MainController extends HttpServlet {
     private static final String ADD_PRODUCT_CONTROLLER = "AddProductController";
     private static final String SEARCH_MANAGER = "SearchManager";
     private static final String SEARCH_MANAGER_CONTROLLER = "SearchManagerController";
+    private static final String FILTER_PRICE = "filter-price";
+    private static final String FILTER_PRICE_CONTROLLER = "FilterPriceController";
     private static final String SEARCH_CATALOG = "search-catalog";
     private static final String SEARCH_CATALOG_CONTROLLER = "SearchCatalogController";
     private static final String SEARCH_CATEGORY = "SearchCategory";
@@ -86,10 +88,24 @@ public class MainController extends HttpServlet {
     private static final String VIEW_IMAGES_CONTROLLER = "ViewImagesController";
     private static final String DELETE_IMAGE = "DeleteImage";
     private static final String DELETE_IMAGE_CONTROLLER = "DeleteImageController";
+    private static final String ADD_IMAGE = "AddImage";
+    private static final String ADD_IMAGE_CONTROLLER = "AddImageController";
+    private static final String DELETE_COLOR = "DeleteColor";
+    private static final String DELETE_COLOR_CONTROLLER = "DeleteColorController";
+    private static final String ADD_COLORS = "AddColors";
+    private static final String ADD_COLORS_CONTROLLER = "AddColorsController";
+    private static final String DELETE_SIZE = "DeleteSize";
+    private static final String DELETE_SIZE_CONTROLLER = "DeleteSizeController";
     private static final String SEARCH_ORDER = "SearchOrder";
     private static final String SEARCH_ORDER_CONTROLLER = "SearchOrderController";
     private static final String UPDATE_ORDER = "UpdateOrder";
     private static final String UPDATE_ORDER_CONTROLLER = "UpdateOrderController";
+    private static final String ADD_VARIANTS = "AddVariants";
+    private static final String ADD_VARIANTS_CONTROLLER = "AddVariantsController";
+    private static final String UPDATE_VARIANTS = "UpdateVariants";
+    private static final String UPDATE_VARIANTS_CONTROLLER = "UpdateVariantsController";
+    private static final String MANAGER_UPDATE_PRODUCT = "ManagerUpdateProduct";
+    private static final String MANAGER_UPDATE_PRODUCT_CONTROLLER = "ManagerUpdateProductController";
     private static final String DETELE_CART_ITEM = "DeleteCartItem";
     private static final String DETELE_CART_ITEM_CONTROLLER = "DeleteCartItemController";
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -133,6 +149,9 @@ public class MainController extends HttpServlet {
                         break;
                     case ADD_PRODUCT:
                         url = ADD_PRODUCT_CONTROLLER;
+                        break;
+                    case FILTER_PRICE:
+                        url = FILTER_PRICE_CONTROLLER;
                         break;
                     case VIEW_USER:
                         url = VIEW_USER_CONTROLLER;
@@ -209,12 +228,32 @@ public class MainController extends HttpServlet {
                     case DELETE_IMAGE:
                         url = DELETE_IMAGE_CONTROLLER;
                         break;
+                    case ADD_IMAGE:
+                        url = ADD_IMAGE_CONTROLLER;
+                        break;    
+                    case DELETE_COLOR:
+                        url = DELETE_COLOR_CONTROLLER;
+                        break;
+                    case ADD_COLORS:
+                        url = ADD_COLORS_CONTROLLER;
+                        break;
+                    case DELETE_SIZE:
+                        url = DELETE_SIZE_CONTROLLER;
+                        break;
+                    case ADD_VARIANTS:
+                        url = ADD_VARIANTS_CONTROLLER;
+                        break;
+                    case UPDATE_VARIANTS:
+                        url = UPDATE_VARIANTS_CONTROLLER;
+                        break;
                     case SEARCH_ORDER:
                         url = SEARCH_ORDER_CONTROLLER;
                         break;
                     case UPDATE_ORDER:
                         url = UPDATE_ORDER_CONTROLLER;
                         break;
+                    case MANAGER_UPDATE_PRODUCT:
+                        url = MANAGER_UPDATE_PRODUCT_CONTROLLER;
                     case DETELE_CART_ITEM:
                         url = DETELE_CART_ITEM_CONTROLLER;
                         break;

@@ -1,7 +1,10 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ */
 package store.controllers;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,65 +12,42 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import store.shopping.CartProduct;
 import store.shopping.ProductDAO;
+import store.shopping.ProductDTO;
 
-@WebServlet(name = "UpdateCartItemQuantityController", urlPatterns = {"/UpdateCartItemQuantityController"})
-public class UpdateCartItemQuantityController extends HttpServlet {
+/**
+ *
+ * @author vankh
+ */
+@WebServlet(name = "FilterPriceController", urlPatterns = {"/FilterPriceController"})
+public class FilterPriceController extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    private static final String ERROR = "shop-cart.jsp";
-    private static final String SUCCESS = "shop-cart.jsp";
+    public static final String ERROR = "error.jsp";
+    public static final String SUCCESS = "search-catalog.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
+
         try {
+            ProductDAO dao = new ProductDAO();
+            //String search = request.getParameter("search");
             HttpSession session = request.getSession();
-            List<CartProduct> cart = (List<CartProduct>) session.getAttribute("CART");
-            List<Integer> quantities = new ArrayList<>();
-            for (int i = 0; i < cart.size(); i++) {
-                quantities.add(Integer.parseInt(request.getParameter("quantity" + (i + 1))));
-            }
-            boolean checkQuantity = true;
-            for (int i = 0; i < cart.size(); i++) {
-
-                ProductDAO dao = new ProductDAO();
-
-                List<String> colorSize = new ArrayList<>();
-                colorSize.add(cart.get(i).getColor());
-                colorSize.add(cart.get(i).getSize());
-
-                int maxQuantity = dao.getProductDetail(cart.get(i).getProductID()).getColorSizeQuantity().get(colorSize);
-
-                if (quantities.get(i) <= maxQuantity && quantities.get(i) > 0) {
-                    cart.get(i).setQuantity(quantities.get(i));
-                } else {
-                    checkQuantity = false;
-                }
-            }
-
-            session.setAttribute("CART", cart);
-            if (!checkQuantity) {
-                request.setAttribute("QUANTITY_MESSAGE_FAIL", "Số lượng sản phẩm không đủ");
-            } else {
-                request.setAttribute("QUANTITY_MESSAGE_SUCCESS", "Cập nhật giỏ hàng thành công!");
-            }
+            List<ProductDTO> searchCatalog = (List<ProductDTO>)session.getAttribute("SEARCH_CATALOG");
+            int minAmount = Integer.parseInt(request.getParameter("minAmount"));
+            int maxAmount = Integer.parseInt(request.getParameter("maxAmount"));
+            List<ProductDTO> listProduct = dao.filterPrice(searchCatalog, minAmount, maxAmount);
+            
+            session.setAttribute("SEARCH_CATALOG", listProduct);
             url = SUCCESS;
+
         } catch (Exception e) {
-            log("Error at UpdateCartItemQuantityController: " + e.toString());
+            log("Error at SearchCatalogController: " + toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

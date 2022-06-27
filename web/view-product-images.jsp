@@ -34,7 +34,7 @@
             .img-wrap .close {
                 position: absolute;
                 top: 2px;
-                right: 2px;
+                right: 17px;
                 z-index: 100;
 
             }
@@ -56,11 +56,25 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                user-select: none;
-                margin-top: 20px;
+                cursor: pointer;
             }
             .add-image-frame input{
                 display: none;
+            }
+
+            .my {
+                position:relative; /* This avoids whatever it's absolute inside of it to go off the container */
+                height: 280px; /* let's imagine that your login box height is 250px . This height needs to be added, otherwise .img-responsive will be like "Oh no, I need to be vertically aligned?! but from which value I need to be aligned??" */
+            }
+
+            .img-responsive {   
+                width: 280px;
+                height: 280px;
+                position:absolute;
+                left:50%;
+                top:50%;
+                margin-top:-140px; /* This needs to be half of the height */
+                margin-left:-140px; /* This needs to be half of the width */
             }
         </style>
         <%ProductDTO product = (ProductDTO) request.getAttribute("PRODUCT_DETAIL");
@@ -69,7 +83,7 @@
             if (message != null) {
         %>
 
-        <!-- Pop-up thông báo cập nhật thành công -->
+        <!-- Pop-up thông báo -->
         <div class="modal fade" id="myModal" role="dialog">
             <div class="modal-dialog">
 
@@ -95,7 +109,6 @@
             <a href="ManagerShowProductController" style="color: #873e23; font-weight: bold;"><i class="fa fa-archive fa-lg"></i>Quản lí sản phẩm</a>
             <a href="manager-order.jsp"><i class="fa fa-cart-plus fa-lg"></i>Quản lí đơn hàng</a>
         </div>
-
         <div class='main'>
             <div class="row">
                 <div class="col-md-12 mb-4">
@@ -111,81 +124,86 @@
                                     } %>                             
                         </ul>
 
+                        <form action="MainController" method="post" id="myForm" enctype="multipart/form-data">
+                            <div class="tab-content">
+                                <% int j = 1;
 
-                        <div class="tab-content">
-                            <% int j = 1;
+                                    for (String color : colorList) {
+                                        int imagesNumber = 0;
+                                %>
+                                <div id="<%= color%>" class="row tab-pane fade <%if (j == 1) { %> active in <%}%>">
+                                    <%  for (int k = 0; k < product.getColorImage().get(color).size(); k++) {%>
 
-                                for (String color : colorList) {
-                                    int imagesNumber = 0;
-                            %>
-                            <div id="<%= color%>" class="tab-pane fade <%if (j == 1) { %> in active <%}%>">
-                                <%  for (int k = 0; k < product.getColorImage().get(color).size(); k++) {%>
+                                    <div class='col-12 col-md-4 img-wrap'>
 
-                                <div class='img-wrap'>
+                                        <button class="close" type="button" data-toggle="modal" data-target="#<%=color%>Modal<%=k%>">&times;</button>
+                                        <img style="height: 280px; width: 280px;" src="<%= product.getColorImage().get(color).get(k)%>"/>
+                                    </div>
+                                    <div class="modal fade" id="<%=color%>Modal<%=k%>" role="dialog">
+                                        <div class="modal-dialog">
+                                                
+                                            <!-- Modal content-->
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Xoá ảnh</h4>
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
 
-                                    <button class="close" type="button" data-toggle="modal" data-target="#<%=color%>Modal<%=k%>">&times;</button>
-                                    <img style="height: 280px; width: 280px;" src="<%= product.getColorImage().get(color).get(k)%>.jpg"/>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Bạn có chắc muốn xoá ảnh này?</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type='button' class='btn btn-default' data-dismiss="modal">Huỷ</button>
+                                                    <a href="MainController?action=DeleteImage&productID=<%=product.getProductID()%>&imageName=<%= product.getColorImage().get(color).get(k)%>"><button type="button" class="btn btn-danger">Xoá</button></a>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+
+                                    <%++imagesNumber;%>
+
+                                    <%}%>
+                                    <div class="add-image-frame col-12 col-md-4 ml-4" onClick="uploadImage(event)">
+                                        <i class="fa fa-file-image-o fa-5x" aria-hidden="true" style="pointer-events: none"></i>
+                                        <input accept="image/*" type="file" name="image" onChange="previewImage(event)"/>
+                                    </div>
                                 </div>
-                                <div class="modal fade" id="<%=color%>Modal<%=k%>" role="dialog">
-                                    <div class="modal-dialog">
+                                <script>
+                                    if (<%=imagesNumber%> >= 3) {
+                                        document.getElementById("<%=color%>").querySelector(".add-image-frame").style.display = "none";
+                                    }
 
+
+                                </script>
+                                <% j++;
+                                    }%>
+
+                                <div class="modal fade" id="uploadModal" role="dialog">
+                                    <div class="modal-dialog">
                                         <!-- Modal content-->
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h4 class="modal-title">Xoá ảnh</h4>
+                                                <h4 class="modal-title">Thêm ảnh</h4>
                                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-
                                             </div>
-                                            <div class="modal-body">
-                                                <p>Bạn có chắc muốn xoá ảnh này?</p>
+                                            <div class="my modal-body">
+                                                <div id="preview"></div>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type='button' class='btn btn-default' data-dismiss="modal">Huỷ</button>
-                                                <a href="MainController?action=DeleteImage&productID=<%=product.getProductID()%>&imageName=<%= product.getColorImage().get(color).get(k)%>"><button type="button" class="btn btn-danger">Xoá</button></a>
+                                                <button name="action" value="AddImage" type="submit" form="myForm" class="btn btn-danger">Thêm</button>
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
-
-
-
-                                <%++imagesNumber;%>
-
-                                <%}%>
-                                <div class="add-image-frame">
-                                    <span class="inner">
-                                        <i class="fa fa-file-image-o fa-5x" aria-hidden="true"></i>
-                                        <input accept="image/*" type="file" name="files" onChange="previewImages(event)"/>
-                                </div>
+                                <input id="color" type="hidden" name="color" value=""/>
+                                <input type="hidden" name="productID" value="<%= product.getProductID()%>"/>
+                                <input type="hidden" name="productName" value="<%=product.getProductName()%>"/>
                             </div>
-                        </div>
-                        <script>
-                            function checkImages() {
-                                if (<%=imagesNumber%> >= 3) {
-                                    return alert("Du roi nha!");
-                                } else {
-                                    var container = document.createElement("div");
-                                    var input = document.createElement("input");
-                                    input.setAttribute("accept", "image/*");
-                                    input.setAttribute("type", "file");
-                                    input.setAttribute("name", "files");
-                                    input.setAttribute("id", "file-input" + inputID.toString());
-                                    input.setAttribute("class", "file-input");
-
-                                    var preview = document.createElement("div");
-                                    preview.setAttribute("id", "preview" + inputID.toString());
-
-                                    container.appendChild(input);
-                                    container.appendChild(preview);
-                                    document.getElementById(<%=color%>).appendChild(container);
-
-                                    document.querySelector('#file-input' + inputID).addEventListener("change", previewImages);
-                                }
-                            }
-                        </script>
-                        <% j++;
-                            }%>
+                        </form>
                     </div>
                 </div> 
             </div>
@@ -195,6 +213,46 @@
             $(document).ready(function () {
                 $("#myModal").modal();
             });
+            function uploadImage(e) {
+                e.target.querySelector("input").click();
+            }
+
+            function previewImage(e) {
+                var preview = document.getElementById("preview");
+                var color = e.target.parentElement.parentElement.id;
+                document.getElementById("color").value = color;
+
+                if (e.target.files) {
+                    [].forEach.call(e.target.files, readAndPreview);
+                }
+
+                $("#uploadModal").modal();
+
+                function readAndPreview(file) {
+
+                    // Make sure `file.name` matches our extensions criteria
+                    if (!/\.(jpe?g|png|gif)$/i.test(file.name)) {
+                        return alert(file.name + " is not an image");
+                    } // else...
+
+
+                    var reader = new FileReader();
+
+                    reader.addEventListener("load", function () {
+
+                        var image = new Image(280, 280);
+                        image.title = file.name;
+                        image.src = this.result;
+                        image.setAttribute("class", "img-responsive");
+
+                        preview.appendChild(image);
+
+                    });
+                    
+                    reader.readAsDataURL(file);
+
+                }
+            }
         </script>
     </body>
 </html>

@@ -34,11 +34,11 @@
 
                                 <div class="col-lg-12">
                                     <div class="checkout__form__input">
-                                        <p>Full name <span>*</span></p>
+                                        <p>Họ và tên <span>*</span></p>
                                         <input type="text" name="fullname" value="<%= loginUser.getFullName()%>" required="">
                                     </div>
                                     <div class="checkout__form__input">
-                                        <p>Town/City <span>*</span></p>
+                                        <p>Địa chỉ giao hàng<span>*</span></p>
                                         <div class="col-lg-6 col-md-6 col-sm-6" style="padding: 0; padding-right: 15px;">
                                             <select style="width: 100%; height: 50px; margin: 0 4% 25px 0; padding: 1px 2px 1px 20px;" name="calc_shipping_provinces" required="">
                                                 <option value="">Tỉnh / Thành phố</option>
@@ -51,17 +51,12 @@
                                         </div>
                                         <input class="billing_address_1" name="" type="hidden" value="">
                                         <input class="billing_address_2" name="" type="hidden" value="">
-                                    </div>
-                                    <div class="checkout__form__input">
-                                        <p>Address <span>*</span></p>
                                         <input type="text" name="address" placeholder="Số nhà, tên đường, phường/ xã" required="">
                                     </div>
-                                    
-
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-6">
                                     <div class="checkout__form__input">
-                                        <p>Phone <span>*</span></p>
+                                        <p>Số điện thoại <span>*</span></p>
                                         <input type="text" name="phone" value="<%= loginUser.getPhone()%>" required="">
                                     </div>
                                 </div>
@@ -74,7 +69,7 @@
                                 <div class="col-lg-12">
 
                                     <div class="checkout__form__input">
-                                        <p>Order notes</p>
+                                        <p>Ghi chú</p>
                                         <input type="text" name="note" placeholder="Note about your order, e.g, special note for delivery">
                                     </div>
                                 </div>
@@ -82,7 +77,7 @@
                         </div>
                         <div class="col-lg-12">
                             <div class="checkout__order">
-                                <h5>Your order</h5>
+                                <h5>Hoá đơn</h5>
                                 <div class="checkout__order__product">
                                     
                                     <div class="row product-details" style="padding-top: 20px;">
@@ -138,8 +133,9 @@
                                 </div>
                                 <div class="checkout__order__total">
                                     <ul>
-                                        <li>Subtotal <span></span></li>
-                                        <li>Total <span><%= (int) (total / 1000)%>.000</span></li>
+                                        <li>Tổng tiền <span></span></li>
+                                        <li>Giảm giá <span></span></li>
+                                        <li>Tổng thanh toán <span><%= (int) (total / 1000)%>.000</span></li>
                                         <input type="hidden" name="total" value="<%= ((int) (total / 1000)) * 1000%>"/>
                                     </ul>
                                 </div>
@@ -147,13 +143,14 @@
 
                                     <label for="check-payment">
                                         COD
-                                        <input type="checkbox" id="check-payment">
+                                        <input type="radio" id="check-payment"/>
                                         <span class="checkmark"></span>
                                     </label>
                                     <label for="paypal">
                                         PayPal
-                                        <input type="checkbox" id="paypal">
+                                        <input type="radio" id="paypal"/>
                                         <span class="checkmark"></span>
+                                        
                                     </label>
                                 </div>
                                 <button type="submit" name="action" value="Checkout" class="site-btn">Đặt hàng</button>
