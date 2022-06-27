@@ -33,18 +33,38 @@ public class StatisticDAO {
 "WHERE DATEDIFF(day,orderDate,GETDATE()) < 1 AND o.orderID IN (SELECT orderID FROM tblOrderStatusUpdate WHERE statusID = '4')\n" +
 "GROUP BY orderDate \n" +
 "ORDER BY orderDate asc";
-    private static final String STATISTIC_BEST_SELLER = "SELECT TOP 5 p.productID, p.productName, SUM(d.quantity) AS [sale], SUM(d.price*d.quantity) AS [income] \n" +
+    private static final String STATISTIC_BEST_SELLER = "SELECT TOP 5 p.productID, p.productName,  SUM(d.quantity) AS [sale], SUM(d.price*d.quantity) AS [income] \n" +
 "FROM tblProduct p JOIN tblOrderDetail d ON p.productID = d.productID \n" +
 "JOIN tblOrder o ON d.orderID = o.orderID\n" +
-"WHERE DATEDIFF(day, o.orderDate,GETDATE()) < ? AND o.orderID IN (SELECT orderID FROM tblOrderStatusUpdate WHERE statusID = '4')\n" +
+"WHERE o.orderDate >= ? AND o.orderDate <= ? AND o.orderID IN (SELECT orderID FROM tblOrderStatusUpdate WHERE statusID = '4')\n" +
 "GROUP BY p.productID, p.productName \n" +
 "ORDER BY Sale desc";
     private static final String STATISTIC_BEST_INCOME = "SELECT TOP 5 p.productID, p.productName, SUM(d.quantity) AS [sale], SUM(d.price*d.quantity) AS [income] \n" +
 "FROM tblProduct p JOIN tblOrderDetail d ON p.productID = d.productID \n" +
 "JOIN tblOrder o ON d.orderID = o.orderID\n" +
-"WHERE DATEDIFF(day, o.orderDate,GETDATE()) < ? AND o.orderID IN (SELECT orderID FROM tblOrderStatusUpdate WHERE statusID = '4')\n" +
+"WHERE o.orderDate >= ? AND o.orderDate <= ? AND o.orderID IN (SELECT orderID FROM tblOrderStatusUpdate WHERE statusID = '4')\n" +
 "GROUP BY p.productID, p.productName \n" +
-"ORDER BY Sale desc";
+"ORDER BY [income] desc";
+    private static final String STATISTIC_PAY_TYPE = "SELECT payType, COUNT(*) As [Number Order]\n" +
+"FROM tblOrder\n" +
+"WHERE orderDate >= ? AND orderDate <= ?\n" +
+"GROUP BY payType";
+    private static final String STATISTIC_USER_GENDER = "SELECT sex, COUNT(*) as Number\n" +
+"FROM tblUsers\n" +
+"WHERE roleID = 'CM'\n" +
+"GROUP BY Sex";
+    private static final String GET_CANCELLED_ORDER = "SELECT COUNT(*) as [Number Order] FROM tblOrderStatusUpdate osu\n" +
+"JOIN tblOrder o ON osu.orderID=o.orderID\n" +
+"WHERE statusID = 5 AND o.orderDate >= ? AND o.orderDate <= ?\n" +
+"GROUP BY statusID";
+    private static final String GET_REFUND_ORDER = "SELECT COUNT(*) as [Number Order] FROM tblOrderStatusUpdate osu\n" +
+"JOIN tblOrder o ON osu.orderID=o.orderID\n" +
+"WHERE statusID = 7 AND o.orderDate >= ? AND o.orderDate <= ?\n" +
+"GROUP BY statusID";
+    private static final String GET_TOTAL_ORDER = "SELECT COUNT(*) as [Number Order] FROM tblOrderStatusUpdate osu\n" +
+"JOIN tblOrder o ON osu.orderID=o.orderID\n" +
+"WHERE statusID = 1 AND o.orderDate >= ? AND o.orderDate <= ?\n" +
+"GROUP BY statusID";
     public Map<String, StatisticDTO> getStatisticOrder7Day() throws SQLException {
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -192,7 +212,7 @@ public class StatisticDAO {
         }
         return today;
     }  
-    public List<Pair<String, StatisticDTO>> getBestSeller(int duration) throws SQLException {
+    public List<Pair<String, StatisticDTO>> getBestSeller(String sellerFrom, String sellerTo) throws SQLException {
         Connection conn = null;
         PreparedStatement ptm = null;
         ResultSet rs = null;
@@ -201,7 +221,8 @@ public class StatisticDAO {
             conn = DBUtils.getConnection();
             if (conn != null) {
                 ptm = conn.prepareStatement(STATISTIC_BEST_SELLER);
-                ptm.setInt(1, duration);
+                ptm.setString(1, sellerFrom);
+                ptm.setString(2, sellerTo);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
                     int productID = rs.getInt("productID");
@@ -228,7 +249,7 @@ public class StatisticDAO {
         }
         return list;
     }  
-    public List<Pair<String, StatisticDTO>> getBestIncome(int duration) throws SQLException {
+    public List<Pair<String, StatisticDTO>> getBestIncome(String incomeFrom, String incomeTo) throws SQLException {
         Connection conn = null;
         PreparedStatement ptm = null;
         ResultSet rs = null;
@@ -237,7 +258,8 @@ public class StatisticDAO {
             conn = DBUtils.getConnection();
             if (conn != null) {
                 ptm = conn.prepareStatement(STATISTIC_BEST_INCOME);
-                ptm.setInt(1, duration);
+                ptm.setString(1, incomeFrom);
+                ptm.setString(2, incomeTo);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
                     int productID = rs.getInt("productID");
@@ -263,5 +285,161 @@ public class StatisticDAO {
             }
         }
         return list;
-    }  
+    } 
+    public List<Pair<String, Integer>> getPayTypeCount(String from, String to) throws SQLException{
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        List<Pair<String, Integer>> list = new ArrayList<>();
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(STATISTIC_PAY_TYPE);
+                ptm.setString(1, from);
+                ptm.setString(2, to);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    String payType = rs.getString("payType");
+                    Integer numberOrder = rs.getInt("Number Order");
+                    Pair <String, Integer> pair = new Pair(payType, numberOrder);
+                    list.add(pair);
+                }
+                
+            }
+        } catch (Exception e) {
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return list;
+    }
+    public List<Pair<String, Integer>> getUserGender() throws SQLException{
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        List<Pair<String, Integer>> list = new ArrayList<>();
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(STATISTIC_USER_GENDER);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    String gender = (rs.getInt("sex") == 0) ? "Nam" : "Nữ";
+                    Integer number = rs.getInt("Number");
+                    Pair <String, Integer> pair = new Pair(gender, number);
+                    list.add(pair);
+                }
+                
+            }
+        } catch (Exception e) {
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return list;
+    }
+    public Integer getCancelledOrder(String from, String to) throws SQLException{
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        int result = 0;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_CANCELLED_ORDER);
+                ptm.setString(1, from);
+                ptm.setString(2, to);
+                rs = ptm.executeQuery();
+                while (rs.next()){        
+                    result = rs.getInt("Number Order");
+                }
+            }
+        } catch (Exception e) {
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return result;
+    }
+    public Integer getRefundOrder(String from, String to) throws SQLException{
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        int result = 0;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_REFUND_ORDER);
+                ptm.setString(1, from);
+                ptm.setString(2, to);
+                rs = ptm.executeQuery();
+                while (rs.next()){        
+                    result = rs.getInt("Number Order");
+                }
+            }
+        } catch (Exception e) {
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return result;
+    }
+    public Integer getTotalOrder(String from, String to) throws SQLException{
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        int result = 0;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_TOTAL_ORDER);
+                ptm.setString(1, from);
+                ptm.setString(2, to);
+                rs = ptm.executeQuery();
+                while (rs.next()){        
+                    result = rs.getInt("Number Order");
+                }
+            }
+        } catch (Exception e) {
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return result;
+    }
 }

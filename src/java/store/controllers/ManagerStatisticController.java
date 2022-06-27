@@ -6,6 +6,9 @@
 package store.controllers;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import javafx.util.Pair;
@@ -26,7 +29,23 @@ public class ManagerStatisticController extends HttpServlet {
 
     private static final String ERROR = "error.jsp";
     private static final String SUCCESS = "manager-statistic.jsp";
+    private static final String MIN_DATE = "1970-01-01";
+    private static final String EMPTY = "";
+    protected String checkFromDate(String date){
+        if(date == null || date == EMPTY){
+            return MIN_DATE;
+        }
+        return date;
+    }
     
+    protected String checkToDate(String date){
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String TODAY = dateFormat.format(new Date());
+        if(date == null || date == EMPTY){
+            return TODAY;
+        }
+        return date;
+    }
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -37,19 +56,35 @@ public class ManagerStatisticController extends HttpServlet {
             Map<String, StatisticDTO> orderStatistic4Week = dao.getStatisticOrder4Week();
             Map<String, StatisticDTO> orderStatistic1Year = dao.getStatisticOrder1Year();
             StatisticDTO today = dao.getStatisticOrderToday();
-            String str1 = request.getParameter("sellerDuration");
-            String str2 = request.getParameter("incomeDuration");
-            int durationBestSeller = Integer.MAX_VALUE;
-            int durationBestIncome = Integer.MAX_VALUE;
-            String empty = "";
-            if(str1 != null && str1 != empty){
-                durationBestSeller = Integer.parseInt(str1);
-            }
-            if(str2 != null && str2 != empty){
-                durationBestIncome = Integer.parseInt(str2);
-            }
-            List<Pair<String, StatisticDTO>> bestSeller = dao.getBestSeller(durationBestSeller);
-            List<Pair<String, StatisticDTO>> bestIncome = dao.getBestIncome(durationBestIncome);
+            String cancelOrderFrom = request.getParameter("cancelOrderFrom");
+            String cancelOrderTo = request.getParameter("cancelOrderTo");
+            String payTypeFrom = request.getParameter("payTypeFrom");
+            String payTypeTo = request.getParameter("payTypeTo");
+            String sellerFrom = request.getParameter("sellerFrom");
+            String sellerTo = request.getParameter("sellerTo");
+            String incomeFrom = request.getParameter("incomeFrom");
+            String incomeTo = request.getParameter("incomeTo");
+            
+            cancelOrderFrom = checkFromDate(cancelOrderFrom);
+            cancelOrderTo = checkToDate(cancelOrderTo);
+            payTypeFrom = checkFromDate(payTypeFrom);
+            payTypeTo = checkToDate(payTypeTo);
+            sellerFrom = checkFromDate(sellerFrom);
+            sellerTo = checkToDate(sellerTo);
+            incomeFrom = checkFromDate(incomeFrom);
+            incomeTo = checkToDate(incomeTo);
+            
+            Integer cancelledOrder = dao.getCancelledOrder(cancelOrderFrom, cancelOrderTo);
+            Integer refundOrder = dao.getRefundOrder(cancelOrderFrom, cancelOrderTo);
+            Integer totalOrder = dao.getTotalOrder(cancelOrderFrom, cancelOrderTo);
+            List<Pair<String, Integer>> payType = dao.getPayTypeCount(payTypeFrom, payTypeTo);
+            Double cancelRatio = (double)cancelledOrder / (double)totalOrder;
+            Double refundRatio = (double)refundOrder / (double)totalOrder;
+            
+            List<Pair<String, StatisticDTO>> bestSeller = dao.getBestSeller(sellerFrom, sellerTo);
+            List<Pair<String, StatisticDTO>> bestIncome = dao.getBestIncome(incomeFrom, incomeTo);
+            List<Pair<String, Integer>> userGender = dao.getUserGender();
+          
             if (orderStatistic7Day.size() > 0) {
                 request.setAttribute("ORDER_STATISTIC_7DAY", orderStatistic7Day);
                 request.setAttribute("ORDER_STATISTIC_4WEEK", orderStatistic4Week);
@@ -57,6 +92,10 @@ public class ManagerStatisticController extends HttpServlet {
                 request.setAttribute("ORDER_STATISTIC_TODAY", today);
                 request.setAttribute("BEST_SELLER", bestSeller);
                 request.setAttribute("BEST_INCOME", bestIncome);
+                request.setAttribute("CANCEL_RATIO", cancelRatio);
+                request.setAttribute("REFUND_RATIO", refundRatio);
+                request.setAttribute("PAY_TYPE", payType);
+                
                 url = SUCCESS;
             }
         } catch (Exception e) {
