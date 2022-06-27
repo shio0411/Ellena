@@ -166,19 +166,19 @@ public class CheckoutController extends HttpServlet {
                             if (checkQuantity && checkStatus && check) {
                                 // new insert order
                                 OrderDAO odao = new OrderDAO();
-                                // update product quantity
-                                for (CartProduct item : cart) {
-                                    int productColorID = pdao.getProductColorID(item.getProductID(), item.getColor());
-                                    List<String> colorSize = new ArrayList<>();
-                                    colorSize.add(item.getColor());
-                                    colorSize.add(item.getSize());
-                                    int maxQuantity = pdao.getProductDetail(item.getProductID()).getColorSizeQuantity().get(colorSize);
-                                    if (productColorID > 0) {
-                                        pdao.updateProductQuantity(maxQuantity - item.getQuantity(), productColorID, item.getSize());
-                                    }
-                                }
                                 boolean checkAddOrder = odao.addOrder(order, user.getUserID(), cart);
                                 if (checkAddOrder) {
+                                    // update product quantity
+                                    for (CartProduct item : cart) {
+                                        int productColorID = pdao.getProductColorID(item.getProductID(), item.getColor());
+                                        List<String> colorSize = new ArrayList<>();
+                                        colorSize.add(item.getColor());
+                                        colorSize.add(item.getSize());
+                                        int maxQuantity = pdao.getProductDetail(item.getProductID()).getColorSizeQuantity().get(colorSize);
+                                        if (productColorID > 0) {
+                                            pdao.updateProductQuantity(maxQuantity - item.getQuantity(), productColorID, item.getSize());
+                                        }
+                                    }
                                     int orderID = odao.getOrderID(user.getUserID());
                                     if (orderID > 0) {
                                         request.setAttribute("CART_MESSAGE", "Đặt hàng thành công! Mã đơn hàng của bạn là " + orderID);
