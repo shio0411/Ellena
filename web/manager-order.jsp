@@ -284,11 +284,11 @@
                                             <table border="1">
                                                 <thead>
                                                     <tr>
-                                                        <th>Product name</th>
-                                                        <th>Price</th>
-                                                        <th>Quantity</th>
+                                                        <th>Sản phẩm</th>
+                                                        <th>Đơn giá</th>
+                                                        <th>Số lượng</th>
                                                         <th>Size</th>
-                                                        <th>Color</th>
+                                                        <th>Màu</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
