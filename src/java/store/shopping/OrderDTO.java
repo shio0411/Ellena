@@ -195,4 +195,31 @@ public class OrderDTO {
         this.transactionNumber = transactionNumber;
     }
 
+    public String getStatus(int statusID) {
+        String status = "";
+        switch (statusID) {
+            case 1: 
+                status = "Chưa xác nhận";
+                break;
+            case 2: 
+                status = "Đã xác nhận";
+                break;
+            case 3: 
+                status = "Đang giao";
+                break;
+            case 4: 
+                status = "Đã giao";
+                break;
+            case 5: 
+                status = "Đã hủy";
+                break;
+            case 6: 
+                status = "Chờ hoàn tiền";
+                break;
+            case 7: 
+                status = "Đã hoàn tiền";
+                break;
+        }
+        return status;
+    }
 }

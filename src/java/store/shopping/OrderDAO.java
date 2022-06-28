@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import store.utils.DBUtils;
 
@@ -300,6 +301,7 @@ public class OrderDAO {
                 conn.close();
             }
         }
+        Collections.reverse(list);
         return list;
 
     }
@@ -432,6 +434,7 @@ public class OrderDAO {
                 conn.close();
             }
         }
+        Collections.reverse(list);
         return list;
     }
 

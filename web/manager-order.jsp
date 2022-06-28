@@ -148,13 +148,11 @@
                                                     <div class="form-outline">
                                                         <label class="form-label" for="statusID">Trạng thái</label>
                                                         <select class="form-control form-control-lg" name="statusID">
-                                                            <option value="1" <%if (order.getStatusID() == 1) {%>selected <%}%>>Chưa xác nhận</option>
-                                                            <option value="2" <%if (order.getStatusID() == 2) {%>selected <%}%>>Đã xác nhận</option>  
-                                                            <option value="3" <%if (order.getStatusID() == 3) {%>selected <%}%>>Đang giao</option>
-                                                            <option value="4" <%if (order.getStatusID() == 4) {%>selected <%}%>>Đã giao</option>
-                                                            <option value="5" <%if (order.getStatusID() == 5) {%>selected <%}%>>Đã hủy</option>
-                                                            <option value="6" <%if (order.getStatusID() == 6) {%>selected <%}%>>Chờ hoàn tiền</option>
-                                                            <option value="7" <%if (order.getStatusID() == 7) {%>selected <%}%>>Đã hoàn tiền</option>
+                                                            <%
+                                                                for (int i = 1; i <= 7; i++) {
+                                                            %>
+                                                            <option value="<%= i%>" <%if (order.getStatusID() == i) {%>selected <%} if (i < order.getStatusID()) {%>disabled <%}%> ><%= order.getStatus(i)%></option>
+                                                            <%}%>
                                                         </select> 
                                                     </div>
 
