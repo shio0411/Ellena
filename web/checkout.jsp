@@ -26,11 +26,13 @@
             if (orderError == null) {
                 orderError = new OrderError();
             }
+            String cartMessage = (String) request.getAttribute("CART_MESSAGE");
         %>
+        
         <!-- Checkout Section Begin -->
         <section class="checkout spad">
             <div class="container">
-
+                <p style="color:red"><%= cartMessage %></p>
                 <form action="MainController" class="checkout__form" method="POST">
                     <div class="row">
                         <div class="col-lg-12">

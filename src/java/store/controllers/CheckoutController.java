@@ -77,6 +77,7 @@ public class CheckoutController extends HttpServlet {
                             }
                         }
                         transactionNumber = request.getParameter("vnp_TransactionNo");
+                        String responseCode = request.getParameter("vnp_ResponseCode");
                         String vnp_SecureHash = request.getParameter("vnp_SecureHash");
                         if (fields.containsKey("vnp_SecureHashType")) {
                             fields.remove("vnp_SecureHashType");
@@ -89,6 +90,9 @@ public class CheckoutController extends HttpServlet {
                         //if customer tries to return to checkout.jsp after they canceled paying
                         if (transactionNumber == null && paidStatus == true) {
                             url = "vnpay.jsp";
+                        }else if(!"00".equalsIgnoreCase(responseCode)){                              
+                            url = INPUT_ERROR;
+                            request.setAttribute("CART_MESSAGE", "Giao dịch không thành công!");
                         } else {
                             String email = request.getParameter("email");
                             String quantityErrorMessage = "Số lượng của những món hàng: ";
