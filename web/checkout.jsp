@@ -1,6 +1,7 @@
+<%@page import="store.shopping.CartProduct"%>
+<%@page import="store.shopping.Cart"%>
 <%@page import="store.shopping.OrderError"%>
 <%@page import="store.user.UserDTO"%>
-<%@page import="store.shopping.CartProduct"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -22,11 +23,15 @@
         <jsp:include page="header.jsp" flush="true"/>
         <% List<CartProduct> cart = (List<CartProduct>) session.getAttribute("CART");
             UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
+            Cart c = (Cart) session.getAttribute("CART_INFO");
             OrderError orderError = (OrderError) request.getAttribute("ORDER_ERROR");
             if (orderError == null) {
                 orderError = new OrderError();
             }
             String cartMessage = (String) request.getAttribute("CART_MESSAGE");
+            if(cartMessage == null){
+                cartMessage = "";
+            }
         %>
         
         <!-- Checkout Section Begin -->
@@ -42,7 +47,7 @@
                                 <div class="col-lg-12">
                                     <div class="checkout__form__input">
                                         <p>Full name <span>*</span></p>
-                                        <input type="text" name="fullname" value="<%= loginUser.getFullName()%>" placeholder="Họ và Tên" required="">
+                                        <input type="text" name="fullname" value="<%= c.getFullName()%>" placeholder="Họ và Tên" required="">
                                     </div>
                                     <div class="checkout__form__input">
                                         <p>Town/City <span>*</span></p>
@@ -65,7 +70,7 @@
                                         </div>
                                     <div class="checkout__form__input">
                                         <p>Address <span>*</span></p>
-                                        <input type="text" name="address" placeholder="Số nhà, tên đường, phường/ xã" required="">
+                                        <input type="text" name="address" placeholder="Số nhà, tên đường, phường/ xã" required="" value="<%= c.getAddress() %>">
                                        
                                     </div>
 
@@ -74,14 +79,14 @@
                                 <div class="col-lg-6 col-md-6 col-sm-6">
                                     <div class="checkout__form__input">
                                         <p>Phone <span>*</span></p>
-                                        <input type="text" name="phone" value="<%= loginUser.getPhone()%>" placeholder="Số điện thoại liên lạc" required="">
+                                        <input type="text" name="phone" value="<%= c.getPhone()%>" placeholder="Số điện thoại liên lạc" required="">
                                         
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-6">
                                     <div class="checkout__form__input">
                                         <p>Email <span>*</span></p>
-                                        <input type="text" name="email" value="<%= loginUser.getUserID()%>" placeholder="Email liên lạc/xác nhận đơn hàng">
+                                        <input type="text" name="email" value="<%= c.getEmail()%>" placeholder="Email liên lạc/xác nhận đơn hàng">
                                         <div class="row">
                                             <p style="color: red"><%= orderError.getEmail()%></p>
                                         </div>
@@ -91,7 +96,7 @@
 
                                     <div class="checkout__form__input">
                                         <p>Order notes</p>
-                                        <input type="text" name="note" placeholder="Note about your order, e.g, special note for delivery">
+                                        <input type="text" name="note" placeholder="Note about your order, e.g, special note for delivery" value="<%= c.getNote() %>">
                                     </div>
                                 </div>
                             </div>

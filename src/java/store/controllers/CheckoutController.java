@@ -15,7 +15,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import store.shopping.Cart;
+import store.shopping.CartDAO;
 import store.shopping.CartProduct;
+import store.shopping.CartProductDAO;
 import store.shopping.OrderDAO;
 import store.shopping.OrderDTO;
 import store.shopping.OrderError;
@@ -42,22 +45,26 @@ public class CheckoutController extends HttpServlet {
         try {
             //If payType is VNPay, the parameters will be put on session, or else they will be killed when redirecting to vnpay.jsp
             HttpSession session = request.getSession();
-            String payType = request.getParameter("payType");
             OrderError orderError = new OrderError();
-
+            UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
+            CartProductDAO cpdao = new CartProductDAO();
+            CartDAO cdao = new CartDAO();
+            Cart c = cdao.getCartByUserID(user.getUserID());
             if ("".equals(request.getParameter("calc_shipping_provinces")) || "".equals(request.getParameter("calc_shipping_district"))) {
                 orderError.setShippingProvinces("Xin quý khách hãy chọn Tỉnh/Thành Phố - Phường/Huyện nơi giao hàng!");
                 request.setAttribute("ORDER_ERROR", orderError);
             } else {
-                if (!"COD".equalsIgnoreCase(payType) && payType != null) {
-                    session.setAttribute("PROVINCE", Integer.parseInt(request.getParameter("calc_shipping_provinces")));
-                    session.setAttribute("FULL_NAME", request.getParameter("fullname"));
-                    session.setAttribute("ADDRESS", request.getParameter("address"));
-                    session.setAttribute("PHONE", request.getParameter("phone"));
-                    session.setAttribute("NOTE", request.getParameter("note"));
-                    session.setAttribute("DISTRICT", request.getParameter("calc_shipping_district"));
-                    session.setAttribute("EMAIL", request.getParameter("email"));
-                    session.setAttribute("PAY_TYPE", request.getParameter("payType"));
+                String fullname = request.getParameter("fullname");
+                String phone = request.getParameter("phone");
+                String email = request.getParameter("email");
+                String payType = request.getParameter("payType");
+                String note = request.getParameter("note");
+                String[] provinces = new String[]{"An Giang", "Bà Rịa - Vũng Tàu", "Bạc Liêu", "Bắc Kạn", "Bắc Giang", "Bắc Ninh", "Bến Tre", "Bình Dương", "Bình Định", "Bình Phước", "Bình Thuận", "Cà Mau", "Cao Bằng", "Cần Thơ", "Đà Nẵng", "Đắk Lắk", "Đắk Nông", "Đồng Nai", "Đồng Tháp", "Điện Biên", "Gia Lai", "Hà Giang", "Hà Nam", "Hà Nội", "Hà Tĩnh", "Hải Dương", "Hải Phòng", "Hòa Bình", "Hậu Giang", "Hưng Yên", "Thành phố Hồ Chí Minh", "Khánh Hòa", "Kiên Giang", "Kon Tum", "Lai Châu", "Lào Cai", "Lạng Sơn", "Lâm Đồng", "Long An", "Nam Định", "Nghệ An", "Ninh Bình", "Ninh Thuận", "Phú Thọ", "Phú Yên", "Quảng Bình", "Quảng Nam", "Quảng Ngãi", "Quảng Ninh", "Quảng Trị", "Sóc Trăng", "Sơn La", "Tây Ninh", "Thái Bình", "Thái Nguyên", "Thanh Hóa", "Thừa Thiên - Huế", "Tiền Giang", "Trà Vinh", "Tuyên Quang", "Vĩnh Long", "Vĩnh Phúc", "Yên Bái"};                     
+                if(fullname != null){
+                    int provinceIndex = Integer.parseInt(request.getParameter("calc_shipping_provinces"));   
+                    String homeAddress = request.getParameter("address");
+                    String address = homeAddress + ", " + request.getParameter("calc_shipping_district") + ", " + provinces[provinceIndex - 1];
+                    cdao.updateCartInfo(fullname, phone, homeAddress, email, note, c.getUserID(), payType);
                 }
                 boolean paidStatus = false;
                 List<CartProduct> cart = (List<CartProduct>) session.getAttribute("CART");
@@ -90,47 +97,25 @@ public class CheckoutController extends HttpServlet {
                         //if customer tries to return to checkout.jsp after they canceled paying
                         if (transactionNumber == null && paidStatus == true) {
                             url = "vnpay.jsp";
-                        }else if(!"00".equalsIgnoreCase(responseCode)){                              
+                        }else if(!"00".equalsIgnoreCase(responseCode) && responseCode != null){                              
                             url = INPUT_ERROR;
                             request.setAttribute("CART_MESSAGE", "Giao dịch không thành công!");
                         } else {
-                            String email = request.getParameter("email");
                             String quantityErrorMessage = "Số lượng của những món hàng: ";
                             String statusErrorMessage = "Những món hàng: ";
 
                             Boolean check = true;
-                            UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
-                            int total = Integer.parseInt(session.getAttribute("TOTAL").toString());
-
-                            String fullname, address, phone, note;
-                            int provinceIndex;
-                            String[] provinces = new String[]{"An Giang", "Bà Rịa - Vũng Tàu", "Bạc Liêu", "Bắc Kạn", "Bắc Giang", "Bắc Ninh", "Bến Tre", "Bình Dương", "Bình Định", "Bình Phước", "Bình Thuận", "Cà Mau", "Cao Bằng", "Cần Thơ", "Đà Nẵng", "Đắk Lắk", "Đắk Nông", "Đồng Nai", "Đồng Tháp", "Điện Biên", "Gia Lai", "Hà Giang", "Hà Nam", "Hà Nội", "Hà Tĩnh", "Hải Dương", "Hải Phòng", "Hòa Bình", "Hậu Giang", "Hưng Yên", "Thành phố Hồ Chí Minh", "Khánh Hòa", "Kiên Giang", "Kon Tum", "Lai Châu", "Lào Cai", "Lạng Sơn", "Lâm Đồng", "Long An", "Nam Định", "Nghệ An", "Ninh Bình", "Ninh Thuận", "Phú Thọ", "Phú Yên", "Quảng Bình", "Quảng Nam", "Quảng Ngãi", "Quảng Ninh", "Quảng Trị", "Sóc Trăng", "Sơn La", "Tây Ninh", "Thái Bình", "Thái Nguyên", "Thanh Hóa", "Thừa Thiên - Huế", "Tiền Giang", "Trà Vinh", "Tuyên Quang", "Vĩnh Long", "Vĩnh Phúc", "Yên Bái"};
-                            //if return from ajaxServlet (the vnpay servlet)
-                            if (payType == null) {
-                                email = session.getAttribute("EMAIL").toString();
-                                fullname = session.getAttribute("FULL_NAME").toString();
-                                provinceIndex = Integer.parseInt(session.getAttribute("PROVINCE").toString());
-                                address = session.getAttribute("ADDRESS").toString() + ", " + session.getAttribute("DISTRICT").toString() + ", " + provinces[provinceIndex - 1];
-                                phone = session.getAttribute("PHONE").toString();
-                                note = session.getAttribute("NOTE").toString();
-                                payType = session.getAttribute("PAY_TYPE").toString();
-                            } else {
-                                fullname = request.getParameter("fullname");
-                                provinceIndex = Integer.parseInt(request.getParameter("calc_shipping_provinces"));;
-                                phone = request.getParameter("phone");
-                                note = request.getParameter("note");
-                                address = request.getParameter("address") + ", " + request.getParameter("calc_shipping_district") + ", " + provinces[provinceIndex - 1];
-                            }
+                            int total = Integer.parseInt(session.getAttribute("TOTAL").toString());                           
 
                             // check valid email and check empty or ""
-                            if (Pattern.matches(EMAIL_PATTERN, email)) {
+                            if (Pattern.matches(EMAIL_PATTERN, c.getEmail())) {
                                 url = INPUT_ERROR;
                                 check = false;
                                 orderError.setEmail("Email quý khách nhập không hợp lệ!");
 //                    request.setAttribute("CART_MESSAGE", "Email quý khách nhập không hợp lệ!");
                             }
 
-                            OrderDTO order = new OrderDTO(Date.valueOf(LocalDate.now()), total, user.getFullName(), 1, "Chưa xác nhận", payType, fullname, address, phone, email, note, transactionNumber);
+                            OrderDTO order = new OrderDTO(Date.valueOf(LocalDate.now()), total, user.getUserID(), 1, "Chưa xác nhận", c.getPayType(), c.getFullName(), c.getAddress(), c.getPhone(), c.getEmail(), c.getNote(), transactionNumber);
 
                             // check quantity and status
                             boolean checkQuantity = true;
@@ -188,6 +173,7 @@ public class CheckoutController extends HttpServlet {
                                         request.setAttribute("CART_MESSAGE", "Đặt hàng thành công! Mã đơn hàng của bạn là " + orderID);
                                         session.removeAttribute("CART");
                                         url = SUCCESS;
+                                        cpdao.deleteAllCartItems(c.getId());
                                         session.removeAttribute("PAID_STATUS");
                                     }
                                 } else {

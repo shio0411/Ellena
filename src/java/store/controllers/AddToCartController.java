@@ -10,8 +10,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import store.shopping.Cart;
+import store.shopping.CartDAO;
 import store.shopping.CartProduct;
+import store.shopping.CartProductDAO;
 import store.shopping.ProductDAO;
+import store.user.UserDTO;
 
 @WebServlet(name = "AddToCartController", urlPatterns = {"/AddToCartController"})
 public class AddToCartController extends HttpServlet {
@@ -41,12 +44,18 @@ public class AddToCartController extends HttpServlet {
                 String size = request.getParameter("size");
                 int quantity = Integer.parseInt(request.getParameter("quantity"));
                 List<CartProduct> cart = (List<CartProduct>) session.getAttribute("CART");
-
+                CartDAO cdao = new CartDAO();
                 if (cart == null) {
                     cart = new ArrayList<>();
                 }
+                UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
+                Cart c = cdao.getCartByUserID(user.getUserID());
+                if(c == null){
+                    c = new Cart(1, user.getUserID(), user.getFullName(), user.getPhone(), user.getAddress(), user.getUserID(), "", "");
+                    cdao.addCart(c);
+                }
                 ProductDAO dao = new ProductDAO();
-
+                CartProductDAO cpdao = new CartProductDAO();
                 List<String> colorSize = new ArrayList<>();
                 colorSize.add(color);
                 colorSize.add(size);
@@ -71,10 +80,14 @@ public class AddToCartController extends HttpServlet {
 
                 if (checkQuantity && !checkDuplicateItem) {
                     cart.add(cp);
+                    Cart checkCart = cdao.getCartByUserID(user.getUserID());
+                    cp.setSessionID(checkCart.getId());
+                    cpdao.addCartItems(cp);
                 }
 
                 if (checkQuantity) {
                     session.setAttribute("CART", cart);
+                    session.setAttribute("CART_INFO", c);
                 } else {
                     request.setAttribute("QUANTITY_MESSAGE", "Chỉ còn lại " + maxQuantity + " sản phẩm này!");
                 }
