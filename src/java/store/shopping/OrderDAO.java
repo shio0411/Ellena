@@ -55,6 +55,8 @@ public class OrderDAO {
 
     private static final String GET_ORDER_ID = "SELECT TOP 1 orderID FROM tblOrder WHERE userID LIKE ? + '%' ORDER BY orderID DESC";
 
+    private static final String GET_ORDER_TRACKING_ID = "SELECT trackingID FROM tblOrder WHERE orderID = ?";
+
     public int getOrderID(String userID) throws SQLException {
         int orderID = 0;
 
@@ -310,18 +312,16 @@ public class OrderDAO {
         boolean result = false;
         Connection conn = null;
         PreparedStatement ptm = null;
-        
-/**
-*        - Chưa xác nhận: hệ thống
-*        - Đã xác nhận: manager/employee 
-*        - Đang giao: manager 
-*        - Đã giao: manager 
-*        - Đã huỷ: manager tự chuyển/ hệ thống chuyển; chỉ áp dụng với trường hợp COD.
-*        - Nếu trả trước (online banking):khi huỷ chuyển thành Chờ hoàn tiền: he thong chuyen, manager chuyen
-*        - Sau khi hoàn tiền online, manager chuyển thành Da hoan tien.
-*
-*        - Chỉ có thể huỷ khi Chưa xác nhận.
-*/
+
+        /**
+         * - Chưa xác nhận: hệ thống - Đã xác nhận: manager/employee - Đang
+         * giao: manager - Đã giao: manager - Đã huỷ: manager tự chuyển/ hệ
+         * thống chuyển; chỉ áp dụng với trường hợp COD. - Nếu trả trước (online
+         * banking):khi huỷ chuyển thành Chờ hoàn tiền: he thong chuyen, manager
+         * chuyen - Sau khi hoàn tiền online, manager chuyển thành Da hoan tien.
+         *
+         * - Chỉ có thể huỷ khi Chưa xác nhận.
+         */
         try {
             List<OrderStatusDTO> list = getUpdateStatusHistory(orderID);
             int currentStatusID = list.get(list.size() - 1).getStatusID();
@@ -368,20 +368,32 @@ public class OrderDAO {
         boolean check = false;
         Connection conn = null;
         PreparedStatement ptm = null;
-
+        ResultSet rs = null;
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                ptm = conn.prepareStatement(UPDATE_TRACKINGID);
-                ptm.setString(1, trackingID);
-                ptm.setInt(2, orderID);
+                String currentTrackingID = "";
+                ptm = conn.prepareStatement(GET_ORDER_TRACKING_ID);
+                ptm.setInt(1, orderID);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    currentTrackingID = rs.getString("trackingID");
+                }
+                if (!currentTrackingID.equals("") && !currentTrackingID.equalsIgnoreCase(trackingID)) {
+                    ptm = conn.prepareStatement(UPDATE_TRACKINGID);
+                    ptm.setString(1, trackingID);
+                    ptm.setInt(2, orderID);
 
-                check = ptm.executeUpdate() > 0;
+                    check = ptm.executeUpdate() > 0;
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
 
+            if (rs != null) {
+                rs.close();
+            }
             if (ptm != null) {
                 ptm.close();
             }
@@ -445,16 +457,16 @@ public class OrderDAO {
 
         try {
             List<OrderStatusDTO> list = getUpdateStatusHistory(orderID);
-            
-                conn = DBUtils.getConnection();
-                if (conn != null) {
-                    ptm = conn.prepareStatement(INSERT_ORDER_STATUS);
-                    ptm.setInt(1, statusID);
-                    ptm.setInt(2, orderID);
 
-                    check = ptm.executeUpdate() > 0;
-                }
-            
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(INSERT_ORDER_STATUS);
+                ptm.setInt(1, statusID);
+                ptm.setInt(2, orderID);
+
+                check = ptm.executeUpdate() > 0;
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

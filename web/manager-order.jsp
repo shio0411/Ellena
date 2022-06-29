@@ -151,7 +151,15 @@
                                                             <%
                                                                 for (int i = 1; i <= 7; i++) {
                                                             %>
-                                                            <option value="<%= i%>" <%if (order.getStatusID() == i) {%>selected <%} if (i < order.getStatusID()) {%>disabled <%}%> ><%= order.getStatus(i)%></option>
+                                                            <option value="<%= i%>" 
+                                                                    <%if (order.getStatusID() == i) {%>
+                                                                    selected 
+                                                                    <%} 
+                                                                    if (i < order.getStatusID() || ((i == 5 || i == 6) && order.getStatusID() != 1) || ((i == 7) && (order.getStatusID() != 6))) {%>
+                                                                    disabled 
+                                                                    <%}%> >
+                                                                <%= order.getStatus(i)%>
+                                                            </option>
                                                             <%}%>
                                                         </select> 
                                                     </div>
