@@ -51,7 +51,11 @@ public class AddToCartController extends HttpServlet {
                 UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
                 Cart c = cdao.getCartByUserID(user.getUserID());
                 if(c == null){
-                    c = new Cart(1, user.getUserID(), user.getFullName(), user.getPhone(), user.getAddress(), user.getUserID(), "", "");
+                    String address = "";
+                    if(user.getAddress()!=null){
+                        address = user.getAddress().split(",")[0];
+                    }
+                    c = new Cart(1, user.getUserID(), user.getFullName(), user.getPhone(), address, user.getUserID(), "", "");
                     cdao.addCart(c);
                 }
                 ProductDAO dao = new ProductDAO();
