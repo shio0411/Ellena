@@ -1,7 +1,6 @@
 package store.controllers;
 
 import java.io.IOException;
-import java.sql.Date;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,14 +11,19 @@ import store.shopping.OrderDAO;
 @WebServlet(name = "UpdateOrderController", urlPatterns = {"/UpdateOrderController"})
 public class UpdateOrderController extends HttpServlet {
 
-    private static final String SUCCESS = "ShowOrderController";
-    private static final String ERROR = "ShowOrderController";
+    private static final String SUCCESS = "SearchOrderController";
+    private static final String ERROR = "SearchOrderController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
+            String sDateFrom = request.getParameter("dateFrom");
+            String sDateTo = request.getParameter("dateTo");
+            String sStatusID = request.getParameter("search-statusID");
+            
+            
             int orderID = Integer.parseInt(request.getParameter("orderID"));
             int statusID = Integer.parseInt(request.getParameter("statusID"));
             String trackingID = request.getParameter("trackingID");

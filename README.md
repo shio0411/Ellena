@@ -1,3 +1,26 @@
+# Update search-order:
+- modified:   README.md
+- modified:   src/java/store/controllers/SearchOrderController.java
+- modified:   src/java/store/controllers/UpdateOrderController.java
+- modified:   src/java/store/filter/AuthenFilter.java
+- modified:   web/login.jsp
+- modified:   web/manager-order.jsp
+- modified:   web/manager-product.jsp
+- modified:   web/manager-statistic.jsp
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
 # Release summary Update Checkout
 ***Changes since last push from 23/6/2022 6:54 AM***
 

@@ -85,7 +85,7 @@
                                 </form>
                                     <a href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/Ellena/LoginGoogleController&response_type=code
                                        &client_id=772482426218-2l2bv33430edm3s1v7g12kul82kb5bmd.apps.googleusercontent.com&approval_prompt=force"><image style="width: 98px; height: 39px;" src="./images/google-login.png" alt="Log in with Google"/></a>  
-                                    <a href="https://www.facebook.com/dialog/oauth?client_id=893226585410442&redirect_uri=http://localhost:8080/Ellena/LoginFacebookController"><image style="width: 98px; height: 39px;" src="./images/facebook-login.png" alt="Log in with Facebook"/></a>
+                                    <!--<a href="https://www.facebook.com/dialog/oauth?client_id=893226585410442&redirect_uri=http://localhost:8080/Ellena/LoginFacebookController"><image style="width: 98px; height: 39px;" src="./images/facebook-login.png" alt="Log in with Facebook"/></a>-->
                             </div>
                         </div>
                     </div>

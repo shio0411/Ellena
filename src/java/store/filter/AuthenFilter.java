@@ -90,7 +90,7 @@ public class AuthenFilter implements Filter {
         MANAGER_FUNCTION.add("add-variant.jsp");
         MANAGER_FUNCTION.add("AddProductController");
         MANAGER_FUNCTION.add("view-product-images.jsp");
-        MANAGER_FUNCTION.add("ManagerShowOrderController");
+        MANAGER_FUNCTION.add("ShowOrderController");
         MANAGER_FUNCTION.add("UpdateOrderController");
         MANAGER_FUNCTION.add("SearchOrderController");
         MANAGER_FUNCTION.add("manager-order.jsp");

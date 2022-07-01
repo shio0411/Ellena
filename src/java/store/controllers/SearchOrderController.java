@@ -22,11 +22,11 @@ public class SearchOrderController extends HttpServlet {
         String url = ERROR;
         try {
             String search = request.getParameter("search");
-            String dateFrom = request.getParameter("dateFrom");
-            String dateTo = request.getParameter("dateTo");
-            String statusID = request.getParameter("statusID");
+            String sDateFrom = request.getParameter("dateFrom");
+            String sDateTo = request.getParameter("dateTo");
+            String sStatusID = request.getParameter("search-statusID");
             OrderDAO dao = new OrderDAO();
-            List<OrderDTO> listOrder = dao.getOrder(search, dateFrom, dateTo, statusID);
+            List<OrderDTO> listOrder = dao.getOrder(search, sDateFrom, sDateTo, sStatusID);
 
             if (listOrder.size() > 0) {
                 request.setAttribute("LIST_ORDER", listOrder);
@@ -34,7 +34,10 @@ public class SearchOrderController extends HttpServlet {
             } else {
                 request.setAttribute("EMPTY_LIST_MESSAGE", "No result found!");
             }
-
+            request.setAttribute("SEARCH", search);
+            request.setAttribute("DATE_FROM", sDateFrom);
+            request.setAttribute("DATE_TO", sDateTo);
+            request.setAttribute("STATUS_ID", sStatusID);
         } catch (Exception e) {
             log("Error at SearchAccountController: " + e.toString());
         } finally {

@@ -25,6 +25,15 @@
             }
 
             String message = (String) request.getAttribute("MESSAGE");
+            String searchValue = request.getAttribute("SEARCH") != null ? (String) request.getAttribute("SEARCH") : "";
+            String sOrderStatusID = request.getAttribute("STATUS_ID") != null ? (String) request.getAttribute("STATUS_ID") : "";
+            int orderStatusID = 0;
+            if (!sOrderStatusID.isEmpty()) {
+                orderStatusID = Integer.parseInt(sOrderStatusID);
+            }
+            String dateFrom = request.getAttribute("DATE_FROM") != null ? (String) request.getAttribute("DATE_FROM") : "";
+            String dateTo = request.getAttribute("DATE_TO") != null ? (String) request.getAttribute("DATE_TO") : "";
+
             if (message != null) {
         %>
         <!-- Pop-up thông báo cập nhật thành công -->
@@ -55,7 +64,7 @@
         <div class="sidenav">
             <a href="ManagerStatisticController"><i class="fa fa-bar-chart fa-lg"></i>Số liệu thống kê</a>
             <a href="ManagerShowProductController"><i class="fa fa-archive fa-lg"></i>Quản lí sản phẩm</a>
-            <a href="ManagerShowOrderController" style="color: #873e23; font-weight: bold;"><i class="fa fa-cart-plus fa-lg"></i>Quản lí đơn hàng</a>
+            <a href="ShowOrderController" style="color: #873e23; font-weight: bold;"><i class="fa fa-cart-plus fa-lg"></i>Quản lí đơn hàng</a>
         </div> 
 
         <div class="main">
@@ -66,22 +75,29 @@
             </form>
             <h1>Danh sách đơn hàng</h1>
             <form action="MainController" method="POST">
-                <input type="text" name="search" value="<%= search%>" placeholder="Tìm kiếm đơn hàng">
+                <input type="text" name="search" value="<%= searchValue%>" id="search-search" placeholder="Tìm kiếm đơn hàng">
                 Trạng thái
-                <select name="statusID">
+                <select name="search-statusID" id="search-statusID">
+
+                    <%
+                        OrderDTO orderDTO = new OrderDTO();
+                        if (orderStatusID == 0) {
+                    %>
                     <option value="" selected hidden>Chọn một trạng thái</option>
-                    <option value="1">Chưa xác nhận</option>
-                    <option value="2">Đã xác nhận</option>
-                    <option value="3">Đang giao</option>
-                    <option value="4">Đã giao</option>
-                    <option value="5">Đã hủy</option>
-                    <option value="6">Chờ hoàn tiền</option>
-                    <option value="7">Đã hoàn tiền</option>
+
+                    <%
+                        }
+                        for (int i = 1; i <= 7; i++) {
+                    %>
+                    <option value="<%= i%>" <% if (i == orderStatusID) { %> selected  <% }%>>
+                        <%= orderDTO.getStatus(i)%>
+                    </option>
+                    <%}%>
                 </select>
                 Từ
-                <input type="date" name="dateFrom" value=""/>
+                <input type="date" name="dateFrom" id="search-dateFrom" value="<%= dateFrom%>"/>
                 đến
-                <input type="date" name="dateTo" value=""/>
+                <input type="date" name="dateTo" id="search-dateTo" value="<%= dateTo%>"/>
                 <button type="submit" name="action" value="SearchOrder" class="btn-outline-dark" style="width: 15%; padding: 0.5% 0.1%;"><i class="fa fa-search fa-lg"></i>Search</button>
             </form>   
             ${requestScope.EMPTY_LIST_MESSAGE}
@@ -154,8 +170,8 @@
                                                             <option value="<%= i%>" 
                                                                     <%if (order.getStatusID() == i) {%>
                                                                     selected 
-                                                                    <%} 
-                                                                    if (i < order.getStatusID() || ((i == 5 || i == 6) && order.getStatusID() != 1) || ((i == 7) && (order.getStatusID() != 6))) {%>
+                                                                    <%}
+                                                                        if (i < order.getStatusID() || ((i == 5 || i == 6) && order.getStatusID() != 1) || ((i == 7) && (order.getStatusID() != 6))) {%>
                                                                     disabled 
                                                                     <%}%> >
                                                                 <%= order.getStatus(i)%>
@@ -246,7 +262,7 @@
                                                         <label class="form-label" for="fullname">Số điện thoại</label>
                                                         <input type="text" value="<%= order.getPhone()%>" readonly="" class="form-control form-control-lg"/>
                                                     </div>
-                                                    
+
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -255,7 +271,7 @@
                                                         <label class="form-label" for="address">Địa chỉ giao hàng</label>
                                                         <input type="text" value="<%= order.getAddress()%>" readonly="" class="form-control form-control-lg"/>
                                                     </div>
-                                                    
+
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -264,29 +280,29 @@
                                                         <label class="form-label" for="email">Email</label>
                                                         <input type="text" value="<%= order.getEmail()%>" readonly="" class="form-control form-control-lg"/>
                                                     </div>
-                                                    
+
                                                 </div>
                                                 <div class="col-md-6 mb-4 pb-2">
                                                     <div class="form-outline">
                                                         <label class="form-label" for="transactionNumber">Mã giao dịch</label>
                                                         <input type="text" <% if (!order.getPayType().equals("COD")) {%>value="<%= order.getTransactionNumber()%>" <%} else {%> value="" <%}%> readonly="" class="form-control form-control-lg"/>
                                                     </div>
-                                                    
+
                                                 </div>
                                             </div>
-                                                    
-                                                    <!--sửa if chỗ này thành [is not empty]-->
-                                        <% if (order.getNote() != null) { %> 
+
+                                            <!--sửa if chỗ này thành [is not empty]-->
+                                            <% if (order.getNote() != null) {%> 
                                             <div class="row">
                                                 <div class="col-md-12 mb-4 pb-2">
                                                     <div class="form-outline">
                                                         <label class="form-label" for="note">Ghi chú</label>
                                                         <input type="text" value="<%= order.getNote()%>" readonly="" class="form-control form-control-lg"/>
                                                     </div>
-                                                    
+
                                                 </div>
                                             </div>
-                                        <%}%>
+                                            <%}%>
                                             <table border="1">
                                                 <thead>
                                                     <tr>
@@ -327,8 +343,12 @@
                                         <input type="hidden" name="payType" value="<%= order.getPayType()%>"/>
                                         <input type="hidden" name="userID" value="<%= loginUser.getUserID()%>"/>
                                         <input type="hidden" name="roleID" value="<%= loginUser.getRoleID()%>"/>
+                                        <input type="hidden" name="search" id="update-search" value=""/>
+                                        <input type="hidden" name="dateFrom" id="update-dateFrom" value=""/>
+                                        <input type="hidden" name="dateTo" id="update-dateTo" value=""/>
+                                        <input type="hidden" name="search-statusID" id="update-statusID" value=""/>
                                         <div class="modal-footer">
-                                            <button class="btn btn-default" type="submit" name="action" value="UpdateOrder">Cập nhật</button>
+                                            <button class="btn btn-default" type="submit" name="action" value="UpdateOrder" onclick="getSearchParameters()">Cập nhật</button>
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
                                         </div>
                                     </form>
@@ -395,6 +415,12 @@
             $(document).ready(function () {
                 $("#myModal").modal();
             });
+            function getSearchParameters() {
+                document.getElementById("update-search").value = document.getElementById("search-search").value;
+                document.getElementById("update-dateFrom").value = document.getElementById("search-dateFrom").value;
+                document.getElementById("update-dateTo").value = document.getElementById("search-dateTo").value;
+                document.getElementById("update-statusID").value = document.getElementById("search-statusID").value;
+            }
         </script>
     </body>
 </html>
