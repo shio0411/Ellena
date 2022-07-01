@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package store.controllers;
 
 import java.io.IOException;
@@ -14,13 +10,12 @@ import javax.servlet.http.HttpServletResponse;
 import store.user.UserDAO;
 import store.user.UserDTO;
 
-
 @WebServlet(name = "ShowAccountController", urlPatterns = {"/ShowAccountController"})
 public class ShowAccountController extends HttpServlet {
 
     private static final String ERROR = "admin.jsp";
     private static final String SUCCESS = "admin.jsp";
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");

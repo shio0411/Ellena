@@ -19,11 +19,6 @@
 
         <%
             UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
-            String search = request.getParameter("search");
-            if (search == null) {
-                search = "";
-            }
-
             String message = (String) request.getAttribute("MESSAGE");
             String searchValue = request.getAttribute("SEARCH") != null ? (String) request.getAttribute("SEARCH") : "";
             String sOrderStatusID = request.getAttribute("STATUS_ID") != null ? (String) request.getAttribute("STATUS_ID") : "";
@@ -109,8 +104,6 @@
                     if (listOrder.size() > 0) {
             %>    
 
-
-
             <table class="table table-hover table-bordered">
                 <tr style="background-color: #b57c68">
                     <th>ID</th>
@@ -134,7 +127,6 @@
                     <td><%= order.getUserName()%></td>
                     <td><%= order.getStatusName()%></td>
 
-
                     <!--pop-up xem chi tiết và chỉnh trạng thái đơn hàng-->
                     <td>
                         <div class="modal fade" id="myModal<%=id%>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -157,7 +149,6 @@
                                                     </div>
 
                                                 </div>
-
 
                                                 <div class="col-md-6 mb-4 pb-2">
 
@@ -195,7 +186,6 @@
                                                 </div>
 
                                             </div>
-
 
                                             <div class="row">
                                                 <div class="col-md-6 mb-4 pb-2">
@@ -335,20 +325,16 @@
                                                 </tbody>
                                             </table>
 
-
-
-
-
                                         </div>
                                         <input type="hidden" name="payType" value="<%= order.getPayType()%>"/>
                                         <input type="hidden" name="userID" value="<%= loginUser.getUserID()%>"/>
                                         <input type="hidden" name="roleID" value="<%= loginUser.getRoleID()%>"/>
-                                        <input type="hidden" name="search" id="update-search" value=""/>
-                                        <input type="hidden" name="dateFrom" id="update-dateFrom" value=""/>
-                                        <input type="hidden" name="dateTo" id="update-dateTo" value=""/>
-                                        <input type="hidden" name="search-statusID" id="update-statusID" value=""/>
+                                        <input type="hidden" name="search" id="update-search" value="<%= searchValue%>"/>
+                                        <input type="hidden" name="dateFrom" id="update-dateFrom" value="<%= dateFrom%>"/>
+                                        <input type="hidden" name="dateTo" id="update-dateTo" value="<%= dateTo%>"/>
+                                        <input type="hidden" name="search-statusID" id="update-statusID" value="<%= orderStatusID%>"/>
                                         <div class="modal-footer">
-                                            <button class="btn btn-default" type="submit" name="action" value="UpdateOrder" onclick="getSearchParameters()">Cập nhật</button>
+                                            <button class="btn btn-default" type="submit" name="action" value="UpdateOrder">Cập nhật</button>
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
                                         </div>
                                     </form>
@@ -415,12 +401,6 @@
             $(document).ready(function () {
                 $("#myModal").modal();
             });
-            function getSearchParameters() {
-                document.getElementById("update-search").value = document.getElementById("search-search").value;
-                document.getElementById("update-dateFrom").value = document.getElementById("search-dateFrom").value;
-                document.getElementById("update-dateTo").value = document.getElementById("search-dateTo").value;
-                document.getElementById("update-statusID").value = document.getElementById("search-statusID").value;
-            }
         </script>
     </body>
 </html>

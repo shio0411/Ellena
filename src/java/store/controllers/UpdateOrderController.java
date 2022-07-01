@@ -19,18 +19,13 @@ public class UpdateOrderController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
-            String sDateFrom = request.getParameter("dateFrom");
-            String sDateTo = request.getParameter("dateTo");
-            String sStatusID = request.getParameter("search-statusID");
-            
-            
             int orderID = Integer.parseInt(request.getParameter("orderID"));
             int statusID = Integer.parseInt(request.getParameter("statusID"));
             String trackingID = request.getParameter("trackingID");
             String modifiedBy = request.getParameter("userID");
             String roleID = request.getParameter("roleID");
             OrderDAO dao = new OrderDAO();
-            boolean checkUpdate = dao.updateOrderStatus(orderID, statusID, modifiedBy, roleID) || dao.updateOrderTrackingID(orderID, trackingID);            
+            boolean checkUpdate = dao.updateOrderStatus(orderID, statusID, modifiedBy, roleID) || dao.updateOrderTrackingID(orderID, trackingID);
             if (checkUpdate) {
                 url = SUCCESS;
                 request.setAttribute("MESSAGE", "Cập nhật thành công");

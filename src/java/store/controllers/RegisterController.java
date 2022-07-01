@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package store.controllers;
 
 import java.io.IOException;
@@ -17,10 +12,6 @@ import store.user.UserDAO;
 import store.user.UserDTO;
 import store.user.UserError;
 
-/**
- *
- * @author giama
- */
 @WebServlet(name = "RegisterController", urlPatterns = {"/Register"})
 public class RegisterController extends HttpServlet {
 

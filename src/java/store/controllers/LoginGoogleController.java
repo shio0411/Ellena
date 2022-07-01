@@ -43,7 +43,6 @@ public class LoginGoogleController extends HttpServlet {
 
                 String accessToken = GoogleUtils.getToken(code);
                 GooglePojo googlePojo = GoogleUtils.getUserInfo(accessToken);
-                //String id = googlePojo.getId();
                 String email = googlePojo.getEmail();
 
                 UserDTO loginUser = new UserDTO();

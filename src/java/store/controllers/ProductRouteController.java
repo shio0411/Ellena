@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package store.controllers;
 
 import java.io.IOException;
@@ -15,7 +11,6 @@ import store.shopping.ProductDAO;
 import store.shopping.ProductDTO;
 import store.shopping.RatingDAO;
 import store.shopping.RatingDTO;
-
 
 @WebServlet(name = "ProductRouteController", urlPatterns = {"/ProductRouteController"})
 public class ProductRouteController extends HttpServlet {
@@ -36,7 +31,7 @@ public class ProductRouteController extends HttpServlet {
             if (product != null) {
                 request.setAttribute("PRODUCT_DETAIL", product);
                 request.setAttribute("PRODUCT_RATING_DETAILS", ratingDetails);
-                if(ratingList != null){
+                if (ratingList != null) {
                     request.setAttribute("RATING_LIST", ratingList);
                 }
                 url = "./product/" + productID;
