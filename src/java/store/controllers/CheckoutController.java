@@ -25,6 +25,7 @@ import store.shopping.OrderError;
 import store.shopping.ProductDAO;
 import store.user.UserDTO;
 import store.utils.Config;
+import store.utils.JavaMailUtils;
 
 /**
  *
@@ -112,7 +113,6 @@ public class CheckoutController extends HttpServlet {
                                 url = INPUT_ERROR;
                                 check = false;
                                 orderError.setEmail("Email quý khách nhập không hợp lệ!");
-//                    request.setAttribute("CART_MESSAGE", "Email quý khách nhập không hợp lệ!");
                             }
 
                             OrderDTO order = new OrderDTO(Date.valueOf(LocalDate.now()), total, user.getUserID(), 1, "Chưa xác nhận", c.getPayType(), c.getFullName(), c.getAddress(), c.getPhone(), c.getEmail(), c.getNote(), transactionNumber);
@@ -168,9 +168,14 @@ public class CheckoutController extends HttpServlet {
                                             pdao.updateProductQuantity(maxQuantity - item.getQuantity(), productColorID, item.getSize());
                                         }
                                     }
+                                    // get newly created orderID
                                     int orderID = odao.getOrderID(user.getUserID());
+                                    // insert orderID to orderDTO
+                                    order.setOrderID(orderID);
+                                    // check if get newly created orderID successful
                                     if (orderID > 0) {
                                         request.setAttribute("CART_MESSAGE", "Đặt hàng thành công! Mã đơn hàng của bạn là " + orderID);
+                                        JavaMailUtils.sendOrderMail(c.getEmail(), "OrderConfirm", order, cart);
                                         session.removeAttribute("CART");
                                         url = SUCCESS;
                                         cpdao.deleteAllCartItems(c.getId());
