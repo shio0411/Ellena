@@ -44,7 +44,6 @@ public class CheckoutController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = INPUT_ERROR;
         try {
-            //If payType is VNPay, the parameters will be put on session, or else they will be killed when redirecting to vnpay.jsp
             HttpSession session = request.getSession();
             OrderError orderError = new OrderError();
             UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
@@ -55,18 +54,21 @@ public class CheckoutController extends HttpServlet {
                 orderError.setShippingProvinces("Xin quý khách hãy chọn Tỉnh/Thành Phố - Phường/Huyện nơi giao hàng!");
                 request.setAttribute("ORDER_ERROR", orderError);
             } else {
+                
                 String fullname = request.getParameter("fullname");
                 String phone = request.getParameter("phone");
                 String email = request.getParameter("email");
                 String payType = request.getParameter("payType");
                 String note = request.getParameter("note");
-                String[] provinces = new String[]{"An Giang", "Bà Rịa - Vũng Tàu", "Bạc Liêu", "Bắc Kạn", "Bắc Giang", "Bắc Ninh", "Bến Tre", "Bình Dương", "Bình Định", "Bình Phước", "Bình Thuận", "Cà Mau", "Cao Bằng", "Cần Thơ", "Đà Nẵng", "Đắk Lắk", "Đắk Nông", "Đồng Nai", "Đồng Tháp", "Điện Biên", "Gia Lai", "Hà Giang", "Hà Nam", "Hà Nội", "Hà Tĩnh", "Hải Dương", "Hải Phòng", "Hòa Bình", "Hậu Giang", "Hưng Yên", "Thành phố Hồ Chí Minh", "Khánh Hòa", "Kiên Giang", "Kon Tum", "Lai Châu", "Lào Cai", "Lạng Sơn", "Lâm Đồng", "Long An", "Nam Định", "Nghệ An", "Ninh Bình", "Ninh Thuận", "Phú Thọ", "Phú Yên", "Quảng Bình", "Quảng Nam", "Quảng Ngãi", "Quảng Ninh", "Quảng Trị", "Sóc Trăng", "Sơn La", "Tây Ninh", "Thái Bình", "Thái Nguyên", "Thanh Hóa", "Thừa Thiên - Huế", "Tiền Giang", "Trà Vinh", "Tuyên Quang", "Vĩnh Long", "Vĩnh Phúc", "Yên Bái"};                     
+                String[] provinces = new String[]{"An Giang", "Bà Rịa - Vũng Tàu", "Bạc Liêu", "Bắc Kạn", "Bắc Giang", "Bắc Ninh", "Bến Tre", "Bình Dương", "Bình Định", "Bình Phước", "Bình Thuận", "Cà Mau", "Cao Bằng", "Cần Thơ", "Đà Nẵng", "Đắk Lắk", "Đắk Nông", "Đồng Nai", "Đồng Tháp", "Điện Biên", "Gia Lai", "Hà Giang", "Hà Nam", "Hà Nội", "Hà Tĩnh", "Hải Dương", "Hải Phòng", "Hòa Bình", "Hậu Giang", "Hưng Yên", "Thành phố Hồ Chí Minh", "Khánh Hòa", "Kiên Giang", "Kon Tum", "Lai Châu", "Lào Cai", "Lạng Sơn", "Lâm Đồng", "Long An", "Nam Định", "Nghệ An", "Ninh Bình", "Ninh Thuận", "Phú Thọ", "Phú Yên", "Quảng Bình", "Quảng Nam", "Quảng Ngãi", "Quảng Ninh", "Quảng Trị", "Sóc Trăng", "Sơn La", "Tây Ninh", "Thái Bình", "Thái Nguyên", "Thanh Hóa", "Thừa Thiên - Huế", "Tiền Giang", "Trà Vinh", "Tuyên Quang", "Vĩnh Long", "Vĩnh Phúc", "Yên Bái"};
                 if(fullname != null){
-                    int provinceIndex = Integer.parseInt(request.getParameter("calc_shipping_provinces"));   
                     String homeAddress = request.getParameter("address");
-                    String address = homeAddress + ", " + request.getParameter("calc_shipping_district") + ", " + provinces[provinceIndex - 1];
+                    int provinceIndex = Integer.parseInt(request.getParameter("calc_shipping_provinces"));   
+                    String address = homeAddress + ", " + request.getParameter("calc_shipping_district") + ", " + provinces[provinceIndex - 1];;
+                    session.setAttribute("ADDRESS", address);
                     cdao.updateCartInfo(fullname, phone, homeAddress, email, note, c.getUserID(), payType);
                 }
+                
                 boolean paidStatus = false;
                 List<CartProduct> cart = (List<CartProduct>) session.getAttribute("CART");
                 // check cart
@@ -115,8 +117,7 @@ public class CheckoutController extends HttpServlet {
                                 orderError.setEmail("Email quý khách nhập không hợp lệ!");
                             }
 
-                            OrderDTO order = new OrderDTO(Date.valueOf(LocalDate.now()), total, user.getUserID(), 1, "Chưa xác nhận", c.getPayType(), c.getFullName(), c.getAddress(), c.getPhone(), c.getEmail(), c.getNote(), transactionNumber);
-
+                            OrderDTO order = new OrderDTO(Date.valueOf(LocalDate.now()), total, user.getUserID(), 1, "Chưa xác nhận", c.getPayType(), c.getFullName(), session.getAttribute("ADDRESS").toString(), c.getPhone(), c.getEmail(), c.getNote(), transactionNumber);
                             // check quantity and status
                             boolean checkQuantity = true;
                             boolean checkStatus = true;
