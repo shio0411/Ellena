@@ -29,7 +29,7 @@ public class ManagerStatisticController extends HttpServlet {
 
     private static final String ERROR = "error.jsp";
     private static final String SUCCESS = "manager-statistic.jsp";
-    private static final String MIN_DATE = "1970-01-01";
+    private static final String MIN_DATE = "2000-01-01";
     private static final String EMPTY = "";
     protected String checkFromDate(String date){
         if(date == null || date == EMPTY){
@@ -53,13 +53,16 @@ public class ManagerStatisticController extends HttpServlet {
         try {
             StatisticDAO dao = new StatisticDAO();
             Map<String, StatisticDTO> orderStatistic7Day = dao.getStatisticOrder7Day();
-            Map<String, StatisticDTO> orderStatistic4Week = dao.getStatisticOrder4Week();
+            Map<String, StatisticDTO> orderStatistic30Day = dao.getStatisticOrder30Day();
             Map<String, StatisticDTO> orderStatistic1Year = dao.getStatisticOrder1Year();
-            StatisticDTO today = dao.getStatisticOrderToday();
             String cancelOrderFrom = request.getParameter("cancelOrderFrom");
             String cancelOrderTo = request.getParameter("cancelOrderTo");
             String payTypeFrom = request.getParameter("payTypeFrom");
             String payTypeTo = request.getParameter("payTypeTo");
+            String getStatisticFrom = request.getParameter("getStatisticFrom");
+            String getStatisticTo = request.getParameter("getStatisticTo");
+            String getGraphFrom = request.getParameter("getGraphFrom");
+            String getGraphTo = request.getParameter("getGraphTo");
             String sellerFrom = request.getParameter("sellerFrom");
             String sellerTo = request.getParameter("sellerTo");
             String incomeFrom = request.getParameter("incomeFrom");
@@ -69,6 +72,8 @@ public class ManagerStatisticController extends HttpServlet {
             cancelOrderTo = checkToDate(cancelOrderTo);
             payTypeFrom = checkFromDate(payTypeFrom);
             payTypeTo = checkToDate(payTypeTo);
+            getStatisticFrom = checkFromDate(getStatisticFrom);
+            getStatisticTo = checkToDate(getStatisticTo);
             sellerFrom = checkFromDate(sellerFrom);
             sellerTo = checkToDate(sellerTo);
             incomeFrom = checkFromDate(incomeFrom);
@@ -84,20 +89,24 @@ public class ManagerStatisticController extends HttpServlet {
             List<Pair<String, StatisticDTO>> bestSeller = dao.getBestSeller(sellerFrom, sellerTo);
             List<Pair<String, StatisticDTO>> bestIncome = dao.getBestIncome(incomeFrom, incomeTo);
             List<Pair<String, Integer>> userGender = dao.getUserGender();
-          
-            if (orderStatistic7Day.size() > 0) {
-                request.setAttribute("ORDER_STATISTIC_7DAY", orderStatistic7Day);
-                request.setAttribute("ORDER_STATISTIC_4WEEK", orderStatistic4Week);
-                request.setAttribute("ORDER_STATISTIC_1YEAR", orderStatistic1Year);
-                request.setAttribute("ORDER_STATISTIC_TODAY", today);
-                request.setAttribute("BEST_SELLER", bestSeller);
-                request.setAttribute("BEST_INCOME", bestIncome);
-                request.setAttribute("CANCEL_RATIO", cancelRatio);
-                request.setAttribute("REFUND_RATIO", refundRatio);
-                request.setAttribute("PAY_TYPE", payType);
-                
-                url = SUCCESS;
+            StatisticDTO today = dao.getStatisticOrder(getStatisticFrom, getStatisticTo);
+            if(getGraphFrom != null && getGraphTo != null){
+                Map<String, StatisticDTO> orderStatisticCustom = dao.getStatisticCustom(getGraphFrom, getGraphTo);
+                request.setAttribute("ORDER_STATISTIC_CUSTOM", orderStatisticCustom);
             }
+    
+            request.setAttribute("ORDER_STATISTIC_7DAY", orderStatistic7Day);
+            request.setAttribute("ORDER_STATISTIC_30DAY", orderStatistic30Day);
+            request.setAttribute("ORDER_STATISTIC_1YEAR", orderStatistic1Year);
+            request.setAttribute("ORDER_STATISTIC_TODAY", today);
+            request.setAttribute("BEST_SELLER", bestSeller);
+            request.setAttribute("BEST_INCOME", bestIncome);
+            request.setAttribute("CANCEL_RATIO", cancelRatio);
+            request.setAttribute("REFUND_RATIO", refundRatio);
+            request.setAttribute("PAY_TYPE", payType);
+
+            url = SUCCESS;
+            
         } catch (Exception e) {
             log("Error at ManagerStatisticController: " + e.toString());
         } finally {

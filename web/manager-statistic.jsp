@@ -37,24 +37,34 @@
     input[type=number] {
         -moz-appearance:textfield; /* Firefox */
     }      
-    .date-picker{
-        font-size: 14px;
-    }
     .bg-grey{
-        background: #dedede;
+        background: #ededed;
     }
     
     .flex-item{
         background: white;
         margin: 1rem;
-        border-radius: 0.5rem;
-        
+        border-radius: 0.5rem;   
     }
+    .flex-item:hover{
+        box-shadow: 0 3px 10px rgba(0 0 0 / 0.2);
+    }
+    
     .order-status-item{
        border: 1px solid #bfbfbf;
        margin: 1rem;
        border-radius: 1rem;
        padding: 1.25rem;
+       
+    }
+    .card:hover{
+        box-shadow: 0 3px 10px rgba(0 0 0 / 0.2);
+    }
+    
+    .flex-card{
+        background: white;
+        margin: 0.5rem;
+        border-radius: 0.5rem;
     }
     #order-status{
         flex-basis: 65%;
@@ -62,7 +72,11 @@
     #today-statistic{
         flex-basis: 35%;
     }
-    
+    #graph-dropdơwn{
+        width: max-content;
+        margin-left: auto; 
+        margin-right: 0;
+    }
     #cancel_ratio{
         flex-basis: 40%;  
         margin-left: 2rem;
@@ -81,7 +95,42 @@
     .text-4{
         color:#344055;
     }
-   
+    #manager__header{
+        padding: 0.5rem 1rem;      
+        background: white;
+        border-radius: 0.5rem;
+        
+    }
+    .navbar__container{
+        background: white;
+        border-radius: 1rem;
+        display:grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0;   
+        margin: 0 1rem;
+        
+    }
+    
+    .navbar__item{
+        border-radius: 1rem;
+        padding: 0.75rem;
+        margin:0.5rem;
+        background: white;
+        text-align: center;
+        
+    }
+    
+    .navbar__item.active{
+        background: #dedede;
+        font-weight:700;
+    }
+    .navbar__item:hover{
+        background: #dedede;
+        
+    }
+    .navbar__container> a{
+        color:black;
+    }
     </style>
     
 </head>
@@ -116,24 +165,30 @@
         %>
         <div id="content" class="p-3 px-5 bg-grey">
             <!--WELCOME USER-->
-            <form action="MainController" method="POST">  
-                <div class="row ml-5">
-                <h4 class="col-6">
-                    <b>Xin chào, </b>
-                        <a data-toggle="dropdown" role="button"><b class="text-color-dark"><%= loginUser.getFullName()%></b></a>
-                    <div class="dropdown-menu nav-tabs" role="tablist">
-                    <button class="dropdown-item btn" role="tab" type="button"><a class="text-dark" href="my-profile.jsp">Thông tin tài khoản</a></button>
-                    <input class=" dropdown-item btn" type="submit" name="action" value="Logout"/>
+            <div class="flex-item" id="manager__header">
+                <form class="m-0" action="MainController" method="POST">  
+                    <h4 class="dropdown">
+                        <b>Xin chào, </b>
+                            <a  data-toggle="dropdown" role="button"><b class="text-color-dark"><%= loginUser.getFullName()%></b></a>
+                        <div  class="dropdown-menu nav-tabs" role="tablist">
+                        <button class="dropdown-item btn" role="tab" type="button"><a class="text-dark" href="my-profile.jsp">Thông tin tài khoản</a></button>
+                        <input class=" dropdown-item btn" type="submit" name="action" value="Logout"/>
+                        </div>
+                    </h4>
+                </form>
+            </div>
+            <!--Nav bar-->
+            <div class="navbar__container">
+                <div class="navbar__item active">
+                    <span>Đơn hàng</span>
                 </div>
-                </h4>
-                
-           
-                </div>
-            </form>
-            <hr class="mx-5 mb-5"/>
+                <a href="ManagerStatisticUserController"><div class="navbar__item">
+                    <span>Người dùng</span>
+                    </div></a>
+            </div>
             
             
-            <div class="d-flex rounded ml-0 mb-4">
+            <div class="d-flex mb-4">
                 <div class="flex-item bg-white" id="order-status">
                     <h4 class="my-4 text-center"><b>Tình trạng đơn hàng</b></h4>
                     <div class="d-flex">
@@ -159,7 +214,7 @@
                                 incomeTo = (dateFormat.format(new Date()));
                             }*/
                             %>
-                        <h6 class="text-center">Tỷ lệ hủy/hoàn đơn</h6>
+                            <h6 class="text-center"><b>Tỷ lệ hủy/hoàn đơn</b></h6>
                         <div class="text-right" >
                             <button type="button" class="btn btn-default mt-3" data-toggle="modal" data-target="#order__modal__1">
                             Chọn thời gian
@@ -194,7 +249,7 @@
                           </div>
                             
                         </div>
-                        <div class="card rounded border-1 my-3">
+                        <div class="card my-3">
                             <div class="d-flex flex-row align-items-center">
                                 <div class="flex-item m-0 ml-2">
                                     <span class="h5">Tỷ lệ hủy</span>
@@ -204,7 +259,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card rounded border-1">
+                        <div class="card ">
                             <div class="d-flex flex-row align-items-center">
                                 <div class="flex-item m-0 ml-2">
                                     <span class="h5">Tỷ lệ hoàn</span>
@@ -222,7 +277,7 @@
                         <%
                             List<Pair<String, Integer>> payType = (List<Pair<String, Integer>>)request.getAttribute("PAY_TYPE");
                         %>
-                        <h6 class="text-center">Hình thức thanh toán</h6>
+                        <h6 class="text-center"><b>Hình thức thanh toán</b></h6>
                         <div class="text-right" >
                             <button type="button" class="btn btn-default my-3" data-toggle="modal" data-target="#order__modal__2">
                             Chọn thời gian
@@ -261,45 +316,79 @@
                     </div>
                     </div>
                 </div>
-                
+                <!--STATISTIC DATE -->
                 <div class="flex-item" id="today-statistic">
-                    <h4 class="my-4 text-center"><b>Thống kê hôm nay</b></h4>
+                    <h4 class="my-4 text-center"><b>Doanh số theo ngày</b></h4>
                     <div class="d-flex flex-column justify-content-around px-5">
-                        <div class="flex-item card rounded border-1 pr-2">
+                        <div class="text-right mr-2" >
+                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#statistic__modal">
+                            Chọn thời gian
+                          </button>
+
+                          <!-- Modal -->
+                          <div class="modal fade" id="statistic__modal" tabindex="-1" role="dialog">
+                              <div class="modal-dialog" role="document">
+                                  <div class="modal-content">
+                                      <div class="modal-header">
+                                          <h5 class="modal-title" id="exampleModalLabel">Chọn thời gian</h5>
+                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                              <span aria-hidden="true">&times;</span>
+                                          </button>
+                                      </div>
+                                      <form action="ManagerStatisticController" method="post">
+                                          <div class="modal-body">
+                                              <div class="date-picker text-center">
+                                                  <b>Từ</b>
+                                                  <input class="date mr-5" data-provide="datepicker" type="date" name="getStatisticFrom" />                                        
+                                                  <b>đến</b>
+                                                  <input class="date" data-provide="datepicker" type="date"  name="getStatisticTo" /> 
+                                              </div>
+                                          </div>
+                                          <div class="modal-footer">
+                                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
+                                              <button class="btn bg-color-primary border-0" type="submit">Áp dụng</button>
+                                          </div>
+                                      </form>   
+                                  </div>
+                              </div>
+                          </div>
+                            
+                        </div>
+                        <div class="flex-card card pr-2">
                             <div class="row no-gutters">
                                 <div class="col-4 text-center">
                                     <img class="" height="50px" src="img/shopping-cart.png" alt="Đơn hàng" />
                                 </div>
                                 <div class="col-8 text-right">
-                                    <h2 class="mt-2 mb-0 mr-5"><b>
+                                    <h3 class="mt-2 mb-0 mr-5 text-3"><b>
                                             <%=today.getOrderQuantity()%>
-                                        </b></h2>
+                                        </b></h3>
                                     <p class="mb-2 mr-5">Đơn hàng</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="flex-item card rounded border-1 pr-2">
+                        <div class="flex-card card pr-2">
                             <div class="row no-gutters">
                                 <div class="col-4 text-center">
                                     <img class="mt-4" height="50px" src="img/coins.png" alt="Đơn hàng" />
                                 </div>
                                 <div class="col-8 text-right">
-                                    <h2 class="mt-2 mb-0 mr-5"><b>
-                                            <%=today.getIncome()%>
-                                        </b></h2>
-                                    <p class="mb-2 mr-5">Doanh thu</p>
+                                    <h3 class="mt-2 mb-0 mr-5 text-2"><b>
+                                            <%=addDot(today.getIncome())%>
+                                        </b></h3>
+                                    <p class="mb-2 mr-5">Doanh thu(VNĐ)</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="flex-item card rounded border-1 pr-2">
+                        <div class="flex-card card  pr-2">
                             <div class="row no-gutters">
                                 <div class="col-4 text-center">
                                     <img class="mt-4" height="50px" src="img/clothes.png" alt="Đơn hàng" />
                                 </div>
                                 <div class="col-8 text-right">
-                                    <h2 class="mt-2 mb-0 mr-5"><b>
+                                    <h3 class="mt-2 mb-0 mr-5 text-4"><b>
                                             <%=today.getProductQuantity()%>
-                                        </b></h2>
+                                        </b></h3>
                                     <p class="mb-2 mr-5">Sản phẩm</p>
                                 </div>
                             </div>
@@ -307,23 +396,32 @@
                     </div>
                 </div>
             </div>
-            
+            <!-- INCOME GRAPH -->
             <%
                     Map<String, StatisticDTO> orderStatistic7Day = (Map<String, StatisticDTO>) request.getAttribute("ORDER_STATISTIC_7DAY");
-                    Map<String, StatisticDTO> orderStatistic4Week = (Map<String, StatisticDTO>) request.getAttribute("ORDER_STATISTIC_4WEEK");
+                    Map<String, StatisticDTO> orderStatistic4Week = (Map<String, StatisticDTO>) request.getAttribute("ORDER_STATISTIC_30DAY");
                     Map<String, StatisticDTO> orderStatistic1Year = (Map<String, StatisticDTO>) request.getAttribute("ORDER_STATISTIC_1YEAR");
+                    Map<String, StatisticDTO> orderStatisticCustom = (Map<String, StatisticDTO>) request.getAttribute("ORDER_STATISTIC_CUSTOM");
                     List<Pair<String, StatisticDTO>> bestSeller = (List<Pair<String, StatisticDTO>>) request.getAttribute("BEST_SELLER");
                     List<Pair<String, StatisticDTO>> bestIncome = (List<Pair<String, StatisticDTO>>) request.getAttribute("BEST_INCOME");  
                     List<Pair<String, Integer>> userGender = (List<Pair<String, Integer>>) request.getAttribute("USER_GENDER"); 
                     Set<String> set7day = orderStatistic7Day.keySet();
                     Set<String> set4week = orderStatistic4Week.keySet();
                     Set<String> set1year = orderStatistic1Year.keySet();
+                    Set<String> setCustom = null;
                     List<String> list7day = new ArrayList<String>(set7day);
                     List<String> list4week = new ArrayList<String>(set4week);
                     List<String> list1year = new ArrayList<String>(set1year);
+                    List<String> listCustom = null;
                     Collections.sort(list7day);
                     Collections.sort(list4week);
                     Collections.sort(list1year);
+                    
+                    if(orderStatisticCustom != null){
+                        setCustom = orderStatisticCustom.keySet();
+                        listCustom = new ArrayList<String>(setCustom);
+                        Collections.sort(listCustom);
+                    }
                     
       
                     String sellerFrom = (String)request.getParameter("sellerFrom");
@@ -344,17 +442,130 @@
                     }
 
                 %>
-            <div class="container-fluid rounded color-bg p-3 mb-4">
+            <div class="flex-item p-3 tab-content mb-4">
+                <div class="container-fluid nav-item p-0 pr-4">
+                    <h4 class="my-3 text-center"><b> Số lượng đơn hàng, doanh thu và sản phẩm bán được</b></h4>
+                    <div class="dropdown" id="graph-dropdơwn">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Chọn thời gian
+                        </button>
+                        <div class="dropdown-menu">
+                            <%
+                                String getGraphFrom = (String)request.getParameter("getGraphFrom");
+                                String getGraphTo = (String)request.getParameter("getGraphTo");
+                                if(getGraphFrom != null && getGraphTo != null && getGraphFrom != "" && getGraphTo != ""){
+                            %>
+                                 <button class="dropdown-item " role="tab" type="button" data-toggle="tab" data-target="#chart4">
+                                 [<%=getGraphFrom%>]-[<%=getGraphTo%>]</button>
+                            <%
+                                }
+                            %>
+                            <button class="dropdown-item " role="tab" type="button" data-toggle="tab" data-target="#chart1">7
+                                ngày</button>
+                            <button class="dropdown-item" role="tab" type="button" data-toggle="tab" data-target="#chart2">30
+                                ngày</button>
+                            <button class="dropdown-item" role="tab" type="button" data-toggle="tab" data-target="#chart3">12
+                                tháng</button>
+                            <button class="dropdown-item" type="button" data-toggle="modal" data-target="#graph__modal">
+                                Tùy chỉnh
+                            </button>
+
+                            
+                        </div>
+                      </div>
+                <!-- Modal -->
+                            <div class="modal fade" id="graph__modal" tabindex="-1" role="dialog">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Chọn thời gian</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <form action="ManagerStatisticController" method="post">
+                                            <div class="modal-body">
+                                                <div class="date-picker text-center">
+                                                    <b>Từ</b>
+                                                    <input class="date mr-5" data-provide="datepicker" type="date" name="getGraphFrom" />                                        
+                                                    <b>đến</b>
+                                                    <input class="date" data-provide="datepicker" type="date"  name="getGraphTo" /> 
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
+                                                <button class="btn bg-color-primary border-0" type="submit">Áp dụng</button>
+                                            </div>
+                                        </form>   
+                                    </div>
+                                </div>
+                            </div>  
+                </div>
+                <%
+                    if(getGraphFrom == null || getGraphTo == null || getGraphFrom == "" || getGraphTo == ""){
+                        %>
+                        <div id="chart1" class="col-10 tab-pane fade active in m-auto" role="tabpanel">
+                            <canvas id="7DayChart"></canvas>
+                        </div>
+                        <%
+                    }else {
+                    %>
+                    <div id="chart4" class="col-10 tab-pane fade active in m-auto" role="tabpanel">
+                        <canvas id="custom-chart"></canvas>
+                    </div>
+                    <div id="chart1" class="col-10 tab-pane fade in m-auto" role="tabpanel">
+                        <canvas id="7DayChart"></canvas>
+                    </div>
+                    <%
+                }                    
+                %>
+                    <div id="chart2" class="col-10 tab-pane fade m-auto" role="tabpanel">
+                        <canvas id="4WeekChart"></canvas>
+                    </div>
+                    <div id="chart3" class="col-10 tab-pane fade m-auto" role="tabpanel">
+                        <canvas id="1YearChart"></canvas>
+                    </div>
+                
+            </div>    
+            <!--BEST SELLER-->
+            <div class="flex-item rounded color-bg p-3 mb-4">
                  
-                <h4 class="text-center"><b>Sản phẩm bán chạy nhất</b></h4>
-                <div class="text-right" >
-                    <form class="mt-3" action="ManagerStatisticController" method="post">
-                        <b><em>Từ</em></b>
-                        <input class="mr-3 date p-1" data-provide="datepicker" type="date" name="sellerFrom" value="<%=sellerFrom%>"/>
-                        <b><em>đến</em></b>
-                        <input class="mr-5 date p-1" data-provide="datepicker" type="date"  name="sellerTo" value="<%=sellerTo%>"/>
-                        <button class="btn bg-color-primary border-0" type="submit">Xem</button>
-                    </form>
+                <h4 class="my-3 text-center"><b>Sản phẩm bán chạy nhất</b></h4>
+               
+                   
+                <div class="text-right">
+                    <button type="button" class="btn btn-default mt-3" data-toggle="modal" data-target="#best-seller__modal">
+                        Chọn thời gian
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="best-seller__modal" tabindex="-1" role="dialog">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Chọn thời gian</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form action="ManagerStatisticController" method="post">
+                                    <div class="modal-body">
+                                        <div class="date-picker text-center">
+                                            <b>Từ</b>
+                                            <input class="date mr-5" data-provide="datepicker" type="date" name="sellerFrom" value="<%=sellerFrom%>" />                                        
+                                            <b>đến</b>
+                                            <input class="date" data-provide="datepicker" type="date" name="sellerTo" value="<%=sellerTo%>" /> 
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
+                                        <button class="btn bg-color-primary border-0" type="submit">Áp dụng</button>
+                                    </div>
+                                </form>   
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="row p-4">
                     <%
@@ -385,18 +596,44 @@
                     %>
                 </div>
             </div>
-            <hr class="mx-5 mb-5"/>
-            <div class="container-fluid rounded color-bg p-3 mb-4">
-                <div class="text-right" role="">
-                    <form action="ManagerStatisticController" method="post">
-                        <b><em>Từ</em></b>
-                        <input class="mr-3 date p-1" data-provide="datepicker" type="date" name="incomeFrom" value="<%=incomeFrom%>"/>
-                        <b><em>đến</em></b>
-                        <input class="mr-5 date p-1" data-provide="datepicker" type="date"  name="incomeTo" value="<%=incomeTo%>"/>
-                        <button class="btn bg-color-primary border-0" type="submit">Xem</button>
-                    </form>
+            <!--BEST INCOME-->    
+            <div class="flex-item rounded color-bg p-3 mb-4">
+                <h4 class="my-3 text-center"><b>Sản phẩm có doanh thu cao nhất</b></h4>
+                <div class="text-right">
+                    <button type="button" class="btn btn-default mt-3" data-toggle="modal" data-target="#best-income__modal">
+                        Chọn thời gian
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="best-income__modal" tabindex="-1" role="dialog">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Chọn thời gian</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form action="ManagerStatisticController" method="post">
+                                    <div class="modal-body">
+                                        <div class="date-picker text-center">
+                                            <b>Từ</b>
+                                            <input class="date mr-5" data-provide="datepicker" type="date" name="incomeFrom" value="<%=incomeFrom%>" />                                        
+                                            <b>đến</b>
+                                            <input class="date" data-provide="datepicker" type="date" name="incomeTo" value="<%=incomeTo%>" /> 
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
+                                        <button class="btn bg-color-primary border-0" type="submit">Áp dụng</button>
+                                    </div>
+                                </form>   
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <h4 class="text-center"><b>Sản phẩm có doanh thu cao nhất</b></h4>
+                
+                
                 <div class="row p-4">
                     <%
                         if(bestIncome.size() > 0){
@@ -425,39 +662,9 @@
                 </div>
                
             </div>
-                 <hr class="mx-5 mb-5"/>
-            <div class="rounded color-bg p-3 tab-content mb-4">
-                <div class="container-fluid nav-item p-0 pr-4">
-                    <h4 class="mb-4 text-center"><b> Số lượng đơn hàng, doanh thu và sản phẩm bán được</b></h4>
-                    <div class="text-right" role="tablist">
-                        <button class="btn btn-light border" role="tab" type="button" data-toggle="tab" data-target="#chart1">7
-                            ngày</button>
-                        <button class="btn btn-light border" role="tab" type="button" data-toggle="tab" data-target="#chart2">4
-                            tuần</button>
-                        <button class=" btn btn-light border" role="tab" type="button" data-toggle="tab" data-target="#chart3">12
-                            tháng</button>
-                    </div>
-                </div>
-             
-                    <div id="chart1" class="col-10 tab-pane fade active in m-auto" role="tabpanel">
-                        <canvas id="7DayChart"></canvas>
-                    </div>
-                    <div id="chart2" class="col-10 tab-pane fade m-auto" role="tabpanel">
-                        <canvas id="4WeekChart"></canvas>
-                    </div>
-                    <div id="chart3" class="col-10 tab-pane fade m-auto" role="tabpanel">
-                        <canvas id="1YearChart"></canvas>
-                    </div>
-                
-            </div>
-            
-            <!--User gender chart-->     
-            <div class="col-12 col-md-5">
-                <canvas id="user-gender"></canvas>
-            </div>
-        </div>
-                
+        </div>              
     </div>
+        
     <!--Pay type chart-->                
     <script>
         var canvas = document.getElementById('pay-type');
@@ -493,16 +700,22 @@
                 }]
         },      
         });
-    </script>
-    <!--User gender chart-->                
-    <script>
-        var canvas = document.getElementById('user-gender');
+    </script>              
+    <!-- CUSTOM CHART -->
+    <%
+    if(getGraphFrom != null && getGraphTo != null && getGraphFrom != "" && getGraphTo != ""){
+    %>
+    <script type="text/javascript">
+        var canvas = document.getElementById('custom-chart');
         var ctx = canvas.getContext('2d');
 
+        // Create a linear gradient
+        // The start gradient point is at x=20, y=0
+        // The end gradient point is at x=220, y=0
         var gradient1 = ctx.createLinearGradient(500,0, 500, 500);
         var gradient2 = ctx.createLinearGradient(500,0, 500, 500);
         var gradient3 = ctx.createLinearGradient(500,0, 500, 500);
-
+        // Add three color stops
         gradient1.addColorStop(0, '#344055');
         gradient1.addColorStop(1, '#93a3b1');
 
@@ -511,25 +724,89 @@
 
         gradient3.addColorStop(0, '#fca17d');
         gradient3.addColorStop(1, '#ffcccc');
-        var ctx = document.getElementById("user-gender");
+        var ctx = document.getElementById("custom-chart");
         var myChart = new Chart(ctx, {
-        type: 'doughnut',
+        type: 'bar',
         data: {
-            labels: [
-        <%for (Pair<String, Integer> p : userGender) {%>
-            "<%=p.getKey()%>",
-        <%}%>
+            labels: [<%for (String key : listCustom) {
+                            %>
+                "<%=key%>",
+                <%}%>
             ],
             datasets: [{
-                    label: 'Giới tính người dùng',
-                    data: [<%for (Pair<String, Integer> p : userGender) {%>
-            "<%=p.getValue()%>",
-        <%}%>],
-                    backgroundColor: [gradient2, gradient3]           
+                    label: 'Đơn hàng',
+                    data: [<%for (String key : listCustom) {
+                                        %>
+                        "<%=orderStatisticCustom.get(key).getOrderQuantity()%>",
+                        <%}%>
+                    ],
+                    backgroundColor: gradient1,
+                    borderColor: [
+
+                    ],
+                    borderWidth: 1
+                },
+                {
+                    label: 'Doanh thu(VNĐ)',
+                    data: [<%for (String key : listCustom) {
+                                        %>
+                        "<%=orderStatisticCustom.get(key).getIncome()%>",
+                        <%}%>
+                    ],
+                    backgroundColor: gradient2,
+                    borderColor: [
+
+                    ],
+                    borderWidth: 1
+                },
+                {
+                    label: 'Số sản phẩm',
+                    data: [<%for (String key : listCustom) {
+                                        %>
+                        "<%=orderStatisticCustom.get(key).getProductQuantity()%>",
+                        <%}%>
+                    ],
+                    backgroundColor: gradient3,
+                    borderColor: [
+
+                    ],
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            scales: {
+
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }],
+                xAxes: [{
+
                 }]
-        },      
+            },
+            legend:{
+                    onClick:function(t,e){
+                    var index =e.datasetIndex,o=this.chart;
+                    for(n=0,i=(o.data.datasets||[]).length;n<i;++n){
+                        if(n!=index){
+                        a=o.getDatasetMeta(n);
+                        a.hidden=true;
+                    }else{
+                        a=o.getDatasetMeta(n);
+                        a.hidden=false;
+                    }
+                    o.update();
+                    }
+                    
+                }
+            }
+        }
     });
-</script>
+    </script>
+    <%}
+    %>
     <script type="text/javascript">
         var canvas = document.getElementById('7DayChart');
         var ctx = canvas.getContext('2d');
@@ -549,8 +826,8 @@
 
         gradient3.addColorStop(0, '#fca17d');
         gradient3.addColorStop(1, '#ffcccc');
-    var ctx = document.getElementById("7DayChart");
-    var myChart = new Chart(ctx, {
+        var ctx = document.getElementById("7DayChart");
+        var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: [<%for (String key : list7day) {
