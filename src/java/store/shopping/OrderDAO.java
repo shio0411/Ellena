@@ -34,7 +34,7 @@ public class OrderDAO {
             + "                 AND DATEADD(DAY, (-DATEPART(WEEKDAY, GETDATE()) + 2) * ? - 7 * ?, GETDATE()) "
             + "AND [TenKhongDau] LIKE '%' + [dbo].[fuChuyenCoDauThanhKhongDau](?) + '%'";
 
-    private static final String UPDATE_ORDER_STATUS = "INSERT INTO tblOrderStatusUpdate(statusID, orderID, updateDate) VALUES (?, ?, GETDATE())";
+    private static final String UPDATE_ORDER_STATUS = "INSERT INTO tblOrderStatusUpdate(statusID, orderID, updateDate, modifiedBy, roleID) VALUES (?, ?, GETDATE(), ?, ?)";
 
     private static final String SEARCH_ORDER_BY_NAME = "SELECT orderID, orderDate, total, userID, fullName, statusID, statusName, [TenKhongDau], payType, trackingID  "
             + "FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID "
@@ -48,7 +48,7 @@ public class OrderDAO {
     //Order status
     private static final String SEARCH_ORDER_STATUS = "SELECT t1.statusID, updateDate, statusName FROM tblOrderStatusUpdate t1 JOIN tblOrderStatus t2 ON t1.statusID = t2.statusID WHERE orderID = ?";
 
-    private static final String INSERT_ORDER = "INSERT INTO tblOrder(orderDate, total, userID, payType, fullName, [address], phone, email, note) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String INSERT_ORDER = "INSERT INTO tblOrder(orderDate, total, userID, payType, fullName, [address], phone, email, note, transactionNumber) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     private static final String INSERT_ORDER_DETAIL = "INSERT INTO tblOrderDetail(price, quantity, size, color, orderID, productID) VALUES(?, ?, ?, ?, ?, ?)";
 
@@ -86,74 +86,7 @@ public class OrderDAO {
 
         return orderID;
     }
-
-    public boolean insertOrderDetail(int orderID, List<CartProduct> cart) throws SQLException {
-        boolean result = true;
-
-        Connection conn = null;
-        PreparedStatement stm = null;
-        try {
-            conn = DBUtils.getConnection();
-            if (conn != null) {
-                for (CartProduct item : cart) {
-                    stm = conn.prepareStatement(INSERT_ORDER_DETAIL);
-                    stm.setInt(1, item.getPrice());
-                    stm.setInt(2, item.getQuantity());
-                    stm.setString(3, item.getSize());
-                    stm.setString(4, item.getColor());
-                    stm.setInt(5, orderID);
-                    stm.setInt(6, item.getProductID());
-                    result = result && stm.executeUpdate() > 0;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (stm != null) {
-                stm.close();
-            }
-            if (conn != null) {
-                conn.close();
-            }
-        }
-
-        return result;
-    }
-
-    public boolean insertOrder(OrderDTO order, String userID) throws SQLException {
-        boolean result = false;
-
-        Connection conn = null;
-        PreparedStatement stm = null;
-        try {
-            conn = DBUtils.getConnection();
-            if (conn != null) {
-                stm = conn.prepareStatement(INSERT_ORDER);
-                stm.setDate(1, Date.valueOf(LocalDate.now()));
-                stm.setInt(2, order.getTotal());
-                stm.setString(3, userID);
-                stm.setString(4, order.getPayType());
-                stm.setString(5, order.getFullName());
-                stm.setString(6, order.getAddress());
-                stm.setString(7, order.getPhone());
-                stm.setString(8, order.getEmail());
-                stm.setString(9, order.getNote());
-                result = stm.executeUpdate() > 0;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (stm != null) {
-                stm.close();
-            }
-            if (conn != null) {
-                conn.close();
-            }
-        }
-
-        return result;
-    }
-
+    
     public List<OrderDetailDTO> getOrderDetail(int orderID) throws SQLException {
         List<OrderDetailDTO> list = new ArrayList<>();
 
@@ -312,28 +245,36 @@ public class OrderDAO {
 
     }
 
-    public boolean updateOrderStatus(int orderID, int statusID) throws SQLException {
+    public boolean updateOrderStatus(int orderID, int statusID, String modifiedBy, String role) throws SQLException {
         boolean check = false;
         Connection conn = null;
         PreparedStatement ptm = null;
 
         try {
             List<OrderStatusDTO> list = getUpdateStatusHistory(orderID);
-            int currentStatusID = list.get(list.size() - 1).getStatusID();
+            int currentStatusID = list.get(list.size() - 1).getStatusID();// got ArrayIndexOutOfBoundsException for new product add in with no previous history so list = 0 and can't -1
             if (currentStatusID != statusID) {
                 conn = DBUtils.getConnection();
-                if (conn != null) {
-                    ptm = conn.prepareStatement(UPDATE_ORDER_STATUS);
-                    ptm.setInt(1, statusID);
-                    ptm.setInt(2, orderID);
+                conn.setAutoCommit(false);
+                ptm = conn.prepareStatement(UPDATE_ORDER_STATUS);
+                ptm.setInt(1, statusID);
+                ptm.setInt(2, orderID);
+                ptm.setString(3, modifiedBy);
+                ptm.setString(4, role);
 
-                    check = ptm.executeUpdate() > 0;
-                }
+                check = ptm.executeUpdate() > 0;
+                conn.commit();
             } else {
                 check = true;
             }
         } catch (Exception e) {
             e.printStackTrace();
+            try {
+                if (conn != null) {
+                    conn.rollback();
+                }
+            } catch (SQLException e2) {
+            }
         } finally {
 
             if (ptm != null) {
@@ -411,6 +352,95 @@ public class OrderDAO {
             }
         }
         return list;
+    }
+
+    public boolean addOrder(OrderDTO order, String userID, List<CartProduct> cart) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DBUtils.getConnection();
+            conn.setAutoCommit(false);
+            // insert Order
+            ptm = conn.prepareStatement(INSERT_ORDER);
+            ptm.setDate(1, Date.valueOf(LocalDate.now()));
+            ptm.setInt(2, order.getTotal());
+            ptm.setString(3, userID);
+            ptm.setString(4, order.getPayType());
+            ptm.setString(5, order.getFullName());
+            ptm.setString(6, order.getAddress());
+            ptm.setString(7, order.getPhone());
+            ptm.setString(8, order.getEmail());
+            ptm.setString(9, order.getNote());
+            ptm.setString(10, order.getTransactionNumber());
+            check = ptm.executeUpdate() > 0;
+            if (check) {
+                // get new orderID
+                ptm = conn.prepareStatement(GET_ORDER_ID);
+                ptm.setString(1, userID);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    int orderID = rs.getInt("orderID");
+                    boolean orderDetailCheck = true;
+                    // insert orderDetail
+                    for (CartProduct item : cart) {
+                        ptm = conn.prepareStatement(INSERT_ORDER_DETAIL);
+                        ptm.setInt(1, item.getPrice());
+                        ptm.setInt(2, item.getQuantity());
+                        ptm.setString(3, item.getSize());
+                        ptm.setString(4, item.getColor());
+                        ptm.setInt(5, orderID);
+                        ptm.setInt(6, item.getProductID());
+                        orderDetailCheck = orderDetailCheck && ptm.executeUpdate() > 0;
+                        if (!orderDetailCheck) {
+                            throw new SQLException("Fail to insert orderDetail");// use throw exception cause i don't know if break; can catch exception to do rollback();
+                        }
+                    }
+                    // update orderStatus
+                    if (orderDetailCheck) {
+                        ptm = conn.prepareStatement(UPDATE_ORDER_STATUS);
+                        ptm.setInt(1, 1); // set statusID = 1 as new order always come with status = 1
+                        ptm.setInt(2, orderID);
+                        ptm.setString(3, "System");
+                        ptm.setString(4, "");
+                        check = ptm.executeUpdate() > 0;
+                    }
+
+                }
+
+            }
+            // check if insert successfully
+            if (check) {
+                conn.commit();
+            } else {
+                throw new SQLException("Fail to insert order");
+            }
+
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+            try {
+                if (conn != null) {
+                    conn.rollback();
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+
+        return check;
     }
 
 }

@@ -6,11 +6,17 @@
 package store.controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import store.shopping.Cart;
+import store.shopping.CartDAO;
+import store.shopping.CartProduct;
+import store.shopping.CartProductDAO;
 import store.user.UserDAO;
 import store.user.UserDTO;
 
@@ -37,6 +43,8 @@ public class LoginController extends HttpServlet {
             UserDAO dao = new UserDAO();
             UserDTO user = dao.checkLogin(userID, password);
             HttpSession session = request.getSession();
+            CartDAO cdao = new CartDAO();
+            CartProductDAO cpdao = new CartProductDAO();
             int productID = 0;
             if (session.getAttribute("productID") != null) {
                 productID = (int) session.getAttribute("productID");
@@ -56,6 +64,18 @@ public class LoginController extends HttpServlet {
                                 url = CONTINUE_SHOPPING_PAGE + productID;
                             } else {
                                 url = CUSTOMER_PAGE;
+                            }
+                            Cart c = cdao.getCartByUserID(userID);
+                            if (c != null) {
+                                List<CartProduct> cart = cpdao.getCartItemsBySessionID(c.getId());
+                                Cart ca = new Cart();
+                                List<CartProduct> detailedCart = new ArrayList<>();
+                                for (CartProduct cp : cart) {
+                                    cp = ca.getProductInfo(cp.getProductID(), cp.getColor(), cp.getSize(), cp.getQuantity());
+                                    detailedCart.add(cp);
+                                }
+                                session.setAttribute("CART", detailedCart);
+                                session.setAttribute("CART_INFO", c);
                             }
                             break;
                         case MN:

@@ -6,7 +6,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import store.shopping.OrderDAO;
+import store.user.UserDTO;
 
 @WebServlet(name = "UpdateOrderController", urlPatterns = {"/UpdateOrderController"})
 public class UpdateOrderController extends HttpServlet {
@@ -21,9 +23,11 @@ public class UpdateOrderController extends HttpServlet {
         try {
             int orderID = Integer.parseInt(request.getParameter("orderID"));
             int statusID = Integer.parseInt(request.getParameter("statusID"));
+            HttpSession session = request.getSession();
+            UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
             String trackingID = request.getParameter("trackingID");
             OrderDAO dao = new OrderDAO();
-            boolean check = dao.updateOrderStatus(orderID, statusID) && dao.updateOrderTrackingID(orderID, trackingID);            
+            boolean check = dao.updateOrderStatus(orderID, statusID, user.getUserID(), user.getRoleID()) && dao.updateOrderTrackingID(orderID, trackingID);            
             if (check) {
                 url = SUCCESS;
                 request.setAttribute("MESSAGE", "Cập nhật thành công");
