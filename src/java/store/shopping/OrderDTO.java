@@ -1,7 +1,9 @@
 package store.shopping;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Map;
 
 public class OrderDTO {
 
@@ -19,8 +21,17 @@ public class OrderDTO {
     private String email;
     private String note;
     private String transactionNumber;
+    private Map<Integer, String> status;
 
     public OrderDTO() {
+    }
+
+    public OrderDTO(int orderID, Date orderDate, int total, String statusName, String payType) {
+        this.orderID = orderID;
+        this.orderDate = orderDate;
+        this.total = total;
+        this.statusName = statusName;
+        this.payType = payType;
     }
 
     // constructor for Manager-order/Employee-order 
@@ -49,6 +60,31 @@ public class OrderDTO {
         this.email = email;
         this.note = note;
         this.transactionNumber = transactionNumber;
+    }
+
+    // contructor for customer order details
+    public OrderDTO(int orderID, Date orderDate, int total, int statusID, String statusName, String payType, String trackingID, String fullName, String address, String phone, String email, String note, Map<Integer, String> status) {
+        this.orderID = orderID;
+        this.orderDate = orderDate;
+        this.total = total;
+        this.statusID = statusID;
+        this.statusName = statusName;
+        this.payType = payType;
+        this.trackingID = trackingID;
+        this.fullName = fullName;
+        this.address = address;
+        this.phone = phone;
+        this.email = email;
+        this.note = note;
+        this.status = status;
+    }
+
+    public Map<Integer, String> getStatus() {
+        return status;
+    }
+
+    public void setStatus(Map<Integer, String> status) {
+        this.status = status;
     }
     
 

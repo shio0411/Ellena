@@ -6,15 +6,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import javafx.util.Pair;
 import store.utils.DBUtils;
 
 public class OrderDAO {
 
     private static final String UPDATE_TRACKINGID = "UPDATE tblOrder SET trackingID = ? WHERE orderID = ?";
-    private static final String SEARCH_ORDER_ALL = "SELECT orderID, orderDate, total, userID, fullName, statusID, statusName, payType, trackingID  "
+    private static final String SEARCH_ORDER_ALL = "SELECT v1.orderID, orderDate, total, userID, fullName, statusID, statusName, payType, trackingID  "
             + "FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID ";
 
     private static final String SEARCH_ORDER_BY_STATUS = "SELECT orderID, orderDate, total, userID, fullName, statusID, statusName, payType, trackingID  FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID "
@@ -54,6 +58,23 @@ public class OrderDAO {
 
     private static final String GET_ORDER_ID = "SELECT TOP 1 orderID FROM tblOrder WHERE userID LIKE ? + '%' ORDER BY orderID DESC";
 
+    private static final String GET_ORDER_HISTORY = "SELECT v2.orderID, orderDate, total, statusName, payType\n"
+            + "FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID WHERE v2.orderID in \n"
+            + "(SELECT orderID FROM tblOrder WHERE userID = ?)\n"
+            + "ORDER BY v2.orderID desc";
+
+    private static final String GET_ORDER_DETAIL = "SELECT top 1 with ties \n"
+            + "p.productID, productName, od.price, od.quantity, od.color, od.size, image \n"
+            + "FROM tblProduct p JOIN tblOrderDetail od ON p.productID = od.productID \n"
+            + "JOIN tblProductColors pc ON p.productID = pc.productID AND od.color = pc.color\n"
+            + "JOIN tblColorImage ci ON ci.productColorID = pc.productColorID  WHERE orderID = ?\n"
+            + "ORDER BY ROW_NUMBER() over (partition by p.productID, od.color, od.size order by image)";
+
+    private static final String GET_ORDER = "SELECT v1.orderID, orderDate, total, statusID, statusName, payType, trackingID, fullName, address, phone, email, note FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID WHERE v2.orderID = ?";
+
+    private static final String GET_STATUS_HISTORY = "SELECT statusID, updateDate\n"
+            + "FROM tblOrderStatusUpdate WHERE orderID = ?";
+    
     public int getOrderID(String userID) throws SQLException {
         int orderID = 0;
 
@@ -86,7 +107,7 @@ public class OrderDAO {
 
         return orderID;
     }
-    
+
     public List<OrderDetailDTO> getOrderDetail(int orderID) throws SQLException {
         List<OrderDetailDTO> list = new ArrayList<>();
 
@@ -443,4 +464,161 @@ public class OrderDAO {
         return check;
     }
 
+    public List<Pair<OrderDTO, List<OrderDetailDTO>>> getOrderHistory(String userID) throws SQLException {
+        List<Pair<OrderDTO, List<OrderDetailDTO>>> list = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_ORDER_HISTORY);
+                ptm.setString(1, userID);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    int orderID = rs.getInt("orderID");
+                    Date orderDate = rs.getDate("orderDate");
+                    int total = rs.getInt("total");
+                    String payType = rs.getString("payType");
+                    String statusName = rs.getString("statusName");
+
+                    list.add(new Pair(new OrderDTO(orderID, orderDate, total, statusName, payType), new ArrayList<OrderDTO>()));
+                }
+
+                for (int i = 0; i < list.size(); i++) {
+                    ptm = conn.prepareStatement(GET_ORDER_DETAIL);
+                    ptm.setInt(1, list.get(i).getKey().getOrderID());
+                    rs = ptm.executeQuery();
+                    while (rs.next()) {
+                        int productID = rs.getInt("productID");
+                        String productName = rs.getString("productName");
+                        int price = rs.getInt("price");
+                        int quantity = rs.getInt("quantity");
+                        String size = rs.getString("size");
+                        String color = rs.getString("color");
+                        String image = rs.getString("image");
+
+                        list.get(i).getValue().add(new OrderDetailDTO(productID, productName, price, quantity, size, color, image));
+                    }
+                }
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return list;
+    }
+
+    public Pair<OrderDTO, List<OrderDetailDTO>> getOrderDetails(int orderID) throws SQLException {
+        Pair<OrderDTO, List<OrderDetailDTO>> order = null;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                Map<Integer, String> status = new HashMap<>();
+
+                ptm = conn.prepareStatement(GET_STATUS_HISTORY);
+                ptm.setInt(1, orderID);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    int statusID = rs.getInt("statusID");
+                    Timestamp updateDate = rs.getTimestamp("updateDate");
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                    status.put(statusID, sdf.format(updateDate));
+                }
+                ptm = conn.prepareStatement(GET_ORDER);
+                ptm.setInt(1, orderID);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    Date orderDate = rs.getDate("orderDate");
+                    int total = rs.getInt("total");
+                    String fullName = rs.getString("fullName");
+                    int statusID = rs.getInt("statusID");
+                    String statusName = rs.getString("statusName");
+                    String payType = rs.getString("payType");
+                    String trackingID = rs.getString("trackingID");
+                    String address = rs.getString("address");
+                    String email = rs.getString("email");
+                    String phone = rs.getString("phone");
+                    String note = rs.getString("note");
+
+                    order = new Pair(new OrderDTO(orderID, orderDate, total, statusID, statusName, payType, trackingID, fullName, address, phone, email, note, status), new ArrayList<OrderDTO>());
+                }
+
+                if (order != null) {
+                    ptm = conn.prepareStatement(GET_ORDER_DETAIL);
+                    ptm.setInt(1, order.getKey().getOrderID());
+                    rs = ptm.executeQuery();
+                    while (rs.next()) {
+                        int productID = rs.getInt("productID");
+                        String productName = rs.getString("productName");
+                        int price = rs.getInt("price");
+                        int quantity = rs.getInt("quantity");
+                        String size = rs.getString("size");
+                        String color = rs.getString("color");
+                        String image = rs.getString("image");
+
+                        order.getValue().add(new OrderDetailDTO(productID, productName, price, quantity, size, color, image));
+                    }
+                }
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return order;
+    }
+    
+    public boolean updateOrderStatus(int orderID, int statusID) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DBUtils.getConnection();
+            ptm = conn.prepareStatement(UPDATE_ORDER_STATUS);
+            
+            ptm.setInt(1, statusID);
+            ptm.setInt(2, orderID);
+            ptm.setString(3, "System");
+            ptm.setString(4, "");
+            
+            check = ptm.executeUpdate() > 0;
+            
+        } catch (ClassNotFoundException | SQLException e) {
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+
+        return check;
+    }
+    
+    
 }

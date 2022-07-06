@@ -74,9 +74,11 @@ public class CheckoutController extends HttpServlet {
                 // check cart
                 if (cart != null) {
                     paidStatus = Boolean.parseBoolean((String) session.getAttribute("PAID_STATUS"));
-                    if (!"COD".equalsIgnoreCase(payType) && paidStatus == false) {
+                    if ("VNPay".equalsIgnoreCase(payType) && paidStatus == false) {
                         url = "vnpay.jsp";
-                    } else {
+                    } else if("Momo".equalsIgnoreCase(payType) && paidStatus == false) {
+                        url = "MainController?action=MomoRequest";
+                    }else {
                         String transactionNumber = "";
                         Map fields = new HashMap();
                         for (Enumeration params = request.getParameterNames(); params.hasMoreElements();) {
