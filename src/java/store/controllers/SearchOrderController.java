@@ -27,7 +27,7 @@ public class SearchOrderController extends HttpServlet {
             String sStatusID = request.getParameter("search-statusID");
             OrderDAO dao = new OrderDAO();
             List<OrderDTO> listOrder = dao.getOrder(search, sDateFrom, sDateTo, sStatusID);
-
+            
             if (listOrder.size() > 0) {
                 request.setAttribute("LIST_ORDER", listOrder);
                 url = SUCCESS;

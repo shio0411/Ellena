@@ -214,7 +214,6 @@ public class OrderDAO {
                     String statusName = rs.getString("statusName");
                     String modifiedBy = rs.getString("modifiedBy");
                     String roleID = rs.getString("roleID");
-
                     list.add(new OrderStatusDTO(statusID, updateDate, statusName, modifiedBy, roleID));
                 }
             }
@@ -233,6 +232,8 @@ public class OrderDAO {
         }
         return list;
     }
+    
+    
 
     public List<OrderDTO> getOrder(String search, String sDateFrom, String sDateTo, String sStatusID) throws SQLException {
         List<OrderDTO> list = new ArrayList<>();
@@ -247,7 +248,6 @@ public class OrderDAO {
                     Date dateFrom = Date.valueOf(sDateFrom);
                     Date dateTo = Date.valueOf(sDateTo);
                     int statusID = Integer.parseInt(sStatusID);
-
                     ptm = conn.prepareStatement(SEARCH_ORDER);
                     ptm.setDate(1, dateFrom);
                     ptm.setDate(2, dateTo);
@@ -256,17 +256,16 @@ public class OrderDAO {
                 } else if (!sDateFrom.isEmpty() && !sDateTo.isEmpty() && sStatusID.isEmpty()) {
                     Date dateFrom = Date.valueOf(sDateFrom);
                     Date dateTo = Date.valueOf(sDateTo);
-
                     ptm = conn.prepareStatement(SEARCH_ORDER_BY_DATE);
                     ptm.setDate(1, dateFrom);
                     ptm.setDate(2, dateTo);
                     ptm.setString(3, search);
                 } else if (!(!sDateFrom.isEmpty() && !sDateTo.isEmpty()) && !sStatusID.isEmpty()) {
-                    int statusID = Integer.parseInt(sStatusID);
+                    int statusID = Integer.parseInt(sStatusID);                    
                     ptm = conn.prepareStatement(SEARCH_ORDER_BY_STATUS);
                     ptm.setInt(1, statusID);
                     ptm.setString(2, search);
-                } else if ((sDateFrom.isEmpty() || sDateTo.isEmpty()) && sStatusID.isEmpty()) {
+                } else if ((sDateFrom.isEmpty() || sDateTo.isEmpty()) && sStatusID.isEmpty()) {                    
                     ptm = conn.prepareStatement(SEARCH_ORDER_BY_NAME);
                     ptm.setString(1, search);
                 }
@@ -286,7 +285,10 @@ public class OrderDAO {
                     String email = rs.getString("email");
                     String note = rs.getString("note");
                     String transactionNumber = rs.getString("transactionNumber");
-                    list.add(new OrderDTO(orderID, orderDate, total, userName, statusID, statusName, payType, trackingID, fullName, address, phone, email, note, transactionNumber));
+                    List<OrderDetailDTO> orderDetail = getOrderDetail(orderID);
+                    List<OrderStatusDTO> orderStatus = getUpdateStatusHistory(orderID);
+                    
+                    list.add(new OrderDTO(orderID, orderDate, total, userName, statusID, statusName, payType, trackingID, fullName, address, phone, email, note, transactionNumber, orderDetail, orderStatus));
 
                 }
             }
@@ -314,9 +316,12 @@ public class OrderDAO {
         PreparedStatement ptm = null;
 
         /**
-         * - Chưa xác nhận: hệ thống - Đã xác nhận: manager/employee - Đang
-         * giao: manager - Đã giao: manager - Đã huỷ: manager tự chuyển/ hệ
-         * thống chuyển; chỉ áp dụng với trường hợp COD. - Nếu trả trước (online
+         * - Chưa xác nhận: hệ thống 
+         * - Đã xác nhận: manager/employee 
+         * - Đang giao: manager 
+         * - Đã giao: manager 
+         * - Đã huỷ: manager tự chuyển/ hệ thống chuyển; chỉ áp dụng với trường hợp COD. 
+         * - Nếu trả trước (online
          * banking):khi huỷ chuyển thành Chờ hoàn tiền: he thong chuyen, manager
          * chuyen - Sau khi hoàn tiền online, manager chuyển thành Da hoan tien.
          *
@@ -429,8 +434,10 @@ public class OrderDAO {
                     String email = rs.getString("email");
                     String note = rs.getString("note");
                     String transactionNumber = rs.getString("transactionNumber");
-                    list.add(new OrderDTO(orderID, orderDate, total, userName, statusID, statusName, payType, trackingID, fullName, address, phone, email, note, transactionNumber));
-
+                    List<OrderDetailDTO> orderDetail = getOrderDetail(orderID);
+                    List<OrderStatusDTO> orderStatus = getUpdateStatusHistory(orderID);
+                    
+                    list.add(new OrderDTO(orderID, orderDate, total, userName, statusID, statusName, payType, trackingID, fullName, address, phone, email, note, transactionNumber, orderDetail, orderStatus));
                 }
             }
         } catch (Exception e) {

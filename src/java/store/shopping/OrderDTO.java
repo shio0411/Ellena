@@ -2,6 +2,7 @@ package store.shopping;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 public class OrderDTO {
 
@@ -19,8 +20,29 @@ public class OrderDTO {
     private String email;
     private String note;
     private String transactionNumber;
+    private List<OrderDetailDTO> orderDetail;
+    private List<OrderStatusDTO> updateStatusHistory;
 
     public OrderDTO() {
+    }
+
+    public OrderDTO(int orderID, Date orderDate, int total, String userName, int statusID, String statusName, String payType, String trackingID, String fullName, String address, String phone, String email, String note, String transactionNumber, List<OrderDetailDTO> orderDetail, List<OrderStatusDTO> updateStatusHistory) {
+        this.orderID = orderID;
+        this.orderDate = orderDate;
+        this.total = total;
+        this.userName = userName;
+        this.statusID = statusID;
+        this.statusName = statusName;
+        this.payType = payType;
+        this.trackingID = trackingID;
+        this.fullName = fullName;
+        this.address = address;
+        this.phone = phone;
+        this.email = email;
+        this.note = note;
+        this.transactionNumber = transactionNumber;
+        this.orderDetail = orderDetail;
+        this.updateStatusHistory = updateStatusHistory;
     }
 
     public OrderDTO(int orderID, Date orderDate, int total, String userName, int statusID, String statusName, String payType, String trackingID) {
@@ -222,4 +244,26 @@ public class OrderDTO {
         }
         return status;
     }
+
+    @Override
+    public boolean equals(Object that) {
+        return this.orderID == ((OrderDTO) that).getOrderID();
+    }
+
+    public List<OrderStatusDTO> getUpdateStatusHistory() {
+        return updateStatusHistory;
+    }
+
+    public void setUpdateStatusHistory(List<OrderStatusDTO> updateStatusHistory) {
+        this.updateStatusHistory = updateStatusHistory;
+    }
+
+    public List<OrderDetailDTO> getOrderDetail() {
+        return orderDetail;
+    }
+
+    public void setOrderDetail(List<OrderDetailDTO> orderDetail) {
+        this.orderDetail = orderDetail;
+    }
+    
 }

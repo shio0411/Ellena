@@ -98,43 +98,33 @@
                 <button type="submit" name="action" value="SearchOrder" class="btn-outline-dark" style="width: 15%; padding: 0.5% 0.1%;"><i class="fa fa-search fa-lg"></i>Search</button>
             </form>   
             ${requestScope.EMPTY_LIST_MESSAGE}
-            <!--phân trang-->
+
             <%
                 List<OrderDTO> listOrder = (List<OrderDTO>) request.getAttribute("LIST_ORDER");
-                OrderDAO dao = new OrderDAO();
                 if (listOrder != null) {
                     if (listOrder.size() > 0) {
-                
-                        int numberOfPages = (int) Math.ceil(listOrder.size() / 10.0);
-                        int numberOfOrderPerPage = 10;
-            %>
-            <div class="tab-content">
-            
-            
-            <%            int id = 1;
-                        for (int i = 1; i <= numberOfPages; i++) {
-            %>
-                <div id="page<%= i%>" class="tab-pane fade <% if (i == 1) {%> in active <%}%>"> 
-                
-                <table class="table table-hover table-bordered">
-                    <tr style="background-color: #b57c68">
-                        <th>ID</th>
-                        <th>Ngày đặt hàng</th>                
-                        <th>Tổng tiền</th>
-                        <th>Tên khách hàng</th>
-                        <th>Trạng thái</th>
-                        <th>Cập nhật trạng thái</th>
-                        <th>Trạng thái đơn hàng</th>
 
-                    </tr>
-            <%
-                            for (int j = (i - 1) * numberOfOrderPerPage + 1; j <= (i * numberOfOrderPerPage > listOrder.size() ? listOrder.size() : i * numberOfOrderPerPage); j++) {
-                                OrderDTO order = listOrder.get(j - 1);
+
             %>
-                                     
-                    
-                    <tr>
-                        <td style="font-weight: bold"><%= order.getOrderID()%></td>
+            <table class="table table-hover table-bordered">
+                <tr style="background-color: #b57c68">
+                    <th>ID</th>
+                    <th>Ngày đặt hàng</th>                
+                    <th>Tổng tiền</th>
+                    <th>Tên khách hàng</th>
+                    <th>Trạng thái</th>
+                    <th>Cập nhật trạng thái</th>
+                    <th>Trạng thái đơn hàng</th>
+                </tr>
+
+                <%            int id = 1;
+                    for (OrderDTO order : listOrder) {
+
+
+                %>
+
+                <tr>
+                    <td style="font-weight: bold"><%= order.getOrderID()%></td>
                     <td><%= order.getOrderDate()%></td>
                     <td><%= order.getTotal()%></td>
                     <td><%= order.getUserName()%></td>
@@ -150,7 +140,7 @@
                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
                                     </div>
-                                    <form action="MainController" method="POST">
+                                    <form action="MainController">
                                         <div class="modal-body" >
 
                                             <div class="row">
@@ -175,7 +165,7 @@
                                                                     <%if (order.getStatusID() == k) {%>
                                                                     selected 
                                                                     <%}
-                                                                        if (k < order.getStatusID() || ((k == 5 || k == 6) && order.getStatusID() != 1) || ((k == 7) && (order.getStatusID() != 6))) {%>
+                                                                        if (k < order.getStatusID() || (k == 5 && order.getStatusID() != 3 && order.getStatusID() != 1) || (k == 6 && order.getStatusID() != 1) || ((k == 7) && (order.getStatusID() != 6))) {%>
                                                                     disabled 
                                                                     <%}%> >
                                                                 <%= order.getStatus(k)%>
@@ -318,8 +308,7 @@
                                                 </thead>
                                                 <tbody>
                                                     <%
-                                                        List<OrderDetailDTO> orderDetailList = dao.getOrderDetail(order.getOrderID());
-                                                        for (OrderDetailDTO orderDetail : orderDetailList) {
+                                                        for (OrderDetailDTO orderDetail : order.getOrderDetail()) {
 
 
                                                     %>
@@ -380,8 +369,7 @@
                                             </thead>
                                             <tbody>
                                                 <%
-                                                    List<OrderStatusDTO> orderStatusList = dao.getUpdateStatusHistory(order.getOrderID());
-                                                    for (OrderStatusDTO orderStatus : orderStatusList) {
+                                                    for (OrderStatusDTO orderStatus : order.getUpdateStatusHistory()) {
                                                 %>
                                                 <tr>
                                                     <td><%= orderStatus.getStatusName()%></td>
@@ -405,33 +393,14 @@
                         </div>
                         <button type="button" data-toggle="modal" data-target="#myModal<%=id++%>">Chi tiết</button>
                     </td>
-                    </tr>
-            <%
-                            }
-            %>
-                 </table>
-                </div>
-                
-            <%
-                        }
-                    
-            %>
-            </div>
-            <% if (numberOfPages > 1) {%>
-            <ul class="pagination">
-                <li class="active"><a data-toggle="tab" href="#page1">1</a></li>
-                <%  
-                    
-                        for (int i = 1; i < numberOfPages; i++) {
-                %>
-                <li><a data-toggle="tab" href="#page<%= i + 1%>"><%= i + 1%></a></li>
-                <%      }
-                            }
+                </tr>
+
+                <%
                         }
                     }
+                }
                 %>
-
-            </ul>  
+            </table>
         </div>
         <script>
             $(document).ready(function () {
