@@ -98,6 +98,10 @@
                             <%if (user != null) {%>
                             <div class="header__right__auth">
                                 <a style="font-weight: 500; color: #721c24" href="my-profile.jsp"><%= user.getFullName().toUpperCase()%></a>
+                                <ul class="dropdown">
+                                    <li><a href="MainController?action=ViewOrderHistory&userID=<%=user.getUserID()%>">Don hang</a></li>
+                                    <li><a href="MainController?action=Logout">Dang xuat</a></li>
+                                </ul>
                             </div>
                             <% } else {%>
                             <div class="header__right__auth">

@@ -6,6 +6,7 @@ import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 @MultipartConfig(
         fileSizeThreshold = 1024 * 1024 * 1, // 1 MB
         maxFileSize = 1024 * 1024 * 10, // 10 MB
@@ -108,6 +109,15 @@ public class MainController extends HttpServlet {
     private static final String MANAGER_UPDATE_PRODUCT_CONTROLLER = "ManagerUpdateProductController";
     private static final String DETELE_CART_ITEM = "DeleteCartItem";
     private static final String DETELE_CART_ITEM_CONTROLLER = "DeleteCartItemController";
+    private static final String MOMO_REQUEST = "MomoRequest";
+    private static final String MOMO_REQUEST_CONTROLLER = "MomoRequestController";
+    private static final String VIEW_ORDER_HISTORY = "ViewOrderHistory";
+    private static final String VIEW_ORDER_HISTORY_CONTROLLER = "ViewOrderHistoryController";
+    private static final String CUSTOMER_VIEW_ORDER_DETAIL = "CustomerViewOrderDetail";
+    private static final String CUSTOMER_VIEW_ORDER_DETAIL_CONTROLLER = "CustomerViewOrderDetailController";
+    private static final String CANCEL_ORDER = "CancelOrder";
+    private static final String CANCEL_ORDER_CONTROLLER = "CancelOrderController";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
@@ -230,7 +240,7 @@ public class MainController extends HttpServlet {
                         break;
                     case ADD_IMAGE:
                         url = ADD_IMAGE_CONTROLLER;
-                        break;    
+                        break;
                     case DELETE_COLOR:
                         url = DELETE_COLOR_CONTROLLER;
                         break;
@@ -254,8 +264,21 @@ public class MainController extends HttpServlet {
                         break;
                     case MANAGER_UPDATE_PRODUCT:
                         url = MANAGER_UPDATE_PRODUCT_CONTROLLER;
+                        break;
                     case DETELE_CART_ITEM:
                         url = DETELE_CART_ITEM_CONTROLLER;
+                        break;
+                    case MOMO_REQUEST:
+                        url = MOMO_REQUEST_CONTROLLER;
+                        break;
+                    case VIEW_ORDER_HISTORY:
+                        url = VIEW_ORDER_HISTORY_CONTROLLER;
+                        break;
+                    case CUSTOMER_VIEW_ORDER_DETAIL:
+                        url = CUSTOMER_VIEW_ORDER_DETAIL_CONTROLLER;
+                        break;
+                    case CANCEL_ORDER:
+                        url = CANCEL_ORDER_CONTROLLER;
                         break;
                     default:
                         break;

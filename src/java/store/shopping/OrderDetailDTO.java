@@ -1,12 +1,15 @@
 package store.shopping;
 
 public class OrderDetailDTO {
-
+    
+    
     private String productName;
+    private int productID;
     private int price;
     private int quantity;
     private String size;
     private String color;
+    private String image;
 
     public OrderDetailDTO() {
     }
@@ -17,6 +20,32 @@ public class OrderDetailDTO {
         this.quantity = quantity;
         this.size = size;
         this.color = color;
+    }
+
+    public OrderDetailDTO(int productID, String productName, int price, int quantity, String size, String color, String image) {
+        this.productID = productID;
+        this.productName = productName;
+        this.price = price;
+        this.quantity = quantity;
+        this.size = size;
+        this.color = color;
+        this.image = image;
+    }
+
+    public int getProductID() {
+        return productID;
+    }
+
+    public void setProductID(int productID) {
+        this.productID = productID;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getProductName() {

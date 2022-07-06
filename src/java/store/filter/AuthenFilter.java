@@ -68,6 +68,8 @@ public class AuthenFilter implements Filter {
         CUSTOMER_FUNCTION.add("vnpay.jsp");
         CUSTOMER_FUNCTION.add("ajaxServlet");
         CUSTOMER_FUNCTION.add("CheckoutController");
+        CUSTOMER_FUNCTION.add("order-history");
+        CUSTOMER_FUNCTION.add("ViewOrderHistoryController");
 
         ADMIN_FUNCTION = new ArrayList<>();
         ADMIN_FUNCTION.add("admin.jsp");

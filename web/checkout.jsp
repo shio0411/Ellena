@@ -170,6 +170,11 @@
                                         <input type="radio" id="VNPay" name="payType" value="VNPay">
                                         <span class="checkmark"></span>
                                     </label>
+                                    <label for="Momo">
+                                        Momo
+                                        <input type="radio" id="Momo" name="payType" value="Momo">
+                                        <span class="checkmark"></span>
+                                    </label>
                                 </div>
                                 <button type="submit" name="action" value="Checkout" class="site-btn">Đặt hàng</button>
                             </div>
