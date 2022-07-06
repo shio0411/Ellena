@@ -279,6 +279,14 @@ public class MainController extends HttpServlet {
                         break;
                     case CANCEL_ORDER:
                         url = CANCEL_ORDER_CONTROLLER;
+                    case FORGOT_PASSWORD:
+                        url = FORGOT_PASSWORD_CONTROLLER;
+                        break;
+                    case VALIDATE_OTP:
+                        url = VALIDATE_OTP_CONTROLLER;
+                        break;
+                    case RESET_PASSWORD:
+                        url = RESET_PASSWORD_CONTROLLER;
                         break;
                     default:
                         break;

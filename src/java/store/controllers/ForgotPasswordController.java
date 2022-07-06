@@ -1,59 +1,59 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ */
 package store.controllers;
 
 import java.io.IOException;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import store.shopping.Cart;
-import store.shopping.CartDAO;
-import store.shopping.CartProduct;
-import store.shopping.CartProductDAO;
-import store.user.UserDTO;
+import store.user.UserDAO;
+import store.utils.JavaMailUtils;
 
-@WebServlet(name = "DeleteCartItemController", urlPatterns = {"/DeleteCartItemController"})
-public class DeleteCartItemController extends HttpServlet {
+/**
+ *
+ * @author Jason 2.0
+ */
+@WebServlet(name = "ForgotPasswordController", urlPatterns = {"/ForgotPasswordController"})
+public class ForgotPasswordController extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    private static final String ERROR = "shop-cart.jsp";
-    private static final String SUCCESS = "shop-cart.jsp";
-    
+    private static final String ERROR = "forgot-password.jsp";
+    private static final String SUCCESS = "validate-otp.jsp";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
+            String userID = request.getParameter("userID");
+            UserDAO dao = new UserDAO();
             HttpSession session = request.getSession();
-            List<CartProduct> cart = (List<CartProduct>) session.getAttribute("CART");
-            int productID = Integer.parseInt(request.getParameter("productID"));
-            String size = request.getParameter("size");
-            String color = request.getParameter("color");
-            UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
-            CartDAO cdao = new CartDAO();
-            CartProductDAO cpdao = new CartProductDAO();
-            Cart c = cdao.getCartByUserID(user.getUserID());
-            cpdao.deleteACartItem(c.getId(), productID, size, color);
-            
-            boolean check = cart.remove(new CartProduct(productID, color, size));
-            if (!check) {
-                request.setAttribute("REMOVE_CART_ITEM_MESSAGE", "Xóa sản phầm thất bại");
-            } else {
-                url = SUCCESS;
-                session.setAttribute("CART", cart);
+            boolean checkDuplicate = dao.checkDuplicate(userID);
+            if (checkDuplicate) {// true == there's a valid email in database
+
+                try {
+                    JavaMailUtils.sendMail(userID, "ForgotPasswordOTP");
+                    
+                    session.setAttribute("USER_ID", userID);// pass userID to reset-password.jsp page
+                    session.setAttribute("OTP_EXPECTED", JavaMailUtils.getOtpValue());// give expected OTP value to ValidateOtpController
+                    session.setAttribute("OTP_CHECK", false);// OTP check for reset-password.jsp page
+                    session.setAttribute("INPUT_ATTEMPS", 3);// set number of allow attemps to input OTP
+                    
+                    url = SUCCESS;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            } else {// false == there's no valid email in database
+                request.setAttribute("ERROR", "Bạn nhập sai ID hoặc bạn chưa có tài khoản!");
             }
+
         } catch (Exception e) {
-            log("Error at DeteleCartItemController: " + e.toString());
+            log("ERROR at ForgotPasswordController : " + toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

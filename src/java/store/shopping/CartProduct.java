@@ -2,6 +2,7 @@ package store.shopping;
 
 public class CartProduct {
     private int productID;
+    private int sessionID;
     private String productName;
     private String color;
     private String image;
@@ -13,6 +14,14 @@ public class CartProduct {
     
     public CartProduct() {
     }
+
+    public CartProduct(int productID, int sessionID, int quantity, String size, String color) {
+        this.productID = productID;
+        this.sessionID = sessionID;
+        this.quantity = quantity;
+        this.size = size;
+        this.color = color;
+    }   
 
     public CartProduct(int productID, String color, String size) {
         this.productID = productID;
@@ -30,6 +39,14 @@ public class CartProduct {
         this.quantity = quantity;
         this.discount = discount;
         this.lowStockLimit = lowStockLimit;
+    }
+
+    public int getSessionID() {
+        return sessionID;
+    }
+
+    public void setSessionID(int sessionID) {
+        this.sessionID = sessionID;
     }
 
     public int getProductID() {

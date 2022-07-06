@@ -1,62 +1,62 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ */
 package store.controllers;
 
 import java.io.IOException;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import store.shopping.Cart;
-import store.shopping.CartDAO;
-import store.shopping.CartProduct;
-import store.shopping.CartProductDAO;
-import store.user.UserDTO;
+import store.user.UserDAO;
 
-@WebServlet(name = "DeleteCartItemController", urlPatterns = {"/DeleteCartItemController"})
-public class DeleteCartItemController extends HttpServlet {
+/**
+ *
+ * @author Jason 2.0
+ */
+@WebServlet(name = "ResetPasswordController", urlPatterns = {"/ResetPasswordController"})
+public class ResetPasswordController extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    private static final String ERROR = "shop-cart.jsp";
-    private static final String SUCCESS = "shop-cart.jsp";
+   private static final String ERROR = "reset-password.jsp";
+   private static final String SUCCESS = "reset-password.jsp";
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
+        
         try {
             HttpSession session = request.getSession();
-            List<CartProduct> cart = (List<CartProduct>) session.getAttribute("CART");
-            int productID = Integer.parseInt(request.getParameter("productID"));
-            String size = request.getParameter("size");
-            String color = request.getParameter("color");
-            UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
-            CartDAO cdao = new CartDAO();
-            CartProductDAO cpdao = new CartProductDAO();
-            Cart c = cdao.getCartByUserID(user.getUserID());
-            cpdao.deleteACartItem(c.getId(), productID, size, color);
+            String userID = (String) session.getAttribute("USER_ID");
+            String newPassword = request.getParameter("newPassword");
+            String confirmNewPassword = request.getParameter("confirmNewPassword");
+            boolean check = true;
+            UserDAO dao = new UserDAO();   
             
-            boolean check = cart.remove(new CartProduct(productID, color, size));
-            if (!check) {
-                request.setAttribute("REMOVE_CART_ITEM_MESSAGE", "Xóa sản phầm thất bại");
-            } else {
-                url = SUCCESS;
-                session.setAttribute("CART", cart);
+            if (!newPassword.equals(confirmNewPassword)) {
+                check = false;
+                request.setAttribute("ERROR", "Hai mật khẩu không giống nhau!");
             }
+            
+            if (check) {
+                boolean checkUpdate = dao.updatePassword(newPassword, userID);
+                if (checkUpdate) {
+                    url = SUCCESS;
+                    request.setAttribute("MESSAGE", "Cập nhật thành công!");
+                }
+
+            }
+            
+            
         } catch (Exception e) {
-            log("Error at DeteleCartItemController: " + e.toString());
+            log("ERROR at ResetPasswordController : "+toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
