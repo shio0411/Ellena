@@ -117,7 +117,7 @@
         <!-- Shop Cart Section Begin -->
         <section class="shop-cart spad">
             <div class="container">
-                <div class="row" style="margin-bottom: 20px">
+                <div class="row" style="margin-bottom: 50px">
                     <div class="col-lg-12">
                         <article class="card">
                             <header class="card-header"> Theo dõi đơn hàng 
@@ -148,9 +148,9 @@
                                 <article class="card">
                                     <div class="card-body row">
                                         <div class="col"> <strong>Trạng thái:</strong> <br> <%=order.getKey().getStatusName()%> </div>
-                                        <div class="col"> <strong>Mã vận đơn:</strong> <br>  <% if (order.getKey().getTrackingID() == null) {%>N/A<%} else {
-                                                order.getKey().getTrackingID();
-                                            }%> </div>
+                                        <div class="col"> <strong>Mã vận đơn:</strong> <br>  <% if (order.getKey().getTrackingID() == null) {%>N/A<%} else {%>
+                                                <%=order.getKey().getTrackingID()%>
+                                            <%}%> </div>
                                     </div>
                                 </article>
                                 <div class="track">
@@ -170,102 +170,8 @@
                                     <%}%>
                                 </div>
                             </div>
-                        </article>
-                    </div>
-                </div>
-
-                <div class="row" style="margin-bottom: 20px">
-                    <div class="col-lg-8">
-                        <div class="card">
-                            <div class="card-header">Thông tin người nhận</div>
-                            <div class="card-body pl-5">
-                                <div class="row pt-5">
-                                    <div class="col-lg-3">
-                                        <div class="form-group">
-                                            <label for="fullName">Họ và tên</label>
-                                            <input type="text" class="form-control form-control-sm" name="fullname" value="<%=order.getKey().getFullName()%>" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-7">
-                                        <div class="form-group">
-                                            <div class="form-row">
-                                                <div class="col">
-                                            <label for="address">Địa chỉ</label>
-                                            <input type="text" name="address" class="form-control form-control-sm" value="<%=order.getKey().getAddress()%>" readonly>
-                                                </div>
-                                            
-                                            </div>
-                                        </div>
-                                        
-                                    </div>
-                                    <%if (order.getKey().getStatusID() == 1) {%>
-                                        <div class="col-lg-2 mt-5">
-                                           
-                                        <i class="fa fa-edit fa-2x" data-toggle="modal" data-target="#myModal"></i>
-                                        </div>
-                                        <div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content" >
-                                                    <div class="modal-header">
-                                                        <h4 class="modal-title" id="myModalLabel">Thay đổi địa chỉ</h4>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <form action="MainController">
-                                                            <div class="row">
-                                                                <div class="col-md-12 mb-4">
-
-                                                                    <div class="form-outline">
-                                                                        <label class="form-label" for="newAddress">Địa chỉ mới</label>
-                                                                        <input type="text" name="newAddress" required="" id="newAddress" placeholder="Địa chỉ mới" class="form-control form-control-lg" />                                                    
-                                                                    </div>
-
-                                                                </div>
-
-                                                            </div>
-
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button class="btn btn-default" type="submit" name="action" value="UpdateAddress">Cập nhật</button>
-                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <%}%>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-lg-3">
-                                        <div class="form-group">
-                                            <label for="phone">SDT</label>
-                                            <input type="text" name="phone"class="form-control form-control-sm" value="<%=order.getKey().getPhone()%>" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-7">
-                                        <div class="form-group">
-                                            <label for="email">Email</label>
-                                            <input type="text" name="email" class="form-control form-control-sm" value="<%=order.getKey().getEmail()%>" readonly>
-                                        </div>
-                                    </div>    
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-lg-10">
-
-                                        <div class="form-group">
-                                            <label for="note">Ghi chú</label>
-                                            <textarea type="text" name="note" class="form-control form-control-sm" rows="3" value="<%=order.getKey().getNote()%>" readonly></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row mt-20">
+                                <hr/>
+                            <div class="row mt-5 ml-5">
                     <div class="col-lg-12">
                         <div class="shop__cart__table mb-20">
                             <table>
@@ -308,6 +214,63 @@
                         </div>
                     </div>
                 </div>
+                        </article>
+                    </div>
+                </div>
+                                
+                <div class="row">
+                    <div class="col-lg-7">
+                        <div class="card">
+                            <div class="card-header">Thông tin người nhận</div>
+                            <div class="card-body pl-5">
+                                <div class="row pt-5">
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="fullName">Họ và tên</label>
+                                            <input type="text" class="form-control form-control-sm" name="fullname" value="${requestScope.ORDER_DETAILS.getKey().getFullName()}" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-7">
+                                        <div class="form-group">
+                                            <div class="form-row">
+                                                <div class="col">
+                                            <label for="address">Địa chỉ</label>
+                                            <input type="text" name="address" class="form-control form-control-sm" value="${requestScope.ORDER_DETAILS.getKey().getAddress()}" readonly>
+                                                </div>                  
+                                            </div>
+                                        </div>                                
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="phone">SDT</label>
+                                            <input type="text" name="phone"class="form-control form-control-sm" value="${requestScope.ORDER_DETAILS.getKey().getPhone()}" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-7">
+                                        <div class="form-group">
+                                            <label for="email">Email</label>
+                                            <input type="text" name="email" class="form-control form-control-sm" value="${requestScope.ORDER_DETAILS.getKey().getEmail()}" readonly>
+                                        </div>
+                                    </div>    
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-11">
+
+                                        <div class="form-group">
+                                            <label for="note">Ghi chú</label>
+                                            <textarea type="text" name="note" class="form-control form-control-sm" rows="4" value="${requestScope.ORDER_DETAILS.getKey().getNote()}" readonly></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
 
             </div>
 

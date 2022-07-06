@@ -49,7 +49,6 @@
                 </library>
                 <library dirs="200">
                     <file>${file.reference.okio-1.14.0.jar}</file>
-                    <file>${file.reference.activation-1.1.1.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">

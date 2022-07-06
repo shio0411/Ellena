@@ -117,6 +117,14 @@ public class MainController extends HttpServlet {
     private static final String CUSTOMER_VIEW_ORDER_DETAIL_CONTROLLER = "CustomerViewOrderDetailController";
     private static final String CANCEL_ORDER = "CancelOrder";
     private static final String CANCEL_ORDER_CONTROLLER = "CancelOrderController";
+    private static final String FORGOT_PASSWORD = "ForgotPassword";
+    private static final String FORGOT_PASSWORD_CONTROLLER = "ForgotPasswordController";
+    private static final String VALIDATE_OTP = "ValidateOtp";
+    private static final String VALIDATE_OTP_CONTROLLER = "ValidateOtpController";
+    private static final String RESET_PASSWORD = "ResetPassword";
+    private static final String RESET_PASSWORD_CONTROLLER = "ResetPasswordController";
+
+
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -279,6 +287,7 @@ public class MainController extends HttpServlet {
                         break;
                     case CANCEL_ORDER:
                         url = CANCEL_ORDER_CONTROLLER;
+                        break;
                     case FORGOT_PASSWORD:
                         url = FORGOT_PASSWORD_CONTROLLER;
                         break;
