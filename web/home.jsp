@@ -88,7 +88,9 @@
     <!-- Product Section Begin -->
     <%
         List<ProductDTO> newArrivalList = (List<ProductDTO>) session.getAttribute("NEW_ARRIVAL_LIST");
-    %>
+        if(newArrivalList.size() > 0){
+            %>
+            
     
     <section class="product spad">
         <div class="container">
@@ -105,9 +107,10 @@
                 </div>
             </div>
             <div class="row property__gallery">
-                <%int size = 8;
+                <%
+                int size = 8;
                 if(newArrivalList.size() < 8) size = newArrivalList.size();
-                 for (int i = 0; i < size; i++) {
+                for (int i = 0; i < size; i++) {
                         ProductDTO product = newArrivalList.get(i);
                 %>
                 <div class="col-lg-3 col-md-4 col-sm-6 mix">
@@ -180,6 +183,9 @@
             </div>
         </div>
     </section>
+            <%
+        }
+    %>
     <!-- Product Section End -->
     <!-- Banner Section Begin -->
     <section class="banner set-bg" data-setbg="img/banner/banner-1.jpg">
@@ -218,6 +224,7 @@
     <!-- Trend Section Begin -->
     <%
         List<ProductDTO> trendList = (List<ProductDTO>) session.getAttribute("TREND_LIST");
+        if(trendList.size() > 0){
     %>
     <section class="product spad">
         <div class="container">
@@ -235,7 +242,7 @@
             </div>
             <div class="row property__gallery">
                 <%
-                    size = 4;
+                    int size = 4;
                     if(trendList.size() < 4) size = trendList.size();
                     for (int i = 0; i < size; i++) {
                         ProductDTO product = trendList.get(i);
@@ -310,10 +317,14 @@
             </div>
         </div>
     </section>
+             <%
+        }
+    %>
     <!-- Trend Section End -->
     <!-- Best-seller Section Begin -->
     <%
         List<ProductDTO> bestSellerList = (List<ProductDTO>) session.getAttribute("BEST_SELLER_LIST");
+        if(bestSellerList.size() > 0){
     %>
     <section class="product spad">
         <div class="container">
@@ -331,7 +342,7 @@
             </div>
             <div class="row property__gallery">
                 <%  
-                    size = 4;
+                    int size = 4;
                     if(bestSellerList.size() < 4) size = bestSellerList.size();
                     for (int i = 0; i < 4; i++) {
                         ProductDTO product = bestSellerList.get(i);
@@ -396,10 +407,14 @@
             </div>
         </div>
     </section>
+    <%
+        }
+    %>        
     <!-- Best-seller Section End -->
     <!-- Sale Section Begin -->
     <%
         List<ProductDTO> saleList = (List<ProductDTO>) session.getAttribute("SALE_LIST");
+        if(saleList.size() > 0){
     %>
     <section class="product spad">
         <div class="container">
@@ -417,7 +432,7 @@
             </div>
             <div class="row property__gallery">
                 <%  
-                    size = 4;
+                    int size = 4;
                     if(saleList.size() < 4) size = saleList.size();
                     for (int i = 0; i < size; i++) {
                         ProductDTO product = saleList.get(i);
@@ -492,6 +507,9 @@
             </div>
         </div>
     </section>
+    <%
+        }
+    %> 
     <!-- Sale Section End -->
     <!-- Discount Section Begin -->
     <section class="discount">
