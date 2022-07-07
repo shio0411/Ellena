@@ -73,6 +73,13 @@ public class AuthenFilter implements Filter {
         CUSTOMER_FUNCTION.add("customer-profile.jsp");
         CUSTOMER_FUNCTION.add("DiscoverController");
         CUSTOMER_FUNCTION.add("CategoryRouteController");
+        CUSTOMER_FUNCTION.add("about-us.jsp");
+        CUSTOMER_FUNCTION.add("faq.jsp");
+        CUSTOMER_FUNCTION.add("choose-size.jsp");
+        CUSTOMER_FUNCTION.add("payment-policy.jsp");
+        CUSTOMER_FUNCTION.add("return-policy.jsp");
+        CUSTOMER_FUNCTION.add("rating-order.jsp");
+        CUSTOMER_FUNCTION.add("rating-product.jsp");
 
         ADMIN_FUNCTION = new ArrayList<>();
         ADMIN_FUNCTION.add("admin.jsp");
