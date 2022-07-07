@@ -1,3 +1,7 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ */
 package store.controllers;
 
 import java.io.IOException;
@@ -9,11 +13,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import store.user.UserDAO;
 import store.user.UserDTO;
-import store.user.UserError;
 
-
-@WebServlet(name = "UpdateNameController", urlPatterns = {"/UpdateNameController"})
-public class UpdateNameController extends HttpServlet {
+/**
+ *
+ * @author vankh
+ */
+@WebServlet(name = "UpdateSexController", urlPatterns = {"/UpdateSexController"})
+public class UpdateSexController extends HttpServlet {
 
     private static final String ERROR = "my-profile.jsp";
     private static final String SUCCESS = "my-profile.jsp";
@@ -26,10 +32,9 @@ public class UpdateNameController extends HttpServlet {
             HttpSession session = request.getSession();
             UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
             String userID = loginUser.getUserID();
-            String newName = request.getParameter("newName");
-            boolean check = true;
+            String newSex = request.getParameter("newSex");
             UserDAO dao = new UserDAO();          
-            boolean checkUpdate = dao.updateName(newName, userID);
+            boolean checkUpdate = dao.updateSex(newSex, userID);
             if (checkUpdate) {
                 url = SUCCESS;
                 if("CM".equalsIgnoreCase(loginUser.getRoleID())) url = "customer-profile.jsp";
@@ -38,12 +43,11 @@ public class UpdateNameController extends HttpServlet {
             }
 
         } catch (Exception e) {
-            log("Error at UpdateNameController: " + e.toString());
+            log("Error at UpdateAddressController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
     }
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

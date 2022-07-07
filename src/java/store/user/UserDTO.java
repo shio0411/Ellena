@@ -5,6 +5,8 @@
  */
 package store.user;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -20,7 +22,7 @@ public class UserDTO {
     private String address;
     private Date   birthday;
     private String phone;
-    private boolean status;    
+    private boolean status;   
     
     public UserDTO() {
         this.userID = "";
@@ -29,7 +31,7 @@ public class UserDTO {
         this.sex = false;
         this.roleID = "";
         this.address = "";
-        this.birthday = new Date();
+        this.birthday = null;
         this.phone = "";
         this.status = false;
     }
