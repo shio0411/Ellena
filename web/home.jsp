@@ -162,10 +162,10 @@
                                 %>
                             <div class="">
                                 <span class="product__price text-danger">
-                                    <%= (int) (product.getPrice() / 1000 * (1 - product.getDiscount()))%>.000đ <span class="original-price"><s>
+                                    <%= (int) (product.getPrice() - product.getDiscount()) / 1000%>.000đ <span class="original-price"><s>
                                             <%=product.getPrice() / 1000%>.000đ </s></span></span>
                                 <span class="product__price text-danger"> -
-                                    <%=(int) (product.getDiscount() * 100)%>%</span>
+                                    <%=(int) (product.getDiscount() * 100.0 / product.getPrice())%>%</span>
                             </div>
                             <%
                             } else {
@@ -292,10 +292,10 @@
                             %>
                             <div class="">
                                 <span class="product__price text-danger">
-                                    <%= (int) (product.getPrice() / 1000 * (1 - product.getDiscount()))%>.000đ <span class="original-price"><s>
+                                    <%= (int) (product.getPrice() - product.getDiscount()) / 1000%>.000đ <span class="original-price"><s>
                                             <%=product.getPrice() / 1000%>.000đ </s></span></span>
                                 <span class="product__price text-danger"> -
-                                    <%=(int) (product.getDiscount() * 100)%>%</span>
+                                    <%=(int) (product.getDiscount() * 100.0 / product.getPrice())%>%</span>
                             </div>
                             <%
                             } else {
@@ -378,10 +378,10 @@
                             %>
                             <div class="">
                                 <span class="product__price text-danger">
-                                    <%= (int) (product.getPrice() / 1000 * (1 - product.getDiscount()))%>.000đ <span class="original-price"><s>
+                                    <%= (int) (product.getPrice() - product.getDiscount()) / 1000%>.000đ <span class="original-price"><s>
                                             <%=product.getPrice() / 1000%>.000đ </s></span></span>
                                 <span class="product__price text-danger"> -
-                                    <%=(int) (product.getDiscount() * 100)%>%</span>
+                                    <%=(int) (product.getDiscount() * 100.0 / product.getPrice())%>%</span>
                             </div>
                             <%
                             } else {
@@ -474,10 +474,10 @@
                             %>
                             <div class="">
                                 <span class="product__price text-danger">
-                                    <%= (int) (product.getPrice() / 1000 * (1 - product.getDiscount()))%>.000đ <span class="original-price"><s>
+                                    <%= (int) (product.getPrice() - product.getDiscount()) / 1000%>.000đ <span class="original-price"><s>
                                             <%=product.getPrice() / 1000%>.000đ </s></span></span>
                                 <span class="product__price text-danger"> -
-                                    <%=(int) (product.getDiscount() * 100)%>%</span>
+                                    <%=(int) (product.getDiscount() * 100.0 / product.getPrice())%>%</span>
                             </div>
                             <%
                             } else {

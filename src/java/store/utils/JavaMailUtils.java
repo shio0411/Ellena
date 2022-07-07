@@ -212,13 +212,13 @@ public class JavaMailUtils {
         // adding each product to html string and calculate total
         int total = 0;
         for (CartProduct product : cartDetail) {
-            total += (int) (product.getPrice() * (1 - product.getDiscount()) * product.getQuantity()); 
+            total += (product.getPrice() - product.getDiscount()) * product.getQuantity(); 
             firstPart += "                                                                        <tr> <!-- product -->\n"
                     + "                                                                            <td width=\"30%\">" + product.getProductName() + "</td>\n"
                     + "                                                                            <td width=\"20%\">" + product.getColor() + " / " + product.getSize() + "</td>\n"
-                    + "                                                                            <td width=\"20%\">" + numberFormat.format((int) ((product.getPrice() * (1 - product.getDiscount())))) + "</td>\n"
+                    + "                                                                            <td width=\"20%\">" + numberFormat.format((int) ((product.getPrice() - product.getDiscount()))) + "</td>\n"
                     + "                                                                            <td width=\"10%\">" + product.getQuantity() + "</td>\n"
-                    + "                                                                            <td width=\"20%\">" + numberFormat.format((int)((product.getPrice() * (1 - product.getDiscount()) * product.getQuantity()))) + "</td>\n"
+                    + "                                                                            <td width=\"20%\">" + numberFormat.format((int)(((product.getPrice() - product.getDiscount()) * product.getQuantity()))) + "</td>\n"
                     + "                                                                        </tr>\n";
         }
 

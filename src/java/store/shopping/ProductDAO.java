@@ -207,7 +207,7 @@ public class ProductDAO {
                     int productID = rs.getInt("productID");
                     String productName = rs.getString("productName");
                     int price = rs.getInt("price");
-                    float discount = rs.getFloat("discount");
+                    int discount = rs.getInt("discount");
                     String categoryName = rs.getString("categoryName");
                     int lowStockLimit = rs.getInt("lowStockLimit");
                     boolean status = rs.getBoolean("status");
@@ -335,7 +335,7 @@ public class ProductDAO {
                     int productID = rs.getInt("productID");
                     String productName = rs.getString("productName");
                     int price = rs.getInt("price");
-                    float discount = rs.getFloat("discount");
+                    int discount = rs.getInt("discount");
                     String categoryName = rs.getString("categoryName");
                     int lowStockLimit = rs.getInt("lowStockLimit");
                     boolean status = rs.getBoolean("status");
@@ -422,7 +422,7 @@ public class ProductDAO {
                 int price = 0;
                 Map<String, List<String>> colorImage = new HashMap<>();
                 Map<List<String>, Integer> colorSizeQuantity = new HashMap<>();
-                float discount = 0;
+                int discount = 0;
                 String categoryName = "";
                 int lowStockLimit = 0;
                 boolean status = true;
@@ -430,7 +430,7 @@ public class ProductDAO {
                     productName = rs.getString("productName");
                     description = rs.getString("description");
                     price = rs.getInt("price");
-                    discount = rs.getFloat("discount");
+                    discount = rs.getInt("discount");
                     categoryName = rs.getString("categoryName");
                     lowStockLimit = rs.getInt("lowStockLimit");
                     status = rs.getBoolean("status");
@@ -495,7 +495,7 @@ public class ProductDAO {
                 int productID = 0;
                 String productName = "";
                 int price = 0;
-                float discount = 0;
+                int discount = 0;
                 Map<String, List<String>> image = new HashMap<>();
                 List<String> listImage = new ArrayList<>();
 
@@ -504,7 +504,7 @@ public class ProductDAO {
                     int tempProductID = rs.getInt("productID");
                     String tempProductName = rs.getString("productName");
                     int tempPrice = rs.getInt("price");
-                    float tempDiscount = rs.getFloat("discount");
+                    int tempDiscount = rs.getInt("discount");
                     String tempImage = rs.getString("image");
                     if (tempProductID != productID) {
                         if (productID != 0) {
@@ -560,7 +560,7 @@ public class ProductDAO {
                 int productID = 0;
                 String productName = "";
                 int price = 0;
-                float discount = 0;
+                int discount = 0;
                 Map<String, List<String>> image = new HashMap<>();
                 List<String> listImage = new ArrayList<>();
 
@@ -569,7 +569,7 @@ public class ProductDAO {
                     int tempProductID = rs.getInt("productID");
                     String tempProductName = rs.getString("productName");
                     int tempPrice = rs.getInt("price");
-                    float tempDiscount = rs.getFloat("discount");
+                    int tempDiscount = rs.getInt("discount");
                     String tempImage = rs.getString("image");
                     if (tempProductID != productID) {
                         if (productID != 0) {
@@ -625,7 +625,7 @@ public class ProductDAO {
                 int productID = 0;
                 String productName = "";
                 int price = 0;
-                float discount = 0;
+                int discount = 0;
                 Map<String, List<String>> image = new HashMap<>();
                 List<String> listImage = new ArrayList<>();
 
@@ -634,7 +634,7 @@ public class ProductDAO {
                     int tempProductID = rs.getInt("productID");
                     String tempProductName = rs.getString("productName");
                     int tempPrice = rs.getInt("price");
-                    float tempDiscount = rs.getFloat("discount");
+                    int tempDiscount = rs.getInt("discount");
                     String tempImage = rs.getString("image");
                     if (tempProductID != productID) {
                         if (productID != 0) {
@@ -690,7 +690,7 @@ public class ProductDAO {
                 int productID = 0;
                 String productName = "";
                 int price = 0;
-                float discount = 0;
+                int discount = 0;
                 Map<String, List<String>> image = new HashMap<>();
                 List<String> listImage = new ArrayList<>();
 
@@ -699,7 +699,7 @@ public class ProductDAO {
                     int tempProductID = rs.getInt("productID");
                     String tempProductName = rs.getString("productName");
                     int tempPrice = rs.getInt("price");
-                    float tempDiscount = rs.getFloat("discount");
+                    int tempDiscount = rs.getInt("discount");
                     String tempImage = rs.getString("image");
                     if (tempProductID != productID) {
                         if (productID != 0) {
@@ -754,7 +754,7 @@ public class ProductDAO {
                 int productID = 0;
                 String productName = "";
                 int price = 0;
-                float discount = 0;
+                int discount = 0;
                 Map<String, List<String>> image = new HashMap<>();
                 List<String> listImage = new ArrayList<>();
                 HashMap<List<String>, Integer> colorSizeQuantity = new HashMap<>();
@@ -764,7 +764,7 @@ public class ProductDAO {
                     int tempProductID = rs.getInt("productID");
                     String tempProductName = rs.getString("productName");
                     int tempPrice = rs.getInt("price");
-                    float tempDiscount = rs.getFloat("discount");
+                    int tempDiscount = rs.getInt("discount");
                     String tempImage = rs.getString("image");
                     String tempColor = rs.getString("color");
                     String tempSize = rs.getString("size");
@@ -846,7 +846,7 @@ public class ProductDAO {
                 int productID = 0;
                 String productName = "";
                 int price = 0;
-                float discount = 0;
+                int discount = 0;
                 Map<String, List<String>> image = new HashMap<>();
                 List<String> listImage = new ArrayList<>();
                 HashMap<List<String>, Integer> colorSizeQuantity = new HashMap<>();
@@ -856,7 +856,7 @@ public class ProductDAO {
                     int tempProductID = rs.getInt("productID");
                     String tempProductName = rs.getString("productName");
                     int tempPrice = rs.getInt("price");
-                    float tempDiscount = rs.getFloat("discount");
+                    int tempDiscount = rs.getInt("discount");
                     String tempImage = rs.getString("image");
                     String tempColor = rs.getString("color");
                     String tempSize = rs.getString("size");
@@ -961,7 +961,7 @@ public class ProductDAO {
             ptm.setString(2, product.getDescription());
             ptm.setInt(3, product.getPrice());
             ptm.setInt(4, product.getCategoryID());
-            ptm.setDouble(5, product.getDiscount());
+            ptm.setInt(5, product.getDiscount());
             ptm.setInt(6, product.getLowStockLimit());
             ptm.setBoolean(7, product.isStatus());
             check = ptm.executeUpdate() > 0;
@@ -1238,7 +1238,7 @@ public class ProductDAO {
             ptm.setString(2, product.getDescription());
             ptm.setInt(3, product.getPrice());
             ptm.setInt(4, product.getCategoryID());
-            ptm.setFloat(5, product.getDiscount());
+            ptm.setInt(5, product.getDiscount());
             ptm.setInt(6, product.getLowStockLimit());
             ptm.setBoolean(7, product.isStatus());
             ptm.setInt(8, product.getProductID());
@@ -1358,7 +1358,7 @@ public class ProductDAO {
     public List<ProductDTO> filterPrice(List<ProductDTO> listProduct, int minAmount, int maxAmount) throws SQLException {
         List<ProductDTO> filterOut = new ArrayList<>();
         for(ProductDTO p: listProduct){
-            if(!(p.getPrice() * (1 - p.getDiscount()) >= minAmount && p.getPrice()* (1 - p.getDiscount()) <= maxAmount)){
+            if(!(p.getPrice() - p.getDiscount() >= minAmount && p.getPrice() - p.getDiscount() <= maxAmount)){
                 filterOut.add(p);
             }
         }

@@ -81,7 +81,7 @@
                     <td><%= list.getProductName()%></td>
                     <td><%= list.getCategoryName()%></td>
                     <td><%= list.getPrice()%></td>
-                    <td><%= Math.round(list.getDiscount() * 100)%></td>
+                    <td><%= Math.round(list.getDiscount() * 100 / list.getPrice())%></td>
                     <td>
                         <%
                             if (list.isStatus()) {

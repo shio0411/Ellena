@@ -1,8 +1,7 @@
 package store.shopping;
 
 public class OrderDetailDTO {
-    
-    
+
     private String productName;
     private int productID;
     private int price;

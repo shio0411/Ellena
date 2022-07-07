@@ -51,7 +51,7 @@ public class AddProductController extends HttpServlet {
             int categoryID = Integer.parseInt(request.getParameter("categoryID"));
             int lowStockLimit = Integer.parseInt(request.getParameter("lowStockLimit"));
             int price = Integer.parseInt(request.getParameter("price"));
-            float discount = Float.parseFloat(request.getParameter("discount"));
+            int discount = Integer.parseInt(request.getParameter("discount"));
             String description = request.getParameter("description");
             String[] color = request.getParameterValues("color");
 

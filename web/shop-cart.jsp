@@ -81,7 +81,7 @@
                                     <%
                                         int i = 1;
                                         for (CartProduct item : cart) {
-                                            total += (int) (item.getPrice() * (1 - item.getDiscount()) * item.getQuantity());
+                                            total += (item.getPrice() - item.getDiscount()) * item.getQuantity();
                                     %>
 
                                     <tr>
@@ -105,7 +105,7 @@
                                                 if (item.getDiscount() != 0) {
                                             %>
                                             <s style="color: #B1B0B0; font-weight: normal;"><%= item.getPrice() / 1000%>.000</s> <br>    
-                                            <%= (int) (item.getPrice() * (1 - item.getDiscount()) / 1000)%>.000
+                                            <%= (item.getPrice() - item.getDiscount()) / 1000%>.000
                                             <%
                                             } else {
                                             %>
@@ -120,7 +120,7 @@
                                                 <input type="text" value="<%= item.getQuantity()%>" id="_quantity#<%= i%>">
                                             </div>
                                         </td>
-                                        <td class="cart__total"><%= (int) (item.getQuantity() * item.getPrice() * (1 - item.getDiscount())) / 1000%>.000</td>
+                                        <td class="cart__total"><%= (item.getQuantity() * (item.getPrice() - item.getDiscount())) / 1000%>.000</td>
                                         <td class="cart__close">
                                             <a href="MainController?action=DeleteCartItem&productID=<%= item.getProductID()%>&color=<%= item.getColor()%>&size=<%= item.getSize()%>">
                                                 <span class="icon_close"></span>

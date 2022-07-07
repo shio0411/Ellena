@@ -9,7 +9,7 @@ public class CartProduct {
     private String size;
     private int price;
     private int quantity;
-    private float discount;
+    private int discount;
     private int lowStockLimit;
     
     public CartProduct() {
@@ -29,7 +29,7 @@ public class CartProduct {
         this.size = size;
     }
 
-    public CartProduct(int productID, String productName, String color, String image, String size, int price, int quantity, float discount, int lowStockLimit) {
+    public CartProduct(int productID, String productName, String color, String image, String size, int price, int quantity, int discount, int lowStockLimit) {
         this.productID = productID;
         this.productName = productName;
         this.color = color;
@@ -105,11 +105,11 @@ public class CartProduct {
         this.quantity = quantity;
     }
 
-    public float getDiscount() {
+    public int getDiscount() {
         return discount;
     }
 
-    public void setDiscount(float discount) {
+    public void setDiscount(int discount) {
         this.discount = discount;
     }
 

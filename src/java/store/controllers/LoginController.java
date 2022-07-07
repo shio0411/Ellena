@@ -27,7 +27,7 @@ public class LoginController extends HttpServlet {
     private static final String CUSTOMER_PAGE = "ViewHomeController";
     private static final String CONTINUE_SHOPPING_PAGE = "ProductRouteController?productID=";
     private static final String MANAGER_PAGE = "ManagerStatisticController";
-    private static final String EMPLOYEE_PAGE = "EmployeeShowOrderController";
+    private static final String EMPLOYEE_PAGE = "ShowOrderController";
     private static final String CM = "CM";
     private static final String AD = "AD";
     private static final String MN = "MN";
