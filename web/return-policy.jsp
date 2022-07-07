@@ -30,7 +30,7 @@
                 <tbody>
                     <tr>
                         <td colspan="3" style="width:513.9pt;border:solid #BFBFBF 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:85.0pt;">
-                            <p style="margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:-42.55pt;line-height:normal;font-size:15px;font-family: Times New Roman ,sans-serif;text-align:center;"><strong><span style="font-size:27px;font-family: Times New Roman ,serif;color:#0070C0;">CHÍNH SÁCH ĐỔI VÀ BẢO HÀNH SẢN PHẨM</span></strong></p>
+                            <p style="margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;font-size:15px;font-family: Times New Roman ,sans-serif;text-align:center;"><strong><span style="font-size:27px;font-family: Times New Roman ,serif;color:#ff00ce;">CHÍNH SÁCH ĐỔI VÀ BẢO HÀNH SẢN PHẨM</span></strong></p>
                         </td>
                     </tr>
                     <tr>
@@ -49,7 +49,7 @@
                     </tr>
                     <tr>
                         <td rowspan="2" style="width:77.55pt;border:solid #BFBFBF 1.0pt;border-top:none;padding:0cm 5.4pt 0cm 5.4pt;height:  28.45pt;">
-                            <p style="margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;font-size:15px;font-family: Times New Roman ,sans-serif;"><strong><span style="font-size:16px;font-family: Times New Roman ,serif;color:#0070C0;">ĐIỀU KIỆN ĐỔI HÀNG</span></strong></p>
+                            <p style="margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;font-size:15px;font-family: Times New Roman ,sans-serif;"><strong><span style="font-size:16px;font-family: Times New Roman ,serif;color:#ff00ce;">ĐIỀU KIỆN ĐỔI HÀNG</span></strong></p>
                         </td>
                         <td colspan="2" style="width:436.35pt;border-top:none;border-left:  none;border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:  28.45pt;">
                             <p style="margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;font-size:15px;font-family: Times New Roman ,sans-serif;"><span style="font-size:16px;font-family: Times New Roman ,serif;">Sản phẩm phải còn nguyên vẹn, nguyên tem mác, chưa qua sử dụng và sửa chữa.</span></p>
@@ -65,7 +65,7 @@
                     </tr>
                     <tr>
                         <td style="width:77.55pt;border:solid #BFBFBF 1.0pt;border-top:none;padding:0cm 5.4pt 0cm 5.4pt;height:119.0pt;">
-                            <p style="margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;font-size:15px;font-family: Times New Roman ,sans-serif;"><strong><span style="font-size:16px;font-family: Times New Roman ,serif;color:#0070C0;">CÁCH THỨC ĐỔI HÀNG</span></strong></p>
+                            <p style="margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;font-size:15px;font-family: Times New Roman ,sans-serif;"><strong><span style="font-size:16px;font-family: Times New Roman ,serif;color:#ff00ce;">CÁCH THỨC ĐỔI HÀNG</span></strong></p>
                         </td>
                         <td style="width:211.35pt;border-top:none;border-left:none;border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:  119.0pt;">
                             <p>
@@ -79,7 +79,7 @@
                     </tr>
                     <tr>
                         <td style="width:77.55pt;border:solid #BFBFBF 1.0pt;border-top:none;padding:0cm 5.4pt 0cm 5.4pt;height:120.05pt;">
-                            <p style="margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;font-size:15px;font-family: Times New Roman ,sans-serif;"><strong><span style="font-size:16px;font-family: Times New Roman ,serif;color:#0070C0;">GIÁ TRỊ HÀNG HÓA</span></strong></p>
+                            <p style="margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;font-size:15px;font-family: Times New Roman ,sans-serif;"><strong><span style="font-size:16px;font-family: Times New Roman ,serif;color:#ff00ce;">GIÁ TRỊ HÀNG HÓA</span></strong></p>
                         </td>
                         <td style="width:211.35pt;border-top:none;border-left:none;border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:  120.05pt;">
                             <p>
@@ -99,7 +99,7 @@
                     </tr>
                     <tr>
                         <td rowspan="2" style="width:77.55pt;border:solid #BFBFBF 1.0pt;border-top:none;padding:0cm 5.4pt 0cm 5.4pt;height:  72.05pt;">
-                            <p style="margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;font-size:15px;font-family: Times New Roman ,sans-serif;"><strong><span style="font-size:16px;font-family: Times New Roman ,serif;color:#0070C0;">CHÍNH SÁCH ĐỔI HÀNG</span></strong></p>
+                            <p style="margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;font-size:15px;font-family: Times New Roman ,sans-serif;"><strong><span style="font-size:16px;font-family: Times New Roman ,serif;color:#ff00ce;">CHÍNH SÁCH ĐỔI HÀNG</span></strong></p>
                         </td>
                         <td colspan="2" style="width:436.35pt;border-top:none;border-left:  none;border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:  72.05pt;">
                             <p>
@@ -118,7 +118,7 @@
                     </tr>
                     <tr>
                         <td style="width:77.55pt;border:solid #BFBFBF 1.0pt;border-top:none;padding:0cm 5.4pt 0cm 5.4pt;height:126.0pt;">
-                            <p style="margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;font-size:15px;font-family: Times New Roman ,sans-serif;"><strong><span style="font-size:16px;font-family: Times New Roman ,serif;color:#0070C0;">PHÍ SHIP ĐỔI HÀNG</span></strong></p>
+                            <p style="margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;font-size:15px;font-family: Times New Roman ,sans-serif;"><strong><span style="font-size:16px;font-family: Times New Roman ,serif;color:#ff00ce;">PHÍ SHIP ĐỔI HÀNG</span></strong></p>
                         </td>
                         <td colspan="2" style="width:436.35pt;border-top:none;border-left:  none;border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:  126.0pt;">
                             <p>
@@ -132,7 +132,7 @@
                     </tr>
                     <tr>
                         <td style="width:77.55pt;border:solid #BFBFBF 1.0pt;border-top:none;padding:0cm 5.4pt 0cm 5.4pt;height:  63.35pt;">
-                            <p style="margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;font-size:15px;font-family: Times New Roman ,sans-serif;"><strong><span style="font-size:16px;font-family: Times New Roman ,serif;color:#0070C0;">LƯU Ý</span></strong></p>
+                            <p style="margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;font-size:15px;font-family: Times New Roman ,sans-serif;"><strong><span style="font-size:16px;font-family: Times New Roman ,serif;color:#ff00ce;">LƯU Ý</span></strong></p>
                         </td>
                         <td colspan="2" style="width:436.35pt;border-top:none;border-left:  none;border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:  63.35pt;">
                             <p style="margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;line-height:normal;font-size:15px;font-family: Times New Roman ,sans-serif;text-align:center;"><span style="font-size:16px;font-family: Times New Roman ,serif;">-Quý khách vui lòng không<strong>&nbsp;gửi hàng khi chưa có sự xác nhận từ bộ phận CSKH của  ELLENA.&nbsp;</strong>Mọi mất mát về hàng hóa  ELLENA hoàn toàn không chịu trách nhiệm.</span></p>
