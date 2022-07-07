@@ -7,33 +7,53 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import store.shopping.OrderDAO;
 import store.shopping.OrderDTO;
+import store.user.UserDTO;
 
 @WebServlet(name = "SearchOrderController", urlPatterns = {"/SearchOrderController"})
 public class SearchOrderController extends HttpServlet {
 
     private static final String ERROR = "manager-order.jsp";
-    private static final String SUCCESS = "manager-order.jsp";
-
+    private static final String MANAGER_SUCCESS = "manager-order.jsp";
+    private static final String EMPLOYEE_SUCCESS = "employee-order.jsp";
+    private static final String MN = "MN";
+    private static final String EM = "EM";
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
+            HttpSession session = request.getSession();
+            UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
             String search = request.getParameter("search");
-            String sNumberOfWeek = request.getParameter("numberOfWeek");
-            String sStatusID = request.getParameter("statusID");
+            String sDateFrom = request.getParameter("dateFrom");
+            String sDateTo = request.getParameter("dateTo");
+            String sStatusID = request.getParameter("search-statusID");
             OrderDAO dao = new OrderDAO();
-            List<OrderDTO> listOrder = dao.getOrder(search, sNumberOfWeek, sStatusID);
-
+            List<OrderDTO> listOrder = dao.getOrder(search, sDateFrom, sDateTo, sStatusID);
+            
             if (listOrder.size() > 0) {
                 request.setAttribute("LIST_ORDER", listOrder);
-                url = SUCCESS;
+                switch (loginUser.getRoleID()) {
+                    case MN:
+                        url = MANAGER_SUCCESS;
+                        break;
+                    case EM:
+                        url = EMPLOYEE_SUCCESS;
+                        break;
+                    default:
+                        break;
+                }
             } else {
                 request.setAttribute("EMPTY_LIST_MESSAGE", "No result found!");
             }
-
+            request.setAttribute("SEARCH", search);
+            request.setAttribute("DATE_FROM", sDateFrom);
+            request.setAttribute("DATE_TO", sDateTo);
+            request.setAttribute("STATUS_ID", sStatusID);
         } catch (Exception e) {
             log("Error at SearchAccountController: " + e.toString());
         } finally {

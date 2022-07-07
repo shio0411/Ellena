@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Cart {
-    
+
     private int id;
     private String userID;
     private String fullName;
@@ -14,7 +14,7 @@ public class Cart {
     private String email;
     private String note;
     private String payType;
-    
+
     private List<CartProduct> cartList = new ArrayList<>();
 
     public Cart() {
@@ -51,7 +51,7 @@ public class Cart {
     public int getTotalAmount(List<CartProduct> cart) {
         int result = 0;
         for (CartProduct item : cart) {
-            result += (int) (item.getPrice() * (1 - item.getDiscount()) * item.getQuantity());
+            result += (item.getPrice() - item.getDiscount()) * item.getQuantity();
         }
         return result;
     }
@@ -87,7 +87,6 @@ public class Cart {
     public void setNote(String note) {
         this.note = note;
     }
-    
 
     public String getFullName() {
         return fullName;
@@ -120,6 +119,13 @@ public class Cart {
     public void setPayType(String payType) {
         this.payType = payType;
     }
-    
-    
+
+    public List<CartProduct> getCartList() {
+        return cartList;
+    }
+
+    public void setCartList(List<CartProduct> cartList) {
+        this.cartList = cartList;
+    }
+
 }

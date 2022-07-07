@@ -12,7 +12,7 @@ public class ProductDTO {
     private Map<List<String>, Integer> colorSizeQuantity;
     private int price;
     private int quantity;
-    private float discount;
+    private int discount;
     private int lowStockLimit;
     private String categoryName;
     private boolean status;
@@ -23,7 +23,7 @@ public class ProductDTO {
 
     }
 
-    public ProductDTO(int productID, String productName, String description, Map<String, List<String>> colorImage, Map<List<String>, Integer> colorSizeQuantity, int price, float discount, int lowStockLimit, boolean status, int categoryID) {
+    public ProductDTO(int productID, String productName, String description, Map<String, List<String>> colorImage, Map<List<String>, Integer> colorSizeQuantity, int price, int discount, int lowStockLimit, boolean status, int categoryID) {
         this.productID = productID;
         this.productName = productName;
         this.description = description;
@@ -36,7 +36,7 @@ public class ProductDTO {
         this.categoryID = categoryID;
     }
 
-    public ProductDTO(int productID, String productName, String description, int price, float discount, int lowStockLimit, boolean status, int categoryID) {
+    public ProductDTO(int productID, String productName, String description, int price, int discount, int lowStockLimit, boolean status, int categoryID) {
         this.productID = productID;
         this.productName = productName;
         this.description = description;
@@ -51,7 +51,7 @@ public class ProductDTO {
 
     
 
-    public ProductDTO(int productID, String productName, String description, Map<String, List<String>> colorImage, int price, int quantity, float discount, int lowStockLimit, String categoryName, boolean status) {
+    public ProductDTO(int productID, String productName, String description, Map<String, List<String>> colorImage, int price, int quantity, int discount, int lowStockLimit, String categoryName, boolean status) {
         this.productID = productID;
         this.productName = productName;
         this.description = description;
@@ -64,7 +64,7 @@ public class ProductDTO {
         this.status = status;
     }
 
-    public ProductDTO(int productID, String productName, int price, float discount, int lowStockLimit, String categoryName, boolean status) {
+    public ProductDTO(int productID, String productName, int price, int discount, int lowStockLimit, String categoryName, boolean status) {
         this.productID = productID;
         this.productName = productName;
         this.price = price;
@@ -74,7 +74,7 @@ public class ProductDTO {
         this.status = status;
     }
 
-    public ProductDTO(int productID, String productName, String description, Map<String, List<String>> colorImage, Map<List<String>, Integer> colorSizeQuantity, int price, int quantity, float discount, int lowStockLimit, String categoryName, boolean status) {
+    public ProductDTO(int productID, String productName, String description, Map<String, List<String>> colorImage, Map<List<String>, Integer> colorSizeQuantity, int price, int quantity, int discount, int lowStockLimit, String categoryName, boolean status) {
         this.productID = productID;
         this.productName = productName;
         this.description = description;
@@ -154,11 +154,11 @@ public class ProductDTO {
         this.quantity = quantity;
     }
 
-    public float getDiscount() {
+    public int getDiscount() {
         return discount;
     }
 
-    public void setDiscount(float discount) {
+    public void setDiscount(int discount) {
         this.discount = discount;
     }
 

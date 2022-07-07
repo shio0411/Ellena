@@ -122,7 +122,7 @@
 
                                         <%  int total = 0;
                                             for (CartProduct item : cart) {
-                                                total += (int) (item.getPrice() * (1 - item.getDiscount()) * item.getQuantity());
+                                                total += (item.getPrice()  - item.getDiscount()) * item.getQuantity();
                                         %>
                                         <div class="col-md-6" style="margin-bottom: 10px;">
                                             <div class="row">
@@ -139,13 +139,13 @@
 
 
                                         <div class="col-md-2">
-                                            <%= (int) (item.getPrice() * (1 - item.getDiscount()))%>
+                                            <%= item.getPrice() - item.getDiscount()%>
                                         </div>
                                         <div class="col-md-2">
                                             <%= item.getQuantity()%>
                                         </div>
                                         <div class="col-md-2">
-                                            <%= (int) ((item.getPrice() * (1 - item.getDiscount()) * item.getQuantity()) / 1000)%>.000
+                                            <%= (int) (((item.getPrice() - item.getDiscount()) * item.getQuantity()) / 1000)%>.000
                                         </div>        
 
 

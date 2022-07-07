@@ -25,8 +25,8 @@ public class LoginGoogleController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     //private static final long serialVersionUID = 1L;
-    private static final String MN = "MN";
-    private static final String CUSTOMER_PAGE = "home.jsp";
+    private static final String CONTINUE_SHOPPING_PAGE = "ProductRouteController?productID=";
+    private static final String CUSTOMER_PAGE = "ViewHomeController";
     private static final String ERROR = "login.jsp";
 
     public LoginGoogleController() {
@@ -55,7 +55,17 @@ public class LoginGoogleController extends HttpServlet {
                 dao.addUser(loginUser);
                 HttpSession session = request.getSession();
                 session.setAttribute("LOGIN_USER", loginUser);
-                url = CUSTOMER_PAGE;
+
+                int productID = 0;
+                if (session.getAttribute("productID") != null) {
+                    productID = (int) session.getAttribute("productID");
+                }
+
+                if (productID != 0) {
+                    url = CONTINUE_SHOPPING_PAGE + productID;
+                } else {
+                    url = CUSTOMER_PAGE;
+                }
             }
         } catch (Exception e) {
             log("Error at LoginGoogleController: " + e.toString());

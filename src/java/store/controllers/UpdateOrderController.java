@@ -6,15 +6,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import store.shopping.OrderDAO;
-import store.user.UserDTO;
 
 @WebServlet(name = "UpdateOrderController", urlPatterns = {"/UpdateOrderController"})
 public class UpdateOrderController extends HttpServlet {
 
-    private static final String SUCCESS = "ShowOrderController";
-    private static final String ERROR = "ShowOrderController";
+    private static final String SUCCESS = "SearchOrderController";
+    private static final String ERROR = "SearchOrderController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -23,12 +21,13 @@ public class UpdateOrderController extends HttpServlet {
         try {
             int orderID = Integer.parseInt(request.getParameter("orderID"));
             int statusID = Integer.parseInt(request.getParameter("statusID"));
-            HttpSession session = request.getSession();
-            UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
             String trackingID = request.getParameter("trackingID");
+            String modifiedBy = request.getParameter("userID");
+            String roleID = request.getParameter("roleID");
             OrderDAO dao = new OrderDAO();
-            boolean check = dao.updateOrderStatus(orderID, statusID, user.getUserID(), user.getRoleID()) && dao.updateOrderTrackingID(orderID, trackingID);            
-            if (check) {
+            boolean checkUpdate = dao.updateOrderStatus(orderID, statusID, modifiedBy, roleID) || dao.updateOrderTrackingID(orderID, trackingID);
+            if (checkUpdate) {
+                
                 url = SUCCESS;
                 request.setAttribute("MESSAGE", "Cập nhật thành công");
             } else {

@@ -58,7 +58,7 @@ public class ManagerUpdateProductController extends HttpServlet {
             int categoryID = Integer.parseInt(request.getParameter("categoryID"));
             int lowStockLimit = Integer.parseInt(request.getParameter("lowStockLimit"));
             int price = Integer.parseInt(request.getParameter("price"));
-            float discount = Float.parseFloat(request.getParameter("discount"));
+            int discount = Integer.parseInt(request.getParameter("discount"));
             String description = request.getParameter("description");
             String oldProductName = request.getParameter("oldProductName");
             String productName = request.getParameter("productName").toUpperCase();

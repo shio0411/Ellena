@@ -1,8 +1,8 @@
 package store.shopping;
 
 import java.sql.Date;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Map;
 
 public class OrderDTO {
@@ -22,8 +22,29 @@ public class OrderDTO {
     private String note;
     private String transactionNumber;
     private Map<Integer, String> status;
+    private List<OrderDetailDTO> orderDetail;
+    private List<OrderStatusDTO> updateStatusHistory;
 
     public OrderDTO() {
+    }
+
+    public OrderDTO(int orderID, Date orderDate, int total, String userName, int statusID, String statusName, String payType, String trackingID, String fullName, String address, String phone, String email, String note, String transactionNumber, List<OrderDetailDTO> orderDetail, List<OrderStatusDTO> updateStatusHistory) {
+        this.orderID = orderID;
+        this.orderDate = orderDate;
+        this.total = total;
+        this.userName = userName;
+        this.statusID = statusID;
+        this.statusName = statusName;
+        this.payType = payType;
+        this.trackingID = trackingID;
+        this.fullName = fullName;
+        this.address = address;
+        this.phone = phone;
+        this.email = email;
+        this.note = note;
+        this.transactionNumber = transactionNumber;
+        this.orderDetail = orderDetail;
+        this.updateStatusHistory = updateStatusHistory;
     }
 
     public OrderDTO(int orderID, Date orderDate, int total, String statusName, String payType) {
@@ -86,7 +107,6 @@ public class OrderDTO {
     public void setStatus(Map<Integer, String> status) {
         this.status = status;
     }
-    
 
     public int getOrderID() {
         return orderID;
@@ -201,7 +221,47 @@ public class OrderDTO {
         this.transactionNumber = transactionNumber;
     }
 
-    
-    
+    public List<OrderDetailDTO> getOrderDetail() {
+        return orderDetail;
+    }
 
+    public void setOrderDetail(List<OrderDetailDTO> orderDetail) {
+        this.orderDetail = orderDetail;
+    }
+
+    public List<OrderStatusDTO> getUpdateStatusHistory() {
+        return updateStatusHistory;
+    }
+
+    public void setUpdateStatusHistory(List<OrderStatusDTO> updateStatusHistory) {
+        this.updateStatusHistory = updateStatusHistory;
+    }
+
+    public String getStatus(int statusID) {
+        String status = "";
+        switch (statusID) {
+            case 1: 
+                status = "Chưa xác nhận";
+                break;
+            case 2: 
+                status = "Đã xác nhận";
+                break;
+            case 3: 
+                status = "Đang giao";
+                break;
+            case 4: 
+                status = "Đã giao";
+                break;
+            case 5: 
+                status = "Đã hủy";
+                break;
+            case 6: 
+                status = "Chờ hoàn tiền";
+                break;
+            case 7: 
+                status = "Đã hoàn tiền";
+                break;
+        }
+        return status;
+    }
 }

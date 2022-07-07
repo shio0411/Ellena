@@ -100,7 +100,7 @@
                                 
                                 if (product.getDiscount() != 0) {
                             %>
-                            <div class="product__details__price"><%= (int) (product.getPrice() / 1000 * (1 - product.getDiscount()))%>.000đ<span><%=product.getPrice() / 1000%>.000đ </span></div>
+                            <div class="product__details__price"><%= (int) (product.getPrice() - product.getDiscount()) / 1000%>.000đ<span><%=product.getPrice() / 1000%>.000đ </span></div>
                             <%
                             } else {
                             %>
@@ -214,7 +214,7 @@
 
                                     <li style="margin-top: 4%;">
                                         <span>Giảm giá:</span>
-                                        <p><%= (int) (product.getDiscount() * 100)%>%</p>
+                                        <p><%= (int) (product.getDiscount() * 100.0 / product.getPrice())%>%</p>
                                     </li>
                                 </ul>
                             </div>
