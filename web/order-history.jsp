@@ -69,7 +69,7 @@
                         <% for (Pair<OrderDTO, List<OrderDetailDTO>> order : list) {%>
                         <div class="container" style="margin-bottom: 20px">
                             <article class="card">
-                                <h5 class="card-header">
+                                <h5 class="card-header p-3">
                                     Mã đơn hàng: <%=order.getKey().getOrderID()%>
                                     <% if ("Chưa xác nhận".equalsIgnoreCase(order.getKey().getStatusName())) {%>
                                     <button type="button" class="btn btn-danger" style="float: right; padding: 12px 15px 8px; text-align: center; font-weight: 600" data-toggle="modal" data-target="#<%=order.getKey().getOrderID()%>Modal">HUỶ ĐƠN HÀNG</button>
@@ -93,7 +93,7 @@
                                     </div>
                                     <%}%>
                                     <a style="float: right" class="mr-2" href="MainController?action=CustomerViewOrderDetail&orderID=<%=order.getKey().getOrderID()%>"><button class="primary-btn">Chi tiết</button></a>
-
+                                    
                                     
                                 </h5>
                                 <div class="card-body">
@@ -110,7 +110,7 @@
                                                     <h6 class="mb-3"><%= order.getValue().get(i).getProductName()%></h6>
                                                 </a>
                                                 <%= order.getValue().get(i).getColor()%>, <%= order.getValue().get(i).getSize()%> x <%= order.getValue().get(i).getQuantity()%><br>
-                                                <p style="font-weight: 500; color: black"><%= order.getValue().get(i).getPrice() / 1000%>.000</p>
+                                                <p style="font-weight: 500; color: black"><%= order.getValue().get(i).getPrice() / 1000%>.000₫</p>
 
                                             </div>
                                         </div>
@@ -119,11 +119,11 @@
                                         <%}
                                     }%>  
                                 </div>
-                                <div class="d-flex flex-row-reverse order__total mr-2" style="font-size: 20px">
-                                    Tổng: <%= (int) (order.getKey().getTotal()) / 1000%>.000
+                                <div class="d-flex flex-row-reverse order__total mr-4 my-3" style="font-size: 20px">
+                                    Tổng: <%= (int) (order.getKey().getTotal()) / 1000%>.000₫
                                 </div>  
                                 <%if(order.getKey().getStatusName().equalsIgnoreCase("ĐÃ GIAO")) {%>
-                                <div class="d-flex flex-row-reverse mr-2">
+                                <div class="d-flex flex-row-reverse mr-4 my-3">
                                     <button class="primary-btn"><i class="fa fa-star"></i>Ðánh giá</button>
                                 </div> 
                                 <%}%>

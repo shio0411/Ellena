@@ -234,8 +234,15 @@ ol {
     text-transform: uppercase;
     font-weight: 600;
     padding: 12px 30px 10px;
-    color: #111111;
+    color: #000;
     background: #fbe2d6;
+    border:1px solid transparent;
+}
+
+.primary-btn:hover{
+    color: #000;
+    background: #fff;
+    border:1px solid #000;
 }
 
 .site-btn {
@@ -250,6 +257,11 @@ ol {
     border-radius: 50px;
 }
 
+.site-btn:hover{  
+    color: #ca1515;
+    background: #fff;
+    border: 1px solid #ca1515;
+}
 /* Preloder */
 
 #preloder {
@@ -503,19 +515,20 @@ ol {
 }
 
 .header__right__auth:hover .dropdown {
-    top: 27px;
+    top: 60px;
     opacity: 1;
     visibility: visible;
 }
 
 .header__right__auth .dropdown {
     position: absolute;
-    left: 0;
-    top: 56px;
+    top: 70px;
     width: 150px;
-    background: #111111;
+    background: #ffffff;
     text-align: left;
     padding: 2px 0;
+    border-radius: 1rem;
+    box-shadow: rgb(0 0 0 / 2%) 0px 1px 3px 0px, rgb(27 31 35 / 15%) 0px 0px 0px 1px;
     z-index: 9;
     opacity: 0;
     visibility: hidden;
@@ -526,12 +539,12 @@ ol {
 
 .header__right__auth .dropdown li {
     display: block;
-    margin-right: 0;
+    margin: 1rem 0;
 }
 
 .header__right__auth .dropdown li a {
     font-size: 14px;
-    color: #ffffff;
+    color: #111111;
     font-weight: 400;
     padding: 8px 20px;
     text-transform: capitalize;
@@ -560,7 +573,6 @@ ol {
     position: absolute;
     right: -8px;
     top: -2px;
-    content: "/";
     font-size: 13px;
 }
 
@@ -1897,6 +1909,7 @@ ol {
     display: inline-block;
     font-size: 14px;
     color: #ffffff;
+    border: 1.5px solid transparent;
     background: #ca1515;
     font-weight: 600;
     text-transform: uppercase;
@@ -1905,6 +1918,12 @@ ol {
     float: left;
     margin-right: 10px;
     margin-bottom: 10px;
+}
+.product__details__button .cart-btn:hover {
+    color: #ca1515;
+    border: 1px solid #ca1515;
+    background: #ffffff;
+    
 }
 
 .product__details__button ul {
@@ -3911,4 +3930,8 @@ ol {
     font-weight: 500;
     color: #000000;
     display: block;
+}
+
+.text-template-primary{
+    color: #ca1515;
 }

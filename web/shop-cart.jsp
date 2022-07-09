@@ -39,7 +39,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="breadcrumb__links">
-                            <a href="./index.html"><i class="fa fa-home"></i> Home</a>
+                            <a href="./index.html"><i class="fa fa-home text-template-primary"></i> Home</a>
                             <span>Shopping cart</span>
                         </div>
                     </div>
@@ -147,7 +147,7 @@
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-6">
                         <div class="cart__btn">
-                            <a href="home.jsp">Continue Shopping</a>
+                            <a href="home.jsp"><i class="fa fa-arrow-left text-template-primary"></i>Continue Shopping</a>
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6">
@@ -166,7 +166,7 @@
                             <ul>
                                 <li>Subtotal <span></span></li>
                                 <li>Total 
-                                    <span><%= (int) (total / 1000)%>.000</span>
+                                    <span><%= (int) (total / 1000)%>.000₫ </span>
                                 </li>
                             </ul>
                             <a href="checkout.jsp" class="primary-btn">Proceed to checkout</a>

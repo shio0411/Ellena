@@ -121,12 +121,12 @@
                                 <input type="text" placeholder="Email">
                                 <button type="submit" class="site-btn">Đăng ký</button>
                             </form>
-                            <div class="footer__social">
-                                <a href="#"><i class="fa fa-facebook"></i></a>
-                                <a href="#"><i class="fa fa-twitter"></i></a>
-                                <a href="#"><i class="fa fa-youtube-play"></i></a>
-                                <a href="#"><i class="fa fa-instagram"></i></a>
-                                <a href="#"><i class="fa fa-pinterest"></i></a>
+                            <div class="footer__social ">
+                                <a href="#"><i class="fa fa-facebook mx-auto text-template-primary"></i></a>
+                                <a href="#"><i class="fa fa-twitter mx-auto text-template-primary"></i></a>
+                                <a href="#"><i class="fa fa-youtube-play mx-auto text-template-primary"></i></a>
+                                <a href="#"><i class="fa fa-instagram mx-auto text-template-primary"></i></a>
+                                <a href="#"><i class="fa fa-pinterest mx-auto text-template-primary"></i></a>
                             </div>
                         </div>
                     </div>

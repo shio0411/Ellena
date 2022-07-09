@@ -15,7 +15,7 @@ import store.utils.DBUtils;
 public class RatingDAO {
 
     private static final String GET_PRODUCT_RATING = "SELECT id, fullName, content, star, rateDate FROM tblRating r JOIN tblProduct p ON r.productID = p.productID JOIN tblUsers u ON u.userID = r.userID AND p.productID = ?";
-
+    private static final String INSERT_RATING = "INSERT INTO tblRating(productID, userID, orderID, content, star, rateDate) VALUES (?, ?, ?, ?, ?, ?)";
     public List<RatingDTO> getProductRating(int productID) throws SQLException {
         List<RatingDTO> ratingList = new ArrayList<>();
         Connection conn = null;
@@ -48,5 +48,38 @@ public class RatingDAO {
             }
         }
         return ratingList;
+    }
+    public boolean addRating(int productID, String userID, int orderID, String content, int star, String rateDate) throws SQLException {
+        boolean result = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(INSERT_RATING);
+                ptm.setInt(1, productID);
+                ptm.setString(2, userID);
+                ptm.setInt(3, orderID);
+                ptm.setString(4, content);
+                ptm.setInt(5, star);
+                ptm.setString(6, rateDate);            
+                result = ptm.executeUpdate() > 0;
+                
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return result;
     }
 }

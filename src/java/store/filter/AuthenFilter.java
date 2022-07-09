@@ -70,7 +70,10 @@ public class AuthenFilter implements Filter {
         CUSTOMER_FUNCTION.add("CheckoutController");
         CUSTOMER_FUNCTION.add("order-history");
         CUSTOMER_FUNCTION.add("ViewOrderHistoryController");
-
+        CUSTOMER_FUNCTION.add("CreateRatingFormController");
+        CUSTOMER_FUNCTION.add("rating-product.jsp");       
+        CUSTOMER_FUNCTION.add("UpdateRatingController");
+        
         ADMIN_FUNCTION = new ArrayList<>();
         ADMIN_FUNCTION.add("admin.jsp");
         ADMIN_FUNCTION.add("add-account.jsp");

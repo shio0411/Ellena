@@ -123,6 +123,8 @@ public class MainController extends HttpServlet {
     private static final String VALIDATE_OTP_CONTROLLER = "ValidateOtpController";
     private static final String RESET_PASSWORD = "ResetPassword";
     private static final String RESET_PASSWORD_CONTROLLER = "ResetPasswordController";
+    private static final String UPDATE_RATING = "UpdateRating";
+    private static final String UPDATE_RATING_CONTROLLER = "UpdateRatingController";
 
 
 
@@ -296,6 +298,9 @@ public class MainController extends HttpServlet {
                         break;
                     case RESET_PASSWORD:
                         url = RESET_PASSWORD_CONTROLLER;
+                        break;
+                    case UPDATE_RATING:
+                        url = UPDATE_RATING_CONTROLLER;
                         break;
                     default:
                         break;
