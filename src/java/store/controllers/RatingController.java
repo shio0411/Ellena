@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import store.shopping.OrderDAO;
 import store.shopping.OrderDTO;
 import store.shopping.OrderDetailDTO;
+import store.shopping.RatingDAO;
+import store.shopping.RatingDTO;
 
 /**
  *
@@ -33,9 +35,12 @@ public class RatingController extends HttpServlet {
         try {
             int orderID = Integer.parseInt(request.getParameter("orderID"));
             OrderDAO dao = new OrderDAO();
+            RatingDAO rDao = new RatingDAO();
             Pair<OrderDTO, List<OrderDetailDTO>> order = dao.getOrderDetails(orderID);
+            List<RatingDTO> listRating = rDao.getProductRatingPerOrder(orderID);
             if (order!=null) {
                 request.setAttribute("ORDER_DETAILS", order);
+                request.setAttribute("PRODUCT_RATING_LIST", listRating);
                 url = SUCCESS;
             }
             

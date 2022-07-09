@@ -16,6 +16,8 @@ public class RatingDAO {
 
     private static final String GET_PRODUCT_RATING = "SELECT id, fullName, content, star, rateDate FROM tblRating r JOIN tblProduct p ON r.productID = p.productID JOIN tblUsers u ON u.userID = r.userID AND p.productID = ?";
     private static final String INSERT_RATING = "INSERT INTO tblRating(productID, userID, orderID, content, star, rateDate) VALUES (?, ?, ?, ?, ?, ?)";
+    private static final String GET_PRODUCT_RATING_PER_ORDER = "select star, content, productID FROM tblRating WHERE orderID = ?";
+    
     public List<RatingDTO> getProductRating(int productID) throws SQLException {
         List<RatingDTO> ratingList = new ArrayList<>();
         Connection conn = null;
@@ -49,6 +51,7 @@ public class RatingDAO {
         }
         return ratingList;
     }
+    
     public boolean addRating(int productID, String userID, int orderID, String content, int star, String rateDate) throws SQLException {
         boolean result = false;
         Connection conn = null;
@@ -82,4 +85,39 @@ public class RatingDAO {
         }
         return result;
     }
+    
+    public List<RatingDTO> getProductRatingPerOrder(int orderID) throws SQLException {
+        List<RatingDTO> ratingList = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_PRODUCT_RATING_PER_ORDER);
+                ptm.setInt(1, orderID);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    int star = rs.getInt("star");
+                    String content = rs.getString("content");
+                    int productID = rs.getInt("productID");
+                    ratingList.add(new RatingDTO(star, content, null, productID));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return ratingList;
+    }
+    
 }

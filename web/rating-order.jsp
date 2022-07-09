@@ -4,6 +4,7 @@
     Author     : ASUS
 --%>
 
+<%@page import="store.shopping.RatingDTO"%>
 <%@page import="store.user.UserDTO"%>
 <%@page import="store.shopping.OrderDetailDTO"%>
 <%@page import="javafx.util.Pair"%>
@@ -41,16 +42,16 @@
                 <!--Message row-->
                 <div class="row">
                     <div class="col-12" style="text-align: center; color: red">
-                        <%if(message == "SUCCESS"){
-                            %>
-                            <div class="alert alert-success" role="alert">
-                                <strong>Thành công!!</strong> Cảm ơn bạn đã đánh giá.
-                                <button type="button" class="close" data-toggle="alert">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <%
-                        }%>
+                        <%if (message == "SUCCESS") {
+                        %>
+                        <div class="alert alert-success" role="alert">
+                            <strong>Thành công!!</strong> Cảm ơn bạn đã đánh giá.
+                            <button type="button" class="close" data-toggle="alert">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <%
+                            }%>
                     </div>
                 </div>
                 <div class="row">
@@ -68,6 +69,7 @@
 
         <%
             Pair<OrderDTO, List<OrderDetailDTO>> order = (Pair<OrderDTO, List<OrderDetailDTO>>) request.getAttribute("ORDER_DETAILS");
+            List<RatingDTO> listRating = (List<RatingDTO>) request.getAttribute("PRODUCT_RATING_LIST");
         %>
 
 
@@ -115,27 +117,54 @@
                                                         <%= orderDetail.getPrice() / 1000%>.000₫ 
                                                     </td>
                                                 <tr>
-                                                <!-- Rating rows -->    
+                                                    <!-- Rating rows -->    
                                                 <tr>
                                                     <td>
                                                         <!-- button to rating product page -->
+                                                        <%
+                                                            if (listRating == null || listRating.size() == 0) { // check if listRating is null
+%>
                                                         <a href="CreateRatingFormController?productID=<%= orderDetail.getProductID()%>&productImage=<%= orderDetail.getImage()%>&orderID=<%= order.getKey().getOrderID()%>&productName=<%= orderDetail.getProductName()%>"><button class="primary-btn"><i class="fa fa-star"></i>Ðánh giá sản phẩm</button></a>
+                                                        <%
+                                                        } else { // begin test with for
+                                                            boolean checkRating = false;
+                                                            for (RatingDTO rating : listRating) {
+                                                                if (rating.getProductID() == orderDetail.getProductID()) {
+                                                                    if (!rating.getContent().isEmpty()) {
+                                                                        checkRating = true;
+                                                                        break;
+                                                                    }
+                                                                }
+                                                            }
+                                                            if (checkRating) { // if there's a rating for this product in this order (disable and gray out)
+                                                        %>
+                                                        <a href="#"><button class="primary-btn" disabled="" style="background: #dbdbdb;"><i class="fa fa-star"></i>Ðánh giá sản phẩm</button></a>
+                                                        <%
+                                                        } else { // display normal link if there is no rating for that product
+%>
+                                                        <a href="CreateRatingFormController?productID=<%= orderDetail.getProductID()%>&productImage=<%= orderDetail.getImage()%>&orderID=<%= order.getKey().getOrderID()%>&productName=<%= orderDetail.getProductName()%>"><button class="primary-btn"><i class="fa fa-star"></i>Ðánh giá sản phẩm</button></a>
+                                                        <%
+                                                                }
+                                                            }
+                                                        %>
+
+
                                                     </td>
                                                     <td>
-                                                        
+
                                                     </td>
                                                 </tr>
                                                 <%}%>
-                                                
+
                                                 <!-- Total rows -->
                                                 <tr style="border-bottom: none;">
                                                     <td></td>
                                                     <td class="cart__total" style="font-size: 24px;">Tổng: <%= (int) (order.getKey().getTotal()) / 1000%>.000₫ </td>
                                                 </tr>    
-                                                
-                                                
-                                                    
-                                                    
+
+
+
+
                                             </tbody>
 
 
