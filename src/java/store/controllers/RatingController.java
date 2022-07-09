@@ -1,47 +1,52 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ */
 package store.controllers;
 
 import java.io.IOException;
+import java.util.List;
+import javafx.util.Pair;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import store.user.UserDAO;
-import store.user.UserDTO;
-import store.user.UserError;
+import store.shopping.OrderDAO;
+import store.shopping.OrderDTO;
+import store.shopping.OrderDetailDTO;
 
+/**
+ *
+ * @author ASUS
+ */
+@WebServlet(name = "RatingController", urlPatterns = {"/RatingController"})
+public class RatingController extends HttpServlet {
 
-@WebServlet(name = "UpdateNameController", urlPatterns = {"/UpdateNameController"})
-public class UpdateNameController extends HttpServlet {
-
-    private static final String ERROR = "my-profile.jsp";
-    private static final String SUCCESS = "my-profile.jsp";
-
+    private static final String ERROR = "error.jsp";
+    private static final String SUCCESS = "rating-order.jsp";
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
-            HttpSession session = request.getSession();
-            UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
-            String userID = loginUser.getUserID();
-            String newName = request.getParameter("newName");
-            boolean check = true;
-            UserDAO dao = new UserDAO();          
-            boolean checkUpdate = dao.updateName(newName, userID);
-            if (checkUpdate) {
+            int orderID = Integer.parseInt(request.getParameter("orderID"));
+            OrderDAO dao = new OrderDAO();
+            Pair<OrderDTO, List<OrderDetailDTO>> order = dao.getOrderDetails(orderID);
+            if (order!=null) {
+                request.setAttribute("ORDER_DETAILS", order);
                 url = SUCCESS;
-                if("CM".equalsIgnoreCase(loginUser.getRoleID())) url = "customer-profile.jsp";
-                UserDTO user = dao.getUserByID(userID);
-                session.setAttribute("LOGIN_USER", user);
             }
-
+            
         } catch (Exception e) {
-            log("Error at UpdateNameController: " + e.toString());
+            log("ERROR at RatingController : " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
+        
+        
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

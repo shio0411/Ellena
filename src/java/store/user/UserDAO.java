@@ -29,6 +29,8 @@ public class UserDAO {
     private static final String UPDATE_ACCOUNT = "UPDATE tblUsers SET fullName=?, sex=?, roleID=?, address=?, birthday=?, phone=? WHERE userID=?";
     private static final String UPDATE_PASSWORD = "UPDATE tblUsers SET password=? WHERE userID=?";
     private static final String UPDATE_NAME = "UPDATE tblUsers SET fullName=? WHERE userID=?";
+    private static final String UPDATE_SEX = "UPDATE tblUsers SET sex=? WHERE userID=?";
+    private static final String UPDATE_BIRTHDAY = "UPDATE tblUsers SET birthday=? WHERE userID=?";
     private static final String UPDATE_ADDRESS = "UPDATE tblUsers SET address=? WHERE userID=?";
     private static final String UPDATE_PHONE = "UPDATE tblUsers SET phone=? WHERE userID=?";
     private static final String ACTIVATE_ACCOUNT = "UPDATE tblUsers SET status=1 WHERE userID=?";
@@ -131,7 +133,11 @@ public class UserDAO {
             ptm.setBoolean(4, sex);
             ptm.setString(5, roleID);
             ptm.setString(6, address);
-            ptm.setDate(7, new java.sql.Date(date.getTime()));
+            if(date!=null)
+                ptm.setDate(7, new java.sql.Date(date.getTime()));
+            else{
+                ptm.setDate(7, null);
+            }
             ptm.setString(8, phone);
             ptm.setBoolean(9, status);
             check = ptm.executeUpdate() > 0 ? true : false;
@@ -392,6 +398,54 @@ public class UserDAO {
             conn = DBUtils.getConnection();
             ptm = conn.prepareStatement(UPDATE_PASSWORD);
             ptm.setString(1, password);
+            ptm.setString(2, userID);
+
+            check = ptm.executeUpdate() > 0 ? true : false;
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+    
+    public boolean updateSex(String newSex, String userID) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DBUtils.getConnection();
+            ptm = conn.prepareStatement(UPDATE_SEX);
+            ptm.setBoolean(1, Boolean.parseBoolean(newSex));
+            ptm.setString(2, userID);
+
+            check = ptm.executeUpdate() > 0 ? true : false;
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+    
+    public boolean updateBirthday(Date newBirthday, String userID) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DBUtils.getConnection();
+            ptm = conn.prepareStatement(UPDATE_BIRTHDAY);
+            ptm.setDate(1, new java.sql.Date(newBirthday.getTime()));
             ptm.setString(2, userID);
 
             check = ptm.executeUpdate() > 0 ? true : false;

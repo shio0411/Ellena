@@ -123,8 +123,9 @@
                                     Tổng: <%= (int) (order.getKey().getTotal()) / 1000%>.000₫
                                 </div>  
                                 <%if(order.getKey().getStatusName().equalsIgnoreCase("ĐÃ GIAO")) {%>
-                                <div class="d-flex flex-row-reverse mr-4 my-3">
-                                    <button class="primary-btn"><i class="fa fa-star"></i>Ðánh giá</button>
+                                <div class="d-flex flex-row-reverse mr-2">
+                                    <!-- button to rating page -->
+                                    <a href="RatingController?orderID=<%=order.getKey().getOrderID()%>"><button class="primary-btn"><i class="fa fa-star"></i>Ðánh giá</button></a>
                                 </div> 
                                 <%}%>
                             </article>

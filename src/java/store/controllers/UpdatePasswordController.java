@@ -50,6 +50,7 @@ public class UpdatePasswordController extends HttpServlet {
                 boolean checkUpdate = dao.updatePassword(newPassword, userID);
                 if (checkUpdate) {
                     url = SUCCESS;
+                    if("CM".equalsIgnoreCase(loginUser.getRoleID())) url = "customer-profile.jsp";
                     UserDTO user = dao.getUserByID(userID);
                     session.setAttribute("LOGIN_USER", user);
                     request.setAttribute("MESSAGE", "Cập nhật thành công!");

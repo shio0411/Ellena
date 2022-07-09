@@ -65,6 +65,7 @@
                                         <button class="btn btn-default" type="submit" name="action" value="UpdateName">Cập nhật</button>
                                         <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
                                     </div>
+                                </form>
                                 </div>
                             </div>
                         </div>
@@ -124,6 +125,7 @@
                                         <button class="btn btn-default" type="submit" name="action" value="UpdatePassword">Cập nhật</button>
                                         <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
                                     </div>
+                                 </form>
                                 </div>
                             </div>
                         </div>
@@ -131,8 +133,91 @@
                     </td>
                 </tr>
                 <tr>   
+                    <th>Giới tính</th>
+                    <td><%= loginUser.getSex() == true ? "Nam" : "Nữ" %>
+                        <div class="modal fade" id="myModal5" role="dialog" aria-labelledby="myModalLabel">
+                            <div class="modal-dialog">
+                                <div class="modal-content" >
+                                    <div class="modal-header">
+                                        <h4 class="modal-title" id="myModalLabel">Thay đổi giới tính</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+                                    </div>
+                                    <form action="MainController" method="POST">
+                                    <div class="modal-body">
+                                        
+                                            <div class="row">
+                                                <div class="col-md-12 mb-4">
+
+                                                    <div>
+                                                        
+                                                        <input  type="radio" <% if(loginUser.getSex()){ %>checked<%} %> id="Nam" name="newSex"  value="true"/>
+                                                        <label class="form-label" for="Nam">Nam</label><br>
+                                                        <input  type="radio" <% if(!loginUser.getSex()){ %>checked<%} %> id="Nữ" name="newSex"  value="false"/>
+                                                        <label class="form-label" for="Nữ">Nữ</label>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-default" type="submit" name="action" value="UpdateSex">Cập nhật</button>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                                    </div>
+                                    </form>
+                                </div>
+                                                   
+                            </div>
+                        </div>
+                        </form>
+                        <i class="fa fa-edit fa-2x" data-toggle="modal" data-target="#myModal5" style="margin-left: 12px;"></i>
+                    </td>
+                </tr>
+                <tr>   
+                    <th>Ngày sinh</th>
+                    <td><%= loginUser.getBirthday() %>
+                        <div class="modal fade" id="myModal6" role="dialog" aria-labelledby="myModalLabel">
+                            <div class="modal-dialog">
+                                <div class="modal-content" >
+                                    <div class="modal-header">
+                                        <h4 class="modal-title" id="myModalLabel">Thay đổi ngày sinh</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+                                    </div>
+                                    <form action="MainController" method="POST">
+                                    <div class="modal-body">
+                                        
+                                            <div class="row">
+                                                <div class="col-md-12 mb-4">
+
+                                                    <div class="form-outline">
+                                                        <label class="form-label" for="newBirthday">Ngày sinh</label>
+                                                        <input type="date" name="newBirthday" id="newBirthday" class="form-control form-control-lg" value="<%= loginUser.getBirthday() %>"/>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-default" type="submit" name="action" value="UpdateBirthday">Cập nhật</button>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                                    </div>
+                                    </form>
+                                </div>
+                                                   
+                            </div>
+                        </div>
+                                                    </form>
+                        <i class="fa fa-edit fa-2x" data-toggle="modal" data-target="#myModal6" style="margin-left: 12px;"></i>
+                    </td>
+                </tr>
+                <tr>   
                     <th>Số điện thoại</th>
-                    <td><%= loginUser.getPhone()%>
+                    <td><%= loginUser.getPhone() !=null ? loginUser.getPhone() : "" %>
                         <div class="modal fade" id="myModal4" role="dialog" aria-labelledby="myModalLabel">
                             <div class="modal-dialog">
                                 <div class="modal-content" >
@@ -141,8 +226,9 @@
                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
                                     </div>
+                                    <form action="MainController" method="POST">
                                     <div class="modal-body">
-                                        <form action="MainController" method="POST">
+                                        
                                             <div class="row">
                                                 <div class="col-md-12 mb-4">
 
@@ -160,15 +246,18 @@
                                         <button class="btn btn-default" type="submit" name="action" value="UpdatePhone">Cập nhật</button>
                                         <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
                                     </div>
+                                    </form>
                                 </div>
+                                                   
                             </div>
                         </div>
+                                                    </form>
                         <i class="fa fa-edit fa-2x" data-toggle="modal" data-target="#myModal4" style="margin-left: 12px;"></i>
                     </td>
                 </tr>
                 <tr>
                     <th>Địa chỉ</th>
-                    <td><%= loginUser.getAddress()%>
+                    <td><% if(!loginUser.getAddress().isEmpty()){ loginUser.getAddress(); }else{ %><i>Bạn chưa có thông tin này.</i><% } %>
                         <div class="modal fade" id="myModal2" role="dialog" aria-labelledby="myModalLabel">
                             <div class="modal-dialog">
                                 <div class="modal-content" >
@@ -196,6 +285,7 @@
                                         <button class="btn btn-default" type="submit" name="action" value="UpdateAddress">Cập nhật</button>
                                         <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
                                     </div>
+                                 </form>
                                 </div>
                             </div>
                         </div>

@@ -98,7 +98,7 @@
                         <div class="header__right">
                             <%if (user != null) {%>
                             <div class="header__right__auth">
-                                <a style="font-weight: 500; color: #721c24" href="my-profile.jsp"><%= user.getFullName().toUpperCase()%></a>
+                                <a style="font-weight: 500; color: #721c24" href="customer-profile.jsp"><%= user.getFullName().toUpperCase()%></a>
                                 <ul class="dropdown">
                                     <li> <a href="MainController?action=ViewOrderHistory&userID=<%=user.getUserID()%>">Đơn hàng <i class="fa fa-shopping-cart text-dark"></i></a></li>
                                     <li> <a href="MainController?action=Logout">Đăng xuất <i class="fa fa-sign-out text-dark"></i></a></li>
@@ -106,8 +106,8 @@
                             </div>
                             <% } else {%>
                             <div class="header__right__auth">
-                                <a href="login.jsp">Login</a>
-                                <a href="register.jsp">Register</a>
+                                <a href="login.jsp">Đăng nhập</a>
+                                <a href="register.jsp">Đăng ký</a>
                             </div>
                             <%}%>
                             <ul class="header__right__widget">

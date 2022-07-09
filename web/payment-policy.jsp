@@ -66,8 +66,8 @@
                         </li>
                     </ul>
 
-                    <h6 style="margin-top: 2%; margin-bottom: 1%; font-weight: bold;">CHI PHÍ VẬN CHUYỂN TẠI GUMAC.VN TÍNH THẾ NÀO?</h6>
-                    <p>Gumac áp dụng phí giao hàng cho tất cả các đơn hàng có giá trị dưới 500.000đ. Với đơn hàng từ 500.000đ trở lên, khách hàng sẽ được miễn phí hoàn toàn chi phí vận chuyển toàn quốc.</p>
+                    <h6 style="margin-top: 2%; margin-bottom: 1%; font-weight: bold;">CHI PHÍ VẬN CHUYỂN TẠI ELLENA.VN TÍNH THẾ NÀO?</h6>
+                    <p>Ellena áp dụng phí giao hàng cho tất cả các đơn hàng có giá trị dưới 500.000đ. Với đơn hàng từ 500.000đ trở lên, khách hàng sẽ được miễn phí hoàn toàn chi phí vận chuyển toàn quốc.</p>
                     <p>Phí Ship đối với đơn hàng dưới 500.000đ:</p>
                     <ul style="list-style-type: none;">
                         <li>
@@ -80,7 +80,7 @@
                             Các tỉnh thành khác: phí 20.0000 VNĐ.
                         </li>
                         <li>
-                            Khu vực ĐẢO: Phí 30.000VNĐ -  Quý khách phải chuyển khoản trước cho GUMAC, sau đó GUMAC sẽ lên đơn hàng và chuyển hàng cho quý khách.
+                            Khu vực ĐẢO: Phí 30.000VNĐ -  Quý khách phải chuyển khoản trước cho ELLENA, sau đó ELLENA sẽ lên đơn hàng và chuyển hàng cho quý khách.
                         </li>
                     </ul>
                 </div>

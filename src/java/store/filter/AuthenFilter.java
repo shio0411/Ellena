@@ -68,12 +68,24 @@ public class AuthenFilter implements Filter {
         CUSTOMER_FUNCTION.add("vnpay.jsp");
         CUSTOMER_FUNCTION.add("ajaxServlet");
         CUSTOMER_FUNCTION.add("CheckoutController");
-        CUSTOMER_FUNCTION.add("order-history");
+        CUSTOMER_FUNCTION.add("order-history.jsp");
         CUSTOMER_FUNCTION.add("ViewOrderHistoryController");
         CUSTOMER_FUNCTION.add("CreateRatingFormController");
         CUSTOMER_FUNCTION.add("rating-product.jsp");       
         CUSTOMER_FUNCTION.add("UpdateRatingController");
         
+        CUSTOMER_FUNCTION.add("customer-profile.jsp");
+        CUSTOMER_FUNCTION.add("DiscoverController");
+        CUSTOMER_FUNCTION.add("CategoryRouteController");
+        CUSTOMER_FUNCTION.add("about-us.jsp");
+        CUSTOMER_FUNCTION.add("faq.jsp");
+        CUSTOMER_FUNCTION.add("choose-size.jsp");
+        CUSTOMER_FUNCTION.add("payment-policy.jsp");
+        CUSTOMER_FUNCTION.add("return-policy.jsp");
+        CUSTOMER_FUNCTION.add("RatingController");
+        CUSTOMER_FUNCTION.add("rating-order.jsp");
+        CUSTOMER_FUNCTION.add("rating-product.jsp");
+
         ADMIN_FUNCTION = new ArrayList<>();
         ADMIN_FUNCTION.add("admin.jsp");
         ADMIN_FUNCTION.add("add-account.jsp");
@@ -84,6 +96,7 @@ public class AuthenFilter implements Filter {
         ADMIN_FUNCTION.add("ShowManagerController");
         ADMIN_FUNCTION.add("ShowCategoryController");
         ADMIN_FUNCTION.add("ShowAccountController");
+        
 
         MANAGER_FUNCTION = new ArrayList<>();
         MANAGER_FUNCTION.add("manager-product.jsp");

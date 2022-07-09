@@ -1,6 +1,12 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ */
 package store.controllers;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -9,11 +15,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import store.user.UserDAO;
 import store.user.UserDTO;
-import store.user.UserError;
 
-
-@WebServlet(name = "UpdateNameController", urlPatterns = {"/UpdateNameController"})
-public class UpdateNameController extends HttpServlet {
+/**
+ *
+ * @author vankh
+ */
+@WebServlet(name = "UpdateBirthdayController", urlPatterns = {"/UpdateBirthdayController"})
+public class UpdateBirthdayController extends HttpServlet {
 
     private static final String ERROR = "my-profile.jsp";
     private static final String SUCCESS = "my-profile.jsp";
@@ -26,10 +34,9 @@ public class UpdateNameController extends HttpServlet {
             HttpSession session = request.getSession();
             UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
             String userID = loginUser.getUserID();
-            String newName = request.getParameter("newName");
-            boolean check = true;
+            Date newBirthday = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("newBirthday"));
             UserDAO dao = new UserDAO();          
-            boolean checkUpdate = dao.updateName(newName, userID);
+            boolean checkUpdate = dao.updateBirthday(newBirthday, userID);
             if (checkUpdate) {
                 url = SUCCESS;
                 if("CM".equalsIgnoreCase(loginUser.getRoleID())) url = "customer-profile.jsp";
@@ -38,7 +45,7 @@ public class UpdateNameController extends HttpServlet {
             }
 
         } catch (Exception e) {
-            log("Error at UpdateNameController: " + e.toString());
+            log("Error at UpdateAddressController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

@@ -34,7 +34,7 @@
             
             <div>
                 <span>
-                    <p>Thành lập vào tháng 5 năm 2022, chỉ trong vòng 10 tuần, Ellena đã khẳng định được chỗ đứng vững chắc trên thị trường và trở thành thương hiệu thời trang có tốc độ tăng trưởng nhanh nhất tại Việt Nam với hệ thống cửa hàng với gần 90 showrooms trên toàn quốc; Hàng triệu khách hàng thân thiết; Là nhà bán số 1 về ngành hàng thời trang trên các sàn Thương mại điện tử phổ biến nhất trong nước như: Tiki, Lazada, Shopee, Sendo,… và sắp có mặt tại sàn Thương Mại điện tử lớn nhất Thế Giới Amazon.</p>
+                    <p>Thành lập vào tháng 5 năm 2022, chỉ trong vòng 10 tuần, Ellena đã khẳng định được chỗ đứng vững chắc trên thị trường và trở thành thương hiệu thời trang có tốc độ tăng trưởng nhanh nhất tại Việt Nam ; Hàng triệu khách hàng thân thiết; Là nhà bán số 1 về ngành hàng thời trang trên các sàn Thương mại điện tử phổ biến nhất trong nước như: Tiki, Lazada, Shopee, Sendo,… và sắp có mặt tại sàn Thương Mại điện tử lớn nhất Thế Giới Amazon.</p>
                 </span>
                 <span>
                     <strong>“ELLENA PHÁT TRIỂN MÔ HÌNH SIÊU THỊ THỜI TRANG PHÁI NỮ”</strong>
