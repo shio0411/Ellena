@@ -31,8 +31,18 @@
         <%
             // get cart message
             String message = (String) request.getAttribute("MESSAGE");
+            String SUCCESS = "SUCCESS";
             if (message == null) {
                 message = "";
+            }else if(message == SUCCESS){
+                %>
+                <div class="alert alert-success" role="alert">
+                    <strong>Thành công!</strong> Cảm ơn bạn đã đánh giá sản phẩm.
+                    <button type="button" class="close" data-toggle="alert">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <%
             }
         %>
 

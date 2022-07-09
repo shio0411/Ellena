@@ -25,7 +25,7 @@ import store.user.UserDTO;
 public class UpdateRatingController extends HttpServlet {
 
     private static final String ERROR = "error.jsp";
-    private static final String SUCCESS = "home.jsp";
+    private static final String SUCCESS = "RatingController";
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

@@ -103,7 +103,7 @@
                                                         </div>
                                                     </td>
                                                     <td class="cart__price">
-                                                        <%= orderDetail.getPrice() / 1000%>.000
+                                                        <%= orderDetail.getPrice() / 1000%>.000₫ 
                                                     </td>
                                                 <tr>
                                                 <!-- Rating rows -->    
@@ -121,7 +121,7 @@
                                                 <!-- Total rows -->
                                                 <tr style="border-bottom: none;">
                                                     <td></td>
-                                                    <td class="cart__total" style="font-size: 24px;">Tổng: <%= (int) (order.getKey().getTotal()) / 1000%>.000</td>
+                                                    <td class="cart__total" style="font-size: 24px;">Tổng: <%= (int) (order.getKey().getTotal()) / 1000%>.000₫ </td>
                                                 </tr>    
                                                 
                                                 
