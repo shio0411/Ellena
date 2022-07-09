@@ -174,7 +174,7 @@
                     <span>Đánh giá</span>
                 </div>
                 <div class="rating col-md-8">
-                    <input type="radio" name="rating" id="rating-5" value="5">
+                    <input type="radio" name="rating" id="rating-5" value="5" checked="checked">
                     <label for="rating-5"></label>
                     <input type="radio" name="rating" id="rating-4" value="4">
                     <label for="rating-4"></label>

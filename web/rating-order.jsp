@@ -41,7 +41,16 @@
                 <!--Message row-->
                 <div class="row">
                     <div class="col-12" style="text-align: center; color: red">
-                        <%= message%>
+                        <%if(message == "SUCCESS"){
+                            %>
+                            <div class="alert alert-success" role="alert">
+                                <strong>Thành công!!</strong> Cảm ơn bạn đã đánh giá.
+                                <button type="button" class="close" data-toggle="alert">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <%
+                        }%>
                     </div>
                 </div>
                 <div class="row">

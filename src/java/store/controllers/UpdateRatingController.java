@@ -47,7 +47,7 @@ public class UpdateRatingController extends HttpServlet {
             String fail = "FAIL";
             if(check){
                 request.setAttribute("MESSAGE", success);
-                url=SUCCESS;
+                url=SUCCESS + "?orderID=" + String.valueOf(orderID);
             }else{
                 request.setAttribute("MESSAGE", fail);
                 url=SUCCESS;
