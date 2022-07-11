@@ -39,7 +39,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="breadcrumb__links">
-                            <a href="./index.html"><i class="fa fa-home text-template-primary"></i> Home</a>
+                            <a href="./"><i class="fa fa-home text-template-primary"></i> Home</a>
                             <span>Shopping cart</span>
                         </div>
                     </div>

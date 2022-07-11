@@ -50,18 +50,18 @@
         <!-- Breadcrumb Begin -->
         <div class="breadcrumb-option">
             <div class="container">
-                <!--Message row-->
-                <div class="row">
-                    <div class="col-12" style="text-align: center; color: red">
-                        <%= message%>
-                    </div>
-                </div>
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="breadcrumb__links">
                             <a href="./"><i class="fa fa-home"></i> Home</a>
                             <span>Order History</span>
                         </div>
+                    </div>
+                </div>
+                <!--Message row-->
+                <div class="row">
+                    <div class="col-12" style="text-align: center; color: red">
+                        <%= message%>
                     </div>
                 </div>
             </div>
@@ -147,7 +147,22 @@
         <!-- Shop Cart Section End -->
 
         <%      }
-            }%>
+            } else {%>
+        <div style="text-align: center;">
+            <div style="margin-bottom: 20px;">
+                <img src="./images/empty-cart.png" alt="Empty cart"/>
+            </div>
+
+            <div>
+                <h6 style="margin-bottom: 20px;">Bạn chưa có đơn hàng nào. Bắt đầu mua hàng thôi!</h6>
+            </div>
+
+            <div class="cart__btn">
+                <a href="home.jsp">Start Shopping</a>
+            </div>
+
+        </div>    
+        <%}%>
         <!-- Search Begin -->
         <div class="search-model">
             <div class="h-100 d-flex align-items-center justify-content-center">

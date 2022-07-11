@@ -27,7 +27,7 @@ import store.user.UserDTO;
 @WebServlet(name = "ViewOrderHistoryController", urlPatterns = {"/ViewOrderHistoryController"})
 public class ViewOrderHistoryController extends HttpServlet {
     
-    private static final String ERROR = "error.jsp";
+    private static final String ERROR = "order-history.jsp";
     private static final String SUCCESS = "order-history.jsp";
     
     /**
@@ -52,7 +52,7 @@ public class ViewOrderHistoryController extends HttpServlet {
             if (!list.isEmpty()) {
                 request.setAttribute("ORDER_HISTORY", list);
                 url = SUCCESS;
-            }
+            } 
             
         } catch (SQLException e) {
             log("Error at ViewOrderHistoryController: " + e.toString());
