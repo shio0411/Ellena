@@ -15,6 +15,14 @@ public class CartProduct {
     public CartProduct() {
     }
 
+    public CartProduct(int productID, String color, String size, int price, int quantity) {
+        this.productID = productID;
+        this.color = color;
+        this.size = size;
+        this.price = price;
+        this.quantity = quantity;
+    }
+
     public CartProduct(int productID, int sessionID, int quantity, String size, String color) {
         this.productID = productID;
         this.sessionID = sessionID;

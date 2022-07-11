@@ -92,6 +92,7 @@ public class AddToCartController extends HttpServlet {
                 if (checkQuantity) {
                     session.setAttribute("CART", cart);
                     session.setAttribute("CART_INFO", c);
+                    request.setAttribute("ADD_TO_CART_MESSAGE", "Thêm vào giỏ hàng thành công!");
                 } else {
                     request.setAttribute("QUANTITY_MESSAGE", "Chỉ còn lại " + maxQuantity + " sản phẩm này!");
                 }

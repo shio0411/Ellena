@@ -103,6 +103,7 @@
                                     </div>
                                     <%}%>
                                     <a style="float: right" class="mr-2" href="MainController?action=CustomerViewOrderDetail&orderID=<%=order.getKey().getOrderID()%>"><button class="primary-btn">Chi tiết</button></a>
+
                                     
                                     
                                 </h5>

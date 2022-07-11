@@ -238,30 +238,33 @@ public class OrderDTO {
     }
 
     public String getStatus(int statusID) {
-        String status = "";
+        String result = "";
         switch (statusID) {
             case 1: 
-                status = "Chưa xác nhận";
+                result = "Chưa xác nhận";
                 break;
             case 2: 
-                status = "Đã xác nhận";
+                result = "Đã xác nhận";
                 break;
             case 3: 
-                status = "Đang giao";
+                result = "Đang giao";
                 break;
             case 4: 
-                status = "Đã giao";
+                result = "Đã giao";
                 break;
             case 5: 
-                status = "Đã hủy";
+                result = "Đã hủy";
                 break;
             case 6: 
-                status = "Chờ hoàn tiền";
+                result = "Chờ hoàn tiền";
                 break;
             case 7: 
-                status = "Đã hoàn tiền";
+                result = "Đã hoàn tiền";
+                break;
+            case 8: 
+                result = "Đã đổi/trả";
                 break;
         }
-        return status;
+        return result;
     }
 }

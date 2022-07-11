@@ -129,8 +129,14 @@ public class MainController extends HttpServlet {
     private static final String RESET_PASSWORD_CONTROLLER = "ResetPasswordController";
     private static final String UPDATE_RATING = "UpdateRating";
     private static final String UPDATE_RATING_CONTROLLER = "UpdateRatingController";
-
-
+    private static final String RETURN = "Return";
+    private static final String RETURN_CONTROLLER = "ReturnController";
+    private static final String UPDATE_ORDER_DETAIL = "UpdateOrderDetail";
+    private static final String UPDATE_ORDER_DETAIL_CONTROLLER = "UpdateOrderDetailController";
+    private static final String REFUND = "Refund";
+    private static final String REFUND_CONTROLLER = "RefundController";
+    private static final String REFUND_ORDER = "RefundOrder";
+    private static final String REFUND_ORDER_CONTROLLER = "RefundOrderController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -311,6 +317,18 @@ public class MainController extends HttpServlet {
                         break;
                     case UPDATE_RATING:
                         url = UPDATE_RATING_CONTROLLER;
+                        break;
+                    case REFUND:
+                        url = REFUND_CONTROLLER;
+                        break;
+                    case RETURN:
+                        url = RETURN_CONTROLLER;
+                        break;
+                    case UPDATE_ORDER_DETAIL:
+                        url = UPDATE_ORDER_DETAIL_CONTROLLER;
+                        break;
+                    case REFUND_ORDER:
+                        url = REFUND_ORDER_CONTROLLER;
                         break;
                     default:
                         break;

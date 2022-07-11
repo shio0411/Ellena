@@ -9,11 +9,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import store.shopping.CartProduct;
+import store.shopping.OrderDAO;
 import store.shopping.ProductDAO;
+import store.user.UserDTO;
 
-@WebServlet(name = "UpdateCartItemQuantityController", urlPatterns = {"/UpdateCartItemQuantityController"})
-public class UpdateCartItemQuantityController extends HttpServlet {
+/**
+ *
+ * @author DuyLVL
+ */
+@WebServlet(name = "RefundOrderController", urlPatterns = {"/RefundOrderController"})
+public class RefundOrderController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -24,48 +29,47 @@ public class UpdateCartItemQuantityController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private static final String ERROR = "shop-cart.jsp";
-    private static final String SUCCESS = "shop-cart.jsp";
-
+    
+    private static final String SUCCESS = "RefundController";
+    private static final String ERROR = "RefundController";
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
+            //String note = request.getParameter("note");
+            String note = request.getParameterValues("note")[0] + request.getParameterValues("note")[1];
+            int oldQuantity = Integer.parseInt(request.getParameter("oldQuantity"));
+            //newQuantity: số sản phẩm trả lại
+            int newQuantity = oldQuantity - Integer.parseInt(request.getParameter("newQuantity"));
+            int orderID = Integer.parseInt(request.getParameter("orderID"));
+            int productID = Integer.parseInt(request.getParameter("productID"));
+            int orderDetailID = Integer.parseInt(request.getParameter("orderDetailID"));
+            int price = Integer.parseInt(request.getParameter("price"));
+            
+            String size = request.getParameter("size");
+            String color = request.getParameter("color");
+            ProductDAO pdao = new ProductDAO();
+            OrderDAO odao = new OrderDAO();
+            List<String> colorSize = new ArrayList<>();
+                colorSize.add(color);
+                colorSize.add(size);
+
+            int maxQuantity = pdao.getProductDetail(productID).getColorSizeQuantity().get(colorSize);
+            //update order
             HttpSession session = request.getSession();
-            List<CartProduct> cart = (List<CartProduct>) session.getAttribute("CART");
-            List<Integer> quantities = new ArrayList<>();
-            for (int i = 0; i < cart.size(); i++) {
-                quantities.add(Integer.parseInt(request.getParameter("quantity" + (i + 1))));
+            UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
+            boolean check = odao.refundProduct(orderID, orderDetailID, oldQuantity, newQuantity, loginUser.getUserID(), loginUser.getRoleID(), maxQuantity, price, note);
+            //nhập product cũ vào lại kho
+            if (!note.equals("Sản phẩm bị lỗi/hỏng")) {
+                check = check && pdao.updateProductQuantity(maxQuantity + oldQuantity - newQuantity, pdao.getProductColorID(productID, color), size);
             }
-            boolean checkQuantity = true;
-            for (int i = 0; i < cart.size(); i++) {
-
-                ProductDAO dao = new ProductDAO();
-
-                List<String> colorSize = new ArrayList<>();
-                colorSize.add(cart.get(i).getColor());
-                colorSize.add(cart.get(i).getSize());
-
-                int maxQuantity = dao.getProductDetail(cart.get(i).getProductID()).getColorSizeQuantity().get(colorSize);
-
-                if (quantities.get(i) <= maxQuantity && quantities.get(i) > 0) {
-                    cart.get(i).setQuantity(quantities.get(i));
-                } else {
-                    checkQuantity = false;
-                }
+            if (check) {
+                url = SUCCESS;
+                request.setAttribute("UPDATE_MESSAGE", "Cập nhật thành công!");
             }
-
-            session.setAttribute("CART", cart);
-            if (!checkQuantity) {
-                request.setAttribute("QUANTITY_MESSAGE_FAIL", "Số lượng sản phẩm không đủ");
-            } else {
-                request.setAttribute("QUANTITY_MESSAGE_SUCCESS", "Cập nhật giỏ hàng thành công!");
-            }
-
-            url = SUCCESS;
         } catch (Exception e) {
-            log("Error at UpdateCartItemQuantityController: " + e.toString());
+            log("Error at RefundOrderController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

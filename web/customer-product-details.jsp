@@ -16,13 +16,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title><%= product.getProductName()%></title>
-
+        
         <!-- Google Font -->
         <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
               rel="stylesheet">
         <jsp:include page="meta.jsp" flush="true"/>
-
     </head>
     <body>
 
@@ -43,7 +42,51 @@
             </div>
         </div>
 
-        <% session.setAttribute("productID", product.getProductID()); %>
+        <% session.setAttribute("productID", product.getProductID()); 
+            String failureMsg = (String) request.getAttribute("QUANTITY_MESSAGE");
+            String successMsg = (String) request.getAttribute("ADD_TO_CART_MESSAGE");
+            if (successMsg != null) {
+        %>
+        
+        <!-- Add to cart SUCCESS message pop-up -->
+        <div class="alert alert-success add-to-cart-notify" id="add-to-cart-notify" style="text-align: center; margin-bottom: 0;">
+            <%= successMsg%>
+            <button type="button" class="close" data-dismiss="alert">x</button>
+            <input type="hidden" id="add-to-cart-message" value="<%= successMsg%>"/>
+        </div>
+
+        <%}
+            if (failureMsg != null) {
+        %>
+        
+        <!-- Add to cart FAIL message pop-up -->
+        <div class="alert alert-danger add-to-cart-notify" id="add-to-cart-notify" style="text-align: center; margin-bottom: 0;">
+            <%= failureMsg%>
+            <button type="button" class="close" data-dismiss="alert">x</button>
+            <input type="hidden" id="quantity-message" value="<%= failureMsg%>"/>
+        </div>
+
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Thông báo</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                    </div>
+                    <div class="modal-body">
+                        <p><%=successMsg%></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    </div>
+                </div>
+
+            </div>
+        </div> 
+        <%}%>
         <!-- Product Details Section Begin -->
         <section class="product-details spad">
             <div class="container">
@@ -287,6 +330,6 @@
         <jsp:include page="footer.jsp" flush="true"/>
 
         <jsp:include page="js-plugins.jsp" flush="true"/>
-
+        
     </body>
 </html>

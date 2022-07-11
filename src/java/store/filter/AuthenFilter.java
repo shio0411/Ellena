@@ -117,6 +117,12 @@ public class AuthenFilter implements Filter {
         MANAGER_FUNCTION.add("UpdateOrderController");
         MANAGER_FUNCTION.add("SearchOrderController");
         MANAGER_FUNCTION.add("manager-order.jsp");
+        MANAGER_FUNCTION.add("return.jsp");
+        MANAGER_FUNCTION.add("refund.jsp");
+        MANAGER_FUNCTION.add("ReturnController");
+        MANAGER_FUNCTION.add("RefundController");
+        MANAGER_FUNCTION.add("UpdateOrderDetailController");
+        MANAGER_FUNCTION.add("RefundOrderController");
         
         EMPLOYEE_FUNCTION = new ArrayList<>();
         EMPLOYEE_FUNCTION.add("EmployeeShowOrderController");

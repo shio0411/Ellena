@@ -23,7 +23,25 @@
             if (message == null) {
                 message = "";
             }
+            String updateSuccessMsg = (String) request.getAttribute("QUANTITY_MESSAGE_SUCCESS");
+            String updateFailMsg = (String) request.getAttribute("QUANTITY_MESSAGE_FAIL");
+            if (updateSuccessMsg != null) {
         %>
+        <div class="alert alert-success add-to-cart-notify" id="add-to-cart-notify" style="text-align: center; margin-bottom: 0;">
+            <%= updateSuccessMsg%>
+            <button type="button" class="close" data-dismiss="alert">x</button>
+            <input type="hidden" id="add-to-cart-message" value="<%= updateSuccessMsg%>"/>
+        </div>
+        <%} 
+            if (updateFailMsg != null) {
+        %>
+        <div class="alert alert-danger add-to-cart-notify" id="add-to-cart-notify" style="text-align: center; margin-bottom: 0;">
+            <%= updateFailMsg%>
+            <button type="button" class="close" data-dismiss="alert">x</button>
+            <input type="hidden" id="add-to-cart-message" value="<%= updateFailMsg%>"/>
+        </div>
+        <%}%>
+
 
 
         <!-- Breadcrumb Begin -->
@@ -35,7 +53,7 @@
                         <%= message%>
                     </div>
                 </div>
-                    
+
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="breadcrumb__links">
@@ -152,7 +170,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6">
                         <div class="cart__btn update__btn">
-                            <a onclick="sendForm()" href="#"><span class="icon_cart"></span> Update cart</a>
+                            <a onclick="sendForm()" href="#"><span class="icon_cart"></span> Cập nhật giỏ hàng</a>
                         </div>
                     </div>
                 </div>
@@ -169,7 +187,7 @@
                                     <span><%= (int) (total / 1000)%>.000₫ </span>
                                 </li>
                             </ul>
-                            <a href="checkout.jsp" class="primary-btn">Proceed to checkout</a>
+                            <a href="checkout.jsp" class="primary-btn">Thanh toán</a>
                         </div>
                     </div>
                 </div>
@@ -216,36 +234,36 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script>
 
-                                $(document).ready(function () {
-                                    // Add smooth scrolling to all links
-                                    $("a").on('click', function (event) {
+            $(document).ready(function () {
+                // Add smooth scrolling to all links
+                $("a").on('click', function (event) {
 
-                                        // Make sure this.hash has a value before overriding default behavior
-                                        if (this.hash !== "") {
-                                            // Prevent default anchor click behavior
-                                            event.preventDefault();
+                    // Make sure this.hash has a value before overriding default behavior
+                    if (this.hash !== "") {
+                        // Prevent default anchor click behavior
+                        event.preventDefault();
 
-                                            // Store hash
-                                            var hash = this.hash;
+                        // Store hash
+                        var hash = this.hash;
 
-                                            // Using jQuery's animate() method to add smooth page scroll
-                                            // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
-                                            $('html, body').animate({
-                                                scrollTop: $(hash).offset().top
-                                            }, 800, function () {
+                        // Using jQuery's animate() method to add smooth page scroll
+                        // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
+                        $('html, body').animate({
+                            scrollTop: $(hash).offset().top
+                        }, 800, function () {
 
-                                                // Add hash (#) to URL when done scrolling (default click behavior)
-                                                window.location.hash = hash;
-                                            });
-                                        } // End if
-                                    });
-                                });
-                                function sendForm() {
-                                    for (var i = 0; i < document.getElementsByClassName('cart__color').length; i++) {
-                                        document.getElementById('quantity#' + (i + 1)).value = document.getElementById('_quantity#' + (i + 1)).value;
-                                    }
-                                    document.getElementById('cartForm').submit();
-                                }
+                            // Add hash (#) to URL when done scrolling (default click behavior)
+                            window.location.hash = hash;
+                        });
+                    } // End if
+                });
+            });
+            function sendForm() {
+                for (var i = 0; i < document.getElementsByClassName('cart__color').length; i++) {
+                    document.getElementById('quantity#' + (i + 1)).value = document.getElementById('_quantity#' + (i + 1)).value;
+                }
+                document.getElementById('cartForm').submit();
+            }
         </script>
         <!-- Js Plugins -->
         <jsp:include page="js-plugins.jsp" flush="true" />

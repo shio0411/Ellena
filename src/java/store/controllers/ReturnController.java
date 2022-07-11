@@ -1,10 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package store.controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,30 +10,47 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import store.shopping.OrderDAO;
 import store.shopping.OrderDTO;
+import store.shopping.OrderDetailDTO;
+import store.shopping.ProductDAO;
+import store.shopping.ProductDTO;
+import store.shopping.ReturnDTO;
 
-/**
- *
- * @author ASUS
- */
-@WebServlet(name = "EmployeeShowOrderController", urlPatterns = {"/EmployeeShowOrderController"})
-public class EmployeeShowOrderController extends HttpServlet {
+@WebServlet(name = "ReturnController", urlPatterns = {"/ReturnController"})
+public class ReturnController extends HttpServlet {
 
-    private static final String ERROR = "employee-order.jsp";
-    private static final String SUCCESS = "employee-order.jsp";
-    
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    private static final String SUCCESS = "return.jsp";
+    private static final String ERROR = "manager-order.jsp";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
-            OrderDAO dao = new OrderDAO();
-            List<OrderDTO> listOrder = dao.getAllOrder();
-            if (listOrder.size() > 0) {
-                request.setAttribute("LIST_ORDER", listOrder);
-                url = SUCCESS;
+            int orderID = Integer.parseInt(request.getParameter("orderID"));
+            OrderDAO odao = new OrderDAO();
+            OrderDTO order = odao.getOrder(orderID);
+            request.setAttribute("ORDER", order);
+            ProductDAO pdao = new ProductDAO();
+            List<ProductDTO> productList = new ArrayList<>();
+            List<OrderDetailDTO> orderDetailList = odao.getOrderDetail(orderID);
+            for (int i = 0; i < orderDetailList.size(); i++) {
+                productList.add(pdao.getProductDetail(orderDetailList.get(i).getProductID()));
             }
+            List<ReturnDTO> returnList = odao.getOrderReturnHistory(orderID);
+            request.setAttribute("RETURN_LIST", returnList);
+            url = SUCCESS;
+            request.setAttribute("PRODUCT_LIST", productList);
         } catch (Exception e) {
-            log("Error at ShowOrderController: " + e.toString());
+            log("Error at ReturnController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

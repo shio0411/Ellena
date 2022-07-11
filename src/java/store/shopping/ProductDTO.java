@@ -47,10 +47,6 @@ public class ProductDTO {
         this.categoryID = categoryID;
     }
 
-    
-
-    
-
     public ProductDTO(int productID, String productName, String description, Map<String, List<String>> colorImage, int price, int quantity, int discount, int lowStockLimit, String categoryName, boolean status) {
         this.productID = productID;
         this.productName = productName;
@@ -95,8 +91,6 @@ public class ProductDTO {
     public void setCategoryID(int categoryID) {
         this.categoryID = categoryID;
     }
-
-   
 
     public int getProductID() {
         return productID;
