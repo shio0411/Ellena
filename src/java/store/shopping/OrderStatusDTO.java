@@ -14,11 +14,6 @@ public class OrderStatusDTO {
     public OrderStatusDTO() {
     }
 
-//    public OrderStatusDTO(int statusID, Timestamp updateDate, String statusName) {
-//        this.statusID = statusID;
-//        this.updateDate = updateDate;
-//        this.statusName = statusName;
-//    }
     public OrderStatusDTO(int statusID, Timestamp updateDate, String statusName, String userID, String roleID) {
         this.statusID = statusID;
         this.updateDate = updateDate;

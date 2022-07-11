@@ -23,7 +23,7 @@
         <div class="sidenav">
             <a href="ManagerStatisticController"><i class="fa fa-bar-chart fa-lg"></i>Số liệu thống kê</a>
             <a href="ManagerShowProductController" style="color: #873e23; font-weight: bold;"><i class="fa fa-archive fa-lg"></i>Quản lí sản phẩm</a>
-            <a href="ShowOrderController"><i class="fa fa-cart-plus fa-lg"></i>Quản lí đơn hàng</a>
+            <a href="ManagerShowOrderController"><i class="fa fa-cart-plus fa-lg"></i>Quản lí đơn hàng</a>
         </div>
 
         <div class="main">
@@ -81,7 +81,7 @@
                     <td><%= list.getProductName()%></td>
                     <td><%= list.getCategoryName()%></td>
                     <td><%= list.getPrice()%></td>
-                    <td><%= Math.round(list.getDiscount() * 100)%></td>
+                    <td><%= Math.round(list.getDiscount() * 100 / list.getPrice())%></td>
                     <td>
                         <%
                             if (list.isStatus()) {

@@ -57,7 +57,7 @@
         <%
             }
         %>
-
+        <!--Hết pop-up cập nhật thành công-->
         <div class="sidenav">
             <a href="ManagerStatisticController"><i class="fa fa-bar-chart fa-lg"></i>Số liệu thống kê</a>
             <a href="ManagerShowProductController"><i class="fa fa-archive fa-lg"></i>Quản lí sản phẩm</a>
@@ -84,7 +84,7 @@
 
                     <%
                         }
-                        for (int i = 1; i <= 7; i++) {
+                        for (int i = 1; i <= 8; i++) {
                     %>
                     <option value="<%= i%>" <% if (i == orderStatusID) { %> selected  <% }%>>
                         <%= orderDTO.getStatus(i)%>
@@ -119,8 +119,6 @@
 
                 <%            int id = 1;
                     for (OrderDTO order : listOrder) {
-
-
                 %>
 
                 <tr>
@@ -159,7 +157,7 @@
                                                         <label class="form-label" for="statusID">Trạng thái</label>
                                                         <select class="form-control form-control-lg" name="statusID">
                                                             <%
-                                                                for (int k = 1; k <= 7; k++) {
+                                                                for (int k = 1; k <= 8; k++) {
                                                             %>
                                                             <option value="<%= k%>" 
                                                                     <%if (order.getStatusID() == k) {%>
@@ -247,9 +245,6 @@
                                                     </div>
                                                 </div>
 
-
-
-
                                                 <div class="col-md-6 mb-4 pb-2">
                                                     <div class="form-outline">
                                                         <label class="form-label" for="fullname">Số điện thoại</label>
@@ -309,8 +304,6 @@
                                                 <tbody>
                                                     <%
                                                         for (OrderDetailDTO orderDetail : order.getOrderDetail()) {
-
-
                                                     %>
 
                                                     <tr>
@@ -326,7 +319,7 @@
                                                     %>
                                                 </tbody>
                                             </table>
-
+                                                
                                         </div>
                                         <input type="hidden" name="payType" value="<%= order.getPayType()%>"/>
                                         <input type="hidden" name="userID" value="<%= loginUser.getUserID()%>"/>
@@ -335,6 +328,12 @@
                                         <input type="hidden" name="dateFrom" id="update-dateFrom" value="<%= dateFrom%>"/>
                                         <input type="hidden" name="dateTo" id="update-dateTo" value="<%= dateTo%>"/>
                                         <input type="hidden" name="search-statusID" id="update-statusID" value="<%= sOrderStatusID%>"/>
+                                        <button type="submit" class="btn btn-secondary" data-toggle="tooltip" data-html="true" title="Đổi hàng" name="action" value="Return">
+                                            Đổi hàng <!-- Icon return here -->
+                                        </button>
+                                        <button type="submit" class="btn btn-secondary" data-toggle="tooltip" data-html="true" title="Trả hàng" name="action" value="Refund">
+                                            Trả hàng <!-- Icon refund here -->
+                                        </button>
                                         <div class="modal-footer">
                                             <button class="btn btn-default" type="submit" name="action" value="UpdateOrder">Cập nhật</button>
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>

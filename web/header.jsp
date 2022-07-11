@@ -73,8 +73,8 @@
                     <div class="col-xl-6 col-lg-7" >
                         <nav class="header__menu">
                             <ul id="menu">
-                                <li id="home"><a href="./">Trang chủ</a></li>
-                                <li id="category"><a>Thời trang</a>
+                                <li id="home" class="header__menu_item"><a href="./">Trang chủ</a></li>
+                                <li id="category" class="header__menu_item"><a>Thời trang</a>
                                     <ul class="dropdown">
                                         <%
                                             for (int i : categoryOrder) {
@@ -88,8 +88,8 @@
                                                 }%>
                                     </ul>
                                 </li>
-                                <li id="browse"><a href="DiscoverController">Khám phá</a></li>
-                                <li id="contact"><a href="./contact.jsp">Liên hệ</a></li>
+                                <li id="discover" class="header__menu_item"><a href="DiscoverController">Khám phá</a></li>
+                                <li id="contact" class="header__menu_item"><a href="./contact.jsp">Liên hệ</a></li>
                             </ul>
                         </nav>
                     </div>
@@ -98,6 +98,10 @@
                             <%if (user != null) {%>
                             <div class="header__right__auth">
                                 <a style="font-weight: 500; color: #721c24" href="my-profile.jsp"><%= user.getFullName().toUpperCase()%></a>
+                                <ul class="dropdown">
+                                    <li><a href="MainController?action=ViewOrderHistory&userID=<%=user.getUserID()%>">Don hang</a></li>
+                                    <li><a href="MainController?action=Logout">Dang xuat</a></li>
+                                </ul>
                             </div>
                             <% } else {%>
                             <div class="header__right__auth">
@@ -149,17 +153,18 @@
         <script>
             // Add active class to the current button (highlight it)
             var header = document.getElementById("menu");
-            var btns = header.getElementsByTagName("li");
-            var path = window.location.href;
+            var btns = header.querySelectorAll(".header__menu_item");
+            var path = window.location.href.toLowerCase();
             var check = true;
+            console.log(btns);
             for (var i = btns.length - 1; i > 0; i--) {
                 if (path.includes(btns[i].id)) {
                     btns[i].className += " active";
                     check = false;
                 }
-                if (check)
-                    btns[0].className += " active";
             }
+            if (check)
+                    btns[0].className += " active";
         </script>
         <!--Start of Tawk.to Script-->
         <script type="text/javascript">

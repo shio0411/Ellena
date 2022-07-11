@@ -6,6 +6,7 @@ import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 @MultipartConfig(
         fileSizeThreshold = 1024 * 1024 * 1, // 1 MB
         maxFileSize = 1024 * 1024 * 10, // 10 MB
@@ -108,6 +109,29 @@ public class MainController extends HttpServlet {
     private static final String MANAGER_UPDATE_PRODUCT_CONTROLLER = "ManagerUpdateProductController";
     private static final String DETELE_CART_ITEM = "DeleteCartItem";
     private static final String DETELE_CART_ITEM_CONTROLLER = "DeleteCartItemController";
+    private static final String MOMO_REQUEST = "MomoRequest";
+    private static final String MOMO_REQUEST_CONTROLLER = "MomoRequestController";
+    private static final String VIEW_ORDER_HISTORY = "ViewOrderHistory";
+    private static final String VIEW_ORDER_HISTORY_CONTROLLER = "ViewOrderHistoryController";
+    private static final String CUSTOMER_VIEW_ORDER_DETAIL = "CustomerViewOrderDetail";
+    private static final String CUSTOMER_VIEW_ORDER_DETAIL_CONTROLLER = "CustomerViewOrderDetailController";
+    private static final String CANCEL_ORDER = "CancelOrder";
+    private static final String CANCEL_ORDER_CONTROLLER = "CancelOrderController";
+    private static final String FORGOT_PASSWORD = "ForgotPassword";
+    private static final String FORGOT_PASSWORD_CONTROLLER = "ForgotPasswordController";
+    private static final String VALIDATE_OTP = "ValidateOtp";
+    private static final String VALIDATE_OTP_CONTROLLER = "ValidateOtpController";
+    private static final String RESET_PASSWORD = "ResetPassword";
+    private static final String RESET_PASSWORD_CONTROLLER = "ResetPasswordController";
+    private static final String RETURN = "Return";
+    private static final String RETURN_CONTROLLER = "ReturnController";
+    private static final String UPDATE_ORDER_DETAIL = "UpdateOrderDetail";
+    private static final String UPDATE_ORDER_DETAIL_CONTROLLER = "UpdateOrderDetailController";
+    private static final String REFUND = "Refund";
+    private static final String REFUND_CONTROLLER = "RefundController";
+    private static final String REFUND_ORDER = "RefundOrder";
+    private static final String REFUND_ORDER_CONTROLLER = "RefundOrderController";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
@@ -230,7 +254,7 @@ public class MainController extends HttpServlet {
                         break;
                     case ADD_IMAGE:
                         url = ADD_IMAGE_CONTROLLER;
-                        break;    
+                        break;
                     case DELETE_COLOR:
                         url = DELETE_COLOR_CONTROLLER;
                         break;
@@ -254,8 +278,42 @@ public class MainController extends HttpServlet {
                         break;
                     case MANAGER_UPDATE_PRODUCT:
                         url = MANAGER_UPDATE_PRODUCT_CONTROLLER;
+                        break;
                     case DETELE_CART_ITEM:
                         url = DETELE_CART_ITEM_CONTROLLER;
+                        break;
+                    case MOMO_REQUEST:
+                        url = MOMO_REQUEST_CONTROLLER;
+                        break;
+                    case VIEW_ORDER_HISTORY:
+                        url = VIEW_ORDER_HISTORY_CONTROLLER;
+                        break;
+                    case CUSTOMER_VIEW_ORDER_DETAIL:
+                        url = CUSTOMER_VIEW_ORDER_DETAIL_CONTROLLER;
+                        break;
+                    case CANCEL_ORDER:
+                        url = CANCEL_ORDER_CONTROLLER;
+                        break;
+                    case FORGOT_PASSWORD:
+                        url = FORGOT_PASSWORD_CONTROLLER;
+                        break;
+                    case VALIDATE_OTP:
+                        url = VALIDATE_OTP_CONTROLLER;
+                        break;
+                    case RESET_PASSWORD:
+                        url = RESET_PASSWORD_CONTROLLER;
+                        break;
+                    case REFUND:
+                        url = REFUND_CONTROLLER;
+                        break;
+                    case RETURN:
+                        url = RETURN_CONTROLLER;
+                        break;
+                    case UPDATE_ORDER_DETAIL:
+                        url = UPDATE_ORDER_DETAIL_CONTROLLER;
+                        break;
+                    case REFUND_ORDER:
+                        url = REFUND_ORDER_CONTROLLER;
                         break;
                     default:
                         break;

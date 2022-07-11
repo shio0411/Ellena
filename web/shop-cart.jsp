@@ -41,6 +41,9 @@
             <input type="hidden" id="add-to-cart-message" value="<%= updateFailMsg%>"/>
         </div>
         <%}%>
+
+
+
         <!-- Breadcrumb Begin -->
         <div class="breadcrumb-option">
             <div class="container">
@@ -50,12 +53,12 @@
                         <%= message%>
                     </div>
                 </div>
-                    
+
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="breadcrumb__links">
-                            <a href="./index.html"><i class="fa fa-home"></i> Trang Chủ</a>
-                            <span>Giỏ hàng</span>
+                            <a href="./index.html"><i class="fa fa-home"></i> Home</a>
+                            <span>Shopping cart</span>
                         </div>
                     </div>
                 </div>
@@ -96,7 +99,7 @@
                                     <%
                                         int i = 1;
                                         for (CartProduct item : cart) {
-                                            total += (int) (item.getPrice() * (1 - item.getDiscount()) * item.getQuantity());
+                                            total += (item.getPrice() - item.getDiscount()) * item.getQuantity();
                                     %>
 
                                     <tr>
@@ -120,7 +123,7 @@
                                                 if (item.getDiscount() != 0) {
                                             %>
                                             <s style="color: #B1B0B0; font-weight: normal;"><%= item.getPrice() / 1000%>.000</s> <br>    
-                                            <%= (int) (item.getPrice() * (1 - item.getDiscount()) / 1000)%>.000
+                                            <%= (item.getPrice() - item.getDiscount()) / 1000%>.000
                                             <%
                                             } else {
                                             %>
@@ -135,7 +138,7 @@
                                                 <input type="text" value="<%= item.getQuantity()%>" id="_quantity#<%= i%>">
                                             </div>
                                         </td>
-                                        <td class="cart__total"><%= (int) (item.getQuantity() * item.getPrice() * (1 - item.getDiscount())) / 1000%>.000</td>
+                                        <td class="cart__total"><%= (item.getQuantity() * (item.getPrice() - item.getDiscount())) / 1000%>.000</td>
                                         <td class="cart__close">
                                             <a href="MainController?action=DeleteCartItem&productID=<%= item.getProductID()%>&color=<%= item.getColor()%>&size=<%= item.getSize()%>">
                                                 <span class="icon_close"></span>
@@ -177,14 +180,14 @@
                     </div>
                     <div class="col-lg-4 offset-lg-2">
                         <div class="cart__total__procced">
+                            <h6>Cart total</h6>
                             <ul>
-                                <li>Tổng tiền <span></span></li>
-                                <li>Giảm giá <span></span></li>
-                                <li>Tổng thanh toán 
+                                <li>Subtotal <span></span></li>
+                                <li>Total 
                                     <span><%= (int) (total / 1000)%>.000</span>
                                 </li>
                             </ul>
-                            <a href="checkout.jsp" class="primary-btn">Đặt hàng</a>
+                            <a href="checkout.jsp" class="primary-btn">Thanh toán</a>
                         </div>
                     </div>
                 </div>
@@ -226,19 +229,6 @@
         <% }
         %>
 
-
-
-        <!-- Search Begin -->
-        <div class="search-model">
-            <div class="h-100 d-flex align-items-center justify-content-center">
-                <div class="search-close-switch">+</div>
-                <form class="search-model-form">
-                    <input type="text" id="search-input" placeholder="Search here.....">
-                </form>
-            </div>
-        </div>
-        <!-- Search End -->
-
         <jsp:include page="footer.jsp" flush="true" />
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -274,7 +264,6 @@
                 }
                 document.getElementById('cartForm').submit();
             }
-            
         </script>
         <!-- Js Plugins -->
         <jsp:include page="js-plugins.jsp" flush="true" />

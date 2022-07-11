@@ -10,8 +10,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import store.shopping.Cart;
+import store.shopping.CartDAO;
 import store.shopping.CartProduct;
+import store.shopping.CartProductDAO;
 import store.shopping.ProductDAO;
+import store.user.UserDTO;
 
 @WebServlet(name = "AddToCartController", urlPatterns = {"/AddToCartController"})
 public class AddToCartController extends HttpServlet {
@@ -41,12 +44,22 @@ public class AddToCartController extends HttpServlet {
                 String size = request.getParameter("size");
                 int quantity = Integer.parseInt(request.getParameter("quantity"));
                 List<CartProduct> cart = (List<CartProduct>) session.getAttribute("CART");
-
+                CartDAO cdao = new CartDAO();
                 if (cart == null) {
                     cart = new ArrayList<>();
                 }
+                UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
+                Cart c = cdao.getCartByUserID(user.getUserID());
+                if(c == null){
+                    String address = "";
+                    if(user.getAddress()!=null){
+                        address = user.getAddress().split(",")[0];
+                    }
+                    c = new Cart(1, user.getUserID(), user.getFullName(), user.getPhone(), address, user.getUserID(), "", "");
+                    cdao.addCart(c);
+                }
                 ProductDAO dao = new ProductDAO();
-
+                CartProductDAO cpdao = new CartProductDAO();
                 List<String> colorSize = new ArrayList<>();
                 colorSize.add(color);
                 colorSize.add(size);
@@ -58,7 +71,7 @@ public class AddToCartController extends HttpServlet {
                 boolean checkQuantity = quantity <= maxQuantity && quantity > 0;
                 for (CartProduct item : cart) {
                     if (cp.equals(item)) {
-                        if ((quantity + item.getQuantity()) <= maxQuantity) {
+                        if ((quantity + item.getQuantity()) < maxQuantity) {
                             item.setQuantity(quantity + item.getQuantity());
                         } else {
                             checkQuantity = false;
@@ -71,13 +84,17 @@ public class AddToCartController extends HttpServlet {
 
                 if (checkQuantity && !checkDuplicateItem) {
                     cart.add(cp);
+                    Cart checkCart = cdao.getCartByUserID(user.getUserID());
+                    cp.setSessionID(checkCart.getId());
+                    cpdao.addCartItems(cp);
                 }
 
                 if (checkQuantity) {
                     session.setAttribute("CART", cart);
+                    session.setAttribute("CART_INFO", c);
                     request.setAttribute("ADD_TO_CART_MESSAGE", "Thêm vào giỏ hàng thành công!");
                 } else {
-                    request.setAttribute("QUANTITY_MESSAGE", "Thêm vào giỏ hàng thất bại. Chỉ còn lại " + maxQuantity + " sản phẩm này!");
+                    request.setAttribute("QUANTITY_MESSAGE", "Chỉ còn lại " + maxQuantity + " sản phẩm này!");
                 }
 
                 url = SUCCESS + productID;

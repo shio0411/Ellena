@@ -2,17 +2,34 @@ package store.shopping;
 
 public class CartProduct {
     private int productID;
+    private int sessionID;
     private String productName;
     private String color;
     private String image;
     private String size;
     private int price;
     private int quantity;
-    private float discount;
+    private int discount;
     private int lowStockLimit;
     
     public CartProduct() {
     }
+
+    public CartProduct(int productID, String color, String size, int price, int quantity) {
+        this.productID = productID;
+        this.color = color;
+        this.size = size;
+        this.price = price;
+        this.quantity = quantity;
+    }
+
+    public CartProduct(int productID, int sessionID, int quantity, String size, String color) {
+        this.productID = productID;
+        this.sessionID = sessionID;
+        this.quantity = quantity;
+        this.size = size;
+        this.color = color;
+    }   
 
     public CartProduct(int productID, String color, String size) {
         this.productID = productID;
@@ -20,7 +37,7 @@ public class CartProduct {
         this.size = size;
     }
 
-    public CartProduct(int productID, String productName, String color, String image, String size, int price, int quantity, float discount, int lowStockLimit) {
+    public CartProduct(int productID, String productName, String color, String image, String size, int price, int quantity, int discount, int lowStockLimit) {
         this.productID = productID;
         this.productName = productName;
         this.color = color;
@@ -30,6 +47,14 @@ public class CartProduct {
         this.quantity = quantity;
         this.discount = discount;
         this.lowStockLimit = lowStockLimit;
+    }
+
+    public int getSessionID() {
+        return sessionID;
+    }
+
+    public void setSessionID(int sessionID) {
+        this.sessionID = sessionID;
     }
 
     public int getProductID() {
@@ -88,11 +113,11 @@ public class CartProduct {
         this.quantity = quantity;
     }
 
-    public float getDiscount() {
+    public int getDiscount() {
         return discount;
     }
 
-    public void setDiscount(float discount) {
+    public void setDiscount(int discount) {
         this.discount = discount;
     }
 

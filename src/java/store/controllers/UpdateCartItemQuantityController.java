@@ -62,6 +62,7 @@ public class UpdateCartItemQuantityController extends HttpServlet {
             } else {
                 request.setAttribute("QUANTITY_MESSAGE_SUCCESS", "Cập nhật giỏ hàng thành công!");
             }
+
             url = SUCCESS;
         } catch (Exception e) {
             log("Error at UpdateCartItemQuantityController: " + e.toString());

@@ -158,7 +158,7 @@
                                             <div class="label sale">Sale</div>
                                             <%}%>
                                             <ul class="product__hover">
-                                                <li><a href="<%=product.getColorImage().get("key").get(0)%>" class="image-popup"><span class="arrow_expand"></span></a></li>
+                                                <li><a href="<%=product.getColorImage().get("key").get(0)%>.jpg" class="image-popup"><span class="arrow_expand"></span></a></li>
                                                 <li><a href="#"><span class="icon_bag_alt"></span></a></li>
                                             </ul>
                                         </div>
@@ -170,10 +170,10 @@
                                                     %>
                                             <div class="">
                                                 <span class="product__price text-danger">
-                                                    <%= (int) (product.getPrice() / 1000 * (1 - product.getDiscount()))%>.000đ <span class="original-price"><s>
+                                                    <%= (int) (product.getPrice() - product.getDiscount()) / 1000%>.000đ <span class="original-price"><s>
                                                             <%=product.getPrice() / 1000%>.000đ </s></span></span>
                                                 <span class="product__price text-danger"> -
-                                                    <%=(int) (product.getDiscount() * 100)%>%</span>
+                                                    <%=(int) (product.getDiscount() * 100.0 / product.getPrice())%>%</span>
                                             </div>
                                             <%
                                             } else {

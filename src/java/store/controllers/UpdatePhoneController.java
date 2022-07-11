@@ -1,6 +1,8 @@
+
 package store.controllers;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -9,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import store.user.UserDAO;
 import store.user.UserDTO;
+
 
 @WebServlet(name = "UpdatePhoneController", urlPatterns = {"/UpdatePhoneController"})
 public class UpdatePhoneController extends HttpServlet {
@@ -26,7 +29,7 @@ public class UpdatePhoneController extends HttpServlet {
             String userID = loginUser.getUserID();
             String newPhone = request.getParameter("newPhone");
             boolean check = true;
-            UserDAO dao = new UserDAO();
+            UserDAO dao = new UserDAO();          
             boolean checkUpdate = dao.updatePhone(newPhone, userID);
             if (checkUpdate) {
                 url = SUCCESS;

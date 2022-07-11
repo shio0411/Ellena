@@ -38,7 +38,6 @@ public class AuthenFilter implements Filter {
     private static final String CM = "CM";
     private static final String AD = "AD";
     private static final String MN = "MN";
-    private static final String LOGIN_PAGE = "login.jsp";
     private static final String HOME_PAGE = "./";
     private static final boolean debug = true;
     // The filter configuration object we are associated with.  If
@@ -66,6 +65,11 @@ public class AuthenFilter implements Filter {
         CUSTOMER_FUNCTION.add("DeleteCartItemController");
         CUSTOMER_FUNCTION.add("UpdateCartItemQuantityController");
         CUSTOMER_FUNCTION.add("checkout.jsp");
+        CUSTOMER_FUNCTION.add("vnpay.jsp");
+        CUSTOMER_FUNCTION.add("ajaxServlet");
+        CUSTOMER_FUNCTION.add("CheckoutController");
+        CUSTOMER_FUNCTION.add("order-history");
+        CUSTOMER_FUNCTION.add("ViewOrderHistoryController");
 
         ADMIN_FUNCTION = new ArrayList<>();
         ADMIN_FUNCTION.add("admin.jsp");
@@ -81,8 +85,10 @@ public class AuthenFilter implements Filter {
         MANAGER_FUNCTION = new ArrayList<>();
         MANAGER_FUNCTION.add("manager-product.jsp");
         MANAGER_FUNCTION.add("manager-statistic.jsp");
+        MANAGER_FUNCTION.add("manager-statistic-user.jsp");
         MANAGER_FUNCTION.add("my-profile.jsp");
         MANAGER_FUNCTION.add("ManagerStatisticController");
+        MANAGER_FUNCTION.add("ManagerStatisticUserController");
         MANAGER_FUNCTION.add("ManagerShowProductController");
         MANAGER_FUNCTION.add("ManagerShowProductDetailController");
         MANAGER_FUNCTION.add("manager-product-details.jsp");
@@ -90,13 +96,20 @@ public class AuthenFilter implements Filter {
         MANAGER_FUNCTION.add("add-variant.jsp");
         MANAGER_FUNCTION.add("AddProductController");
         MANAGER_FUNCTION.add("view-product-images.jsp");
+        MANAGER_FUNCTION.add("ManagerShowOrderController");
         MANAGER_FUNCTION.add("ShowOrderController");
         MANAGER_FUNCTION.add("UpdateOrderController");
         MANAGER_FUNCTION.add("SearchOrderController");
         MANAGER_FUNCTION.add("manager-order.jsp");
+        MANAGER_FUNCTION.add("return.jsp");
+        MANAGER_FUNCTION.add("refund.jsp");
+        MANAGER_FUNCTION.add("ReturnController");
+        MANAGER_FUNCTION.add("RefundController");
+        MANAGER_FUNCTION.add("UpdateOrderDetailController");
         
         EMPLOYEE_FUNCTION = new ArrayList<>();
         EMPLOYEE_FUNCTION.add("EmployeeShowOrderController");
+        EMPLOYEE_FUNCTION.add("ShowOrderController");
         EMPLOYEE_FUNCTION.add("UpdateOrderController");
         EMPLOYEE_FUNCTION.add("SearchOrderController");
         EMPLOYEE_FUNCTION.add("employee-order.jsp");
@@ -164,7 +177,6 @@ public class AuthenFilter implements Filter {
      * @exception IOException if an input/output error occurs
      * @exception ServletException if a servlet error occurs
      */
-    @Override
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain)
             throws IOException, ServletException {
@@ -194,7 +206,9 @@ public class AuthenFilter implements Filter {
                                 || uri.contains("customer-product-details.jsp") || uri.contains("ProductRouteController") || uri.contains("DiscoverController")
                                 || uri.contains("CategoryRouteController") || uri.contains("CheckSizeQuantityController") || uri.contains("discover.jsp")
                                 || uri.contains("search-catalog.jsp") || uri.contains("LoginGoogleController") || uri.contains("LoginFacebookController") || uri.contains("AddToCartController")
-                                || uri.contains("about-us.jsp") || uri.contains("faq.jsp") || uri.contains("choose-size.jsp") || uri.contains("payment-policy.jsp") || uri.contains("return-policy.jsp")) {
+                                || uri.contains("about-us.jsp") || uri.contains("faq.jsp") || uri.contains("choose-size.jsp") || uri.contains("payment-policy.jsp") || uri.contains("return-policy.jsp")
+                                || uri.contains("forgot-password.jsp") || uri.contains("ForgotPasswordController") || uri.contains("validate-otp.jsp") || uri.contains("ValidateOtpController")
+                                || uri.contains("reset-password.jsp") || uri.contains("ResetPasswordController") || uri.contains("LogoutController")) {
                             chain.doFilter(request, response);
                         } else if (!ADMIN_FUNCTION.contains(resource) && !CUSTOMER_FUNCTION.contains(resource) && !MANAGER_FUNCTION.contains(resource)) {
                             res.sendError(404);

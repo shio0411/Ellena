@@ -1,5 +1,7 @@
-<%@page import="store.user.UserDTO"%>
 <%@page import="store.shopping.CartProduct"%>
+<%@page import="store.shopping.Cart"%>
+<%@page import="store.shopping.OrderError"%>
+<%@page import="store.user.UserDTO"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -19,14 +21,24 @@
     </head>
     <body>
         <jsp:include page="header.jsp" flush="true"/>
-        <% List<CartProduct> cart = (List<CartProduct>) session.getAttribute("CART"); 
+        <% List<CartProduct> cart = (List<CartProduct>) session.getAttribute("CART");
             UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
+            Cart c = (Cart) session.getAttribute("CART_INFO");
+            OrderError orderError = (OrderError) request.getAttribute("ORDER_ERROR");
+            if (orderError == null) {
+                orderError = new OrderError();
+            }
+            String cartMessage = (String) request.getAttribute("CART_MESSAGE");
+            if(cartMessage == null){
+                cartMessage = "";
+            }
         %>
+        
         <!-- Checkout Section Begin -->
         <section class="checkout spad">
             <div class="container">
-
-                <form action="MainController" class="checkout__form">
+                <p style="color:red"><%= cartMessage %></p>
+                <form action="MainController" class="checkout__form" method="POST">
                     <div class="row">
                         <div class="col-lg-12">
                             <h5>Địa chỉ nhận hàng</h5>
@@ -34,52 +46,66 @@
 
                                 <div class="col-lg-12">
                                     <div class="checkout__form__input">
-                                        <p>Họ và tên <span>*</span></p>
-                                        <input type="text" name="fullname" value="<%= loginUser.getFullName()%>" required="">
+                                        <p>Full name <span>*</span></p>
+                                        <input type="text" name="fullname" value="<%= c.getFullName()%>" placeholder="Họ và Tên" required="">
                                     </div>
                                     <div class="checkout__form__input">
-                                        <p>Địa chỉ giao hàng<span>*</span></p>
+                                        <p>Town/City <span>*</span></p>
                                         <div class="col-lg-6 col-md-6 col-sm-6" style="padding: 0; padding-right: 15px;">
-                                            <select style="width: 100%; height: 50px; margin: 0 4% 25px 0; padding: 1px 2px 1px 20px;" name="calc_shipping_provinces" required="">
+                                            <select style="width: 100%; height: 50px; margin: 0 4% 25px 0; padding: 1px 2px 1px 20px;" name="calc_shipping_provinces">
                                                 <option value="">Tỉnh / Thành phố</option>
                                             </select>
                                         </div>
                                         <div class="col-lg-6 col-md-6 col-sm-6" style="padding: 0; padding-left: 15px;">
-                                            <select style="width: 100%; height: 50px; margin: 0 4% 25px 0; padding: 1px 2px 1px 20px;" name="calc_shipping_district" required="">
+                                            <select style="width: 100%; height: 50px; margin: 0 4% 25px 0; padding: 1px 2px 1px 20px;" name="calc_shipping_district">
                                                 <option value="">Quận / Huyện</option>
                                             </select>
                                         </div>
                                         <input class="billing_address_1" name="" type="hidden" value="">
                                         <input class="billing_address_2" name="" type="hidden" value="">
-                                        <input type="text" name="address" placeholder="Số nhà, tên đường, phường/ xã" required="">
+                                        
                                     </div>
+                                    <div class="row">
+                                            <p style="color: red"><%= orderError.getShippingProvinces()%></p>
+                                        </div>
+                                    <div class="checkout__form__input">
+                                        <p>Address <span>*</span></p>
+                                        <input type="text" name="address" placeholder="Số nhà, tên đường, phường/ xã" required="" value="<%= c.getAddress() %>">
+                                       
+                                    </div>
+
+
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-6">
                                     <div class="checkout__form__input">
-                                        <p>Số điện thoại <span>*</span></p>
-                                        <input type="text" name="phone" value="<%= loginUser.getPhone()%>" required="">
+                                        <p>Phone <span>*</span></p>
+                                        <input type="text" name="phone" value="<%= c.getPhone()%>" placeholder="Số điện thoại liên lạc" required="">
+                                        
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-6">
                                     <div class="checkout__form__input">
                                         <p>Email <span>*</span></p>
-                                        <input type="text" name="email" value="<%= loginUser.getUserID()%>" required="">
+                                        <input type="text" name="email" value="<%= c.getEmail()%>" placeholder="Email liên lạc/xác nhận đơn hàng">
+                                        <div class="row">
+                                            <p style="color: red"><%= orderError.getEmail()%></p>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
 
                                     <div class="checkout__form__input">
-                                        <p>Ghi chú</p>
-                                        <input type="text" name="note" placeholder="Note about your order, e.g, special note for delivery">
+                                        <p>Order notes</p>
+                                        <input type="text" name="note" placeholder="Note about your order, e.g, special note for delivery" value="<%= c.getNote() %>">
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-lg-12">
                             <div class="checkout__order">
-                                <h5>Hoá đơn</h5>
+                                <h5>Your order</h5>
                                 <div class="checkout__order__product">
-                                    
+
                                     <div class="row product-details" style="padding-top: 20px;">
                                         <div class="col-md-6" style="font-weight: bold; margin-bottom: 10px;">
                                             Sản phẩm
@@ -93,10 +119,10 @@
                                         <div class="col-md-2" style="font-weight: bold;">
                                             Thành tiền
                                         </div>
-                                        
+
                                         <%  int total = 0;
                                             for (CartProduct item : cart) {
-                                                total += (int) (item.getPrice() * (1 - item.getDiscount()) * item.getQuantity()); 
+                                                total += (item.getPrice()  - item.getDiscount()) * item.getQuantity();
                                         %>
                                         <div class="col-md-6" style="margin-bottom: 10px;">
                                             <div class="row">
@@ -108,49 +134,53 @@
                                                     <span><%= item.getColor()%>/ <%= item.getSize()%></span>
                                                 </div>
                                             </div>
-                                            
+
                                         </div>
-                                                
-                                                
+
+
                                         <div class="col-md-2">
-                                            <%= (int) (item.getPrice() * (1 - item.getDiscount()))%>
+                                            <%= item.getPrice() - item.getDiscount()%>
                                         </div>
                                         <div class="col-md-2">
                                             <%= item.getQuantity()%>
                                         </div>
                                         <div class="col-md-2">
-                                            <%= (int) ((item.getPrice() * (1 - item.getDiscount()) * item.getQuantity()) / 1000)%>.000
+                                            <%= (int) (((item.getPrice() - item.getDiscount()) * item.getQuantity()) / 1000)%>.000
                                         </div>        
-                                        
-                                        
-                                        
+
+
+
                                         <% }%>
                                     </div>
-                                    
+
                                 </div>
                                 <div>
 
                                 </div>
                                 <div class="checkout__order__total">
                                     <ul>
-                                        <li>Tổng tiền <span></span></li>
-                                        <li>Giảm giá <span></span></li>
-                                        <li>Tổng thanh toán <span><%= (int) (total / 1000)%>.000</span></li>
+                                        <li>Subtotal <span></span></li>
+                                        <li>Total <span><%= (int) (total / 1000)%>.000</span></li>
                                         <input type="hidden" name="total" value="<%= ((int) (total / 1000)) * 1000%>"/>
+                                        <% session.setAttribute("TOTAL", ((int) (total / 1000)) * 1000); %>
                                     </ul>
                                 </div>
                                 <div class="checkout__order__widget">
 
-                                    <label for="check-payment">
+                                    <label for="COD">
                                         COD
-                                        <input type="radio" id="check-payment"/>
+                                        <input type="radio" id="COD" name="payType" checked="" value="COD">
                                         <span class="checkmark"></span>
                                     </label>
-                                    <label for="paypal">
-                                        PayPal
-                                        <input type="radio" id="paypal"/>
+                                    <label for="VNPay">
+                                        VNPay
+                                        <input type="radio" id="VNPay" name="payType" value="VNPay">
                                         <span class="checkmark"></span>
-                                        
+                                    </label>
+                                    <label for="Momo">
+                                        Momo
+                                        <input type="radio" id="Momo" name="payType" value="Momo">
+                                        <span class="checkmark"></span>
                                     </label>
                                 </div>
                                 <button type="submit" name="action" value="Checkout" class="site-btn">Đặt hàng</button>

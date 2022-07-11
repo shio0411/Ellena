@@ -1,6 +1,11 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ */
 package store.controllers;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -10,6 +15,10 @@ import javax.servlet.http.HttpSession;
 import store.user.UserDAO;
 import store.user.UserDTO;
 
+/**
+ *
+ * @author vankh
+ */
 @WebServlet(name = "UpdateAddressController", urlPatterns = {"/UpdateAddressController"})
 public class UpdateAddressController extends HttpServlet {
 
@@ -25,7 +34,8 @@ public class UpdateAddressController extends HttpServlet {
             UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
             String userID = loginUser.getUserID();
             String newAddress = request.getParameter("newAddress");
-            UserDAO dao = new UserDAO();
+            boolean check = true;
+            UserDAO dao = new UserDAO();          
             boolean checkUpdate = dao.updateAddress(newAddress, userID);
             if (checkUpdate) {
                 url = SUCCESS;

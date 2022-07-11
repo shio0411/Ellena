@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package store.controllers;
 
 import java.io.IOException;
@@ -12,11 +17,13 @@ import store.shopping.CategoryDTO;
 import store.shopping.ProductDAO;
 import store.shopping.ProductDTO;
 
+/**
+ *
+ * @author giama
+ */
 public class ViewHomeController extends HttpServlet {
-
     private static final String ERROR = "error.jsp";
     private static final String SUCCESS = "home.jsp";
-
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -34,7 +41,7 @@ public class ViewHomeController extends HttpServlet {
             HttpSession session = request.getSession();
             if (session != null) {
                 CategoryDAO cateDao = new CategoryDAO();
-                ProductDAO prodDao = new ProductDAO();
+                ProductDAO  prodDao = new ProductDAO();
                 List<CategoryDTO> listCategory = cateDao.getListCategory("", "true");
                 List<ProductDTO> trendList = prodDao.getTrendList();
                 List<ProductDTO> bestSellerList = prodDao.getBestSellerList();

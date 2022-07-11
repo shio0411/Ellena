@@ -8,7 +8,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import store.shopping.Cart;
+import store.shopping.CartDAO;
 import store.shopping.CartProduct;
+import store.shopping.CartProductDAO;
+import store.user.UserDTO;
 
 @WebServlet(name = "DeleteCartItemController", urlPatterns = {"/DeleteCartItemController"})
 public class DeleteCartItemController extends HttpServlet {
@@ -35,6 +39,11 @@ public class DeleteCartItemController extends HttpServlet {
             int productID = Integer.parseInt(request.getParameter("productID"));
             String size = request.getParameter("size");
             String color = request.getParameter("color");
+            UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
+            CartDAO cdao = new CartDAO();
+            CartProductDAO cpdao = new CartProductDAO();
+            Cart c = cdao.getCartByUserID(user.getUserID());
+            cpdao.deleteACartItem(c.getId(), productID, size, color);
             
             boolean check = cart.remove(new CartProduct(productID, color, size));
             if (!check) {

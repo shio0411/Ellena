@@ -1,3 +1,7 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ */
 package store.controllers;
 
 import java.io.IOException;
@@ -12,6 +16,10 @@ import store.shopping.ProductDAO;
 import store.shopping.ProductDTO;
 import store.utils.VNCharacterUtils;
 
+/**
+ *
+ * @author vankh
+ */
 @WebServlet(name = "SearchCatalogController", urlPatterns = {"/SearchCatalogController"})
 public class SearchCatalogController extends HttpServlet {
 

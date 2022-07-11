@@ -1,3 +1,7 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ */
 package store.controllers;
 
 import java.io.IOException;
@@ -10,7 +14,7 @@ import javax.servlet.http.HttpSession;
 import store.user.UserDAO;
 import store.user.UserDTO;
 import store.user.UserError;
-
+    
 @WebServlet(name = "UpdatePasswordController", urlPatterns = {"/UpdatePasswordController"})
 public class UpdatePasswordController extends HttpServlet {
 
@@ -29,19 +33,19 @@ public class UpdatePasswordController extends HttpServlet {
             String newPassword = request.getParameter("newPassword");
             String confirmNewPassword = request.getParameter("confirmNewPassword");
             boolean check = true;
-            UserDAO dao = new UserDAO();
+            UserDAO dao = new UserDAO();          
             UserError userError = new UserError();
-
-            if (!currentPassword.equals(loginUser.getPassword())) {
+            
+            if(!currentPassword.equals(loginUser.getPassword())){
                 check = false;
                 userError.setPassword("Mật khẩu bạn nhập không đúng!");
             }
-
+            
             if (!newPassword.equals(confirmNewPassword)) {
                 check = false;
                 userError.setConfirm("Mật khẩu và xác nhận mật khẩu khác nhau!");
             }
-
+            
             if (check) {
                 boolean checkUpdate = dao.updatePassword(newPassword, userID);
                 if (checkUpdate) {
@@ -62,7 +66,6 @@ public class UpdatePasswordController extends HttpServlet {
             request.getRequestDispatcher(url).forward(request, response);
         }
     }
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

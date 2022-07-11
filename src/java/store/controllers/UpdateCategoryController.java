@@ -10,6 +10,10 @@ import javax.servlet.http.HttpServletResponse;
 import store.shopping.CategoryDAO;
 import store.shopping.CategoryDTO;
 
+/**
+ *
+ * @author vankh
+ */
 @WebServlet(name = "UpdateCategoryController", urlPatterns = {"/UpdateCategoryController"})
 public class UpdateCategoryController extends HttpServlet {
 

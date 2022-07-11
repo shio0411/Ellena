@@ -27,6 +27,7 @@ public class UpdateOrderController extends HttpServlet {
             OrderDAO dao = new OrderDAO();
             boolean checkUpdate = dao.updateOrderStatus(orderID, statusID, modifiedBy, roleID) || dao.updateOrderTrackingID(orderID, trackingID);
             if (checkUpdate) {
+                
                 url = SUCCESS;
                 request.setAttribute("MESSAGE", "Cập nhật thành công");
             } else {

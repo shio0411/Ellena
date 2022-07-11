@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package store.controllers;
 
 import java.io.File;
@@ -17,19 +22,22 @@ import store.shopping.ProductDAO;
 import store.shopping.ProductDTO;
 import store.utils.VNCharacterUtils;
 
+/**
+ *
+ * @author giama
+ */
 @WebServlet(name = "ManagerUpdateProductController", urlPatterns = {"/ManagerUpdateProductController"})
 public class ManagerUpdateProductController extends HttpServlet {
-
     private static final String ERROR = "error.jsp";
     private static final String SUCCESS = "ManagerShowProductDetailController";
-
+    
     private File uploadFolder;
 
     @Override
     public void init() throws ServletException {
         uploadFolder = new File("D:\\images\\");
     }
-
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -46,11 +54,11 @@ public class ManagerUpdateProductController extends HttpServlet {
         try {
             int productID = Integer.parseInt(request.getParameter("productID"));
             boolean status = Boolean.parseBoolean(request.getParameter("status"));
-
+            
             int categoryID = Integer.parseInt(request.getParameter("categoryID"));
             int lowStockLimit = Integer.parseInt(request.getParameter("lowStockLimit"));
             int price = Integer.parseInt(request.getParameter("price"));
-            float discount = Float.parseFloat(request.getParameter("discount"));
+            int discount = Integer.parseInt(request.getParameter("discount"));
             String description = request.getParameter("description");
             String oldProductName = request.getParameter("oldProductName");
             String productName = request.getParameter("productName").toUpperCase();
@@ -64,12 +72,12 @@ public class ManagerUpdateProductController extends HttpServlet {
                     List<Integer> productColorIDs = dao.getProductColorIDList(productID);
                     List<String> images = dao.getProductImages(productColorIDs);
                     List<String> newImages = new ArrayList<>();
-                    for (String image : images) {
+                    for (String image: images) {
                         newImages.add(image.replace(oldProductName, productName));
-
+                        
                     }
                     for (int i = 0; i < images.size(); i++) {
-                        Path source = Paths.get("D:\\" + images.get(i));
+                        Path source = Paths.get("D:\\"+ images.get(i));
                         Files.move(source, source.resolveSibling(newImages.get(i)));
                     }
                     dao.updateImages(newImages, images);

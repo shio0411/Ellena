@@ -16,13 +16,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title><%= product.getProductName()%></title>
-
+        
         <!-- Google Font -->
         <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
               rel="stylesheet">
         <jsp:include page="meta.jsp" flush="true"/>
-
     </head>
     <body>
 
@@ -43,30 +42,50 @@
             </div>
         </div>
 
-        <% session.setAttribute("productID", product.getProductID());
-            String quantityMsg = (String) request.getAttribute("QUANTITY_MESSAGE");
-            String addToCartMsg = (String) request.getAttribute("ADD_TO_CART_MESSAGE");
-            if (quantityMsg == null) {
-                quantityMsg = "";
-            }
-            if (addToCartMsg == null)
-                addToCartMsg = "";
-            if (!addToCartMsg.equals("")) {
+        <% session.setAttribute("productID", product.getProductID()); 
+            String failureMsg = (String) request.getAttribute("QUANTITY_MESSAGE");
+            String successMsg = (String) request.getAttribute("ADD_TO_CART_MESSAGE");
+            if (successMsg != null) {
         %>
         
+        <!-- Add to cart SUCCESS message pop-up -->
         <div class="alert alert-success add-to-cart-notify" id="add-to-cart-notify" style="text-align: center; margin-bottom: 0;">
-            <%= addToCartMsg%>
+            <%= successMsg%>
             <button type="button" class="close" data-dismiss="alert">x</button>
-            <input type="hidden" id="add-to-cart-message" value="<%= addToCartMsg%>"/>
+            <input type="hidden" id="add-to-cart-message" value="<%= successMsg%>"/>
         </div>
+
         <%}
-            if (!quantityMsg.equals("")) {
+            if (failureMsg != null) {
         %>
+        
+        <!-- Add to cart FAIL message pop-up -->
         <div class="alert alert-danger add-to-cart-notify" id="add-to-cart-notify" style="text-align: center; margin-bottom: 0;">
-            <%= quantityMsg%>
+            <%= failureMsg%>
             <button type="button" class="close" data-dismiss="alert">x</button>
-            <input type="hidden" id="quantity-message" value="<%= quantityMsg%>"/>
+            <input type="hidden" id="quantity-message" value="<%= failureMsg%>"/>
         </div>
+
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Thông báo</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                    </div>
+                    <div class="modal-body">
+                        <p><%=successMsg%></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    </div>
+                </div>
+
+            </div>
+        </div> 
         <%}%>
         <!-- Product Details Section Begin -->
         <section class="product-details spad">
@@ -121,9 +140,10 @@
                             </div>
                             <%
 
+                                
                                 if (product.getDiscount() != 0) {
                             %>
-                            <div class="product__details__price"><%= (int) (product.getPrice() / 1000 * (1 - product.getDiscount()))%>.000đ<span><%=product.getPrice() / 1000%>.000đ </span></div>
+                            <div class="product__details__price"><%= (int) (product.getPrice() - product.getDiscount()) / 1000%>.000đ<span><%=product.getPrice() / 1000%>.000đ </span></div>
                             <%
                             } else {
                             %>
@@ -163,6 +183,7 @@
                                                         String color = it.next();
                                                         colorList.add(color);
 
+                                                        
                                                     }
                                                     if (currentColor == null) {
                                                         currentColor = colorList.get(0);
@@ -219,7 +240,7 @@
                                                     for (int a = 0; a < key.size(); a += 2) {
                                                         if (colorList.get(0).equalsIgnoreCase(key.get(a))) {%>
                                                 <label for="size<%=g%>" <%if (g == 1) {
-
+                                                                
                                                        %>class="active"<%}%>>
                                                     <input type="radio" id="size<%=g%>" name="size" value="<%= key.get(a + 1)%>" <%if (g == 1) {%> checked <%}%>>  
                                                     <%= key.get(a + 1)%>
@@ -236,7 +257,7 @@
 
                                     <li style="margin-top: 4%;">
                                         <span>Giảm giá:</span>
-                                        <p><%= (int) (product.getDiscount() * 100)%>%</p>
+                                        <p><%= (int) (product.getDiscount() * 100.0 / product.getPrice())%>%</p>
                                     </li>
                                 </ul>
                             </div>
@@ -287,8 +308,6 @@
 
             </div>
         </section>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
         <script>
             var colors = document.getElementById('colors');
             var numElems = colors.getElementsByTagName('input');
@@ -298,17 +317,19 @@
                     document.getElementById('sizeQuantityForm').submit();
                 });
             }
-
-
+            
+            
             function sendQuantity() {
+//                $.post("AddToCartController", {quantity: document.getElementById('quantity').value});
                 document.getElementById('quantity').value = document.getElementById('_quantity').value;
                 document.getElementById('getSizeForm').submit();
             }
+            
             
         </script>
         <jsp:include page="footer.jsp" flush="true"/>
 
         <jsp:include page="js-plugins.jsp" flush="true"/>
-
+        
     </body>
 </html>
