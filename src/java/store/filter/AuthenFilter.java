@@ -130,6 +130,12 @@ public class AuthenFilter implements Filter {
         EMPLOYEE_FUNCTION.add("UpdateOrderController");
         EMPLOYEE_FUNCTION.add("SearchOrderController");
         EMPLOYEE_FUNCTION.add("employee-order.jsp");
+        EMPLOYEE_FUNCTION.add("return.jsp");
+        EMPLOYEE_FUNCTION.add("refund.jsp");
+        EMPLOYEE_FUNCTION.add("ReturnController");
+        EMPLOYEE_FUNCTION.add("RefundController");
+        EMPLOYEE_FUNCTION.add("UpdateOrderDetailController");
+        EMPLOYEE_FUNCTION.add("RefundOrderController");
     }
 
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
