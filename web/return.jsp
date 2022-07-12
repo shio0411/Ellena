@@ -52,11 +52,22 @@
             List<ProductDTO> productList = (List<ProductDTO>) request.getAttribute("PRODUCT_LIST");
         %>
 
+        <%
+        if (loginUser.getRoleID().equals("EM")) {    
+        %>
+        
+        <div class="sidenav">
+            <a href="EmployeeShowOrderController" style="color: #873e23; font-weight: bold;"><i class="fa fa-cart-plus fa-lg"></i>Quản lí đơn hàng</a>
+            <a href="https://www.tawk.to/"><i class="fa fa-archive fa-lg"></i>Quản lí Q&A</a>
+        </div> 
+        
+        <%} else {%>
         <div class="sidenav">
             <a href="ManagerStatisticController"><i class="fa fa-bar-chart fa-lg"></i>Số liệu thống kê</a>
             <a href="ManagerShowProductController"><i class="fa fa-archive fa-lg"></i>Quản lí sản phẩm</a>
             <a href="ShowOrderController" style="color: #873e23; font-weight: bold;"><i class="fa fa-cart-plus fa-lg"></i>Quản lí đơn hàng</a>
         </div> 
+        <%}%>
 
         <div class="main">
 

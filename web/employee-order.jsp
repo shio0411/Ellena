@@ -65,7 +65,7 @@
         %>
 
         <div class="sidenav">
-            <a href="EmployeeShowOrderController" style="color: #873e23; font-weight: bold;"><i class="fa fa-cart-plus fa-lg"></i>Quản lí đơn hàng</a>
+            <a href="ShowOrderController" style="color: #873e23; font-weight: bold;"><i class="fa fa-cart-plus fa-lg"></i>Quản lí đơn hàng</a>
             <a href="https://www.tawk.to/"><i class="fa fa-archive fa-lg"></i>Quản lí Q&A</a>
         </div> 
 
@@ -338,6 +338,13 @@
                                         <input type="hidden" name="dateFrom" id="update-dateFrom" value="<%= dateFrom%>"/>
                                         <input type="hidden" name="dateTo" id="update-dateTo" value="<%= dateTo%>"/>
                                         <input type="hidden" name="search-statusID" id="update-statusID" value="<%= sOrderStatusID%>"/>
+                                        <button type="submit" class="btn btn-secondary" data-toggle="tooltip" data-html="true" title="Đổi hàng" name="action" value="Return">
+                                            Đổi hàng <!-- Icon return here -->
+                                        </button>
+                                        <button type="submit" class="btn btn-secondary" data-toggle="tooltip" data-html="true" title="Trả hàng" name="action" value="Refund">
+                                            Trả hàng <!-- Icon refund here -->
+                                        </button>
+                                        
                                         <div class="modal-footer">
                                             <button class="btn btn-default" type="submit" name="action" value="UpdateOrder">Cập nhật</button>
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
