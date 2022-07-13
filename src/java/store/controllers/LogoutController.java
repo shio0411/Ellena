@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession;
 public class LogoutController extends HttpServlet {
 
     private static final String ERROR = "login.jsp";
-    private static final String SUCCESS = "login.jsp";
+    private static final String SUCCESS = "ViewHomeController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
