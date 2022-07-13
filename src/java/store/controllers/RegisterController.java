@@ -25,7 +25,7 @@ import store.user.UserError;
 public class RegisterController extends HttpServlet {
 
     private static final String ERROR = "register.jsp";
-    private static final String SUCCESS = "login.jsp";
+    private static final String SUCCESS = "register.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -52,7 +52,7 @@ public class RegisterController extends HttpServlet {
             }
             if (!password.equals(confirm)) {
                 check = false;
-                userError.setConfirm("Password và xác nhận password khác nhau!");
+                userError.setConfirm("Mật khẩu và xác nhận mật khẩu khác nhau!");
             }
 
             if (check) {
@@ -60,6 +60,7 @@ public class RegisterController extends HttpServlet {
                 boolean checkInsert = dao.addUser(user);
                 if (checkInsert) {
                     url = SUCCESS;
+                    request.setAttribute("MESSAGE", "Bạn đã đăng ký thành công");
                 }
 
             } else {

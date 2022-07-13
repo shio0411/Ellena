@@ -6,7 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
     <head>
         <title>Đăng ký tài khoản mới</title>
         <meta charset="utf-8">
@@ -17,6 +17,9 @@
               rel="stylesheet">
 
         <jsp:include page="meta.jsp" flush="true"/>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        
     </head>
 
     <body class="goto-here">
@@ -49,6 +52,8 @@
                 </div>
             </div>
         </header>
+
+
         <section class="vh-100 gradient-custom">
             <div class="container py-5 h-100">
                 <div class="row justify-content-center align-items-center h-100">
@@ -63,7 +68,7 @@
 
                                             <div class="form-outline">
                                                 <label class="form-label" for="email">Email</label>
-                                                <input type="email" name="userID" id="firstName" required="" class="form-control form-control-lg" />
+                                                <input type="email" name="userID" id="email" required="" class="form-control form-control-lg" />
                                                 <p style="color: red">${requestScope.USER_ERROR.userID}</p>
 
                                             </div>
@@ -103,6 +108,8 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <p style="color: red">${requestScope.USER_ERROR.confirm}</p>
+
                                     <div class="row">
                                         <div class="col-md-6 mb-4 d-flex align-items-center">
 
@@ -166,6 +173,32 @@
                     </div>
                 </div>
             </div>
+            <%  String message = (String) request.getAttribute("MESSAGE");
+                if (message != null) {
+            %>
+
+            <!-- Pop-up thông báo -->
+            <div class="modal fade in show" id="myModal" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Thông báo</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p><%=message%></p>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="./"><button type="button" class="btn btn-default">Đóng</button></a>
+                        </div>
+                    </div>
+
+                </div>
+            </div> 
+            <%}%>
+            
+
         </section>
 
     </body>
@@ -183,6 +216,6 @@
     </script>
     <!--End of Tawk.to Script-->
     <!-- Js Plugins -->
-    
+
     <jsp:include page="js-plugins.jsp" flush="true"/>
 </html>

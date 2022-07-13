@@ -1572,15 +1572,6 @@ ol {
     margin-bottom: 0;
 }
 
-.filter-range-wrap .range-slider .price-input:after {
-    position: absolute;
-    left: 81px;
-    top: 12px;
-    height: 1px;
-    width: 5px;
-    background: #0d0d0d;
-    content: "";
-}
 
 .filter-range-wrap .range-slider .price-input input {
     font-size: 12px;

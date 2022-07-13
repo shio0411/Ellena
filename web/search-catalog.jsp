@@ -64,7 +64,8 @@
                                                 <div class="price-input">
                                                     <p>Price:</p>
                                                     <input type="text" readonly="" id="minamount" name="minAmount">
-                                                    <input type="text" readonly="" id="maxamount" name="maxAmount">
+                                                    
+                                                    <input class="ml-5 pl-4" type="text" readonly="" id="maxamount" name="maxAmount">
                                                 </div>
                                             </div>
                                         </div>

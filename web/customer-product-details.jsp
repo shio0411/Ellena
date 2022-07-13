@@ -16,12 +16,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title><%= product.getProductName()%></title>
-        
+
         <!-- Google Font -->
         <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
               rel="stylesheet">
         <jsp:include page="meta.jsp" flush="true"/>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        
     </head>
     <body>
 
@@ -42,12 +45,13 @@
             </div>
         </div>
 
-        <% session.setAttribute("productID", product.getProductID()); 
+        <% session.setAttribute("productID", product.getProductID());
             String failureMsg = (String) request.getAttribute("QUANTITY_MESSAGE");
             String successMsg = (String) request.getAttribute("ADD_TO_CART_MESSAGE");
+            String activeColor = (String) request.getAttribute("ACTIVE_COLOR");
             if (successMsg != null) {
         %>
-        
+
         <!-- Add to cart SUCCESS message pop-up -->
         <div class="alert alert-success add-to-cart-notify" id="add-to-cart-notify" style="text-align: center; margin-bottom: 0;">
             <%= successMsg%>
@@ -58,7 +62,7 @@
         <%}
             if (failureMsg != null) {
         %>
-        
+
         <!-- Add to cart FAIL message pop-up -->
         <div class="alert alert-danger add-to-cart-notify" id="add-to-cart-notify" style="text-align: center; margin-bottom: 0;">
             <%= failureMsg%>
@@ -87,6 +91,7 @@
             </div>
         </div> 
         <%}%>
+        
         <!-- Product Details Section Begin -->
         <section class="product-details spad">
             <div class="container">
@@ -140,7 +145,6 @@
                             </div>
                             <%
 
-                                
                                 if (product.getDiscount() != 0) {
                             %>
                             <div class="product__details__price"><%= (int) (product.getPrice() - product.getDiscount()) / 1000%>.000đ<span><%=product.getPrice() / 1000%>.000đ </span></div>
@@ -152,109 +156,71 @@
                                 <%}%>
                             <p><%= product.getDescription()%></p>
 
-                            <div class="product__details__button">
-
-                                <div class="quantity">
-                                    <span>Số lượng</span>
-                                    <div class="pro-qty">
-                                        <input name="_quantity" id="_quantity" type="text" value="1">
-                                    </div>
-                                </div>
-
-                                <a href="#" class="cart-btn" id="add-to-cart-hyperlink" onclick="sendQuantity()">
-                                    <span class="icon_bag_alt"></span>
-                                    Thêm vào giỏ hàng
-                                </a>
-                            </div>
-
-
                             <div class="product__details__widget">
                                 <ul>
-
                                     <li>
-                                        <span>Màu:</span>
-                                        <form action="CheckSizeQuantityController" id="sizeQuantityForm" >
-                                            <div id="colors">
-                                                <% Iterator<String> it = product.getColorImage().keySet().iterator();
-                                                    int i = 1;
-                                                    List<String> colorList = new ArrayList<>();
-                                                    String currentColor = request.getParameter("color");
-                                                    while (it.hasNext()) {
-                                                        String color = it.next();
-                                                        colorList.add(color);
+                                        <ul class="mt-2 mb-5 nav nav-tabs ">
 
-                                                        
+                                            <% Iterator<String> it = product.getColorImage().keySet().iterator();
+                                                int i = 1;
+                                                List<String> colorList = new ArrayList<>();
+                                                while (it.hasNext()) {
+                                                    String color = it.next();
+                                                    colorList.add(color);  %>      
+
+                                            <li <%if ((i == 1 && activeColor == null) || color.equalsIgnoreCase(activeColor)) { %> class="active" <%}%>><a class="p-2 px-4" data-toggle="tab" href="#<%= color%>-size"><%= color%></a></li>
+
+                                            <% i++;
+                                                }%>                             
+                                        </ul>
+
+                                    </li>
+                                    <li>
+                                        <div class="tab-content">
+                                            <%Iterator<List<String>> it1 = product.getColorSizeQuantity().keySet().iterator();
+                                                int g = 1;
+                                                List<String> key = new ArrayList<>();
+                                                while (it1.hasNext()) {
+                                                    for (String n : it1.next()) {
+                                                        key.add(n);
                                                     }
-                                                    if (currentColor == null) {
-                                                        currentColor = colorList.get(0);
-                                                    }
-                                                    for (String color : colorList) {
-                                                %>   
-                                                <label for="color<%=i%>" style="margin-right:1%">
-                                                    <input type="radio" name="color" id="color<%=i%>" value="<%= color%>" 
-                                                           <% if (color.equalsIgnoreCase(currentColor)) {
-                                                                   session.setAttribute("color", color);
-                                                           %> checked="" <%}%>/> <%= color%>
-                                                </label>     
-                                                <% i++;
-                                                    }%> 
-                                                <input type="hidden" name="productID" value="<%= product.getProductID()%>" />
+                                                }
+                                                int k = 1; 
+                                                for (String color : colorList) {
+                                            %>
+                                            <div id="<%=color%>-size" class="tab-pane fade <%if ((g == 1 && activeColor == null) || color.equalsIgnoreCase(activeColor)) { %> in active <%}%>">
+                                                <form action="AddToCartController" id="get<%=color%>SizeForm">
+                                                    <div>
+                                                        <input type="hidden" name="color" value="<%=color%>"/>
+                                                        <% 
+                                                            for (int a = 0; a < key.size(); a += 2) {
+                                                            if (color.equalsIgnoreCase(key.get(a))) {%>
+                                                            <input type="radio" id="size<%= k %>" required="" name="size" value="<%= key.get(a + 1)%>" />
+                                                        <label for="size<%= k %>"><%= key.get(a + 1)%></label>
+                                                        <% k++;}
+                                                        }%>
+                                                    </div>
+                                                    <div class="product__details__button">
+                                                        <div class="quantity">
+                                                            <span>Số lượng</span>
+                                                            <div class="pro-qty">
+                                                                <input name="quantity" id="quantity" type="text" value="1">
+                                                            </div>
+                                                        </div>
+                                                        <button type="submit" form="get<%=color%>SizeForm" class="cart-btn" id="add-to-cart-hyperlink">
+                                                                Thêm vào giỏ hàng
+                                                        </button>
+                                                    </div>
+                                                </form>
                                             </div>
-                                        </form>
+
+
+
+                                            <% g++;
+                                                }%>
+                                        </div>
 
                                     </li>
-
-                                    <li>
-                                        <form action="AddToCartController" id="getSizeForm">
-                                            <span>Size:</span>
-                                            <div class="size__btn">
-                                                <% ArrayList<Pair<String, Integer>> sizeQuantityList = (ArrayList<Pair<String, Integer>>) request.getAttribute("SIZE_QUANTITY");
-                                                    int x = 1;
-                                                    if (sizeQuantityList != null) {
-                                                        for (Pair<String, Integer> sizeQuantity : sizeQuantityList) {
-                                                            if (sizeQuantity.getValue() > 0) {
-                                                %>
-                                                <label for="size<%=x%>" <%if (x == 1) {
-                                                        session.setAttribute("size", sizeQuantity.getKey());
-                                                       %>class="active"<%}%>>
-                                                    <input type="radio" id="size<%=x%>" name="size" value="<%= sizeQuantity.getKey()%>" <%if (x == 1) {%> checked <%}%>>
-                                                    <%= sizeQuantity.getKey()%>
-                                                </label>
-                                                <% } else {%>
-                                                <label for="size<%=x%>">
-                                                    <input type="radio" id="size<%=x%>" name="size" disabled="">
-                                                    <%= sizeQuantity.getKey()%>
-                                                </label>
-                                                <% }
-                                                        x++;
-                                                    }
-                                                } else {
-                                                    Iterator<List<String>> it1 = product.getColorSizeQuantity().keySet().iterator();
-                                                    int g = 1;
-                                                    List<String> key = new ArrayList<>();
-                                                    while (it1.hasNext()) {
-                                                        for (String n : it1.next()) {
-                                                            key.add(n);
-                                                        }
-                                                    }
-                                                    for (int a = 0; a < key.size(); a += 2) {
-                                                        if (colorList.get(0).equalsIgnoreCase(key.get(a))) {%>
-                                                <label for="size<%=g%>" <%if (g == 1) {
-                                                                
-                                                       %>class="active"<%}%>>
-                                                    <input type="radio" id="size<%=g%>" name="size" value="<%= key.get(a + 1)%>" <%if (g == 1) {%> checked <%}%>>  
-                                                    <%= key.get(a + 1)%>
-                                                </label>
-                                                <%}
-                                                            g++;
-                                                        }
-                                                    }%>
-                                            </div>  
-
-                                            <input type="hidden" name="quantity" id="quantity" value=""/>
-                                        </form>
-                                    </li>
-
                                     <li style="margin-top: 4%;">
                                         <span>Giảm giá:</span>
                                         <p><%= (int) (product.getDiscount() * 100.0 / product.getPrice())%>%</p>
@@ -317,19 +283,19 @@
                     document.getElementById('sizeQuantityForm').submit();
                 });
             }
-            
-            
+
+
             function sendQuantity() {
-//                $.post("AddToCartController", {quantity: document.getElementById('quantity').value});
+                //                $.post("AddToCartController", {quantity: document.getElementById('quantity').value});
                 document.getElementById('quantity').value = document.getElementById('_quantity').value;
                 document.getElementById('getSizeForm').submit();
             }
-            
-            
+
+
         </script>
         <jsp:include page="footer.jsp" flush="true"/>
 
         <jsp:include page="js-plugins.jsp" flush="true"/>
-        
+
     </body>
 </html>

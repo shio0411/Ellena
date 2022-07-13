@@ -206,7 +206,7 @@
                             <i class="fa fa-edit" data-toggle="modal" data-target="#myModal6" ></i>
                         </div>
                         <div class="row mt-4">
-                            <div class="col-md-11"><label class="labels">Số điện thoại</label><div><% if(!loginUser.getPhone().isEmpty()){ loginUser.getPhone(); }else{ %><i>Bạn chưa có thông tin này.</i><% } %></div></div>
+                            <div class="col-md-11"><label class="labels">Số điện thoại</label><div><% if(!loginUser.getPhone().isEmpty()){ %><%= loginUser.getPhone()%><% }else{ %><i>Bạn chưa có thông tin này.</i><% } %></div></div>
                             <div class="modal fade" id="myModal4" role="dialog" aria-labelledby="myModalLabel">
                                 <div class="modal-dialog">
                                     <div class="modal-content" >
@@ -244,7 +244,7 @@
                             <i class="fa fa-edit" data-toggle="modal" data-target="#myModal4"></i>
                         </div>
                         <div class="row mt-4">
-                            <div class="col-md-11"><label class="labels">Địa chỉ</label><div><% if(!loginUser.getAddress().isEmpty()){ loginUser.getAddress(); }else{ %><i>Bạn chưa có thông tin này.</i><% } %></div></div>                            
+                            <div class="col-md-11"><label class="labels">Địa chỉ</label><div><% if(!loginUser.getAddress().isEmpty()){ %><%= loginUser.getAddress()%><% }else{ %><i>Bạn chưa có thông tin này.</i><% } %></div></div>                            
                             <div class="modal fade" id="myModal2" role="dialog" aria-labelledby="myModalLabel">
                                 <div class="modal-dialog">
                                     <div class="modal-content" >

@@ -211,13 +211,13 @@
                                                    
                             </div>
                         </div>
-                                                    </form>
+                        </form>
                         <i class="fa fa-edit fa-2x" data-toggle="modal" data-target="#myModal6" style="margin-left: 12px;"></i>
                     </td>
                 </tr>
                 <tr>   
                     <th>Số điện thoại</th>
-                    <td><%= loginUser.getPhone() !=null ? loginUser.getPhone() : "" %>
+                    <td><% if(!loginUser.getPhone().isEmpty()){ %><%= loginUser.getPhone()%><% }else{ %><i>Bạn chưa có thông tin này.</i><% } %>
                         <div class="modal fade" id="myModal4" role="dialog" aria-labelledby="myModalLabel">
                             <div class="modal-dialog">
                                 <div class="modal-content" >
@@ -257,7 +257,7 @@
                 </tr>
                 <tr>
                     <th>Địa chỉ</th>
-                    <td><% if(!loginUser.getAddress().isEmpty()){ loginUser.getAddress(); }else{ %><i>Bạn chưa có thông tin này.</i><% } %>
+                    <td><% if(!loginUser.getAddress().isEmpty()){ %><%= loginUser.getAddress() %><% }else{ %><i>Bạn chưa có thông tin này.</i><% } %>
                         <div class="modal fade" id="myModal2" role="dialog" aria-labelledby="myModalLabel">
                             <div class="modal-dialog">
                                 <div class="modal-content" >
