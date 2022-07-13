@@ -40,7 +40,7 @@ public class AddToCartController extends HttpServlet {
             if (session.getAttribute("LOGIN_USER") != null) {
 //            int productID = Integer.parseInt(request.getParameter("productID"));
                 int productID = (int) session.getAttribute("productID");
-                String color = (String) session.getAttribute("color");
+                String color = request.getParameter("color");
                 String size = request.getParameter("size");
                 int quantity = Integer.parseInt(request.getParameter("quantity"));
                 List<CartProduct> cart = (List<CartProduct>) session.getAttribute("CART");
