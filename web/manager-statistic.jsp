@@ -149,6 +149,7 @@
             if (search == null) {
                 search = "";
             }
+            String MIN_DATE = "2000-01-01";
             
         %>
        
@@ -197,22 +198,30 @@
                             double cancelRatio = (double)request.getAttribute("CANCEL_RATIO");
                             double refundRatio = (double)request.getAttribute("REFUND_RATIO");
                             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                            /*String sellerFrom = (String)request.getParameter("sellerFrom");
-                            if(sellerFrom == null){
-                                sellerFrom = (dateFormat.format(new Date()));
+                            String cancelOrderFrom = (String)request.getParameter("cancelOrderFrom");
+                            if(cancelOrderFrom == null){
+                                cancelOrderFrom = MIN_DATE;
                             }
-                            String sellerTo = (String)request.getParameter("sellerTo");
-                            if(sellerTo == null){
-                                sellerTo = (dateFormat.format(new Date()));
+                            String cancelOrderTo = (String)request.getParameter("cancelOrderTo");
+                            if(cancelOrderTo == null){
+                                cancelOrderTo = (dateFormat.format(new Date()));
                             }
-                            String incomeFrom = (String)request.getParameter("incomeFrom");
-                            if(incomeFrom == null){
-                                incomeFrom = (dateFormat.format(new Date()));
+                            String payTypeFrom = (String)request.getParameter("payTypeFrom");
+                            if(payTypeFrom == null){
+                                payTypeFrom = MIN_DATE;
                             }
-                            String incomeTo = (String)request.getParameter("incomeTo");
-                            if(incomeTo == null){
-                                incomeTo = (dateFormat.format(new Date()));
-                            }*/
+                            String payTypeTo= (String)request.getParameter("payTypeTo");
+                            if(payTypeTo == null){
+                                payTypeTo = (dateFormat.format(new Date()));
+                            }
+                            String getStatisticFrom = (String)request.getParameter("getStatisticFrom");
+                            if(getStatisticFrom == null){
+                                getStatisticFrom = MIN_DATE;
+                            }
+                            String getStatisticTo= (String)request.getParameter("getStatisticTo");
+                            if(getStatisticTo == null){
+                                getStatisticTo = (dateFormat.format(new Date()));
+                            }                          
                             %>
                             <h6 class="text-center"><b>Tỷ lệ hủy/hoàn đơn</b></h6>
                         <div class="text-right" >
@@ -234,9 +243,9 @@
                                           <div class="modal-body">
                                               <div class="date-picker text-center">
                                                   <b>Từ</b>
-                                                  <input class="date mr-5" data-provide="datepicker" type="date" name="cancelOrderFrom" />                                        
+                                                  <input class="date mr-5" data-provide="datepicker" type="date" name="cancelOrderFrom" value="<%=cancelOrderFrom%>" />                                        
                                                   <b>đến</b>
-                                                  <input class="date" data-provide="datepicker" type="date"  name="cancelOrderTo" /> 
+                                                  <input class="date" data-provide="datepicker" type="date"  name="cancelOrderTo" value="<%=cancelOrderTo%>"/> 
                                               </div>
                                           </div>
                                           <div class="modal-footer">
@@ -297,9 +306,9 @@
                                           <div class="modal-body">
                                               <div class="date-picker text-center">
                                                   <b>Từ</b>
-                                                  <input class="date mr-5" data-provide="datepicker" type="date" name="payTypeFrom" />                                        
+                                                  <input class="date mr-5" data-provide="datepicker" type="date" name="payTypeFrom" value="<%=payTypeFrom%>"/>                                        
                                                   <b>đến</b>
-                                                  <input class="date" data-provide="datepicker" type="date"  name="payTypeTo" /> 
+                                                  <input class="date" data-provide="datepicker" type="date"  name="payTypeTo" value="<%=payTypeTo%>"/> 
                                               </div>
                                           </div>
                                           <div class="modal-footer">
@@ -339,9 +348,9 @@
                                           <div class="modal-body">
                                               <div class="date-picker text-center">
                                                   <b>Từ</b>
-                                                  <input class="date mr-5" data-provide="datepicker" type="date" name="getStatisticFrom" />                                        
+                                                  <input class="date mr-5" data-provide="datepicker" type="date" name="getStatisticFrom" value="<%=getStatisticFrom%>"/>                                        
                                                   <b>đến</b>
-                                                  <input class="date" data-provide="datepicker" type="date"  name="getStatisticTo" /> 
+                                                  <input class="date" data-provide="datepicker" type="date"  name="getStatisticTo" value="<%=getStatisticTo%>"/> 
                                               </div>
                                           </div>
                                           <div class="modal-footer">
@@ -426,7 +435,7 @@
       
                     String sellerFrom = (String)request.getParameter("sellerFrom");
                     if(sellerFrom == null){
-                        sellerFrom = (dateFormat.format(new Date()));
+                        sellerFrom = MIN_DATE;
                     }
                     String sellerTo = (String)request.getParameter("sellerTo");
                     if(sellerTo == null){
@@ -434,7 +443,7 @@
                     }
                     String incomeFrom = (String)request.getParameter("incomeFrom");
                     if(incomeFrom == null){
-                        incomeFrom = (dateFormat.format(new Date()));
+                        incomeFrom = MIN_DATE;
                     }
                     String incomeTo = (String)request.getParameter("incomeTo");
                     if(incomeTo == null){
@@ -528,11 +537,8 @@
                 
             </div>    
             <!--BEST SELLER-->
-            <div class="flex-item rounded color-bg p-3 mb-4">
-                 
-                <h4 class="my-3 text-center"><b>Sản phẩm bán chạy nhất</b></h4>
-               
-                   
+            <div class="flex-item rounded color-bg p-3 mb-4">          
+                <h4 class="my-3 text-center"><b>Sản phẩm bán chạy nhất</b></h4>                  
                 <div class="text-right">
                     <button type="button" class="btn btn-default mt-3" data-toggle="modal" data-target="#best-seller__modal">
                         Chọn thời gian

@@ -1583,9 +1583,8 @@ ol {
 }
 
 .filter-range-wrap .range-slider .price-input input {
-    font-size: 16px;
+    font-size: 12px;
     color: #0d0d0d;
-    max-width: 16%;
     border: none;
 }
 
