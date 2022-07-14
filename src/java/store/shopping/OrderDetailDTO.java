@@ -10,6 +10,8 @@ public class OrderDetailDTO {
     private String size;
     private String color;
     private String image;
+    private String returnStatus;
+    private String note;
 
     public OrderDetailDTO() {
     }
@@ -31,7 +33,7 @@ public class OrderDetailDTO {
         this.size = size;
         this.color = color;
     }
-
+    
     public OrderDetailDTO(int productID, String productName, int price, int quantity, String size, String color, String image) {
         this.productID = productID;
         this.productName = productName;
@@ -42,6 +44,39 @@ public class OrderDetailDTO {
         this.image = image;
     }
 
+    public OrderDetailDTO(int detailID,int productID, String productName, int price, int quantity, String size, String color, String image, String returnStatus, String note) {
+        this.orderDetailID = detailID;
+        this.productID = productID;
+        this.productName = productName;
+        this.price = price;
+        this.quantity = quantity;
+        this.size = size;
+        this.color = color;
+        this.image = image;
+        this.returnStatus = returnStatus;
+        this.note = note;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    
+    
+    public String getReturnStatus() {
+        return returnStatus;
+    }
+
+    public void setReturnStatus(String returnStatus) {
+        this.returnStatus = returnStatus;
+    }
+
+    
+    
     public int getOrderDetailID() {
         return orderDetailID;
     }
