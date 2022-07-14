@@ -19,6 +19,7 @@ import store.utils.DBUtils;
 public class OrderDAO {
 
     private static final String UPDATE_TRACKINGID = "UPDATE tblOrder SET trackingID = ? WHERE orderID = ?";
+
     private static final String SEARCH_ORDER_ALL = "SELECT v1.orderID, orderDate, total, userID, fullName, statusID, statusName, payType, trackingID, [orderFullName], [address], phone, email, note, transactionNumber "
             + "FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID ";
     private static final String SEARCH_ORDER_BY_ID = "SELECT v1.orderID, orderDate, total, userID, fullName, statusID, statusName, payType, trackingID, [orderFullName], [address], phone, email, note, transactionNumber "
@@ -42,7 +43,6 @@ public class OrderDAO {
             + "AND [TenKhongDau] LIKE '%' + [dbo].[fuChuyenCoDauThanhKhongDau](?) + '%'";
 
     private static final String UPDATE_ORDER_STATUS = "INSERT INTO tblOrderStatusUpdate(statusID, orderID, updateDate, modifiedBy, roleID) VALUES (?, ?, GETDATE(), ?, ?)";
-    private static final String INSERT_ORDER_STATUS = "INSERT INTO tblOrderStatusUpdate(statusID, orderID, updateDate, modifiedBy, roleID) VALUES (?, ?, GETDATE(), 'System', '')";
 
     private static final String SEARCH_ORDER_BY_NAME = "SELECT v1.orderID, orderDate, total, userID, fullName, statusID, statusName, payType, trackingID, [orderFullName], [address], phone, email, note, transactionNumber "
             + "FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID "
@@ -70,10 +70,11 @@ public class OrderDAO {
             + "ORDER BY v2.orderID desc";
 
     private static final String GET_ORDER_DETAIL = "SELECT top 1 with ties \n"
-            + "p.productID, productName, od.price, od.quantity, od.color, od.size, image \n"
-            + "FROM tblProduct p JOIN tblOrderDetail od ON p.productID = od.productID \n"
+            + "p.productID, productName, od.detailID, od.price, od.quantity, od.color, r.returnType, r.note, od.size, image\n"
+            + "FROM tblProduct p JOIN tblOrderDetail od ON p.productID = od.productID\n"
             + "JOIN tblProductColors pc ON p.productID = pc.productID AND od.color = pc.color\n"
-            + "JOIN tblColorImage ci ON ci.productColorID = pc.productColorID  WHERE orderID = ?\n"
+            + "JOIN tblColorImage ci ON ci.productColorID = pc.productColorID  \n"
+            + "LEFT JOIN tblReturns r ON od.detailID = r.detailID WHERE orderID = ?\n"
             + "ORDER BY ROW_NUMBER() over (partition by p.productID, od.color, od.size order by image)";
 
     private static final String GET_ORDER = "SELECT v1.orderID, orderDate, total, statusID, statusName, payType, trackingID, fullName, address, phone, email, note FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID WHERE v2.orderID = ?";
@@ -82,10 +83,15 @@ public class OrderDAO {
             + "FROM tblOrderStatusUpdate WHERE orderID = ?";
 
     private static final String UPDATE_ORDER_DETAIL = "UPDATE tblOrderDetail SET quantity = ? WHERE detailID = ?";
+
     private static final String UPDATE_ORDER_TOTAL = "UPDATE tblOrder SET total = ? WHERE orderID = ?";
+
     private static final String INSERT_ORDER_RETURN = "INSERT INTO tblReturns(detailID, quantity, returnType, returnDate, note) VALUES(?, ?, ?, GETDATE(), ?)";
+
     private static final String GET_ORDER_TOTAL = "SELECT total FROM tblOrder WHERE orderID = ?";
+
     private static final String CHECK_ORDER_DUPLICATE_ITEM = "SELECT detailID, quantity FROM tblOrderDetail WHERE orderID = ? AND productID = ? AND color LIKE ? AND size LIKE ?";
+
     private static final String GET_RETURN_HISTORY = "SELECT t1.detailID, t1.productID, productName, t1.price, t1.quantity, size, color, t3.quantity AS [returnQuantity], returnType, returnDate, note \n"
             + "FROM tblOrderDetail t1 JOIN tblProduct t2 ON t1.productID = t2.productID JOIN tblReturns t3 ON t1.detailID = t3.detailID\n"
             + "WHERE orderID = ?";
@@ -226,11 +232,11 @@ public class OrderDAO {
                     ptm.setDate(2, dateTo);
                     ptm.setString(3, search);
                 } else if (!(!sDateFrom.isEmpty() && !sDateTo.isEmpty()) && !sStatusID.isEmpty()) {
-                    int statusID = Integer.parseInt(sStatusID);                    
+                    int statusID = Integer.parseInt(sStatusID);
                     ptm = conn.prepareStatement(SEARCH_ORDER_BY_STATUS);
                     ptm.setInt(1, statusID);
                     ptm.setString(2, search);
-                } else if ((sDateFrom.isEmpty() || sDateTo.isEmpty()) && sStatusID.isEmpty()) {                    
+                } else if ((sDateFrom.isEmpty() || sDateTo.isEmpty()) && sStatusID.isEmpty()) {
                     ptm = conn.prepareStatement(SEARCH_ORDER_BY_NAME);
                     ptm.setString(1, search);
                 }
@@ -281,12 +287,9 @@ public class OrderDAO {
         PreparedStatement ptm = null;
 
         /**
-         * - Chưa xác nhận: hệ thống 
-         * - Đã xác nhận: manager/employee 
-         * - Đang giao: manager 
-         * - Đã giao: manager 
-         * - Đã huỷ: manager tự chuyển/ hệ thống chuyển; chỉ áp dụng với trường hợp COD. 
-         * - Nếu trả trước (online
+         * - Chưa xác nhận: hệ thống - Đã xác nhận: manager/employee - Đang
+         * giao: manager - Đã giao: manager - Đã huỷ: manager tự chuyển/ hệ
+         * thống chuyển; chỉ áp dụng với trường hợp COD. - Nếu trả trước (online
          * banking):khi huỷ chuyển thành Chờ hoàn tiền: he thong chuyen, manager
          * chuyen - Sau khi hoàn tiền online, manager chuyển thành Da hoan tien.
          *
@@ -610,6 +613,7 @@ public class OrderDAO {
                     ptm.setInt(1, order.getKey().getOrderID());
                     rs = ptm.executeQuery();
                     while (rs.next()) {
+                        int detailID = rs.getInt("detailID");
                         int productID = rs.getInt("productID");
                         String productName = rs.getString("productName");
                         int price = rs.getInt("price");
@@ -617,8 +621,10 @@ public class OrderDAO {
                         String size = rs.getString("size");
                         String color = rs.getString("color");
                         String image = rs.getString("image");
-
-                        order.getValue().add(new OrderDetailDTO(productID, productName, price, quantity, size, color, image));
+                        String returnStatus = rs.getString("returnType");
+                        String note = rs.getString("note");
+                        
+                        order.getValue().add(new OrderDetailDTO(detailID, productID, productName, price, quantity, size, color, image, returnStatus, note));
                     }
                 }
             }
@@ -636,7 +642,7 @@ public class OrderDAO {
         }
         return order;
     }
-    
+
     public boolean updateOrderStatus(int orderID, int statusID) throws SQLException {
         boolean check = false;
         Connection conn = null;
@@ -646,14 +652,14 @@ public class OrderDAO {
         try {
             conn = DBUtils.getConnection();
             ptm = conn.prepareStatement(UPDATE_ORDER_STATUS);
-            
+
             ptm.setInt(1, statusID);
             ptm.setInt(2, orderID);
             ptm.setString(3, "System");
             ptm.setString(4, "");
-            
+
             check = ptm.executeUpdate() > 0;
-            
+
         } catch (ClassNotFoundException | SQLException e) {
         } finally {
             if (rs != null) {
@@ -780,7 +786,7 @@ public class OrderDAO {
                     String returnType = rs.getString("returnType");
                     Date returnDate = rs.getDate("returnDate");
                     String note = rs.getString("note");
-                    
+
                     list.add(new ReturnDTO(productName, price, size, color, returnQuantity, returnType, returnDate, note));
                 }
             }
@@ -799,7 +805,7 @@ public class OrderDAO {
         }
         return list;
     }
-    
+
     public boolean updateOrderReturnStatus(int orderID, int statusID, String modifiedBy, String roleID) throws SQLException {
         boolean check = false;
         Connection conn = null;
@@ -832,7 +838,7 @@ public class OrderDAO {
 
         return check;
     }
-    
+
     public OrderDTO getOrder(int orderID) throws SQLException {
         OrderDTO order = new OrderDTO();
         Connection conn = null;
@@ -879,7 +885,7 @@ public class OrderDAO {
         }
         return order;
     }
-    
+
     public boolean returnProduct(int orderID, int detailID, int oldQuantity, int newQuantity, CartProduct itemOld, CartProduct itemNew, String modifiedBy, String roleID, int maxQuantity, String note) throws SQLException {
         boolean result = false;
         Connection conn = null;
