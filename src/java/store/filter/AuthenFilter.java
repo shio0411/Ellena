@@ -96,6 +96,7 @@ public class AuthenFilter implements Filter {
         ADMIN_FUNCTION.add("ShowManagerController");
         ADMIN_FUNCTION.add("ShowCategoryController");
         ADMIN_FUNCTION.add("ShowAccountController");
+        ADMIN_FUNCTION.add("SearchAccountController");
         
 
         MANAGER_FUNCTION = new ArrayList<>();
