@@ -1,7 +1,7 @@
 # Release summary Manager product/order pagination and Employee order pagination
 ***Changes since last push from 17/7/2022 1:13 PM***
 
-***Release date: 15/7/2022 5:42 PM***
+***Release date: 17/7/2022 5:42 PM***
 
 ## Add in Files:
 - 
