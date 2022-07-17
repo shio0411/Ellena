@@ -25,18 +25,36 @@ public class SearchOrderController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
+        int page = 1; // page it start counting
+        int orderPerPage = 8; //number of product per page
+        int noOfPages = 1;// default number of page, to prevent no product was found
+        
         try {
+            
+            // if there is a page param, take it
+            if (request.getParameter("page") != null) {
+                page = Integer.parseInt(request.getParameter("page"));
+            }
+            
             HttpSession session = request.getSession();
             UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
             String search = request.getParameter("search");
             String sDateFrom = request.getParameter("dateFrom");
             String sDateTo = request.getParameter("dateTo");
             String sStatusID = request.getParameter("search-statusID");
+            
             OrderDAO dao = new OrderDAO();
-            List<OrderDTO> listOrder = dao.getOrder(search, sDateFrom, sDateTo, sStatusID);
+            List<OrderDTO> listOrder = dao.getOrder(search, sDateFrom, sDateTo, sStatusID, (page * orderPerPage) - orderPerPage + 1, orderPerPage * page);
             
             if (listOrder.size() > 0) {
+                
+                int noOfOrders = dao.getNumberOfOrder();
+                noOfPages = (int) Math.ceil(noOfOrders * 1.0 / orderPerPage);
+                
                 request.setAttribute("LIST_ORDER", listOrder);
+                request.setAttribute("noOfPages", noOfPages);
+                request.setAttribute("currentPage", page);
+                
                 switch (loginUser.getRoleID()) {
                     case MN:
                         url = MANAGER_SUCCESS;
@@ -54,6 +72,11 @@ public class SearchOrderController extends HttpServlet {
             request.setAttribute("DATE_FROM", sDateFrom);
             request.setAttribute("DATE_TO", sDateTo);
             request.setAttribute("STATUS_ID", sStatusID);
+            //give manager-order.jsp know that we are in SearchOrder
+            boolean searchPage = false;
+            request.setAttribute("noOfPages", noOfPages);
+            request.setAttribute("currentPage", page);
+            request.setAttribute("SWITCH_SEARCH", searchPage);
         } catch (Exception e) {
             log("Error at SearchAccountController: " + e.toString());
         } finally {

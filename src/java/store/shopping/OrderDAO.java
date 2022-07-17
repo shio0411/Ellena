@@ -20,34 +20,30 @@ public class OrderDAO {
 
     private static final String UPDATE_TRACKINGID = "UPDATE tblOrder SET trackingID = ? WHERE orderID = ?";
 
-    private static final String SEARCH_ORDER_ALL = "SELECT v1.orderID, orderDate, total, userID, fullName, statusID, statusName, payType, trackingID, [orderFullName], [address], phone, email, note, transactionNumber "
-            + "FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID ";
+//    private static final String SEARCH_ORDER_ALL = "SELECT v1.orderID, orderDate, total, userID, fullName, statusID, statusName, payType, trackingID, [orderFullName], [address], phone, email, note, transactionNumber "
+//            + "FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID ";
     private static final String SEARCH_ORDER_BY_ID = "SELECT v1.orderID, orderDate, total, userID, fullName, statusID, statusName, payType, trackingID, [orderFullName], [address], phone, email, note, transactionNumber "
             + "FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID "
             + "WHERE v1.orderID = ?";
 
-    private static final String SEARCH_ORDER_BY_STATUS = "SELECT v1.orderID, orderDate, total, userID, fullName, statusID, statusName, payType, trackingID, [orderFullName], [address], phone, email, note, transactionNumber "
-            + "FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID "
-            + "AND statusID = ? "
-            + "AND [TenKhongDau] LIKE '%' + [dbo].[fuChuyenCoDauThanhKhongDau](?) + '%'";
-
-    private static final String SEARCH_ORDER = "SELECT v1.orderID, orderDate, total, userID, fullName, statusID, statusName, payType, trackingID, [orderFullName], [address], phone, email, note, transactionNumber "
-            + "FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID "
-            + "WHERE (orderDate BETWEEN ? AND ?) "
-            + "AND statusID = ? "
-            + "AND [TenKhongDau] LIKE '%' + [dbo].[fuChuyenCoDauThanhKhongDau](?) + '%'";
-
-    private static final String SEARCH_ORDER_BY_DATE = "SELECT v1.orderID, orderDate, total, userID, fullName, statusID, statusName, payType, trackingID, [orderFullName], [address], phone, email, note, transactionNumber "
-            + "FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID "
-            + "WHERE (orderDate BETWEEN ? AND ?) "
-            + "AND [TenKhongDau] LIKE '%' + [dbo].[fuChuyenCoDauThanhKhongDau](?) + '%'";
-
+//    private static final String SEARCH_ORDER_BY_STATUS = "SELECT v1.orderID, orderDate, total, userID, fullName, statusID, statusName, payType, trackingID, [orderFullName], [address], phone, email, note, transactionNumber "
+//            + "FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID "
+//            + "AND statusID = ? "
+//            + "AND [TenKhongDau] LIKE '%' + [dbo].[fuChuyenCoDauThanhKhongDau](?) + '%'";
+//    private static final String SEARCH_ORDER = "SELECT v1.orderID, orderDate, total, userID, fullName, statusID, statusName, payType, trackingID, [orderFullName], [address], phone, email, note, transactionNumber "
+//            + "FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID "
+//            + "WHERE (orderDate BETWEEN ? AND ?) "
+//            + "AND statusID = ? "
+//            + "AND [TenKhongDau] LIKE '%' + [dbo].[fuChuyenCoDauThanhKhongDau](?) + '%'";
+//    private static final String SEARCH_ORDER_BY_DATE = "SELECT v1.orderID, orderDate, total, userID, fullName, statusID, statusName, payType, trackingID, [orderFullName], [address], phone, email, note, transactionNumber "
+//            + "FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID "
+//            + "WHERE (orderDate BETWEEN ? AND ?) "
+//            + "AND [TenKhongDau] LIKE '%' + [dbo].[fuChuyenCoDauThanhKhongDau](?) + '%'";
     private static final String UPDATE_ORDER_STATUS = "INSERT INTO tblOrderStatusUpdate(statusID, orderID, updateDate, modifiedBy, roleID) VALUES (?, ?, GETDATE(), ?, ?)";
 
-    private static final String SEARCH_ORDER_BY_NAME = "SELECT v1.orderID, orderDate, total, userID, fullName, statusID, statusName, payType, trackingID, [orderFullName], [address], phone, email, note, transactionNumber "
-            + "FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID "
-            + "AND [TenKhongDau] LIKE '%' + [dbo].[fuChuyenCoDauThanhKhongDau](?) + '%'";
-
+//    private static final String SEARCH_ORDER_BY_NAME = "SELECT v1.orderID, orderDate, total, userID, fullName, statusID, statusName, payType, trackingID, [orderFullName], [address], phone, email, note, transactionNumber "
+//            + "FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID "
+//            + "AND [TenKhongDau] LIKE '%' + [dbo].[fuChuyenCoDauThanhKhongDau](?) + '%'";
     //Order detail
     private static final String SEARCH_ORDER_DETAIL = "SELECT detailID, t1.productID, productName, t1.price, quantity, size, color "
             + "FROM tblOrderDetail t1 JOIN tblProduct t2 ON t1.productID = t2.productID "
@@ -95,7 +91,57 @@ public class OrderDAO {
     private static final String GET_RETURN_HISTORY = "SELECT t1.detailID, t1.productID, productName, t1.price, t1.quantity, size, color, t3.quantity AS [returnQuantity], returnType, returnDate, note \n"
             + "FROM tblOrderDetail t1 JOIN tblProduct t2 ON t1.productID = t2.productID JOIN tblReturns t3 ON t1.detailID = t3.detailID\n"
             + "WHERE orderID = ?";
+    private static final String SEARCH_ORDER_ALL = "WITH subTable AS (\n"
+            + "			SELECT v1.orderID, orderDate, total, userID, fullName, statusID, statusName, payType, trackingID, [orderFullName], [address], phone, email, note, transactionNumber, ROW_NUMBER() OVER(ORDER BY v1.orderID DESC) as row#\n"
+            + "			FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID \n"
+            + "			)\n"
+            + "SELECT orderID, orderDate, total, userID, fullName, statusID, statusName, payType, trackingID, [orderFullName], [address], phone, email, note, transactionNumber\n"
+            + "FROM subTable\n"
+            + "WHERE row# BETWEEN ? AND ?";
+    private static final String NUMBER_OF_SEARCH_ORDER_ALL = "SELECT Top 1 COUNT (*) OVER () AS ROW_COUNT FROM tblOrder";
+    private static final String SEARCH_ORDER = "WITH subTable AS (\n"
+            + "			SELECT v1.orderID, orderDate, total, userID, fullName, statusID, statusName, payType, trackingID, [orderFullName], [address], phone, email, note, transactionNumber, ROW_NUMBER() OVER(ORDER BY v1.orderID DESC) as row#\n"
+            + "			FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID \n"
+            + "			WHERE (orderDate BETWEEN ? AND ?) AND statusID = ? AND [TenKhongDau] LIKE '%' + [dbo].[fuChuyenCoDauThanhKhongDau](?) + '%'\n"
+            + "			)\n"
+            + "SELECT orderID, orderDate, total, userID, fullName, statusID, statusName, payType, trackingID, [orderFullName], [address], phone, email, note, transactionNumber\n"
+            + "FROM subTable\n"
+            + "WHERE row# BETWEEN ? AND ?";
+    private static final String NUMBER_OF_SEARCH_ORDER = "SELECT Top 1 COUNT (*) OVER () AS ROW_COUNT FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID WHERE (orderDate BETWEEN ? AND ?) AND statusID = ? AND [TenKhongDau] LIKE '%' + [dbo].[fuChuyenCoDauThanhKhongDau](?) + '%'";
+    private static final String SEARCH_ORDER_BY_DATE = "WITH subTable AS (\n"
+            + "			SELECT v1.orderID, orderDate, total, userID, fullName, statusID, statusName, payType, trackingID, [orderFullName], [address], phone, email, note, transactionNumber, ROW_NUMBER() OVER(ORDER BY v1.orderID DESC) as row# \n"
+            + "			FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID \n"
+            + "			WHERE (orderDate BETWEEN ? AND ?) AND [TenKhongDau] LIKE '%' + [dbo].[fuChuyenCoDauThanhKhongDau](?) + '%'\n"
+            + "			)\n"
+            + "SELECT orderID, orderDate, total, userID, fullName, statusID, statusName, payType, trackingID, [orderFullName], [address], phone, email, note, transactionNumber\n"
+            + "FROM subTable\n"
+            + "WHERE row# BETWEEN ? AND ?";
+    private static final String NUMBER_OF_SEARCH_ORDER_BY_DATE = "SELECT Top 1 COUNT (*) OVER () AS ROW_COUNT FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID WHERE (orderDate BETWEEN ? AND ?) AND [TenKhongDau] LIKE '%' + [dbo].[fuChuyenCoDauThanhKhongDau](?) + '%'";
+    private static final String SEARCH_ORDER_BY_STATUS = "WITH subTable AS (\n"
+            + "			SELECT v1.orderID, orderDate, total, userID, fullName, statusID, statusName, payType, trackingID, [orderFullName], [address], phone, email, note, transactionNumber, ROW_NUMBER() OVER(ORDER BY v1.orderID DESC) as row#  \n"
+            + "                 FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID AND statusID = ? AND [TenKhongDau] LIKE '%' + [dbo].[fuChuyenCoDauThanhKhongDau](?) + '%'\n"
+            + "			)\n"
+            + "SELECT orderID, orderDate, total, userID, fullName, statusID, statusName, payType, trackingID, [orderFullName], [address], phone, email, note, transactionNumber\n"
+            + "FROM subTable\n"
+            + "WHERE row# BETWEEN ? AND ?";
+    private static final String NUMBER_OF_SEARCH_ORDER_BY_STATUS = "SELECT Top 1 COUNT (*) OVER () AS ROW_COUNT FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID AND statusID = ? AND [TenKhongDau] LIKE '%' + [dbo].[fuChuyenCoDauThanhKhongDau](?) + '%'";
+    private static final String SEARCH_ORDER_BY_NAME = "WITH subTable AS (\n"
+            + "			SELECT v1.orderID, orderDate, total, userID, fullName, statusID, statusName, payType, trackingID, [orderFullName], [address], phone, email, note, transactionNumber, ROW_NUMBER() OVER(ORDER BY v1.orderID DESC) as row#  \n"
+            + "			FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID AND [TenKhongDau] LIKE '%' + [dbo].[fuChuyenCoDauThanhKhongDau](?) + '%'\n"
+            + "			)\n"
+            + "SELECT orderID, orderDate, total, userID, fullName, statusID, statusName, payType, trackingID, [orderFullName], [address], phone, email, note, transactionNumber\n"
+            + "FROM subTable\n"
+            + "WHERE row# BETWEEN ? AND ?";
+    private static final String NUMBER_OF_SEARCH_ORDER_BY_NAME = "SELECT Top 1 COUNT (*) OVER () AS ROW_COUNT FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID AND [TenKhongDau] LIKE '%' + [dbo].[fuChuyenCoDauThanhKhongDau](?) + '%'";
 
+    //-------------------------------
+    private int numberOfOrder;
+
+    public int getNumberOfOrder() {
+        return numberOfOrder;
+    }
+
+    //-------------------------------
     public int getOrderID(String userID) throws SQLException {
         int orderID = 0;
 
@@ -206,7 +252,7 @@ public class OrderDAO {
         return list;
     }
 
-    public List<OrderDTO> getOrder(String search, String sDateFrom, String sDateTo, String sStatusID) throws SQLException {
+    public List<OrderDTO> getOrder(String search, String sDateFrom, String sDateTo, String sStatusID, int offset, int noOfProducts) throws SQLException {
         List<OrderDTO> list = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -224,6 +270,8 @@ public class OrderDAO {
                     ptm.setDate(2, dateTo);
                     ptm.setInt(3, statusID);
                     ptm.setString(4, search);
+                    ptm.setInt(5, offset);
+                    ptm.setInt(6, noOfProducts);
                 } else if (!sDateFrom.isEmpty() && !sDateTo.isEmpty() && sStatusID.isEmpty()) {
                     Date dateFrom = Date.valueOf(sDateFrom);
                     Date dateTo = Date.valueOf(sDateTo);
@@ -231,14 +279,20 @@ public class OrderDAO {
                     ptm.setDate(1, dateFrom);
                     ptm.setDate(2, dateTo);
                     ptm.setString(3, search);
+                    ptm.setInt(4, offset);
+                    ptm.setInt(5, noOfProducts);
                 } else if (!(!sDateFrom.isEmpty() && !sDateTo.isEmpty()) && !sStatusID.isEmpty()) {
                     int statusID = Integer.parseInt(sStatusID);
                     ptm = conn.prepareStatement(SEARCH_ORDER_BY_STATUS);
                     ptm.setInt(1, statusID);
                     ptm.setString(2, search);
+                    ptm.setInt(3, offset);
+                    ptm.setInt(4, noOfProducts);
                 } else if ((sDateFrom.isEmpty() || sDateTo.isEmpty()) && sStatusID.isEmpty()) {
                     ptm = conn.prepareStatement(SEARCH_ORDER_BY_NAME);
                     ptm.setString(1, search);
+                    ptm.setInt(2, offset);
+                    ptm.setInt(3, noOfProducts);
                 }
                 rs = ptm.executeQuery();
                 while (rs.next()) {
@@ -267,6 +321,35 @@ public class OrderDAO {
             e.printStackTrace();
         } finally {
             if (rs != null) {
+                if (!sDateFrom.isEmpty() && !sDateTo.isEmpty() && !sStatusID.isEmpty()) {
+                    Date dateFrom = Date.valueOf(sDateFrom);
+                    Date dateTo = Date.valueOf(sDateTo);
+                    int statusID = Integer.parseInt(sStatusID);
+                    ptm = conn.prepareStatement(NUMBER_OF_SEARCH_ORDER);
+                    ptm.setDate(1, dateFrom);
+                    ptm.setDate(2, dateTo);
+                    ptm.setInt(3, statusID);
+                    ptm.setString(4, search);
+                } else if (!sDateFrom.isEmpty() && !sDateTo.isEmpty() && sStatusID.isEmpty()) {
+                    Date dateFrom = Date.valueOf(sDateFrom);
+                    Date dateTo = Date.valueOf(sDateTo);
+                    ptm = conn.prepareStatement(NUMBER_OF_SEARCH_ORDER_BY_DATE);
+                    ptm.setDate(1, dateFrom);
+                    ptm.setDate(2, dateTo);
+                    ptm.setString(3, search);
+                } else if (!(!sDateFrom.isEmpty() && !sDateTo.isEmpty()) && !sStatusID.isEmpty()) {
+                    int statusID = Integer.parseInt(sStatusID);
+                    ptm = conn.prepareStatement(NUMBER_OF_SEARCH_ORDER_BY_STATUS);
+                    ptm.setInt(1, statusID);
+                    ptm.setString(2, search);
+                } else if ((sDateFrom.isEmpty() || sDateTo.isEmpty()) && sStatusID.isEmpty()) {
+                    ptm = conn.prepareStatement(NUMBER_OF_SEARCH_ORDER_BY_NAME);
+                    ptm.setString(1, search);
+                }
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    this.numberOfOrder = rs.getInt("ROW_COUNT");
+                }
                 rs.close();
             }
             if (ptm != null) {
@@ -276,7 +359,7 @@ public class OrderDAO {
                 conn.close();
             }
         }
-        Collections.reverse(list);
+//        Collections.reverse(list);
         return list;
 
     }
@@ -380,7 +463,7 @@ public class OrderDAO {
         return check;
     }
 
-    public List<OrderDTO> getAllOrder() throws SQLException {
+    public List<OrderDTO> getAllOrder(int offset, int noOfProducts) throws SQLException {
         List<OrderDTO> list = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -389,6 +472,8 @@ public class OrderDAO {
             conn = DBUtils.getConnection();
             if (conn != null) {
                 ptm = conn.prepareStatement(SEARCH_ORDER_ALL);
+                ptm.setInt(1, offset);
+                ptm.setInt(2, noOfProducts);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
                     int orderID = rs.getInt("orderID");
@@ -415,6 +500,11 @@ public class OrderDAO {
             e.printStackTrace();
         } finally {
             if (rs != null) {
+                ptm = conn.prepareStatement(NUMBER_OF_SEARCH_ORDER_ALL);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    this.numberOfOrder = rs.getInt("ROW_COUNT");
+                }
                 rs.close();
             }
             if (ptm != null) {
@@ -424,7 +514,7 @@ public class OrderDAO {
                 conn.close();
             }
         }
-        Collections.reverse(list);
+//        Collections.reverse(list);
         return list;
     }
 
@@ -623,7 +713,7 @@ public class OrderDAO {
                         String image = rs.getString("image");
                         String returnStatus = rs.getString("returnType");
                         String note = rs.getString("note");
-                        
+
                         order.getValue().add(new OrderDetailDTO(detailID, productID, productName, price, quantity, size, color, image, returnStatus, note));
                     }
                 }

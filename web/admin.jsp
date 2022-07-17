@@ -270,7 +270,7 @@
                     //  int begin = ((currentPage - minLinkRange) > 0 ? ((currentPage - minLinkRange) < (noOfPages - noOfPageLinks + 1) ? (currentPage - minLinkRange) : (noOfPages - noOfPageLinks)) : 0) + 1; (referance)
                     int begin = 0;
                     if ((currentPage - minLinkRange) > 0) {
-                        if ((currentPage - minLinkRange) < (noOfPages - noOfPageLinks + 1)) {
+                        if ((currentPage - minLinkRange) < (noOfPages - noOfPageLinks + 1) || (noOfPages < noOfPageLinks)) { // add in (noOfPages < noOfPageLinks) in order to prevent negative page link
                             begin = (currentPage - minLinkRange);
                         } else {
                             begin = (noOfPages - noOfPageLinks + 1);

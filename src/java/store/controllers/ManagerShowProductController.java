@@ -29,11 +29,31 @@ public class ManagerShowProductController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
+        int page = 1; // page it start counting
+        int productPerPage = 8; //number of product per page
+        
         try {
+            // if there is a page param, take it
+            if (request.getParameter("page") != null) {
+                page = Integer.parseInt(request.getParameter("page"));
+            }
+            
             ProductDAO dao = new ProductDAO();
-            List<ProductDTO> listProduct = dao.getAllProduct();
+            List<ProductDTO> listProduct = dao.getAllProduct((page * productPerPage) - productPerPage + 1, productPerPage * page);
+            
             if (listProduct.size() > 0) {
+                
+                int noOfProducts = dao.getNumberOfProduct();
+                int noOfPages = (int) Math.ceil(noOfProducts * 1.0 / productPerPage);
+                
                 request.setAttribute("LIST_PRODUCT", listProduct);
+                request.setAttribute("noOfPages", noOfPages);
+                request.setAttribute("currentPage", page);
+                
+//                give manager-product.jsp know that we are in ShowProduct
+                boolean searchPage = true;
+                request.setAttribute("SWITCH_SEARCH", searchPage);
+                
                 url = SUCCESS;
             }
         } catch (Exception e) {

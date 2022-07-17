@@ -18,11 +18,7 @@ public class UserDAO {
     private static final String LOGIN = "SELECT fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID=? AND password=?";
     private static final String CHECK_DUPLICATE = "SELECT fullName FROM tblUsers WHERE userID=?";
     private static final String INSERT = "INSERT tblUsers(userID, fullName, password, sex, roleID, address, birthday, phone, status) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
-//    private static final String SEARCH_USER = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID LIKE ?";
-//    private static final String SEARCH_USER_WITH_ROLE_ID = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID LIKE ? AND roleID LIKE ?";
-//    private static final String SEARCH_USER_WITH_STATUS = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID LIKE ? AND roleID LIKE ? AND status=?";
     private static final String GET_USER_BY_ID = "SELECT userID, fullName, password, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID=?";
-//    private static final String SEARCH_USER_ALL = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers";
     private static final String SEARCH_MANAGER = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID LIKE ? AND roleID LIKE 'MN'";
     private static final String SEARCH_MANAGER_WITH_STATUS = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID LIKE ? AND roleID LIKE 'MN' AND status=?";
     private static final String SEARCH_MANAGER_ALL = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE roleID LIKE 'MN'";

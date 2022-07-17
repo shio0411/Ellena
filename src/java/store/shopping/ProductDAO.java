@@ -16,10 +16,7 @@ public class ProductDAO {
 
     private static final String ACTIVATE_PRODUCT = "UPDATE tblProduct SET status=1 WHERE productID=?";
     private static final String DEACTIVATE_PRODUCT = "UPDATE tblProduct SET status=0 WHERE productID=?";
-    private static final String SEARCH_ALL_PRODUCT = "SELECT productID, productName, price, categoryName, discount, lowStockLimit, p.status  FROM tblProduct p JOIN tblCategory c ON p.categoryID=c.categoryID";
-    private static final String SEARCH_PRODUCT = "SELECT productID, productName, price, categoryName, discount, lowStockLimit, p.status  FROM tblProduct p JOIN tblCategory c ON p.categoryID=c.categoryID AND dbo.fuChuyenCoDauThanhKhongDau(productName) LIKE ?";
     private static final String GET_PRODUCT = "SELECT productID, productName, price, description, categoryName, discount, lowStockLimit, p.status  FROM tblProduct p JOIN tblCategory c ON p.categoryID=c.categoryID AND productID=?";
-    private static final String SEARCH_PRODUCT_WITH_STATUS = "SELECT productID, productName, price, categoryName, discount, lowStockLimit, p.status FROM tblProduct p JOIN tblCategory c ON p.categoryID=c.categoryID AND dbo.fuChuyenCoDauThanhKhongDau(productName) LIKE ? AND p.status=?";
     private static final String GET_PRODUCT_COLOR_IMAGES = "SELECT color, image\n"
             + "FROM tblProduct p JOIN tblProductColors pc\n"
             + "ON p.productID = pc.productID \n"
@@ -37,7 +34,7 @@ public class ProductDAO {
             + "JOIN tblColorImage i ON pc.productColorID = i.productColorID\n"
             + "INNER JOIN tblOrderDetail d ON p.productID = d.productID \n"
             + "JOIN tblOrder o ON d.orderID = o.orderID  \n"
-            + "WHERE DATEDIFF(day,o.orderDate,GETDATE()) < 30 \n" 
+            + "WHERE DATEDIFF(day,o.orderDate,GETDATE()) < 30 \n"
             + "GROUP BY p.productID, p.productName, p.price, p.discount, i.image\n"
             + "ORDER BY SUM(d.quantity) desc";
     private static final String GET_BEST_SELLER_LIST = "SELECT p.productID, p.productName, p.price, p.discount, i.image\n"
@@ -89,12 +86,44 @@ public class ProductDAO {
             + "JOIN tblColorSizes cs ON cs.productColorID = pc.productColorID\n"
             + "JOIN tblCategory c ON c.categoryID = p.categoryID\n"
             + "WHERE dbo.fuChuyenCoDauThanhKhongDau(categoryName) LIKE ?";
-    
+
     private static final String UPDATE_PRODUCT_QUANTITY = "UPDATE tblColorSizes SET quantity = ? WHERE productColorID = ? AND size LIKE ?";
     private static final String GET_PRODUCTCOLORID = "SELECT pc.productColorID, color FROM tblProduct p JOIN tblProductColors pc ON p.productID = pc.productID WHERE p.productID = ? AND color LIKE ?";
     private static final String GET_PRODUCT_STATUS = "SELECT [status] FROM tblProduct WHERE productID = ?";
-    
-    public int getProductStatus(int productID) throws SQLException{
+    private static final String SEARCH_ALL_PRODUCT = "WITH subTable AS (\n"
+            + "			SELECT productID, productName, price, categoryName, discount, lowStockLimit, p.status, ROW_NUMBER() OVER(ORDER BY (SELECT NULL)) as row#\n"
+            + "			FROM tblProduct p JOIN tblCategory c ON p.categoryID=c.categoryID\n"
+            + "			)\n"
+            + "SELECT productID, productName, price, categoryName, discount, lowStockLimit, status\n"
+            + "FROM subTable\n"
+            + "WHERE row# BETWEEN ? AND ?";
+    private static final String NUMBER_OF_ALL_PRODUCT = "SELECT Top 1 COUNT (*) OVER () AS ROW_COUNT FROM tblProduct";
+    private static final String SEARCH_PRODUCT = "WITH subTable AS (\n"
+            + "			SELECT productID, productName, price, categoryName, discount, lowStockLimit, p.status, ROW_NUMBER() OVER(ORDER BY (SELECT NULL)) as row#\n"
+            + "			FROM tblProduct p JOIN tblCategory c ON p.categoryID=c.categoryID AND dbo.fuChuyenCoDauThanhKhongDau(productName) LIKE ?\n"
+            + "			)\n"
+            + "SELECT productID, productName, price, categoryName, discount, lowStockLimit, status\n"
+            + "FROM subTable\n"
+            + "WHERE row# BETWEEN ? AND ?";
+    private static final String NUMBER_OF_SEARCH_PRODUCT = "SELECT Top 1 COUNT (*) OVER () AS ROW_COUNT FROM tblProduct WHERE dbo.fuChuyenCoDauThanhKhongDau(productName) LIKE ?";
+    private static final String SEARCH_PRODUCT_WITH_STATUS = "WITH subTable AS (\n"
+            + "			SELECT productID, productName, price, categoryName, discount, lowStockLimit, p.status, ROW_NUMBER() OVER(ORDER BY (SELECT NULL)) as row#\n"
+            + "			FROM tblProduct p JOIN tblCategory c ON p.categoryID=c.categoryID AND dbo.fuChuyenCoDauThanhKhongDau(productName) LIKE ? AND p.status=?\n"
+            + "			)\n"
+            + "SELECT productID, productName, price, categoryName, discount, lowStockLimit, status\n"
+            + "FROM subTable\n"
+            + "WHERE row# BETWEEN ? AND ?";
+    private static final String NUMBER_OF_SEARCH_PRODUCT_WITH_STATUS = "SELECT Top 1 COUNT (*) OVER () AS ROW_COUNT FROM tblProduct WHERE dbo.fuChuyenCoDauThanhKhongDau(productName) LIKE ? AND status=?";
+
+    //-------------------------------
+    private int numberOfProduct;
+
+    public int getNumberOfProduct() {
+        return numberOfProduct;
+    }
+
+    //-------------------------------
+    public int getProductStatus(int productID) throws SQLException {
         int status = -1;
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -127,12 +156,11 @@ public class ProductDAO {
 
         return status;
     }
-    
-    public boolean updateProductQuantity(int quantity, int productColorID, String size) throws SQLException{
+
+    public boolean updateProductQuantity(int quantity, int productColorID, String size) throws SQLException {
         boolean result = false;
         Connection conn = null;
         PreparedStatement ptm = null;
-        
 
         try {
             conn = DBUtils.getConnection();
@@ -157,6 +185,7 @@ public class ProductDAO {
 
         return result;
     }
+
     public int getProductColorID(int productID, String color) throws SQLException {
         int colorSizeID = 0;
         Connection conn = null;
@@ -192,7 +221,7 @@ public class ProductDAO {
         return colorSizeID;
     }
 
-    public List<ProductDTO> getAllProduct() throws SQLException {
+    public List<ProductDTO> getAllProduct(int offset, int noOfProducts) throws SQLException {
         List<ProductDTO> listProduct = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -202,6 +231,8 @@ public class ProductDAO {
             conn = DBUtils.getConnection();
             if (conn != null) {
                 ptm = conn.prepareStatement(SEARCH_ALL_PRODUCT);
+                ptm.setInt(1, offset);
+                ptm.setInt(2, noOfProducts);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
                     int productID = rs.getInt("productID");
@@ -219,6 +250,11 @@ public class ProductDAO {
             e.printStackTrace();
         } finally {
             if (rs != null) {
+                ptm = conn.prepareStatement(NUMBER_OF_ALL_PRODUCT);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    this.numberOfProduct = rs.getInt("ROW_COUNT");
+                }
                 rs.close();
             }
             if (ptm != null) {
@@ -313,7 +349,7 @@ public class ProductDAO {
         return sizeQuantityList;
     }
 
-    public List<ProductDTO> getListProduct(String search, String Status) throws SQLException {
+    public List<ProductDTO> getListProduct(String search, String Status, int offset, int noOfProducts) throws SQLException {
         List<ProductDTO> listProduct = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -326,9 +362,13 @@ public class ProductDAO {
                     ptm = conn.prepareStatement(SEARCH_PRODUCT_WITH_STATUS);
                     ptm.setString(1, "%" + search + "%");
                     ptm.setString(2, Status);
+                    ptm.setInt(3, offset);
+                    ptm.setInt(4, noOfProducts);
                 } else {
                     ptm = conn.prepareStatement(SEARCH_PRODUCT);
                     ptm.setString(1, "%" + search + "%");
+                    ptm.setInt(2, offset);
+                    ptm.setInt(3, noOfProducts);
                 }
                 rs = ptm.executeQuery();
                 while (rs.next()) {
@@ -347,6 +387,19 @@ public class ProductDAO {
             e.printStackTrace();
         } finally {
             if (rs != null) {
+                if ("true".equalsIgnoreCase(Status) || "false".equalsIgnoreCase(Status)) {
+                    ptm = conn.prepareStatement(NUMBER_OF_SEARCH_PRODUCT_WITH_STATUS);
+                    ptm.setString(1, "%" + search + "%");
+                    ptm.setString(2, Status);
+                } else {
+                    ptm = conn.prepareStatement(NUMBER_OF_SEARCH_PRODUCT);
+                    ptm.setString(1, "%" + search + "%");
+                }
+
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    this.numberOfProduct = rs.getInt("ROW_COUNT");
+                }
                 rs.close();
             }
             if (ptm != null) {
@@ -460,7 +513,6 @@ public class ProductDAO {
                     String size = rs.getString("size");
                     int quantity = rs.getInt("quantity");
                     colorSizeQuantity.put(Arrays.asList(color, size), quantity);
-
 
                 }
                 product = new ProductDTO(productID, productName, description, colorImage, colorSizeQuantity, price, price, discount, lowStockLimit, categoryName, status);
@@ -1088,7 +1140,7 @@ public class ProductDAO {
 
     public boolean addColors(int productID, String[] colors) throws SQLException {
         boolean check = false;
-        Connection conn = null; 
+        Connection conn = null;
         PreparedStatement ptm = null;
         try {
             conn = DBUtils.getConnection();
@@ -1147,10 +1199,10 @@ public class ProductDAO {
         }
         return check;
     }
-    
+
     public boolean addVariants(int productColorID, String[] sizes, int[] quantities) throws SQLException {
         boolean check = false;
-        Connection conn = null; 
+        Connection conn = null;
         PreparedStatement ptm = null;
         try {
             conn = DBUtils.getConnection();
@@ -1186,10 +1238,10 @@ public class ProductDAO {
         }
         return check;
     }
-    
+
     public boolean updateVariants(int productColorID, String[] sizes, int[] quantities) throws SQLException {
         boolean check = false;
-        Connection conn = null; 
+        Connection conn = null;
         PreparedStatement ptm = null;
         try {
             conn = DBUtils.getConnection();
@@ -1225,15 +1277,15 @@ public class ProductDAO {
         }
         return check;
     }
-    
+
     public boolean updateProduct(ProductDTO product) throws SQLException {
         boolean check = false;
-        Connection conn = null; 
+        Connection conn = null;
         PreparedStatement ptm = null;
         try {
             conn = DBUtils.getConnection();
             ptm = conn.prepareStatement(UPDATE_PRODUCT);
-            
+
             ptm.setString(1, product.getProductName());
             ptm.setString(2, product.getDescription());
             ptm.setInt(3, product.getPrice());
@@ -1242,10 +1294,8 @@ public class ProductDAO {
             ptm.setInt(6, product.getLowStockLimit());
             ptm.setBoolean(7, product.isStatus());
             ptm.setInt(8, product.getProductID());
-            
+
             check = ptm.executeUpdate() > 0;
-            
-            
 
         } catch (ClassNotFoundException | SQLException e) {
         } finally {
@@ -1258,9 +1308,9 @@ public class ProductDAO {
         }
         return check;
     }
-    
+
     public List<Integer> getProductColorIDList(int productID) throws SQLException {
-        Connection conn = null; 
+        Connection conn = null;
         PreparedStatement ptm = null;
         ResultSet rs = null;
         List<Integer> productColorIDs = new ArrayList<>();
@@ -1269,9 +1319,9 @@ public class ProductDAO {
             ptm = conn.prepareStatement(GET_PRODUCT_COLOR_ID_LIST);
             ptm.setInt(1, productID);
             rs = ptm.executeQuery();
-            while(rs.next()) {
+            while (rs.next()) {
                 productColorIDs.add(rs.getInt(1));
-            }            
+            }
 
         } catch (ClassNotFoundException | SQLException e) {
         } finally {
@@ -1283,10 +1333,10 @@ public class ProductDAO {
             }
         }
         return productColorIDs;
-    } 
-    
+    }
+
     public List<String> getProductImages(List<Integer> productColorIDList) throws SQLException {
-        Connection conn = null; 
+        Connection conn = null;
         PreparedStatement ptm = null;
         ResultSet rs = null;
         List<String> images = null;
@@ -1297,17 +1347,17 @@ public class ProductDAO {
             productColorIDList.forEach((Integer _item) -> {
                 sb.append("?, ");
             });
-            sb.replace(sb.length()-2,sb.length()-1 , ")");
-            
+            sb.replace(sb.length() - 2, sb.length() - 1, ")");
+
             ptm = conn.prepareStatement(sb.toString());
             for (int i = 0; i < productColorIDList.size(); i++) {
-                ptm.setInt(i+1, productColorIDList.get(i));
+                ptm.setInt(i + 1, productColorIDList.get(i));
             }
-            
+
             rs = ptm.executeQuery();
-            while(rs.next()) {
+            while (rs.next()) {
                 images.add(rs.getString("image"));
-            }            
+            }
 
         } catch (ClassNotFoundException | SQLException e) {
         } finally {
@@ -1320,10 +1370,10 @@ public class ProductDAO {
         }
         return images;
     }
-    
+
     public boolean updateImages(List<String> newImages, List<String> images) throws SQLException {
         boolean check = false;
-        Connection conn = null; 
+        Connection conn = null;
         PreparedStatement ptm = null;
         try {
             conn = DBUtils.getConnection();
@@ -1334,14 +1384,12 @@ public class ProductDAO {
                 ptm.setString(2, images.get(i));
                 ptm.addBatch();
             }
-            
+
             int[] results = ptm.executeBatch();
             for (int i = 0; i < results.length; i++) {
                 check = results[i] >= 0;
             }
             conn.commit();
-            
-            
 
         } catch (ClassNotFoundException | SQLException e) {
         } finally {
@@ -1354,16 +1402,16 @@ public class ProductDAO {
         }
         return check;
     }
-    
+
     public List<ProductDTO> filterPrice(List<ProductDTO> listProduct, int minAmount, int maxAmount) throws SQLException {
         List<ProductDTO> filterOut = new ArrayList<>();
-        for(ProductDTO p: listProduct){
-            if(!(p.getPrice() - p.getDiscount() >= minAmount && p.getPrice() - p.getDiscount() <= maxAmount)){
+        for (ProductDTO p : listProduct) {
+            if (!(p.getPrice() - p.getDiscount() >= minAmount && p.getPrice() - p.getDiscount() <= maxAmount)) {
                 filterOut.add(p);
             }
         }
-        
-        for(ProductDTO p : filterOut){
+
+        for (ProductDTO p : filterOut) {
             listProduct.remove(p);
         }
         return listProduct;
