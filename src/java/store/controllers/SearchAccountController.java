@@ -28,16 +28,42 @@ public class SearchAccountController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
+        int page = 1; // page it start counting
+        int accountPerPage = 8; //number of account per page
+        int noOfPages = 1;// default number of page, to prevent no product was found
+        
         try {
             String search = request.getParameter("search");
             String roleID = request.getParameter("roleID");
             String status = request.getParameter("status");
+            
+            // if there is a "page" param, take it
+            if (request.getParameter("page") != null) {
+                page = Integer.parseInt(request.getParameter("page"));
+            }
+            
             UserDAO dao = new UserDAO();
-            List<UserDTO> listUser = dao.getListUsers(search, roleID, status);
+            List<UserDTO> listUser = dao.getListUsers(search, roleID, status, (page * accountPerPage) - accountPerPage + 1, accountPerPage * page);
+
             if (listUser.size() > 0) {
+                
+                int noOfAccounts = dao.getNumberOfUser();
+                noOfPages = (int) Math.ceil(noOfAccounts * 1.0 / accountPerPage);
+                
                 request.setAttribute("LIST_USER", listUser);
+                request.setAttribute("noOfPages", noOfPages);
+                request.setAttribute("currentPage", page);
+
                 url = SUCCESS;
             }
+            //give admin.jsp know that we are in SearchAccountController
+            boolean searchPage = false;
+            request.setAttribute("noOfPages", noOfPages);
+            request.setAttribute("currentPage", page);
+            request.setAttribute("SWITCH_SEARCH", searchPage);
+            
+            
+            
         } catch (Exception e) {
             log("Error at SearchAccountController: " + e.toString());
         } finally {

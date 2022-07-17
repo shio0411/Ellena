@@ -1,13 +1,19 @@
-# Release summary orderConfirm mail
-***Changes since last push from 30/6/2022 8:39 PM***
+# Release summary admin account pagination
+***Changes since last push from 14/7/2022 10:39 PM***
 
-***Release date: 03/7/2022 8:45 PM***
+***Release date: 15/7/2022 12:20 PM***
 
 ## Add in Files:
 - 
 
 ## Change in Files:
-- `JavaMailUtils`
-	- Add in orderConfirm mail funcitons
-- `CheckoutController`
-	- - Add in orderConfirm mail funciton
+- admin.jsp
+	- Reconfig for pagination pageNav
+- `ShowAccountController`
+	- Reconfig for pagination
+- `SearchAccountController`
+	- Reconfig for pagination
+- `UserDAO`
+	- Reconfig for pagination
+- `AuthenFilter`
+	- Allow Admin to access SearchAccountController directly
