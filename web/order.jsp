@@ -192,8 +192,12 @@
                                             <div class="cart__product__item__title">
                                                 <a href="ProductRouteController?productID=<%= orderDetail.getProductID()%>">
                                                     <h6 class="mb-3"><%= orderDetail.getProductName()%></h6>
-                                                </a>
-                                                <%= orderDetail.getColor()%>, <%= orderDetail.getSize()%> x <%= orderDetail.getQuantity()%>
+                                                </a>    
+                                                <%= orderDetail.getColor()%>, <%= orderDetail.getSize()%> <%if (orderDetail.getQuantity() != 0) {%> x <%= orderDetail.getQuantity()%> 
+                                                <%} else {%> 
+                                                <br/>
+                                                <%= orderDetail.getReturnStatus()%>: <%= orderDetail.getNote()%>
+                                                <%}%>
 
                                             </div>
                                         </td>

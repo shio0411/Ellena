@@ -25,13 +25,34 @@ public class ShowOrderController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
+        int page = 1; // page it start counting
+        int orderPerPage = 8; //number of order per page
+        
         try {
+            
+            // if there is a page param, take it
+            if (request.getParameter("page") != null) {
+                page = Integer.parseInt(request.getParameter("page"));
+            }
+            
             OrderDAO dao = new OrderDAO();
-            List<OrderDTO> listOrder = dao.getAllOrder();
+            List<OrderDTO> listOrder = dao.getAllOrder((page * orderPerPage) - orderPerPage + 1, orderPerPage * page);
+            
             HttpSession session = request.getSession();
             UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
             if (listOrder.size() > 0) {
+                
+                int noOfOrders = dao.getNumberOfOrder();
+                int noOfPages = (int) Math.ceil(noOfOrders * 1.0 / orderPerPage);
+                
                 request.setAttribute("LIST_ORDER", listOrder);
+                request.setAttribute("noOfPages", noOfPages);
+                request.setAttribute("currentPage", page);
+                
+//                give manager-order.jsp know that we are in ShowOrder
+                boolean searchPage = true;
+                request.setAttribute("SWITCH_SEARCH", searchPage);
+                
                 switch (loginUser.getRoleID()) {
                     case MN:
                         url = MANAGER_SUCCESS;

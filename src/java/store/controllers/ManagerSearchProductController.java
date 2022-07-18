@@ -29,18 +29,39 @@ public class ManagerSearchProductController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
+        int page = 1; // page it start counting
+        int productPerPage = 8; //number of product per page
+        int noOfPages = 1;// default number of page, to prevent no product was found
 
         try {
+            // if there is a page param, take it
+            if (request.getParameter("page") != null) {
+                page = Integer.parseInt(request.getParameter("page"));
+            }
+            
             ProductDAO dao = new ProductDAO();
             String search = VNCharacterUtils.removeAccent(request.getParameter("search"));
             String status = request.getParameter("status");
 
-            List<ProductDTO> listProduct = dao.getListProduct(search, status);
+            List<ProductDTO> listProduct = dao.getListProduct(search, status, (page * productPerPage) - productPerPage + 1, productPerPage * page);
 
             if (listProduct.size() > 0) {
+                
+                int noOfProducts = dao.getNumberOfProduct();
+                noOfPages = (int) Math.ceil(noOfProducts * 1.0 / productPerPage);
+                
                 request.setAttribute("LIST_PRODUCT", listProduct);
+                request.setAttribute("noOfPages", noOfPages);
+                request.setAttribute("currentPage", page);
+                
                 url = SUCCESS;
             }
+            //give manager-product.jsp know that we are in SearchProduct
+            boolean searchPage = false;
+            request.setAttribute("noOfPages", noOfPages);
+            request.setAttribute("currentPage", page);
+            request.setAttribute("SWITCH_SEARCH", searchPage);
+            
 
         } catch (Exception e) {
             log("Error at ManagerShowProductController: " + toString());

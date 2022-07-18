@@ -18,11 +18,7 @@ public class UserDAO {
     private static final String LOGIN = "SELECT fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID=? AND password=?";
     private static final String CHECK_DUPLICATE = "SELECT fullName FROM tblUsers WHERE userID=?";
     private static final String INSERT = "INSERT tblUsers(userID, fullName, password, sex, roleID, address, birthday, phone, status) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    private static final String SEARCH_USER = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID LIKE ?";
-    private static final String SEARCH_USER_WITH_ROLE_ID = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID LIKE ? AND roleID LIKE ?";
-    private static final String SEARCH_USER_WITH_STATUS = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID LIKE ? AND roleID LIKE ? AND status=?";
     private static final String GET_USER_BY_ID = "SELECT userID, fullName, password, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID=?";
-    private static final String SEARCH_USER_ALL = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers";
     private static final String SEARCH_MANAGER = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID LIKE ? AND roleID LIKE 'MN'";
     private static final String SEARCH_MANAGER_WITH_STATUS = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE userID LIKE ? AND roleID LIKE 'MN' AND status=?";
     private static final String SEARCH_MANAGER_ALL = "SELECT userID, fullName, sex, roleID, address, birthday, phone, status FROM tblUsers WHERE roleID LIKE 'MN'";
@@ -36,7 +32,50 @@ public class UserDAO {
     private static final String ACTIVATE_ACCOUNT = "UPDATE tblUsers SET status=1 WHERE userID=?";
     private static final String DEACTIVATE_ACCOUNT = "UPDATE tblUsers SET status=0 WHERE userID=?";
     private static final String STATISTIC_ORDER_QUANITY = "SELECT orderDate, COUNT(*) AS [orderQuantity], SUM(total) AS [income], SUM(quantity) as [productQuantity] FROM tblOrder o JOIN tblOrderDetail d ON o.orderID = d.orderID GROUP BY orderDate";
+    private static final String SEARCH_USER_ALL = "WITH subTable AS ("
+            + "                 SELECT userID, fullName, sex, roleID, address, birthday, phone, status, ROW_NUMBER() OVER(ORDER BY (SELECT NULL)) as row# "
+            + "                 FROM tblUsers "
+            + "                 )"
+            + "SELECT userID, fullName, sex, roleID, address, birthday, phone, status "
+            + "FROM subTable "
+            + "WHERE row# BETWEEN ? AND ? ";
+    private static final String NUMBER_OF_ALL_USER = "SELECT Top 1 COUNT (*) OVER () AS ROW_COUNT FROM tblUsers";
+    private static final String SEARCH_USER = "WITH subTable AS ("
+            + "			SELECT userID, fullName, sex, roleID, address, birthday, phone, status, ROW_NUMBER() OVER(ORDER BY (SELECT NULL)) as row# "
+            + "			FROM tblUsers "
+            + "			WHERE userID LIKE ? "
+            + "			)"
+            + "SELECT userID, fullName, sex, roleID, address, birthday, phone, status "
+            + "FROM subTable "
+            + "WHERE row# BETWEEN ? AND ? ";
+    private static final String NUMBER_OF_SEARCH_USER = "SELECT Top 1 COUNT (*) OVER () AS ROW_COUNT FROM tblUsers WHERE userID LIKE ?";
+    private static final String SEARCH_USER_WITH_ROLE_ID = "WITH subTable AS ("
+            + "			SELECT userID, fullName, sex, roleID, address, birthday, phone, status, ROW_NUMBER() OVER(ORDER BY (SELECT NULL)) as row# "
+            + "			FROM tblUsers "
+            + "			WHERE userID LIKE ? AND roleID LIKE ? "
+            + "			)"
+            + "SELECT userID, fullName, sex, roleID, address, birthday, phone, status "
+            + "FROM subTable "
+            + "WHERE row# BETWEEN ? AND ? ";
+    private static final String NUMBER_OF_SEARCH_USER_WITH_ROLE_ID = "SELECT Top 1 COUNT (*) OVER () AS ROW_COUNT FROM tblUsers WHERE userID LIKE ? AND roleID LIKE ?";
+    private static final String SEARCH_USER_WITH_STATUS = "WITH subTable AS ("
+            + "			SELECT userID, fullName, sex, roleID, address, birthday, phone, status, ROW_NUMBER() OVER(ORDER BY (SELECT NULL)) as row# "
+            + "			FROM tblUsers "
+            + "			WHERE userID LIKE ? AND roleID LIKE ? AND status=? "
+            + "			)"
+            + "SELECT userID, fullName, sex, roleID, address, birthday, phone, status "
+            + "FROM subTable "
+            + "WHERE row# BETWEEN ? AND ? ";
+    private static final String NUMBER_OF_SEARCH_USER_WITH_STATUS = "SELECT Top 1 COUNT (*) OVER () AS ROW_COUNT FROM tblUsers WHERE userID LIKE ? AND roleID LIKE ? AND status=?";
 
+    //-------------------------------
+    private int numberOfUser;
+
+    public int getNumberOfUser() {
+        return numberOfUser;
+    }
+
+    //-------------------------------
     public UserDTO checkLogin(String userID, String password) throws SQLException {
         UserDTO user = null;
         Connection conn = null;
@@ -133,9 +172,9 @@ public class UserDAO {
             ptm.setBoolean(4, sex);
             ptm.setString(5, roleID);
             ptm.setString(6, address);
-            if(date!=null)
+            if (date != null) {
                 ptm.setDate(7, new java.sql.Date(date.getTime()));
-            else{
+            } else {
                 ptm.setDate(7, null);
             }
             ptm.setString(8, phone);
@@ -155,7 +194,7 @@ public class UserDAO {
         return check;
     }
 
-    public List<UserDTO> getListUsers(String search, String roleID, String Status) throws SQLException {
+    public List<UserDTO> getListUsers(String search, String roleID, String Status, int offset, int noOfProducts) throws SQLException {
         List<UserDTO> list = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -166,15 +205,21 @@ public class UserDAO {
                 if (roleID == null) {
                     ptm = conn.prepareStatement(SEARCH_USER);
                     ptm.setString(1, "%" + search + "%");
+                    ptm.setInt(2, offset);
+                    ptm.setInt(3, noOfProducts);
                 } else if ("true".equalsIgnoreCase(Status) || "false".equalsIgnoreCase(Status)) {
                     ptm = conn.prepareStatement(SEARCH_USER_WITH_STATUS);
                     ptm.setString(1, "%" + search + "%");
                     ptm.setString(2, roleID);
                     ptm.setString(3, Status);
+                    ptm.setInt(4, offset);
+                    ptm.setInt(5, noOfProducts);
                 } else {
                     ptm = conn.prepareStatement(SEARCH_USER_WITH_ROLE_ID);
                     ptm.setString(1, "%" + search + "%");
                     ptm.setString(2, roleID);
+                    ptm.setInt(3, offset);
+                    ptm.setInt(4, noOfProducts);
 
                 }
                 rs = ptm.executeQuery();
@@ -182,17 +227,37 @@ public class UserDAO {
                     String userID = rs.getString("userID");
                     String fullName = rs.getString("fullName");
                     boolean sex = rs.getBoolean("sex");
-                    roleID = rs.getString("roleID");
+                    String role = rs.getString("roleID");
                     String address = rs.getString("address");
                     Date birthday = rs.getDate("birthday");
                     String phone = rs.getString("phone");
                     boolean status = rs.getBoolean("status");
-                    list.add(new UserDTO(userID, fullName, "*******", sex, roleID, address, birthday, phone, status));
+                    list.add(new UserDTO(userID, fullName, "*******", sex, role, address, birthday, phone, status));
                 }
             }
         } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             if (rs != null) {
+                if (roleID == null) {
+                    ptm = conn.prepareStatement(NUMBER_OF_SEARCH_USER);
+                    ptm.setString(1, "%" + search + "%");
+                } else if ("true".equalsIgnoreCase(Status) || "false".equalsIgnoreCase(Status)) {
+                    ptm = conn.prepareStatement(NUMBER_OF_SEARCH_USER_WITH_STATUS);
+                    ptm.setString(1, "%" + search + "%");
+                    ptm.setString(2, roleID);
+                    ptm.setString(3, Status);
+                } else {
+                    ptm = conn.prepareStatement(NUMBER_OF_SEARCH_USER_WITH_ROLE_ID);
+                    ptm.setString(1, "%" + search + "%");
+                    ptm.setString(2, roleID);
+
+                }
+                
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    this.numberOfUser = rs.getInt("ROW_COUNT");
+                }
                 rs.close();
             }
             if (ptm != null) {
@@ -205,7 +270,7 @@ public class UserDAO {
         return list;
     }
 
-    public List<UserDTO> getAllUsers() throws SQLException {
+    public List<UserDTO> getAllUsers(int offset, int noOfProducts) throws SQLException {
         List<UserDTO> list = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -214,6 +279,8 @@ public class UserDAO {
             conn = DBUtils.getConnection();
             if (conn != null) {
                 ptm = conn.prepareStatement(SEARCH_USER_ALL);
+                ptm.setInt(1, offset);
+                ptm.setInt(2, noOfProducts);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
                     String userID = rs.getString("userID");
@@ -228,8 +295,14 @@ public class UserDAO {
                 }
             }
         } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             if (rs != null) {
+                ptm = conn.prepareStatement(NUMBER_OF_ALL_USER);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    this.numberOfUser = rs.getInt("ROW_COUNT");
+                }
                 rs.close();
             }
             if (ptm != null) {
@@ -413,7 +486,7 @@ public class UserDAO {
         }
         return check;
     }
-    
+
     public boolean updateSex(String newSex, String userID) throws SQLException {
         boolean check = false;
         Connection conn = null;
@@ -437,7 +510,7 @@ public class UserDAO {
         }
         return check;
     }
-    
+
     public boolean updateBirthday(Date newBirthday, String userID) throws SQLException {
         boolean check = false;
         Connection conn = null;

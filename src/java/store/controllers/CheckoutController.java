@@ -90,6 +90,7 @@ public class CheckoutController extends HttpServlet {
                         }
                         transactionNumber = request.getParameter("vnp_TransactionNo");
                         String responseCode = request.getParameter("vnp_ResponseCode");
+                        String momoResultCode = request.getParameter("resultCode");
                         String vnp_SecureHash = request.getParameter("vnp_SecureHash");
                         if (fields.containsKey("vnp_SecureHashType")) {
                             fields.remove("vnp_SecureHashType");
@@ -103,6 +104,9 @@ public class CheckoutController extends HttpServlet {
                         if (transactionNumber == null && paidStatus == true) {
                             url = "vnpay.jsp";
                         }else if(!"00".equalsIgnoreCase(responseCode) && responseCode != null){                              
+                            url = INPUT_ERROR;
+                            request.setAttribute("CART_MESSAGE", "Giao dịch không thành công!");
+                        } else if (!"0".equalsIgnoreCase(momoResultCode) && momoResultCode != null) { 
                             url = INPUT_ERROR;
                             request.setAttribute("CART_MESSAGE", "Giao dịch không thành công!");
                         } else {

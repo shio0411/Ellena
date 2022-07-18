@@ -40,6 +40,9 @@
             if (dateFrom.equals("") || dateTo.equals("")) {
                 dateFrom = dateTo = "";
             }
+//            checking if using ShowController or SearchController page count
+            boolean searchAll = false;
+
             if (message != null) {
         %>
         <!-- Pop-up thông báo cập nhật thành công -->
@@ -112,7 +115,11 @@
                 <input type="date" name="dateFrom" id="search-dateFrom" value="<%= dateFrom%>"/>
                 đến
                 <input type="date" name="dateTo" id="search-dateTo" value="<%= dateTo%>"/>
-                <button type="submit" name="action" value="SearchOrder" class="btn-outline-dark" style="width: 15%; padding: 0.5% 0.1%;"><i class="fa fa-search fa-lg"></i>Tìm kiếm</button>
+                <button type="submit" name="action" value="SearchOrder" class="btn-outline-dark" style="width: 15%; padding: 0.5% 0.1%;"><i class="fa fa-search fa-lg"></i>Search</button>
+                <!--switch to SearchController page count after submit form-->
+                <%
+                    searchAll = (boolean) request.getAttribute("SWITCH_SEARCH");
+                %>
             </form>   
             ${requestScope.EMPTY_LIST_MESSAGE}
 
@@ -411,11 +418,147 @@
                 </tr>
 
                 <%
+                            }
                         }
                     }
-                }
                 %>
             </table>
+
+            <!--page nav-->
+            <%
+                if (listOrder != null) { //if no order in list, page nav won't display
+
+
+            %>
+            <div class="row pagination__option" style="justify-content: center; align-items: center; text-align: center;">
+
+                <%                    int currentPage = (int) request.getAttribute("currentPage");
+                    int noOfPages = (int) request.getAttribute("noOfPages");
+                    int noOfPageLinks = 5; // amount of page links to be displayed
+                    int minLinkRange = noOfPageLinks / 2; // minimum link range ahead/behind
+
+//                    -------------------------------Calculating the begin and end of pageNav for loop-------------------------------
+                    //  int begin = ((currentPage - minLinkRange) > 0 ? ((currentPage - minLinkRange) < (noOfPages - noOfPageLinks + 1) ? (currentPage - minLinkRange) : (noOfPages - noOfPageLinks)) : 0) + 1; (referance)
+                    int begin = 0;
+                    if ((currentPage - minLinkRange) > 0) {
+                        if ((currentPage - minLinkRange) < (noOfPages - noOfPageLinks + 1) || (noOfPages < noOfPageLinks)) { // add in (noOfPages < noOfPageLinks) in order to prevent negative page link
+                            begin = (currentPage - minLinkRange);
+                        } else {
+                            begin = (noOfPages - noOfPageLinks + 1);
+                        }
+                    } else {
+                        begin = 1;
+                    }
+
+                    //  int end = (currentPage + minLinkRange) < noOfPages ? ((currentPage + minLinkRange) > noOfPageLinks ? (currentPage + minLinkRange) : noOfPageLinks) : noOfPages; (referance)
+                    int end = 0;
+                    if ((currentPage + minLinkRange) < noOfPages) {
+                        if ((currentPage + minLinkRange) > noOfPageLinks) {
+                            end = (currentPage + minLinkRange);
+                        } else {
+                            end = noOfPageLinks;
+                        }
+                    } else {
+                        end = noOfPages;
+                    }
+//                    -----------------------------------------------------------------------------------------------------------------------------
+
+                    if (searchAll) { //Currently at ShowController
+
+                        //start of pageNav
+                        if (currentPage != 1) {
+                %>
+
+                <!-- For displaying Previous link except for the 1st page -->
+                <a href="ShowOrderController?page=<%= currentPage - 1%>"><i class="glyphicon glyphicon-menu-left"></i></a>
+                    <%
+                        }
+                    %>
+
+                <!--For displaying Page numbers. The when condition does not display a link for the current page-->
+
+                <%  for (int i = begin; i <= end; i++) {
+                        if (currentPage == i) {
+                %>
+                <a class="active" style="background: #000000; color: #ffffff"><%= i%></a>  <!-- There is no active class for pagination (currenly hard code) -->
+                <%
+                } else {
+                %>
+                <a href="ShowOrderController?page=<%= i%>" style="text-decoration: none;"><%= i%></a>
+                <%
+                        }
+                    }
+                %>
+
+
+                <!--For displaying Next link -->
+                <%
+                    if (currentPage < noOfPages) {
+                %>
+                <a href="ShowOrderController?page=<%= currentPage + 1%>"><i class="glyphicon glyphicon-menu-right"></i></a>
+                    <%
+                        }
+
+                        //                end of pageNav
+                    %>
+
+
+
+                <%            } else {//Currently at SearchController
+                    //                    start of pageNav
+                    if (currentPage != 1) {
+                %>
+
+                <!-- For displaying Previous link except for the 1st page -->
+                <a href="SearchOrderController?search=<%= searchValue%>&search-statusID=<%= sOrderStatusID%>&dateFrom=<%= dateFrom%>&dateTo=<%= dateTo%>&page=<%= currentPage - 1%>" style="text-decoration: none;"><i class="glyphicon glyphicon-menu-left"></i></a>
+                    <%
+                        }
+                    %>
+
+                <!--For displaying Page numbers. The when condition does not display a link for the current page--> 
+
+                <%  for (int i = begin; i <= end; i++) {
+                        if (currentPage == i) {
+                %>
+                <a class="active" style="background: #000000; color: #ffffff"><%= i%></a>  <!-- There is no active class for pagination (currenly hard code) -->
+                <%
+                } else {
+                %>
+                <a href="SearchOrderController?search=<%= searchValue%>&search-statusID=<%= sOrderStatusID%>&dateFrom=<%= dateFrom%>&dateTo=<%= dateTo%>&page=<%= i%>"><%= i%></a>
+                <%
+                        }
+                    }
+                %>
+
+
+                <!--For displaying Next link -->
+                <%
+                    if (currentPage < noOfPages) {
+                %>
+                <a href="SearchOrderController?search=<%= searchValue%>&search-statusID=<%= sOrderStatusID%>&dateFrom=<%= dateFrom%>&dateTo=<%= dateTo%>&page=<%= currentPage + 1%>"><i class="glyphicon glyphicon-menu-right"></i></a>
+                    <%
+                            }
+
+                        }
+                        //                end of pageNav
+
+                    %>
+
+            </div>
+            <%                
+                } //end of the "No product" if statement
+            %>
+
+
+
+
+
+
+
+
+
+
+
         </div>
         <script>
             $(document).ready(function () {
