@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import javafx.util.Pair;
@@ -1403,12 +1404,47 @@ public class ProductDAO {
         return check;
     }
 
-    public List<ProductDTO> filterPrice(List<ProductDTO> listProduct, int minAmount, int maxAmount) throws SQLException {
+    public List<ProductDTO> filterSearchedProducts(String search, int minAmount, int maxAmount, List<String> colors, List<String> sizes) throws SQLException {
         List<ProductDTO> filterOut = new ArrayList<>();
+        List<ProductDTO> listProduct = getSearchCatalog(search);
         for (ProductDTO p : listProduct) {
+            ProductDTO product = getProductDetail(p.getProductID());
             if (!(p.getPrice() - p.getDiscount() >= minAmount && p.getPrice() - p.getDiscount() <= maxAmount)) {
                 filterOut.add(p);
             }
+            if (!colors.isEmpty()) {     
+                boolean checkColor = false;
+                for(String c: product.getColorImage().keySet()){
+                    if(colors.contains(c)){
+                       checkColor = true;
+                       break;
+                    }
+                }
+                if(!checkColor && !filterOut.contains(p)){
+                    filterOut.add(p);
+                }
+            }
+            if (!sizes.isEmpty()) {
+                boolean checkSize = false;
+                Iterator<List<String>> it1 = product.getColorSizeQuantity().keySet().iterator();
+                List<String> key = new ArrayList<>();
+                while (it1.hasNext()) {
+                    for (String n : it1.next()) {
+                        key.add(n);
+                    }
+                }
+                
+                for (int a = 0; a < key.size(); a+=2) {
+                    if(sizes.contains(key.get(a+1))){
+                        checkSize = true;
+                        break;
+                    }
+                }      
+                if(!checkSize && !filterOut.contains(p)){
+                    filterOut.add(p);
+                }
+            }
+
         }
 
         for (ProductDTO p : filterOut) {
@@ -1416,4 +1452,54 @@ public class ProductDAO {
         }
         return listProduct;
     }
+    
+    public List<ProductDTO> filterCategoryProducts(String category, int minAmount, int maxAmount, List<String> colors, List<String> sizes) throws SQLException {
+        List<ProductDTO> filterOut = new ArrayList<>();
+        List<ProductDTO> listProduct = getProductByCategory(category);
+        for (ProductDTO p : listProduct) {
+            ProductDTO product = getProductDetail(p.getProductID());
+            if (!(p.getPrice() - p.getDiscount() >= minAmount && p.getPrice() - p.getDiscount() <= maxAmount)) {
+                filterOut.add(p);
+            }
+            if (!colors.isEmpty()) {     
+                boolean checkColor = false;
+                for(String c: product.getColorImage().keySet()){
+                    if(colors.contains(c)){
+                       checkColor = true;
+                       break;
+                    }
+                }
+                if(!checkColor && !filterOut.contains(p)){
+                    filterOut.add(p);
+                }
+            }
+            if (!sizes.isEmpty()) {
+                boolean checkSize = false;
+                Iterator<List<String>> it1 = product.getColorSizeQuantity().keySet().iterator();
+                List<String> key = new ArrayList<>();
+                while (it1.hasNext()) {
+                    for (String n : it1.next()) {
+                        key.add(n);
+                    }
+                }
+                
+                for (int a = 0; a < key.size(); a+=2) {
+                    if(sizes.contains(key.get(a+1))){
+                        checkSize = true;
+                        break;
+                    }
+                }      
+                if(!checkSize && !filterOut.contains(p)){
+                    filterOut.add(p);
+                }
+            }
+
+        }
+
+        for (ProductDTO p : filterOut) {
+            listProduct.remove(p);
+        }
+        return listProduct;
+    }
+    
 }

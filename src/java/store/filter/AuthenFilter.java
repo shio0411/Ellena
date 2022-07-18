@@ -72,8 +72,7 @@ public class AuthenFilter implements Filter {
         CUSTOMER_FUNCTION.add("ViewOrderHistoryController");
         CUSTOMER_FUNCTION.add("CreateRatingFormController");
         CUSTOMER_FUNCTION.add("rating-product.jsp");       
-        CUSTOMER_FUNCTION.add("UpdateRatingController");
-        
+        CUSTOMER_FUNCTION.add("UpdateRatingController");     
         CUSTOMER_FUNCTION.add("customer-profile.jsp");
         CUSTOMER_FUNCTION.add("DiscoverController");
         CUSTOMER_FUNCTION.add("CategoryRouteController");
@@ -85,7 +84,7 @@ public class AuthenFilter implements Filter {
         CUSTOMER_FUNCTION.add("RatingController");
         CUSTOMER_FUNCTION.add("rating-order.jsp");
         CUSTOMER_FUNCTION.add("rating-product.jsp");
-
+        
         ADMIN_FUNCTION = new ArrayList<>();
         ADMIN_FUNCTION.add("admin.jsp");
         ADMIN_FUNCTION.add("add-account.jsp");

@@ -29,8 +29,12 @@ public class MainController extends HttpServlet {
     private static final String ADD_PRODUCT_CONTROLLER = "AddProductController";
     private static final String SEARCH_MANAGER = "SearchManager";
     private static final String SEARCH_MANAGER_CONTROLLER = "SearchManagerController";
-    private static final String FILTER_PRICE = "filter-price";
-    private static final String FILTER_PRICE_CONTROLLER = "FilterPriceController";
+    private static final String FILTER_SEARCHED = "filter-searched-products";
+    private static final String FILTER_SEARCHED_CONTROLLER = "FilterSearchedProductsController";
+    private static final String FILTER_IN_CATEGORY = "filter-in-category";
+    private static final String FILTER_IN_CATEGORY_CONTROLLER = "FilterCategoryProductsController";
+    private static final String FILTER_ALL_PRODUCTS = "filter-all-products";
+    private static final String FILTER_ALL_PRODUCTS_CONTROLLER = "FilterAllProductsController";
     private static final String SEARCH_CATALOG = "search-catalog";
     private static final String SEARCH_CATALOG_CONTROLLER = "SearchCatalogController";
     private static final String SEARCH_CATEGORY = "SearchCategory";
@@ -182,8 +186,14 @@ public class MainController extends HttpServlet {
                     case ADD_PRODUCT:
                         url = ADD_PRODUCT_CONTROLLER;
                         break;
-                    case FILTER_PRICE:
-                        url = FILTER_PRICE_CONTROLLER;
+                    case FILTER_SEARCHED:
+                        url = FILTER_SEARCHED_CONTROLLER;
+                        break;
+                    case FILTER_IN_CATEGORY:
+                        url = FILTER_IN_CATEGORY_CONTROLLER;
+                        break;
+                    case FILTER_ALL_PRODUCTS:
+                        url = FILTER_ALL_PRODUCTS_CONTROLLER;
                         break;
                     case VIEW_USER:
                         url = VIEW_USER_CONTROLLER;

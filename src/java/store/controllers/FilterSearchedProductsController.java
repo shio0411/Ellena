@@ -5,59 +5,64 @@
 package store.controllers;
 
 import java.io.IOException;
-import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
-import javafx.util.Pair;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import store.shopping.OrderDAO;
-import store.shopping.OrderDTO;
-import store.shopping.OrderDetailDTO;
-import store.user.UserDTO;
+import store.shopping.ProductDAO;
+import store.shopping.ProductDTO;
 
 /**
  *
- * @author giama
+ * @author vankh
  */
-@WebServlet(name = "ViewOrderHistoryController", urlPatterns = {"/ViewOrderHistoryController"})
-public class ViewOrderHistoryController extends HttpServlet {
-    
-    private static final String ERROR = "order-history.jsp";
-    private static final String SUCCESS = "order-history.jsp";
-    
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+@WebServlet(name = "FilterSearchedProductsController", urlPatterns = {"/FilterSearchedProductsController"})
+public class FilterSearchedProductsController extends HttpServlet {
+
+    public static final String ERROR = "error.jsp";
+    public static final String SUCCESS = "search-catalog.jsp";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
+
         try {
+            ProductDAO dao = new ProductDAO();
+            String search = request.getParameter("search");
             HttpSession session = request.getSession();
-            UserDTO user = (UserDTO)session.getAttribute("LOGIN_USER");
-            String userID = user.getUserID();
-            OrderDAO dao = new OrderDAO();
-            List<Pair<OrderDTO, List<OrderDetailDTO>>> list = dao.getOrderHistory(userID);
-            if (!list.isEmpty()) {
-                request.setAttribute("ORDER_HISTORY", list);
-                url = SUCCESS;
-            } 
+            int minAmount = Integer.parseInt(request.getParameter("minAmount"));
+            int maxAmount = Integer.parseInt(request.getParameter("maxAmount"));
+            String[] colors = request.getParameterValues("color");
+            String[] sizes = request.getParameterValues("size");
+            List<String> colorList = new ArrayList();
+            List<String> sizeList = new ArrayList();
+            if(colors!=null){
+                for(String c: colors){
+                    colorList.add(c);
+                }
+            }
+            if(sizes!=null){
+                for(String s: sizes){
+                    sizeList.add(s);
+                }
+            }
             
-        } catch (SQLException e) {
-            log("Error at ViewOrderHistoryController: " + e.toString());
+            List<ProductDTO> listProduct = dao.filterSearchedProducts(search, minAmount, maxAmount, colorList, sizeList);
+            
+            session.setAttribute("SEARCH_CATALOG", listProduct);
+            url = SUCCESS;
+
+        } catch (Exception e) {
+            log("Error at SearchCatalogController: " + toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
