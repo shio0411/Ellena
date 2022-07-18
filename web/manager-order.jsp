@@ -171,7 +171,7 @@
                                                                     <%if (order.getStatusID() == k) {%>
                                                                     selected 
                                                                     <%}
-                                                                        if (k < order.getStatusID() || (k == 5 && order.getStatusID() != 3 && order.getStatusID() != 1) || (k == 6 && order.getStatusID() != 1) || ((k == 7) && (order.getStatusID() != 6))) {%>
+                                                                        if (order.getStatusID() == 5 || k < order.getStatusID() || (k == 5 && order.getStatusID() != 3 && order.getStatusID() != 1) || (k == 6 && order.getStatusID() != 1) || ((k == 7) && (order.getStatusID() != 6))) {%>
                                                                     disabled 
                                                                     <%}%> >
                                                                 <%= order.getStatus(k)%>
@@ -529,15 +529,6 @@
             <%                
                 } //end of the "No product" if statement
             %>
-
-
-
-
-
-
-
-
-
 
 
         </div>
