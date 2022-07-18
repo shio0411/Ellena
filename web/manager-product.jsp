@@ -195,6 +195,9 @@
                         if (currentPage != 1) {
                 %>
 
+                <!-- For displaying 1st page link except for the 1st page -->
+                <a href="ManagerShowProductController?page=1"><i class="glyphicon glyphicon-menu-left"></i><i class="glyphicon glyphicon-menu-left"></i></a>
+                
                 <!-- For displaying Previous link except for the 1st page -->
                 <a href="ManagerShowProductController?page=<%= currentPage - 1%>"><i class="glyphicon glyphicon-menu-left"></i></a>
                     <%
@@ -221,6 +224,10 @@
                     if (currentPage < noOfPages) {
                 %>
                 <a href="ManagerShowProductController?page=<%= currentPage + 1%>"><i class="glyphicon glyphicon-menu-right"></i></a>
+                
+                <!-- For displaying last page link except for the last page -->
+                <a href="ManagerShowProductController?page=<%= noOfPages %>"><i class="glyphicon glyphicon-menu-right"></i><i class="glyphicon glyphicon-menu-right"></i></a>
+                
                     <%
                         }
 
@@ -234,6 +241,9 @@
                     if (currentPage != 1) {
                 %>
 
+                <!-- For displaying 1st page link except for the 1st page -->
+                <a href="ManagerSearchProductController?search=<%= search%>&status=<%= status%>&page=1"><i class="glyphicon glyphicon-menu-left"></i><i class="glyphicon glyphicon-menu-left"></i></a>
+                
                 <!-- For displaying Previous link except for the 1st page -->
                 <a href="ManagerSearchProductController?search=<%= search%>&status=<%= status%>&page=<%= currentPage - 1%>" style="text-decoration: none;"><i class="glyphicon glyphicon-menu-left"></i></a>
                     <%
@@ -261,6 +271,10 @@
                     if (currentPage < noOfPages) {
                 %>
                 <a href="ManagerSearchProductController?search=<%= search%>&status=<%= status%>&page=<%= currentPage + 1%>"><i class="glyphicon glyphicon-menu-right"></i></a>
+                
+                <!-- For displaying last page link except for the last page -->
+                <a href="ManagerSearchProductController?search=<%= search%>&status=<%= status%>&page=<%= noOfPages %>"><i class="glyphicon glyphicon-menu-right"></i><i class="glyphicon glyphicon-menu-right"></i></a>
+                
                     <%
                             }
 
