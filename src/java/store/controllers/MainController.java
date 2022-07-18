@@ -137,7 +137,9 @@ public class MainController extends HttpServlet {
     private static final String REFUND_CONTROLLER = "RefundController";
     private static final String REFUND_ORDER = "RefundOrder";
     private static final String REFUND_ORDER_CONTROLLER = "RefundOrderController";
-
+    private static final String SEARCH_RETURN_CUSTOMER = "SearchReturnedHistory";
+    private static final String SEARCH_RETURN_CUSTOMER_CONTROLLER = "SearchReturnedHistoryController";
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
@@ -329,6 +331,9 @@ public class MainController extends HttpServlet {
                         break;
                     case REFUND_ORDER:
                         url = REFUND_ORDER_CONTROLLER;
+                        break;
+                    case SEARCH_RETURN_CUSTOMER:
+                        url = SEARCH_RETURN_CUSTOMER_CONTROLLER;
                         break;
                     default:
                         break;

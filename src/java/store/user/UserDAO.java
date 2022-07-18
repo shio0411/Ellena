@@ -67,6 +67,9 @@ public class UserDAO {
             + "FROM subTable "
             + "WHERE row# BETWEEN ? AND ? ";
     private static final String NUMBER_OF_SEARCH_USER_WITH_STATUS = "SELECT Top 1 COUNT (*) OVER () AS ROW_COUNT FROM tblUsers WHERE userID LIKE ? AND roleID LIKE ? AND status=?";
+    private static final String SEARCH_RETURNED_HISTORY = "SELECT DISTINCT u.userID, u.fullName, u.sex, u.address, u.phone "
+            + "FROM tblUsers u JOIN tblOrder o ON u.userID = o.userID JOIN tblOrderStatusUpdate osu ON o.orderID = osu.orderID "
+            + "WHERE osu.statusID = 8 AND (u.fullName LIKE ? OR u.phone LIKE ? OR u.userID LIKE ?) AND u.status > 0";
 
     //-------------------------------
     private int numberOfUser;
@@ -691,5 +694,43 @@ public class UserDAO {
             }
         }
         return map;
+    }
+    
+    public List<UserDTO> getReturnedCustomer(String search) throws SQLException {
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        List<UserDTO> list = new ArrayList();
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(SEARCH_RETURNED_HISTORY);
+                ptm.setString(1, "%" + search + "%");
+                ptm.setString(2, search);
+                ptm.setString(3, search);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    String userID = rs.getString("userID");
+                    String fullName = rs.getString("fullName");
+                    boolean sex = rs.getBoolean("sex");
+                    String address = rs.getString("address");
+                    String phone = rs.getString("phone");
+                    UserDTO user = new UserDTO(userID, fullName, sex, address, phone);
+                    list.add(user);
+                }
+            }
+        } catch (Exception e) {
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return list;
     }
 }

@@ -133,7 +133,10 @@ public class OrderDAO {
             + "FROM subTable\n"
             + "WHERE row# BETWEEN ? AND ?";
     private static final String NUMBER_OF_SEARCH_ORDER_BY_NAME = "SELECT Top 1 COUNT (*) OVER () AS ROW_COUNT FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID AND [TenKhongDau] LIKE '%' + [dbo].[fuChuyenCoDauThanhKhongDau](?) + '%'";
-
+    
+    private static final String GET_RETURNED_ORDER = "SELECT v1.orderID, orderDate, total, userID, fullName, statusID, statusName, payType, trackingID, [orderFullName], [address], phone, email, note, transactionNumber \n"
+            + "FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID \n"
+            + "WHERE statusID = 8 AND userID LIKE ?";
     //-------------------------------
     private int numberOfOrder;
 
@@ -1062,5 +1065,51 @@ public class OrderDAO {
         }
 
         return result;
+    }
+    
+    public List<OrderDTO> getReturnedOrder(String userID) throws SQLException {
+        List<OrderDTO> list = new ArrayList();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DBUtils.getConnection();
+            ptm = conn.prepareStatement(GET_RETURNED_ORDER);
+            ptm.setString(1, userID);
+            rs = ptm.executeQuery();
+            while (rs.next()) {
+                int orderID = rs.getInt("orderID");
+                String userName = rs.getString("fullName");
+                Date orderDate = rs.getDate("orderDate");
+                int total = rs.getInt("total");
+                int statusID = rs.getInt("statusID");
+                String statusName = rs.getString("statusName");
+                String payType = rs.getString("payType");
+                String trackingID = rs.getString("trackingID");
+                String fullName = rs.getString("orderFullName");
+                String address = rs.getString("address");
+                String phone = rs.getString("phone");
+                String email = rs.getString("email");
+                String note = rs.getString("note");
+                String transactionNumber = rs.getString("transactionNumber");
+                List<OrderDetailDTO> orderDetail = getOrderDetail(orderID);
+                List<OrderStatusDTO> orderStatus = getUpdateStatusHistory(orderID);
+
+                list.add(new OrderDTO(orderID, orderDate, total, userName, statusID, statusName, payType, trackingID, fullName, address, phone, email, note, transactionNumber, orderDetail, orderStatus));
+
+            }
+        } catch (Exception e) {
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return list;
     }
 }
