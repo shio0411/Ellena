@@ -131,6 +131,10 @@
     .navbar__container> a{
         color:black;
     }
+    .dropdown-menu{
+        right:0;
+        left:auto;
+    }
     </style>
     
 </head>
@@ -166,7 +170,7 @@
         %>
         <div id="content" class="p-3 px-5 bg-grey">
             <!--WELCOME USER-->
-            <div class="flex-item" id="manager__header">
+            <div class="flex-item text-right" id="manager__header">
                 <form class="m-0" action="MainController" method="POST">  
                     <h4 class="dropdown">
                         <b>Xin chào, </b>

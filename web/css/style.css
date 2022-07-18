@@ -3855,13 +3855,13 @@ ol {
 
 
 .color-2{
-    background: linear-gradient(to top right, #93a3b1 37%, #ccffff 119%);
+    background: #93a3b1;
 }
 .color-3{
-    background: linear-gradient(to top right, #fca17d 7%, #ffcccc 98%);
+    background: #fca17d;
 }
 .color-4{
-    background: linear-gradient(to top right, #344055 37%, #93a3b1 119%);
+    background: #344055;
 }
 .color-5{
     background: #040F0F;
@@ -3924,4 +3924,31 @@ ol {
 
 .text-template-primary{
     color: #ca1515;
+}
+
+.manager-CTA{
+    display: inline-block;
+    margin-bottom: 0;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    border-radius: 4px;
+    background:  #fca17d;
+    color:#000;
+}
+
+.manager-CTA:hover{
+    background:  white;
+    color:#000;
+    border: 1px solid #ccc;
+    text-decoration: none;
 }

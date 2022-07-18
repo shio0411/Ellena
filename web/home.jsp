@@ -26,6 +26,13 @@
 <body>
     <jsp:include page="header.jsp" flush="true"/>
     <!-- Categories Section Begin -->
+    <%
+        List<ProductDTO> newArrivalList = (List<ProductDTO>) session.getAttribute("NEW_ARRIVAL_LIST");
+        List<ProductDTO> trendList = (List<ProductDTO>) session.getAttribute("TREND_LIST");
+        List<ProductDTO> saleList = (List<ProductDTO>) session.getAttribute("SALE_LIST");
+        List<ProductDTO> bestSellerList = (List<ProductDTO>) session.getAttribute("BEST_SELLER_LIST");
+
+    %>
     <section class="categories">
         <div class="container-fluid">
             <div class="row">
@@ -35,7 +42,7 @@
                             <h1>Enrich The Beauty</h1>
                             Khám phá bộ sưu tập mới nhất của chúng tôi
                             <p style="font-weight: bold;">The Ellena Project</p>
-                            <a href="#">Shop now</a>
+                            <a href="DiscoverController">Shop now</a>
                         </div>
                     </div>
                 </div>
@@ -45,8 +52,8 @@
                             <div class="categories__item set-bg" data-setbg="img/categories/category-2.jpg">
                                 <div class="categories__text">
                                     <h4>Nổi Bật</h4>
-                                    <p>358 items</p>
-                                    <a href="#Noi-bat">Shop now</a>
+                                    <p><%=trendList.size()%> sản phẩm</p>
+                                    <a href="trend.jsp">Shop now</a>
                                 </div>
                             </div>
                         </div>
@@ -54,17 +61,17 @@
                             <div class="categories__item set-bg" data-setbg="img/categories/category-3.jpg">
                                 <div class="categories__text">
                                     <h4>Bán Chạy Nhất</h4>
-                                    <p>273 items</p>
-                                    <a href="#Ban-chay-nhat">Shop now</a>
+                                    <p><%=bestSellerList.size()%> sản phẩm</p>
+                                    <a href="best-seller.jsp">Shop now</a>
                                 </div>
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 p-0">
                             <div class="categories__item set-bg" data-setbg="img/categories/category-4.jpg">
                                 <div class="categories__text">
-                                    <h4>New Arrivals</h4>
-                                    <p>159 items</p>
-                                    <a href="#New-arrivals">Shop now</a>
+                                    <h4>Mới về</h4>
+                                    <p><%=newArrivalList.size()%> sản phẩm</p>
+                                    <a href="new-arrival.jsp">Shop now</a>
                                 </div>
                             </div>
                         </div>
@@ -72,8 +79,8 @@
                             <div class="categories__item set-bg" data-setbg="img/categories/category-5.jpg">
                                 <div class="categories__text">
                                     <h4>Khuyến Mãi</h4>
-                                    <p>792 items</p>
-                                    <a href="#Khuyen-mai">Shop now</a>
+                                    <p><%=saleList.size()%> sản phẩm</p>
+                                    <a href="sale-product.jsp">Shop now</a>
                                 </div>
                             </div>
                         </div>
@@ -87,7 +94,6 @@
     
     <!-- Product Section Begin -->
     <%
-        List<ProductDTO> newArrivalList = (List<ProductDTO>) session.getAttribute("NEW_ARRIVAL_LIST");
         if(newArrivalList.size() > 0){
             %>
             
@@ -223,7 +229,6 @@
 
     <!-- Trend Section Begin -->
     <%
-        List<ProductDTO> trendList = (List<ProductDTO>) session.getAttribute("TREND_LIST");
         if(trendList.size() > 0){
     %>
     <section class="product spad">
@@ -323,7 +328,6 @@
     <!-- Trend Section End -->
     <!-- Best-seller Section Begin -->
     <%
-        List<ProductDTO> bestSellerList = (List<ProductDTO>) session.getAttribute("BEST_SELLER_LIST");
         if(bestSellerList.size() > 0){
     %>
     <section class="product spad">
@@ -413,7 +417,6 @@
     <!-- Best-seller Section End -->
     <!-- Sale Section Begin -->
     <%
-        List<ProductDTO> saleList = (List<ProductDTO>) session.getAttribute("SALE_LIST");
         if(saleList.size() > 0){
     %>
     <section class="product spad">

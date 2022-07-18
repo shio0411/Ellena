@@ -14,6 +14,15 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+         <style>
+            .dropdown-menu{
+                right:0;
+                left:auto;
+            }
+            form input{
+                margin-right: 2%;
+            }
+        </style>
     </head>
     <body>
 
@@ -66,21 +75,29 @@
 
         <div class="main">
 
-            <form action="MainController" method="POST" style="margin-left: 65%;">  
-                Xin chào, <a href="my-profile.jsp"><%= loginUser.getFullName()%></a>
-                <input type="submit" name="action" value="Logout" style="margin-left: 4%;">
-            </form>
+           <div class="flex-item text-right" id="manager__header">
+                <form class="m-0" action="MainController" method="POST">  
+                    <h4 class="dropdown">
+                        <b>Xin chào, </b>
+                            <a  data-toggle="dropdown" role="button"><b class="text-color-dark"><%= loginUser.getFullName()%></b></a>
+                        <div  class="dropdown-menu nav-tabs" role="tablist">
+                        <button class="dropdown-item btn" role="tab" type="button"><a class="text-dark" href="my-profile.jsp">Thông tin tài khoản</a></button>
+                        <input class=" dropdown-item btn" type="submit" name="action" value="Logout"/>
+                        </div>
+                    </h4>
+                </form>
+            </div>
             <h1>Danh sách đơn hàng</h1>
             <form action="MainController" method="POST">
-                <input type="text" name="search" value="<%= searchValue%>" id="search-search" placeholder="Tìm kiếm đơn hàng">
-                Trạng thái
+                <input type="text" name="search" value="<%= searchValue%>" id="search-search" placeholder="Tên khách hàng">
+                
                 <select name="search-statusID" id="search-statusID">
 
                     <%
                         OrderDTO orderDTO = new OrderDTO();
                         if (orderStatusID == 0) {
                     %>
-                    <option value="" selected hidden>Chọn một trạng thái</option>
+                    <option class="p-1" value="" selected hidden>Chọn một trạng thái</option>
 
                     <%
                         }
@@ -95,7 +112,7 @@
                 <input type="date" name="dateFrom" id="search-dateFrom" value="<%= dateFrom%>"/>
                 đến
                 <input type="date" name="dateTo" id="search-dateTo" value="<%= dateTo%>"/>
-                <button type="submit" name="action" value="SearchOrder" class="btn-outline-dark" style="width: 15%; padding: 0.5% 0.1%;"><i class="fa fa-search fa-lg"></i>Search</button>
+                <button type="submit" name="action" value="SearchOrder" class="btn-outline-dark" style="width: 15%; padding: 0.5% 0.1%;"><i class="fa fa-search fa-lg"></i>Tìm kiếm</button>
             </form>   
             ${requestScope.EMPTY_LIST_MESSAGE}
 
