@@ -40,7 +40,7 @@
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/Login</url-pattern>
     </servlet-mapping>
-    <!--
+    
     <error-page>  
         <exception-type>java.lang.Exception</exception-type>  
         <location>/ExceptionHandlerController</location>  
@@ -49,7 +49,7 @@
         <error-code>404</error-code>  
         <location>/ExceptionHandlerController</location>  
     </error-page>  
-    -->
+    
     
     <context-param>
         <param-name>uploadFolder</param-name>

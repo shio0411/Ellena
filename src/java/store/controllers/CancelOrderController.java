@@ -5,14 +5,17 @@
 package store.controllers;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import store.momo.Environment;
+import store.momo.RefundMoMoResponse;
+import store.momo.RefundTransaction;
 import store.shopping.OrderDAO;
+import store.shopping.OrderDTO;
 
 /**
  *
@@ -34,24 +37,36 @@ public class CancelOrderController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException{
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
             int orderID = Integer.parseInt(request.getParameter("orderID"));
             String payType = request.getParameter("payType");
             OrderDAO dao = new OrderDAO();
+            OrderDTO order = dao.getOrder(orderID);
+            
             boolean check;
             if ("COD".equals(payType))
                 check = dao.updateOrderStatus(orderID, 5, "System", "");
-            else
+            else{
                 check = dao.updateOrderStatus(orderID, 6, "System", "");
+                if ("Momo".equalsIgnoreCase(payType)) {
+                    String requestId = String.valueOf(System.currentTimeMillis());
+                    String orderId = String.valueOf(System.currentTimeMillis());
+                    Environment environment = Environment.selectEnv("dev");
+                    RefundMoMoResponse refundMoMoResponse = RefundTransaction.process(environment, orderId, requestId, Long.toString(order.getTotal()), Long.valueOf(order.getTransactionNumber()), "");
+                    if (refundMoMoResponse.getResultCode() != 0) 
+                        check = false;
+                }
+            }
+            
             if (check) {
                 request.setAttribute("MESSAGE", "Huỷ đơn hàng thành công!");
                 url = SUCCESS;
             }
             
-        } catch (NumberFormatException | SQLException e) {
+        } catch (Exception e) {
             log("Error at CancelOrderController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
