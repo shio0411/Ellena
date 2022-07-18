@@ -253,11 +253,7 @@
                                                     String color = it.next();
                                                     colorList.add(color);  %>      
 
-<<<<<<< Updated upstream
-                                            <li <%if ((i == 1 && activeColor == null) || color.equalsIgnoreCase(activeColor)) { %> class="active" <%}%>><a class="p-2 px-4 " data-toggle="tab" href="#<%= color%>-size"><%= color%></a></li>
-=======
                                             <li <%if (i == 1) { %> class="active" <%}%>><a class="p-2 px-4" data-toggle="tab" href="#<%= color%>-size"><%= color%></a></li>
->>>>>>> Stashed changes
 
                                             <% i++;
                                                 }%>                             
