@@ -1,7 +1,7 @@
-# Release summary Manager product/order pagination and Employee order pagination
-***Changes since last push from 17/7/2022 1:13 PM***
+# Release summary discover,search-catalog pagination and update PageNav code
+***Changes since last push from 19/7/2022 4:14 PM***
 
-***Release date: 17/7/2022 5:42 PM***
+***Release date: 20/7/2022 1:00 AM***
 
 ## Add in Files:
 - 
@@ -12,27 +12,30 @@
 		- Fix pageNav calculating
 - Manager product pagination
 	- manager-product.jsp
-		- Add back in pop-up modal
+		- Fix pageNav calculating
+- Manager/Employee order paginaiton
+	- manager-order.jsp
+		- Fix pageNav calculating
+	- employee-order.jsp
+		- Fix pageNav calculating
+- Guest/Customer product paginaiton
+	- discover.jsp
 		- Reconfig for pagination pageNav
-	- `ManagerShowProductController`
+	- search-catalog.jsp
+		- Reconfig for pagination pageNav
+	- `DiscoverController`
 		- Reconfig for pagination
-	- `ManagerSearchProductController`
+	- `FilterAllProductsController`
+		- Reconfig for pagination
+	- `SearchCatalogController`
+		- Reconfig for pagination
+	- `FilterSearchedProductsController`
 		- Reconfig for pagination
 	- `ProductDAO`
 		- Reconfig for pagination
-- Manager/Employee order paginaiton
-	- manager-order.jsp
-		- Reconfig for pagination pageNav
-	- employee-order.jsp
-		- Reconfig for pagination pageNav
-	- `ShowOrderController`
-		- Reconfig for pagination
-	- `SearchOrderController`
-		- Reconfig for pagination
-	- `OrderDAO`
-		- Reconfig for pagination
-
-
 - `AuthenFilter`
-	- Allow Manager to access ManagerSearchProductController directly
+	- Allow Guest/Customer direct access to :
+		- `FilterAllProductsController`
+		- `SearchCatalogController`
+		- `FilterSearchedProductsController`
 

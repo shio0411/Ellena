@@ -30,15 +30,34 @@ public class FilterSearchedProductsController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
+        int page = 1; // page it start counting
+        int productPerPage = 6; //number of product per page
+        int noOfPages = 1;// default number of page, to prevent no product was found
 
         try {
+            
+            // if there is a page param, take it
+            if (request.getParameter("page") != null) {
+                page = Integer.parseInt(request.getParameter("page"));
+            }
+            
             ProductDAO dao = new ProductDAO();
             String search = request.getParameter("search");
             HttpSession session = request.getSession();
             int minAmount = Integer.parseInt(request.getParameter("minAmount"));
             int maxAmount = Integer.parseInt(request.getParameter("maxAmount"));
             String[] colors = request.getParameterValues("color");
+            // if there is a listColors param, take it
+            if (request.getParameter("listColors") != null && !request.getParameter("listColors").equals("")) {
+                colors = request.getParameter("listColors").split("-");
+            }
+
             String[] sizes = request.getParameterValues("size");
+            // if there is a listSizes param, take it
+            if (request.getParameter("listSizes") != null && !request.getParameter("listSizes").equals("")) {
+                sizes = request.getParameter("listSizes").split("-");
+            }
+            
             List<String> colorList = new ArrayList();
             List<String> sizeList = new ArrayList();
             if(colors!=null){
@@ -52,10 +71,24 @@ public class FilterSearchedProductsController extends HttpServlet {
                 }
             }
             
-            List<ProductDTO> listProduct = dao.filterSearchedProducts(search, minAmount, maxAmount, colorList, sizeList);
+            List<ProductDTO> listProduct = dao.filterSearchedProducts(search, minAmount, maxAmount, colorList, sizeList, (page * productPerPage) - productPerPage , productPerPage * page - 1);   // +0, -1
             
             session.setAttribute("SEARCH_CATALOG", listProduct);
             url = SUCCESS;
+            
+            int noOfProducts = dao.getNumberOfProduct();
+            noOfPages = (int) Math.ceil(noOfProducts * 1.0 / productPerPage);
+
+            request.setAttribute("LIST_COLORS", colorList);
+            request.setAttribute("LIST_SIZES", sizeList);
+            request.setAttribute("MIN_AMOUNT", minAmount);
+            request.setAttribute("MAX_AMOUNT", maxAmount);
+
+            //give manager-product.jsp know that we are in SearchProduct
+            boolean searchPage = false;
+            request.setAttribute("noOfPages", noOfPages);
+            request.setAttribute("currentPage", page);
+            request.setAttribute("SWITCH_SEARCH", searchPage);
 
         } catch (Exception e) {
             log("Error at SearchCatalogController: " + toString());

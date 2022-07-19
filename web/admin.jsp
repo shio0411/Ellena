@@ -326,6 +326,8 @@
                     if ((currentPage + minLinkRange) < noOfPages) {
                         if ((currentPage + minLinkRange) > noOfPageLinks) {
                             end = (currentPage + minLinkRange);
+                        } else if (noOfPages < noOfPageLinks) {
+                            end = noOfPages; // in case noOfPageLinks larger than noOfPages and display wrong
                         } else {
                             end = noOfPageLinks;
                         }

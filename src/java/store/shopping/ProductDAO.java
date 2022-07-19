@@ -119,6 +119,22 @@ public class ProductDAO {
             + "FROM subTable\n"
             + "WHERE row# BETWEEN ? AND ?";
     private static final String NUMBER_OF_SEARCH_PRODUCT_WITH_STATUS = "SELECT Top 1 COUNT (*) OVER () AS ROW_COUNT FROM tblProduct WHERE dbo.fuChuyenCoDauThanhKhongDau(productName) LIKE ? AND status=?";
+    private static final String GET_SEARCH_CATALOG_PAGINATION = "WITH subTable AS (\n"
+            + "			SELECT p.productID, p.productName, p.price, p.discount, i.image, color, size, DENSE_RANK() OVER(ORDER BY p.productID) AS row#  \n"
+            + "			FROM tblProduct p JOIN tblProductColors pc ON p.productID = pc.productID \n"
+            + "			JOIN tblColorImage i ON pc.productColorID = i.productColorID\n"
+            + "			JOIN tblColorSizes cs ON cs.productColorID = pc.productColorID\n"
+            + "			WHERE dbo.fuChuyenCoDauThanhKhongDau(p.productName) LIKE ?\n"
+            + "			)\n"
+            + "SELECT productID, productName, price, discount, image, color, size\n"
+            + "FROM subTable\n"
+            + "WHERE row# BETWEEN ? AND ?";
+    private static final String NUMBER_OF_GET_SEARCH_CATALOG_PAGINATION = "SELECT TOP 1 DENSE_RANK() OVER(ORDER BY p.productID) AS ROW_COUNT\n"
+            + "FROM tblProduct p JOIN tblProductColors pc ON p.productID = pc.productID \n"
+            + "JOIN tblColorImage i ON pc.productColorID = i.productColorID\n"
+            + "JOIN tblColorSizes cs ON cs.productColorID = pc.productColorID\n"
+            + "WHERE dbo.fuChuyenCoDauThanhKhongDau(p.productName) LIKE ?\n"
+            + "ORDER BY ROW_COUNT DESC";
 
     //-------------------------------
     private int numberOfProduct;
@@ -797,7 +813,7 @@ public class ProductDAO {
         return list;
     }
 
-    public List<ProductDTO> getSearchCatalog(String search) throws SQLException {
+    public List<ProductDTO> getSearchCatalogPagination(String search, int offset, int noOfProducts) throws SQLException {
         Connection conn = null;
         PreparedStatement ptm = null;
         ResultSet rs = null;
@@ -805,8 +821,10 @@ public class ProductDAO {
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                ptm = conn.prepareStatement(GET_SEARCH_CATALOG);
+                ptm = conn.prepareStatement(GET_SEARCH_CATALOG_PAGINATION);
                 ptm.setString(1, "%" + search + "%");
+                ptm.setInt(2, offset);
+                ptm.setInt(3, noOfProducts);
                 rs = ptm.executeQuery();
                 int productID = 0;
                 String productName = "";
@@ -874,8 +892,15 @@ public class ProductDAO {
 
             }
         } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             if (rs != null) {
+                ptm = conn.prepareStatement(NUMBER_OF_GET_SEARCH_CATALOG_PAGINATION);
+                ptm.setString(1, "%" + search + "%");
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    this.numberOfProduct = rs.getInt("ROW_COUNT");
+                }
                 rs.close();
             }
             if (ptm != null) {
@@ -1376,6 +1401,98 @@ public class ProductDAO {
         return images;
     }
 
+    public List<ProductDTO> getSearchCatalog(String search) throws SQLException {
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        List<ProductDTO> list = new ArrayList<>();
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_SEARCH_CATALOG);
+                ptm.setString(1, "%" + search + "%");
+                rs = ptm.executeQuery();
+                int productID = 0;
+                String productName = "";
+                int price = 0;
+                int discount = 0;
+                Map<String, List<String>> image = new HashMap<>();
+                List<String> listImage = new ArrayList<>();
+                HashMap<List<String>, Integer> colorSizeQuantity = new HashMap<>();
+                List<String> colorSize = new ArrayList<>();
+                while (rs.next()) {
+
+                    int tempProductID = rs.getInt("productID");
+                    String tempProductName = rs.getString("productName");
+                    int tempPrice = rs.getInt("price");
+                    int tempDiscount = rs.getInt("discount");
+                    String tempImage = rs.getString("image");
+                    String tempColor = rs.getString("color");
+                    String tempSize = rs.getString("size");
+                    if (tempProductID != productID) {
+                        if (productID != 0) {
+                            image.put("key", listImage);
+                            colorSizeQuantity.put(colorSize, 1);
+                            ProductDTO product = new ProductDTO(productID, productName, "", image, colorSizeQuantity, price, 0, discount, 0, "", false);
+                            list.add(product);
+                        }
+                        image = new HashMap<>();
+                        colorSizeQuantity = new HashMap<>();
+                        listImage = new ArrayList<>();
+                        colorSize = new ArrayList<>();
+                        if (!listImage.contains(tempImage)) {
+                            listImage.add(tempImage);
+                        }
+                        if (!colorSize.contains(tempColor)) {
+                            colorSize.add(tempColor);
+                        }
+                        if (!colorSize.contains(tempSize)) {
+                            colorSize.add(tempSize);
+                        }
+
+                        productID = tempProductID;
+                        productName = tempProductName;
+                        price = tempPrice;
+                        discount = tempDiscount;
+                    } else {
+                        if (!listImage.contains(tempImage)) {
+                            listImage.add(tempImage);
+                        }
+
+                        if (!colorSize.contains(tempColor)) {
+                            colorSize.add(tempColor);
+                        }
+                        if (!colorSize.contains(tempSize)) {
+                            colorSize.add(tempSize);
+                        }
+
+                    }
+
+                }
+                image.put("key", listImage);
+                colorSizeQuantity.put(colorSize, 1);
+                if (productID != 0) {
+                    ProductDTO product = new ProductDTO(productID, productName, "", image, colorSizeQuantity, price, 0, discount, 0, "", false);
+                    list.add(product);
+                }
+
+            }
+        } catch (Exception e) {
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+
+        return list;
+    }
+
     public boolean updateImages(List<String> newImages, List<String> images) throws SQLException {
         boolean check = false;
         Connection conn = null;
@@ -1408,7 +1525,7 @@ public class ProductDAO {
         return check;
     }
 
-    public List<ProductDTO> filterSearchedProducts(String search, int minAmount, int maxAmount, List<String> colors, List<String> sizes) throws SQLException {
+    public List<ProductDTO> filterSearchedProducts(String search, int minAmount, int maxAmount, List<String> colors, List<String> sizes, int offset, int noOfProducts) throws SQLException {
         List<ProductDTO> filterOut = new ArrayList<>();
         List<ProductDTO> listProduct = getSearchCatalog(search);
         for (ProductDTO p : listProduct) {
@@ -1416,15 +1533,15 @@ public class ProductDAO {
             if (!(p.getPrice() - p.getDiscount() >= minAmount && p.getPrice() - p.getDiscount() <= maxAmount)) {
                 filterOut.add(p);
             }
-            if (!colors.isEmpty()) {     
+            if (!colors.isEmpty()) {
                 boolean checkColor = false;
-                for(String c: product.getColorImage().keySet()){
-                    if(colors.contains(c)){
-                       checkColor = true;
-                       break;
+                for (String c : product.getColorImage().keySet()) {
+                    if (colors.contains(c)) {
+                        checkColor = true;
+                        break;
                     }
                 }
-                if(!checkColor && !filterOut.contains(p)){
+                if (!checkColor && !filterOut.contains(p)) {
                     filterOut.add(p);
                 }
             }
@@ -1437,14 +1554,14 @@ public class ProductDAO {
                         key.add(n);
                     }
                 }
-                
-                for (int a = 0; a < key.size(); a+=2) {
-                    if(sizes.contains(key.get(a+1))){
+
+                for (int a = 0; a < key.size(); a += 2) {
+                    if (sizes.contains(key.get(a + 1))) {
                         checkSize = true;
                         break;
                     }
-                }      
-                if(!checkSize && !filterOut.contains(p)){
+                }
+                if (!checkSize && !filterOut.contains(p)) {
                     filterOut.add(p);
                 }
             }
@@ -1454,9 +1571,25 @@ public class ProductDAO {
         for (ProductDTO p : filterOut) {
             listProduct.remove(p);
         }
-        return listProduct;
+
+        List<ProductDTO> listProductPagination = new ArrayList<>();
+        int index = 0;
+        for (int i = offset; i <= noOfProducts; i++) {
+//            listProductPagination.set(index, listProduct.get(i));
+            if (i == listProduct.size()) {// prevent out of bound
+                break;
+            } else {
+                listProductPagination.add(listProduct.get(i));
+                index++;
+            }
+        }
+
+        // number of product after filter out
+        this.numberOfProduct = listProduct.size();
+
+        return listProductPagination;
     }
-    
+
     public List<ProductDTO> filterCategoryProducts(String category, int minAmount, int maxAmount, List<String> colors, List<String> sizes) throws SQLException {
         List<ProductDTO> filterOut = new ArrayList<>();
         List<ProductDTO> listProduct = getProductByCategory(category);
@@ -1465,15 +1598,15 @@ public class ProductDAO {
             if (!(p.getPrice() - p.getDiscount() >= minAmount && p.getPrice() - p.getDiscount() <= maxAmount)) {
                 filterOut.add(p);
             }
-            if (!colors.isEmpty()) {     
+            if (!colors.isEmpty()) {
                 boolean checkColor = false;
-                for(String c: product.getColorImage().keySet()){
-                    if(colors.contains(c)){
-                       checkColor = true;
-                       break;
+                for (String c : product.getColorImage().keySet()) {
+                    if (colors.contains(c)) {
+                        checkColor = true;
+                        break;
                     }
                 }
-                if(!checkColor && !filterOut.contains(p)){
+                if (!checkColor && !filterOut.contains(p)) {
                     filterOut.add(p);
                 }
             }
@@ -1486,14 +1619,14 @@ public class ProductDAO {
                         key.add(n);
                     }
                 }
-                
-                for (int a = 0; a < key.size(); a+=2) {
-                    if(sizes.contains(key.get(a+1))){
+
+                for (int a = 0; a < key.size(); a += 2) {
+                    if (sizes.contains(key.get(a + 1))) {
                         checkSize = true;
                         break;
                     }
-                }      
-                if(!checkSize && !filterOut.contains(p)){
+                }
+                if (!checkSize && !filterOut.contains(p)) {
                     filterOut.add(p);
                 }
             }
@@ -1505,5 +1638,5 @@ public class ProductDAO {
         }
         return listProduct;
     }
-    
+
 }

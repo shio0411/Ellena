@@ -84,6 +84,9 @@ public class AuthenFilter implements Filter {
         CUSTOMER_FUNCTION.add("RatingController");
         CUSTOMER_FUNCTION.add("rating-order.jsp");
         CUSTOMER_FUNCTION.add("rating-product.jsp");
+        CUSTOMER_FUNCTION.add("FilterAllProductsController");
+        CUSTOMER_FUNCTION.add("SearchCatalogController");
+        CUSTOMER_FUNCTION.add("FilterSearchedProductsController");
         
         ADMIN_FUNCTION = new ArrayList<>();
         ADMIN_FUNCTION.add("admin.jsp");
@@ -232,7 +235,8 @@ public class AuthenFilter implements Filter {
                                 || uri.contains("search-catalog.jsp") || uri.contains("LoginGoogleController") || uri.contains("LoginFacebookController") || uri.contains("AddToCartController")
                                 || uri.contains("about-us.jsp") || uri.contains("faq.jsp") || uri.contains("choose-size.jsp") || uri.contains("payment-policy.jsp") || uri.contains("return-policy.jsp")
                                 || uri.contains("forgot-password.jsp") || uri.contains("ForgotPasswordController") || uri.contains("validate-otp.jsp") || uri.contains("ValidateOtpController")
-                                || uri.contains("reset-password.jsp") || uri.contains("ResetPasswordController") || uri.contains("LogoutController")) {
+                                || uri.contains("reset-password.jsp") || uri.contains("ResetPasswordController") || uri.contains("LogoutController") 
+                                || uri.contains("FilterAllProductsController") || uri.contains("SearchCatalogController") || uri.contains("FilterSearchedProductsController")) {
                             chain.doFilter(request, response);
                         } else if (!ADMIN_FUNCTION.contains(resource) && !CUSTOMER_FUNCTION.contains(resource) && !MANAGER_FUNCTION.contains(resource)) {
                             res.sendError(404);

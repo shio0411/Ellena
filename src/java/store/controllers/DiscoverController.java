@@ -29,13 +29,36 @@ public class DiscoverController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
+        int page = 1; // page it start counting
+        int productPerPage = 6; //number of product per page
 
         try {
+
+            // if there is a page param, take it
+            if (request.getParameter("page") != null) {
+                page = Integer.parseInt(request.getParameter("page"));
+            }
+
             ProductDAO dao = new ProductDAO();
             String search = "";
-            List<ProductDTO> listProduct = dao.getSearchCatalog(search);
+            List<ProductDTO> listProduct = dao.getSearchCatalogPagination(search, (page * productPerPage) - productPerPage + 1, productPerPage * page);
             HttpSession session = request.getSession();
             session.setAttribute("SEARCH_CATALOG", listProduct);
+            
+
+            int noOfProducts = dao.getNumberOfProduct();
+            int noOfPages = (int) Math.ceil(noOfProducts * 1.0 / productPerPage);
+            
+            request.setAttribute("MIN_AMOUNT", 0);
+            request.setAttribute("MAX_AMOUNT", 0);
+            
+            request.setAttribute("noOfPages", noOfPages);
+            request.setAttribute("currentPage", page);
+//            give manager-product.jsp know that we are in ShowProduct
+            boolean searchPage = true;
+            request.setAttribute("SWITCH_SEARCH", searchPage);
+            
+            
             url = SUCCESS;
 
         } catch (Exception e) {
