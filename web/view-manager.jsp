@@ -242,7 +242,11 @@
                 </td>
                     
                 </tr>
-            <% } } }%>
+            <% } } }else{
+                        %>
+                        <div style="text-align: center">Không có kết quả tìm kiếm.</div>
+                <%
+                        }%>
         </table>
         </div>
         <script>

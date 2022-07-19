@@ -89,8 +89,14 @@ public class CheckoutController extends HttpServlet {
                             }
                         }
                         transactionNumber = request.getParameter("vnp_TransactionNo");
+                        if (transactionNumber == null)
+                            transactionNumber = request.getParameter("transId");
+
                         String responseCode = request.getParameter("vnp_ResponseCode");
+                        
                         String momoResultCode = request.getParameter("resultCode");
+                        
+                        
                         String vnp_SecureHash = request.getParameter("vnp_SecureHash");
                         if (fields.containsKey("vnp_SecureHashType")) {
                             fields.remove("vnp_SecureHashType");

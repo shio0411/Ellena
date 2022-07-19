@@ -29,8 +29,12 @@ public class MainController extends HttpServlet {
     private static final String ADD_PRODUCT_CONTROLLER = "AddProductController";
     private static final String SEARCH_MANAGER = "SearchManager";
     private static final String SEARCH_MANAGER_CONTROLLER = "SearchManagerController";
-    private static final String FILTER_PRICE = "filter-price";
-    private static final String FILTER_PRICE_CONTROLLER = "FilterPriceController";
+    private static final String FILTER_SEARCHED = "filter-searched-products";
+    private static final String FILTER_SEARCHED_CONTROLLER = "FilterSearchedProductsController";
+    private static final String FILTER_IN_CATEGORY = "filter-in-category";
+    private static final String FILTER_IN_CATEGORY_CONTROLLER = "FilterCategoryProductsController";
+    private static final String FILTER_ALL_PRODUCTS = "filter-all-products";
+    private static final String FILTER_ALL_PRODUCTS_CONTROLLER = "FilterAllProductsController";
     private static final String SEARCH_CATALOG = "search-catalog";
     private static final String SEARCH_CATALOG_CONTROLLER = "SearchCatalogController";
     private static final String SEARCH_CATEGORY = "SearchCategory";
@@ -137,7 +141,9 @@ public class MainController extends HttpServlet {
     private static final String REFUND_CONTROLLER = "RefundController";
     private static final String REFUND_ORDER = "RefundOrder";
     private static final String REFUND_ORDER_CONTROLLER = "RefundOrderController";
-
+    private static final String SEARCH_RETURN_CUSTOMER = "SearchReturnedHistory";
+    private static final String SEARCH_RETURN_CUSTOMER_CONTROLLER = "SearchReturnedHistoryController";
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
@@ -180,8 +186,14 @@ public class MainController extends HttpServlet {
                     case ADD_PRODUCT:
                         url = ADD_PRODUCT_CONTROLLER;
                         break;
-                    case FILTER_PRICE:
-                        url = FILTER_PRICE_CONTROLLER;
+                    case FILTER_SEARCHED:
+                        url = FILTER_SEARCHED_CONTROLLER;
+                        break;
+                    case FILTER_IN_CATEGORY:
+                        url = FILTER_IN_CATEGORY_CONTROLLER;
+                        break;
+                    case FILTER_ALL_PRODUCTS:
+                        url = FILTER_ALL_PRODUCTS_CONTROLLER;
                         break;
                     case VIEW_USER:
                         url = VIEW_USER_CONTROLLER;
@@ -329,6 +341,9 @@ public class MainController extends HttpServlet {
                         break;
                     case REFUND_ORDER:
                         url = REFUND_ORDER_CONTROLLER;
+                        break;
+                    case SEARCH_RETURN_CUSTOMER:
+                        url = SEARCH_RETURN_CUSTOMER_CONTROLLER;
                         break;
                     default:
                         break;

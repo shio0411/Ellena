@@ -64,45 +64,43 @@
                                             </div>
                                         </div>
                                         <input type="hidden" name="search" value="">
-                                        <a><button style="border: none; background: none;" type="submit" name="action" value="filter-price">Filter</button></a>
-                                    </form>
                                 </div>
                                 <div class="sidebar__sizes">
                                     <div class="section-title">
                                         <h4>Màu sắc</h4>
                                     </div>
                                     <div>
-                                        <ul id="filters" style="list-style: none;">
+                                        <ul style="list-style: none;">
                                             <li>
-                                                <input type="checkbox" value="Đen" id="Đen"/>                                               
+                                                <input type="checkbox" value="Đen" name="color" id="Đen"/>                                               
                                                 <label for="Đen">Đen</label>
                                             </li>
                                             <li>
-                                                <input type="checkbox" value="Hồng" id="Hồng"/>   
+                                                <input type="checkbox" value="Hồng" name="color" id="Hồng"/>   
                                                 <label for="Hồng">Hồng</label>
                                             </li>
                                             <li>
-                                                <input type="checkbox" value="Đỏ" id="Đỏ"/>
+                                                <input type="checkbox" value="Đỏ" name="color" id="Đỏ"/>
                                                 <label for="Đỏ">Đỏ</label>
                                             </li>
                                             <li>
 
-                                                <input type="checkbox" value="Xanh" id="Xanh"/>
+                                                <input type="checkbox" value="Xanh" name="color" id="Xanh"/>
                                                 <label for="Xanh">Xanh</label>
                                             </li>
                                             <li>
 
-                                                <input type="checkbox" value="Xanhnhạt" id="Xanh nhạt"/>
+                                                <input type="checkbox" value="Xanh nhạt" name="color" id="Xanh nhạt"/>
                                                 <label for="Xanh nhạt">Xanh nhạt</label>
                                             </li>
                                             <li>
 
-                                                <input type="checkbox" value="Trắng" id="Trắng"/>
+                                                <input type="checkbox" value="Trắng" name="color" id="Trắng"/>
                                                 <label for="Trắng">Trắng</label>
                                             </li>
                                             <li>
 
-                                                <input type="checkbox" value="Be" id="Be"/>
+                                                <input type="checkbox" value="Be" name="color" id="Be"/>
                                                 <label for="Be">Be</label>
                                             </li><br>
                                             <div class="section-title">
@@ -110,27 +108,27 @@
                                             </div>
                                             <li>
 
-                                                <input type="checkbox" value="XS" id="XS"/>
+                                                <input type="checkbox" value="XS" name="size" id="XS"/>
                                                 <label for="XS">XS</label>
                                             </li>
                                             <li>
 
-                                                <input type="checkbox" value="S" id="S"/>
+                                                <input type="checkbox" value="S" name="size" id="S"/>
                                                 <label for="S">S</label>
-                                            </li
+                                            </li>
                                             <li>
 
-                                                <input type="checkbox" value="M" id="M"/>
+                                                <input type="checkbox" value="M" name="size" id="M"/>
                                                 <label for="M">M</label>
                                             </li>
                                             <li>
 
-                                                <input type="checkbox" value="L" id="L"/>
+                                                <input type="checkbox" value="L" name="size" id="L"/>
                                                 <label for="L">L</label>
                                             </li>
                                             <li>
 
-                                                <input type="checkbox" value="XL" id="XL"/>
+                                                <input type="checkbox" value="XL" name="size" id="XL"/>
                                                 <label for="XL">XL</label>
                                             </li>
 
@@ -139,6 +137,7 @@
                                 </div>
 
                             </div>
+                            <a><button style="border: none; background: none;" type="submit" name="action" value="filter-all-products">Filter</button></a>
                             </form>
                         </div>
                         <%
@@ -265,17 +264,6 @@
         <script>
             $(".carousel-inner").children(".carousel-item:first-child").addClass("active");
         </script>
-        <script>
-            $("#filters :checkbox").click(function () {
-                $("div.all").hide();
-                if ($('#filters :checkbox:checked').length > 0) {
-                    $("#filters :checkbox:checked").each(function () {
-                        $("." + $(this).val()).show();
-                    });
-                } else {
-                    $("div.all").show();
-                }
-            });
-        </script>
+      
     </body>
 </html>

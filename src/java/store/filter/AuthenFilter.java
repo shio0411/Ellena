@@ -72,8 +72,7 @@ public class AuthenFilter implements Filter {
         CUSTOMER_FUNCTION.add("ViewOrderHistoryController");
         CUSTOMER_FUNCTION.add("CreateRatingFormController");
         CUSTOMER_FUNCTION.add("rating-product.jsp");       
-        CUSTOMER_FUNCTION.add("UpdateRatingController");
-        
+        CUSTOMER_FUNCTION.add("UpdateRatingController");     
         CUSTOMER_FUNCTION.add("customer-profile.jsp");
         CUSTOMER_FUNCTION.add("DiscoverController");
         CUSTOMER_FUNCTION.add("CategoryRouteController");
@@ -85,7 +84,7 @@ public class AuthenFilter implements Filter {
         CUSTOMER_FUNCTION.add("RatingController");
         CUSTOMER_FUNCTION.add("rating-order.jsp");
         CUSTOMER_FUNCTION.add("rating-product.jsp");
-
+        
         ADMIN_FUNCTION = new ArrayList<>();
         ADMIN_FUNCTION.add("admin.jsp");
         ADMIN_FUNCTION.add("add-account.jsp");
@@ -120,11 +119,12 @@ public class AuthenFilter implements Filter {
         MANAGER_FUNCTION.add("SearchOrderController");
         MANAGER_FUNCTION.add("manager-order.jsp");
         MANAGER_FUNCTION.add("return.jsp");
-        MANAGER_FUNCTION.add("refund.jsp");
         MANAGER_FUNCTION.add("ReturnController");
         MANAGER_FUNCTION.add("RefundController");
         MANAGER_FUNCTION.add("UpdateOrderDetailController");
         MANAGER_FUNCTION.add("RefundOrderController");
+        MANAGER_FUNCTION.add("manager-customer-return-history.jsp");
+        MANAGER_FUNCTION.add("SearchReturnedHistoryController");
         
         EMPLOYEE_FUNCTION = new ArrayList<>();
         EMPLOYEE_FUNCTION.add("EmployeeShowOrderController");
@@ -133,7 +133,6 @@ public class AuthenFilter implements Filter {
         EMPLOYEE_FUNCTION.add("SearchOrderController");
         EMPLOYEE_FUNCTION.add("employee-order.jsp");
         EMPLOYEE_FUNCTION.add("return.jsp");
-        EMPLOYEE_FUNCTION.add("refund.jsp");
         EMPLOYEE_FUNCTION.add("ReturnController");
         EMPLOYEE_FUNCTION.add("RefundController");
         EMPLOYEE_FUNCTION.add("UpdateOrderDetailController");

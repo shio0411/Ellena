@@ -66,7 +66,7 @@ public class SearchOrderController extends HttpServlet {
                         break;
                 }
             } else {
-                request.setAttribute("EMPTY_LIST_MESSAGE", "No result found!");
+                request.setAttribute("EMPTY_LIST_MESSAGE", "Không có kết quả tìm kiếm.");
             }
             request.setAttribute("SEARCH", search);
             request.setAttribute("DATE_FROM", sDateFrom);

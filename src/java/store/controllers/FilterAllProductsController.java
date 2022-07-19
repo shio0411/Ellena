@@ -5,72 +5,64 @@
 package store.controllers;
 
 import java.io.IOException;
-import java.sql.SQLException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import store.momo.Environment;
-import store.momo.RefundMoMoResponse;
-import store.momo.RefundTransaction;
-import store.shopping.OrderDAO;
-import store.shopping.OrderDTO;
+import javax.servlet.http.HttpSession;
+import store.shopping.ProductDAO;
+import store.shopping.ProductDTO;
 
 /**
  *
- * @author giama
+ * @author vankh
  */
-@WebServlet(name = "CancelOrderController", urlPatterns = {"/CancelOrderController"})
-public class CancelOrderController extends HttpServlet {
+@WebServlet(name = "FilterAllProductsController", urlPatterns = {"/FilterAllProductsController"})
+public class FilterAllProductsController extends HttpServlet {
 
-    private static final String ERROR = "error.jsp";
-    private static final String SUCCESS = "ViewOrderHistoryController";
-    
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    public static final String ERROR = "error.jsp";
+    public static final String SUCCESS = "discover.jsp";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException{
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
+
         try {
-            int orderID = Integer.parseInt(request.getParameter("orderID"));
-            String payType = request.getParameter("payType");
-            OrderDAO dao = new OrderDAO();
-            OrderDTO order = dao.getOrder(orderID);
-            
-            boolean check;
-            if ("COD".equals(payType))
-                check = dao.updateOrderStatus(orderID, 5, "System", "");
-            else{
-                check = dao.updateOrderStatus(orderID, 6, "System", "");
-                if ("Momo".equalsIgnoreCase(payType)) {
-                    String requestId = String.valueOf(System.currentTimeMillis());
-                    String orderId = String.valueOf(System.currentTimeMillis());
-                    Environment environment = Environment.selectEnv("dev");
-                    RefundMoMoResponse refundMoMoResponse = RefundTransaction.process(environment, orderId, requestId, Long.toString(order.getTotal()), Long.valueOf(order.getTransactionNumber()), "");
-                    if (refundMoMoResponse.getResultCode() != 0) 
-                        check = false;
+            ProductDAO dao = new ProductDAO();
+            HttpSession session = request.getSession();
+            int minAmount = Integer.parseInt(request.getParameter("minAmount"));
+            int maxAmount = Integer.parseInt(request.getParameter("maxAmount"));
+            String[] colors = request.getParameterValues("color");
+            String[] sizes = request.getParameterValues("size");
+            List<String> colorList = new ArrayList();
+            List<String> sizeList = new ArrayList();
+            if(colors!=null){
+                for(String c: colors){
+                    colorList.add(c);
+                }
+            }
+            if(sizes!=null){
+                for(String s: sizes){
+                    sizeList.add(s);
                 }
             }
             
-            if (check) {
-                request.setAttribute("MESSAGE", "Huỷ đơn hàng thành công!");
-                url = SUCCESS;
-            }
+            List<ProductDTO> listProduct = dao.filterSearchedProducts("", minAmount, maxAmount, colorList, sizeList);
             
+            session.setAttribute("SEARCH_CATALOG", listProduct);
+            url = SUCCESS;
+
         } catch (Exception e) {
-            log("Error at CancelOrderController: " + e.toString());
+            log("Error at SearchCatalogController: " + toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

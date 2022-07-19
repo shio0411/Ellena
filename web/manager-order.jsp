@@ -87,6 +87,7 @@
             <a href="ManagerStatisticController"><i class="fa fa-bar-chart fa-lg"></i>Số liệu thống kê</a>
             <a href="ManagerShowProductController"><i class="fa fa-archive fa-lg"></i>Quản lí sản phẩm</a>
             <a href="ShowOrderController" style="color: #873e23; font-weight: bold;"><i class="fa fa-cart-plus fa-lg"></i>Quản lí đơn hàng</a>
+            <a href="manager-customer-return-history.jsp"><span>CHO XIN CÁI ICON :V</span>Lịch sử đổi/trả</a>
         </div> 
 
         <div class="main">
@@ -209,7 +210,7 @@
                                                                     <%if (order.getStatusID() == k) {%>
                                                                     selected 
                                                                     <%}
-                                                                        if (k < order.getStatusID() || (k == 5 && order.getStatusID() != 3 && order.getStatusID() != 1) || (k == 6 && order.getStatusID() != 1) || ((k == 7) && (order.getStatusID() != 6))) {%>
+                                                                        if (order.getStatusID() == 5 || k < order.getStatusID() || (k == 5 && order.getStatusID() != 3 && order.getStatusID() != 1) || (k == 6 && order.getStatusID() != 1) || ((k == 7) && (order.getStatusID() != 6))) {%>
                                                                     disabled 
                                                                     <%}%> >
                                                                 <%= order.getStatus(k)%>
@@ -372,12 +373,9 @@
                                         <input type="hidden" name="search" id="update-search" value="<%= searchValue%>"/>
                                         <input type="hidden" name="dateFrom" id="update-dateFrom" value="<%= dateFrom%>"/>
                                         <input type="hidden" name="dateTo" id="update-dateTo" value="<%= dateTo%>"/>
-                                        <input type="hidden" name="search-statusID" id="update-statusID" value="<%= sOrderStatusID%>"/>
-                                        <button type="submit" class="ml-4 btn btn-secondary" data-toggle="tooltip" data-html="true" title="Đổi hàng" name="action" value="Return">
-                                            Đổi hàng <!-- Icon return here -->
-                                        </button>
-                                        <button type="submit" class="btn btn-secondary" data-toggle="tooltip" data-html="true" title="Trả hàng" name="action" value="Refund">
-                                            Trả hàng <!-- Icon refund here -->
+                                        <input type="hidden" name="search-st atusID" id="update-statusID" value="<%= sOrderStatusID%>"/>
+                                        <button type="submit" class="btn btn-secondary" data-toggle="tooltip" data-html="true" title="Đổi hàng" name="action" value="Return">
+                                            Đổi/trả <!-- Icon return here -->
                                         </button>
                                         <div class="modal-footer">
                                             <button class="btn btn-default" type="submit" name="action" value="UpdateOrder">Cập nhật</button>
@@ -491,6 +489,9 @@
                         if (currentPage != 1) {
                 %>
 
+                <!-- For displaying 1st page link except for the 1st page -->
+                <a href="ShowOrderController?page=1"><i class="glyphicon glyphicon-menu-left"></i><i class="glyphicon glyphicon-menu-left"></i></a>
+                
                 <!-- For displaying Previous link except for the 1st page -->
                 <a href="ShowOrderController?page=<%= currentPage - 1%>"><i class="glyphicon glyphicon-menu-left"></i></a>
                     <%
@@ -518,6 +519,10 @@
                     if (currentPage < noOfPages) {
                 %>
                 <a href="ShowOrderController?page=<%= currentPage + 1%>"><i class="glyphicon glyphicon-menu-right"></i></a>
+                
+                <!-- For displaying last page link except for the last page -->
+                <a href="ShowOrderController?page=<%= noOfPages %>"><i class="glyphicon glyphicon-menu-right"></i><i class="glyphicon glyphicon-menu-right"></i></a>
+                
                     <%
                         }
 
@@ -531,6 +536,9 @@
                     if (currentPage != 1) {
                 %>
 
+                <!-- For displaying 1st page link except for the 1st page -->
+                <a href="SearchOrderController?search=<%= searchValue%>&search-statusID=<%= sOrderStatusID%>&dateFrom=<%= dateFrom%>&dateTo=<%= dateTo%>&page=1"><i class="glyphicon glyphicon-menu-left"></i><i class="glyphicon glyphicon-menu-left"></i></a>
+                
                 <!-- For displaying Previous link except for the 1st page -->
                 <a href="SearchOrderController?search=<%= searchValue%>&search-statusID=<%= sOrderStatusID%>&dateFrom=<%= dateFrom%>&dateTo=<%= dateTo%>&page=<%= currentPage - 1%>" style="text-decoration: none;"><i class="glyphicon glyphicon-menu-left"></i></a>
                     <%
@@ -558,6 +566,10 @@
                     if (currentPage < noOfPages) {
                 %>
                 <a href="SearchOrderController?search=<%= searchValue%>&search-statusID=<%= sOrderStatusID%>&dateFrom=<%= dateFrom%>&dateTo=<%= dateTo%>&page=<%= currentPage + 1%>"><i class="glyphicon glyphicon-menu-right"></i></a>
+                
+                <!-- For displaying last page link except for the last page -->
+                <a href="SearchOrderController?search=<%= searchValue%>&search-statusID=<%= sOrderStatusID%>&dateFrom=<%= dateFrom%>&dateTo=<%= dateTo%>&page=<%= noOfPages %>"><i class="glyphicon glyphicon-menu-right"></i><i class="glyphicon glyphicon-menu-right"></i></a>
+                
                     <%
                             }
 
@@ -570,15 +582,6 @@
             <%                
                 } //end of the "No product" if statement
             %>
-
-
-
-
-
-
-
-
-
 
 
         </div>

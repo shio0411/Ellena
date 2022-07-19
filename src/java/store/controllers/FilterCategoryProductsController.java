@@ -5,6 +5,8 @@
 package store.controllers;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,16 +16,17 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import store.shopping.ProductDAO;
 import store.shopping.ProductDTO;
+import store.utils.VNCharacterUtils;
 
 /**
  *
  * @author vankh
  */
-@WebServlet(name = "FilterPriceController", urlPatterns = {"/FilterPriceController"})
-public class FilterPriceController extends HttpServlet {
+@WebServlet(name = "FilterCategoryProductsController", urlPatterns = {"/FilterCategoryProductsController"})
+public class FilterCategoryProductsController extends HttpServlet {
 
     public static final String ERROR = "error.jsp";
-    public static final String SUCCESS = "search-catalog.jsp";
+    public static final String SUCCESS = "category.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -32,12 +35,26 @@ public class FilterPriceController extends HttpServlet {
 
         try {
             ProductDAO dao = new ProductDAO();
-            //String search = request.getParameter("search");
+            String category = VNCharacterUtils.removeAccent(request.getParameter("category"));
             HttpSession session = request.getSession();
-            List<ProductDTO> searchCatalog = (List<ProductDTO>)session.getAttribute("SEARCH_CATALOG");
             int minAmount = Integer.parseInt(request.getParameter("minAmount"));
             int maxAmount = Integer.parseInt(request.getParameter("maxAmount"));
-            List<ProductDTO> listProduct = dao.filterPrice(searchCatalog, minAmount, maxAmount);
+            String[] colors = request.getParameterValues("color");
+            String[] sizes = request.getParameterValues("size");
+            List<String> colorList = new ArrayList();
+            List<String> sizeList = new ArrayList();
+            if(colors!=null){
+                for(String c: colors){
+                    colorList.add(c);
+                }
+            }
+            if(sizes!=null){
+                for(String s: sizes){
+                    sizeList.add(s);
+                }
+            }
+            
+            List<ProductDTO> listProduct = dao.filterCategoryProducts(category, minAmount, maxAmount, colorList, sizeList);
             
             session.setAttribute("SEARCH_CATALOG", listProduct);
             url = SUCCESS;

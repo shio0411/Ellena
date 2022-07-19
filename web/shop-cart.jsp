@@ -57,8 +57,8 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="breadcrumb__links">
-                            <a href="./"><i class="fa fa-home text-template-primary"></i> Home</a>
-                            <span>Shopping cart</span>
+                            <a href="./"><i class="fa fa-home text-template-primary"></i> Trang chủ</a>
+                            <span>Giỏ hàng</span>
                         </div>
                     </div>
                 </div>
@@ -67,6 +67,7 @@
         <!-- Breadcrumb End -->
         <% List<CartProduct> cart = (List<CartProduct>) session.getAttribute("CART");
             int total = 0;
+            int subtotal = 0;
         %>
         <!-- Shop Cart Section Begin -->
         <%
@@ -100,6 +101,7 @@
                                         int i = 1;
                                         for (CartProduct item : cart) {
                                             total += (item.getPrice() - item.getDiscount()) * item.getQuantity();
+                                            subtotal += item.getPrice() * item.getQuantity();
                                     %>
 
                                     <tr>
@@ -165,7 +167,7 @@
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-6">
                         <div class="cart__btn">
-                            <a href="home.jsp"><i class="fa fa-arrow-left text-template-primary"></i>Continue Shopping</a>
+                            <a href="home.jsp"><i class="fa fa-arrow-left text-template-primary"></i>Tiếp tục mua sắm</a>
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6">
@@ -180,10 +182,11 @@
                     </div>
                     <div class="col-lg-4 offset-lg-2">
                         <div class="cart__total__procced">
-                            <h6>Cart total</h6>
+                            <h6>Tổng thanh toán</h6>
                             <ul>
-                                <li>Subtotal <span></span></li>
-                                <li>Total 
+                                <li>Tổng tiền hàng <span><%= (int) (subtotal / 1000)%>.000₫ </span></li>
+                                <li>Giảm giá <span>-<%= (int) ((subtotal - total) / 1000)%>.000₫ </span></li>
+                                <li>Tổng thanh toán 
                                     <span><%= (int) (total / 1000)%>.000₫ </span>
                                 </li>
                             </ul>
@@ -206,7 +209,7 @@
             </div>
 
             <div class="cart__btn">
-                <a href="home.jsp">Continue Shopping</a>
+                <a href="home.jsp">Tiếp tục mua sắm</a>
             </div>
 
         </div>
@@ -222,7 +225,7 @@
             </div>
 
             <div class="cart__btn">
-                <a href="home.jsp">Continue Shopping</a>
+                <a href="home.jsp">Tiếp tục mua sắm</a>
             </div>
 
         </div>

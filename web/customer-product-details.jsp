@@ -134,7 +134,6 @@
         <% session.setAttribute("productID", product.getProductID());
             String failureMsg = (String) request.getAttribute("QUANTITY_MESSAGE");
             String successMsg = (String) request.getAttribute("ADD_TO_CART_MESSAGE");
-            String activeColor = (String) request.getAttribute("ACTIVE_COLOR");
             if (successMsg != null) {
         %>
 
@@ -254,7 +253,7 @@
                                                     String color = it.next();
                                                     colorList.add(color);  %>      
 
-                                            <li <%if ((i == 1 && activeColor == null) || color.equalsIgnoreCase(activeColor)) { %> class="active" <%}%>><a class="p-2 px-4 " data-toggle="tab" href="#<%= color%>-size"><%= color%></a></li>
+                                            <li <%if (i == 1) { %> class="active" <%}%>><a class="p-2 px-4" data-toggle="tab" href="#<%= color%>-size"><%= color%></a></li>
 
                                             <% i++;
                                                 }%>                             
@@ -279,7 +278,7 @@
                                                 int k = 1; 
                                                 for (String color : colorList) {
                                             %>
-                                            <div id="<%=color%>-size" class="tab-pane fade <%if ((g == 1 && activeColor == null) || color.equalsIgnoreCase(activeColor)) { %> in active <%}%>">
+                                            <div id="<%=color%>-size" class="tab-pane fade <%if (g == 1) { %> in active <%}%>">
                                                 <form action="AddToCartController" id="get<%=color%>SizeForm">
                                                     <div class="sizes__container">
                                                         <input type="hidden" name="color" value="<%=color%>"/>

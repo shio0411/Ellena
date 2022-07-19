@@ -73,14 +73,73 @@
                 Xin chào, <a href="my-profile.jsp"><%= loginUser.getFullName()%></a>
                 <input type="submit" name="action" value="Logout" style="margin-left: 4%;">
             </form>
-            <ul class="pagination">
-                <li class="active"><a href="#">Đổi</a></li>
-                <li><a href="MainController?action=Refund&orderID=<%= order.getOrderID()%>">Trả</a></li>
-            </ul>
-            <h3>Chọn sản phẩm muốn đổi</h3>
+            
+            <h3>Chọn sản phẩm muốn đổi/trả</h3>
             <div>
 
+                <div class="row">
+                    <div class="col-md-6 mb-4 pb-2">
 
+                        <div class="form-outline">
+                            <label class="form-label" for="orderID">ID đơn hàng</label>
+                            <input type="text" readonly="" name="orderID" value="<%= order.getOrderID()%>" id="orderID" class="form-control form-control-lg" />
+                        </div>
+
+                    </div>
+                    <div class="col-md-6 mb-4 pb-2">
+
+                        <div class="form-outline">
+                            <label class="form-label" for="statusID">Trạng thái</label>
+                            <input type="text" readonly="" name="statusID" value="<%= order.getStatus(order.getStatusID()) %>" id="statusID" class="form-control form-control-lg" />
+                        </div>
+
+                    </div>
+                    <div class="col-md-12 mb-4">
+
+                        <div class="form-outline">
+                            <label class="form-label" for="fullName">User name</label>
+                            <input type="text" name="fullName" value="<%= order.getUserName()%>" readonly="" id="userID" class="form-control form-control-lg" />
+                        </div>
+
+                    </div>
+                        
+                    <div class="col-md-6 mb-4 pb-2">
+
+                        <div class="form-outline">
+                            <label class="form-label" for="orderDate">Ngày đặt hàng</label>
+                            <input type="text" readonly="" name="orderDate" value="<%= order.getOrderDate()%>" id="orderDate" class="form-control form-control-lg" />
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-md-6 mb-4 pb-2">
+
+                        <div class="form-outline">
+                            <label class="form-label" for="total">Tổng tiền</label>
+                            <input type="text" readonly="" name="total" value="<%= order.getTotal()%>" id="total" class="form-control form-control-lg" />
+
+                        </div>
+
+                    </div>
+                            <div class="col-md-6 mb-4 pb-2">
+
+                        <div class="form-outline">
+                            <label class="form-label" for="payType">Hình thức thanh toán</label>
+                            <input type="text" name="payType" readonly="" value="<%= order.getPayType()%>" id="payType" class="form-control form-control-lg" />
+                        </div>
+
+                    </div>
+                    <div class="col-md-6 mb-4 pb-2">
+
+                        <div class="form-outline">
+                            <label class="form-label" for="trackingID">Tracking ID</label>
+                            <input type="text" readonly="" name="trackingID" value="<%= order.getTrackingID()%>" id="trackingID" class="form-control form-control-lg" />
+                        </div>
+
+                    </div>
+                </div>
                 <table class="table table-hover table-bordered">
                     <thead>
                         <tr style="background-color: #b57c68">
@@ -89,12 +148,14 @@
                             <th>Số lượng</th>
                             <th>Màu</th>
                             <th>Size</th>
-                            <th></th>
+                            <th>Đổi</th>
+                            <th>Trả</th>
                         </tr>
                     </thead>
                     <tbody>
                         <%
                             int id = 1;
+                            int count = 0;
                             for (OrderDetailDTO orderDetail : order.getOrderDetail()) {
                         %>
 
@@ -102,16 +163,16 @@
                             <td><%= orderDetail.getProductName()%></td>
                             <td>
                                 <%
-                                    if (productList.get(id - 1).getPrice() != orderDetail.getPrice()) {
+                                    if (productList.get(count).getPrice() != orderDetail.getPrice()) {
                                 %>
-                                <s><%= productList.get(id - 1).getPrice()%></s><br>
+                                <s><%= productList.get(count).getPrice()%></s><br>
                                     <%}%>
                                     <%= orderDetail.getPrice()%>
                             </td>
                             <td><%= orderDetail.getQuantity()%></td>
                             <td><%= orderDetail.getColor()%></td>
                             <td><%= orderDetail.getSize()%></td>
-                            <!--Pop-up thay đổi sản phẩm trong đơn hàng-->
+                            <!--Pop-up đổi hàng-->
                             <td>
                                 <div class="modal fade" id="myModal<%=id%>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                     <div class="modal-dialog" id="<%=id%>" >
@@ -121,7 +182,7 @@
                                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
                                             </div>
-                                            <form action="MainController">
+                                            <form action="MainController" method="POST">
                                                 <div class="modal-body">
                                                     <div>
                                                         <span>Số lượng</span>
@@ -132,7 +193,7 @@
                                                     <select name="sizeColor" required="">
                                                         <option hidden>Chọn phân loại</option>
                                                         <%
-                                                            ProductDTO product = productList.get(id - 1);
+                                                            ProductDTO product = productList.get(count);
                                                             product.getProductID();
                                                             product.getProductName();
                                                             Iterator<List<String>> colorSizeIt = product.getColorSizeQuantity().keySet().iterator();
@@ -178,6 +239,55 @@
                                                 <input type="hidden" name="orderDetailID" value="<%= orderDetail.getOrderDetailID()%>"/>
                                                 <div class="modal-footer">
                                                     <button class="btn btn-default" type="submit" name="action" value="UpdateOrderDetail">Cập nhật</button>
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" data-toggle="modal" data-target="#myModal<%=id++%>">Chi tiết</button>
+                            </td>
+                            <!--Pop-up trả hàng-->
+                            <td>
+                                <div class="modal fade" id="myModal<%=id%>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" id="<%=id%>" >
+                                        <div class="modal-content" >
+                                            <div class="modal-header">
+                                                <h4 class="modal-title" id="myModalLabel">Chỉnh sửa</h4>
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+                                            </div>
+                                            <form action="MainController">
+                                                <div class="modal-body">
+                                                    <div>
+                                                        <span>Số lượng trả lại</span>
+                                                        <input type="number" min="1" max="<%= orderDetail.getQuantity()%>" required="" name="newQuantity" value="1">
+                                                    </div>
+                                                    <span>Lý do:</span><br>
+                                                    <label>
+                                                        <input type="radio" name="note" value="Sản phẩm bị lỗi/hỏng" id="note1" checked="">
+                                                        Sản phẩm bị lỗi/hỏng
+                                                    </label><br>
+                                                    
+                                                    <label>
+                                                        <div style="float:left;">
+                                                            <input type="radio" name="note" value="Khác: " id="note4"> Khác: 
+                                                        </div>
+                                                        <div style="float:left;">
+                                                            <input type="text" id="note5" name="note" value="" placeholder="Nhập lí do"/>
+                                                        </div>
+                                                        <div style="clear:both;"></div>
+                                                    </label>
+                                                </div>
+                                                <input type="hidden" name="price" value="<%= orderDetail.getPrice()%>"/>
+                                                <input type="hidden" name="color" value="<%= orderDetail.getColor()%>"/>
+                                                <input type="hidden" name="size" value="<%= orderDetail.getSize()%>"/>
+                                                <input type="hidden" name="oldQuantity" value="<%= orderDetail.getQuantity()%>"/>
+                                                <input type="hidden" name="orderID" value="<%= order.getOrderID()%>"/>
+                                                <input type="hidden" name="productID" value="<%= orderDetail.getProductID()%>"/>
+                                                <input type="hidden" name="orderDetailID" value="<%= orderDetail.getOrderDetailID()%>"/>
+                                                <div class="modal-footer">
+                                                    <button class="btn btn-default" type="submit" name="action" value="RefundOrder">Cập nhật</button>
                                                     <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
                                                 </div>
                                             </form>
