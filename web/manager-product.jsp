@@ -18,13 +18,18 @@
             }
             form input{
                 border: 1px solid #adadad;
+                padding: 0.3rem;
+                 border-radius: 0.3rem;
             }
             select{
                  border: 1px solid #adadad;
+                 padding: 0.5rem;
+                 border-radius: 0.3rem;
             }
             
-            td{
-                padding: 1rem;
+            table tbody tr{
+                font-size: 1.25rem!important;
+                
             }
             
         </style>
@@ -91,7 +96,7 @@
             </div>
 
             <div class="row" style="margin: 0;">
-                <h1>Danh sách sản phẩm</h1>
+                <h2><b>Danh sách sản phẩm</b></h2>
             </div>
 
             <!--search bar and add product row-->
@@ -108,7 +113,7 @@
                             <option value="false">Inactive</option>
                         </select>
 
-                        <button type="submit" name="action" value="ManagerSearchProduct" class="btn-outline-dark" style="width: 15%; padding: 0.5% 0.1%;"><i class="fa fa-search fa-lg"></i>Search</button>
+                        <button type="submit" name="action" value="ManagerSearchProduct" class="btn btn-default" style="width: 15%; padding: 0.5% 0.1%;"><i class="fa fa-search fa-lg"></i>Tìm kiếm</button>
                         <!--switch to SearchController page count after submit form-->
                         <%
                             searchAll = (boolean) request.getAttribute("SWITCH_SEARCH");
@@ -120,7 +125,7 @@
 
 
             </div>
-            <a class="manager-CTA" href="add-product.jsp">Thêm sản phẩm mới</a>
+            <a class="btn btn-default" href="add-product.jsp">Thêm sản phẩm mới</a>
             
             <%  List<ProductDTO> listProduct = (List<ProductDTO>) request.getAttribute("LIST_PRODUCT");
                 if (listProduct != null) {
@@ -128,15 +133,15 @@
             %>  
             <table class="table table-hover table-bordered">
                 <colgroup>
-       <col span="1" style="width: 5%;">
-       <col span="1" style="width: 35%;">
-       <col span="1" style="width: 15%;">
-       <col span="1" style="width: 10%;">
-       <col span="1" style="width: 10%;">
-       <col span="1" style="width: 10%;">
-       <col span="1" style="width: 8%;">
-    </colgroup>
-                <tr style="background-color: #fca17d">
+                    <col span="1" style="width: 5%;">
+                    <col span="1" style="width: 35%;">
+                    <col span="1" style="width: 15%;">
+                    <col span="1" style="width: 10%;">
+                    <col span="1" style="width: 10%;">
+                    <col span="1" style="width: 10%;">
+                    <col span="1" style="width: 8%;">
+                </colgroup>
+                <tr style="background-color: #b57c68">
                     <th>ID</th>
                     <th>Tên Sản phẩm</th>                
                     <th>Loại sản phẩm</th>
@@ -158,10 +163,10 @@
                         <%
                             if (list.isStatus()) {
                         %>
-                        <a href="MainController?action=DeactivateProduct&productID=<%=list.getProductID()%>">Vô hiệu hoá</a> 
+                        <a class="btn btn-default" href="MainController?action=DeactivateProduct&productID=<%=list.getProductID()%>">Vô hiệu hoá</a> 
                         <%} else {
                         %>
-                        <a href="MainController?action=ActivateProduct&productID=<%=list.getProductID()%>">Kích hoạt</a> 
+                        <a class="btn btn-default" href="MainController?action=ActivateProduct&productID=<%=list.getProductID()%>">Kích hoạt</a> 
                         <%
                             }
                         %>
@@ -169,7 +174,7 @@
 
                     <!-- Chỉnh sửa chi tiết product-->
                     <td>
-                        <a href="ManagerShowProductDetailController?productID=<%=list.getProductID()%>">Chi tiết</a>
+                        <a class="btn btn-default" href="ManagerShowProductDetailController?productID=<%=list.getProductID()%>">Chi tiết</a>
                     </td>
 
                 </tr>
@@ -234,7 +239,7 @@
                 <%  for (int i = begin; i <= end; i++) {
                         if (currentPage == i) {
                 %>
-                <a class="active" style="background: #000000; color: #ffffff"><%= i%></a>  <!-- There is no active class for pagination (currenly hard code) -->
+                <a class="active" style="background: #b57c68; color: #ffffff"><%= i%></a>  <!-- There is no active class for pagination (currenly hard code) -->
                 <%
                 } else {
                 %>

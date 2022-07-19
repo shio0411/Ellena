@@ -46,9 +46,7 @@
         margin: 1rem;
         border-radius: 0.5rem;   
     }
-    .flex-item:hover{
-        box-shadow: 0 3px 10px rgba(0 0 0 / 0.2);
-    }
+    
     
     .order-status-item{
        border: 1px solid #bfbfbf;
@@ -57,9 +55,7 @@
        padding: 1.25rem;
        
     }
-    .card:hover{
-        box-shadow: 0 3px 10px rgba(0 0 0 / 0.2);
-    }
+    
     
     .flex-card{
         background: white;
@@ -108,7 +104,8 @@
         grid-template-columns: 1fr 1fr;
         gap: 0;   
         margin: 0 1rem;
-        
+ 
+      
     }
     
     .navbar__item{
@@ -134,6 +131,16 @@
     .dropdown-menu{
         right:0;
         left:auto;
+    }
+    #manager__header{
+        padding: 0.5rem 1rem;      
+        text-align: right;
+        border-radius: 0.5rem;
+        background: transparent;
+        font-size: 0.7rem;
+    }
+    #manager__header h4{
+        font-size: 1.75rem;
     }
     </style>
     
@@ -174,10 +181,10 @@
                 <form class="m-0" action="MainController" method="POST">  
                     <h4 class="dropdown">
                         <b>Xin chào, </b>
-                            <a  data-toggle="dropdown" role="button"><b class="text-color-dark"><%= loginUser.getFullName()%></b></a>
+                        <a  data-toggle="dropdown" role="button"><b class="text-color-dark"><%= loginUser.getFullName()%></b></a>
                         <div  class="dropdown-menu nav-tabs" role="tablist">
-                        <button class="dropdown-item btn" role="tab" type="button"><a class="text-dark" href="my-profile.jsp">Thông tin tài khoản</a></button>
-                        <input class=" dropdown-item btn" type="submit" name="action" value="Logout"/>
+                            <button class="dropdown-item btn" role="tab" type="button"><a class="text-dark" href="my-profile.jsp">Thông tin tài khoản</a></button>
+                            <input class=" dropdown-item btn" type="submit" name="action" value="Logout"/>
                         </div>
                     </h4>
                 </form>

@@ -44,20 +44,20 @@
     .flex-item{
         background: white;
         margin: 1rem;
-        border-radius: 0.5rem;    
+        
         
     }
     .order-status-item{
        border: 1px solid #bfbfbf;
        margin: 1rem;
-       border-radius: 1rem;
+       
        padding: 1.25rem;
     }
     
     .flex-card{
         background: white;
         margin: 0.5rem;
-        border-radius: 0.5rem;
+        
     }
     #order-status{
         flex-basis: 65%;
@@ -86,13 +86,16 @@
     }
     #manager__header{
         padding: 0.5rem 1rem;      
-        background: white;
+        text-align: right;
         border-radius: 0.5rem;
-        
+        background: transparent;
+        font-size: 0.7rem;
+    }
+    #manager__header h4{
+        font-size: 1.75rem;
     }
     .navbar__container{
         background: white;
-        border-radius: 1rem;
         display:grid;
         grid-template-columns: 1fr 1fr;
         gap: 0;   
@@ -135,7 +138,7 @@
     }
     #user-statistic{
         margin: 1rem;
-        border-radius: 0.5rem;  
+        
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         gap: 1.5rem;
@@ -154,10 +157,7 @@
     .user__item > span{
         font-size: 4rem;
     }
-    .user__item:hover{
-        box-shadow: 0 3px 10px rgba(0 0 0 / 0.2);
-        
-    }
+   
     
     .table__container{
         width: 100%;
@@ -306,7 +306,7 @@
                                     </div>
                                 </div>
                                 <div class="p-3">
-                                    <button class="btn bg-color-primary border-0" type="submit">Áp dụng</button>
+                                    <button class="btn btn-default" type="submit">Áp dụng</button>
                                 </div>
                             </div>
                         <!-- Modal -->
@@ -350,19 +350,10 @@
         var canvas = document.getElementById('user-gender');
         var ctx = canvas.getContext('2d');
 
-        var gradient1 = ctx.createLinearGradient(500,0, 500, 500);
-        var gradient2 = ctx.createLinearGradient(500,0, 500, 500);
-        var gradient3 = ctx.createLinearGradient(500,0, 500, 500);
+        var gradient1 = "#344055";
+        var gradient2 = "#93a3b1";
+        var gradient3 = "#fca17d";
 
-        gradient1.addColorStop(0, '#344055');
-        gradient1.addColorStop(1, '#93a3b1');
-
-        gradient2.addColorStop(0.5, '#93a3b1');
-        gradient2.addColorStop(1, '#ccffff');
-
-        gradient3.addColorStop(0, '#fca17d');
-        gradient3.addColorStop(1, '#ffcccc');
-        var ctx = document.getElementById("user-gender");
         var myChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
@@ -376,7 +367,7 @@
                     data: [<%for (Pair<String, Integer> p : userGender) {%>
             "<%=p.getValue()%>",
         <%}%>],
-                    backgroundColor: [gradient1, gradient3]           
+                    backgroundColor: [gradient1,  gradient3]           
                 }]
         },      
         });

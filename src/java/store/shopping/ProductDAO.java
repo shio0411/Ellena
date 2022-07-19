@@ -30,29 +30,33 @@ public class ProductDAO {
             + "JOIN tblColorSizes cs\n"
             + "ON cs.productColorID = pc.productColorID";
     private static final String GET_TREND_LIST = "SELECT p.productID, p.productName, p.price, p.discount, i.image\n"
-            + "FROM tblProduct p JOIN tblProductColors pc ON p.productID = pc.productID \n"
-            + "JOIN tblColorImage i ON pc.productColorID = i.productColorID\n"
-            + "INNER JOIN tblOrderDetail d ON p.productID = d.productID \n"
-            + "JOIN tblOrder o ON d.orderID = o.orderID  \n"
-            + "WHERE DATEDIFF(day,o.orderDate,GETDATE()) < 30 \n"
-            + "GROUP BY p.productID, p.productName, p.price, p.discount, i.image\n"
-            + "ORDER BY SUM(d.quantity) desc";
+            + "            FROM tblProduct p JOIN tblProductColors pc ON p.productID = pc.productID \n"
+            + "            JOIN tblColorImage i ON pc.productColorID = i.productColorID\n"
+            + "            INNER JOIN tblOrderDetail d ON p.productID = d.productID \n"
+            + "            JOIN tblOrder o ON d.orderID = o.orderID  \n"
+            + "            WHERE DATEDIFF(day,o.orderDate,GETDATE()) < 30 AND p.status = 1\n"
+            + "            GROUP BY p.productID, p.productName, p.price, p.discount, i.image\n"
+            + "            ORDER BY SUM(d.quantity) desc";
     private static final String GET_BEST_SELLER_LIST = "SELECT p.productID, p.productName, p.price, p.discount, i.image\n"
             + "FROM tblProduct p JOIN tblProductColors pc ON p.productID = pc.productID \n"
             + "JOIN tblColorImage i ON pc.productColorID = i.productColorID\n"
             + "JOIN tblOrderDetail d ON p.productID = d.productID \n"
             + "JOIN tblOrder o ON d.orderID = o.orderID\n"
+            + "WHERE  p.status = 1\n"
             + "GROUP BY p.productID, p.productName, p.price, p.discount, i.image\n"
             + "ORDER BY SUM(d.quantity) desc";
     private static final String GET_SALE_LIST = "SELECT p.productID, p.productName, p.price, p.discount, i.image\n"
             + "FROM tblProduct p JOIN tblProductColors pc ON p.productID = pc.productID \n"
             + "JOIN tblColorImage i ON pc.productColorID = i.productColorID\n"
-            + "WHERE p.discount <> 0\n"
-            + "ORDER BY p.discount desc";
+            + "JOIN tblOrderDetail d ON p.productID = d.productID \n"
+            + "JOIN tblOrder o ON d.orderID = o.orderID\n"
+            + "WHERE  p.status = 1\n"
+            + "GROUP BY p.productID, p.productName, p.price, p.discount, i.image\n"
+            + "ORDER BY SUM(d.quantity) desc";
     private static final String GET_NEW_ARRIVAL_LIST = "SELECT p.productID, p.productName, p.price, p.discount, i.image\n"
             + "FROM tblProduct p JOIN tblProductColors pc ON p.productID = pc.productID \n"
             + "JOIN tblColorImage i ON pc.productColorID = i.productColorID\n"
-            + "WHERE p.productID in (SELECT TOP 20 productID FROM tblProduct ORDER BY productID desc)\n"
+            + "WHERE p.productID in (SELECT TOP 20 productID FROM tblProduct ORDER BY productID desc) AND p.status = 1\n"
             + "ORDER BY p.productID desc";
     private static final String GET_SEARCH_CATALOG = "SELECT p.productID, p.productName, p.price, p.discount, i.image, color, size\n"
             + "FROM tblProduct p JOIN tblProductColors pc ON p.productID = pc.productID \n"

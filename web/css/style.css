@@ -1709,8 +1709,8 @@ ol {
 }
 
 .pagination__option a:hover {
-    background: #0d0d0d;
-    border-color: #0d0d0d;
+    background: #b57c68;
+    border-color: #b57c68;
     color: #ffffff;
 }
 
@@ -3900,7 +3900,7 @@ ol {
     color: #fbe2d6;
 }
 .text-color-dark{
-    color: #873e23;
+    color: #b57c68;
 }
 .text-color-black{
     color: #111111;
@@ -3942,7 +3942,7 @@ ol {
     font-size: 14px;
     line-height: 1.42857143;
     border-radius: 4px;
-    background:  #fca17d;
+    background:  #b57c68;
     color:#000;
 }
 

@@ -80,7 +80,7 @@ public class StatisticDAO {
             + "WHERE roleID = 'CM'";
      private static final String GET_LOYAL_CUSTOMER_LIST = "SELECT TOP (?) u.userID, u.fullName, SUM(total) as [Buy Value], COUNT(*) as [Order] \n" +
 "FROM tblUsers u JOIN tblOrder o ON u.userID = o.userID\n" +
-"WHERE o.orderDate >= ? AND o.orderDate <= ? AND o.orderID IN (SELECT orderID FROM tblOrderStatusUpdate WHERE statusID = '4')\n" +
+"WHERE o.orderDate >= ? AND o.orderDate <= ? AND u.roleID = 'CM' AND o.orderID IN (SELECT orderID FROM tblOrderStatusUpdate WHERE statusID = '4')\n" +
 "GROUP BY u.userID, u.fullName\n" +
 "ORDER BY [Buy Value] desc";
     public Map<String, StatisticDTO> getStatisticOrder7Day() throws SQLException {

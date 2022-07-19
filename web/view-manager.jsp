@@ -9,6 +9,28 @@
         <jsp:include page="meta.jsp" flush="true"/>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <style>
+            .dropdown-menu{
+                right:0;
+                left:auto;
+            }
+            form input{
+                margin-right: 2%;        
+                border: 1px solid #adadad;
+                padding: 0.3rem;
+                 border-radius: 0.3rem;
+            }
+            select{
+                 border: 1px solid #adadad;
+                 padding: 0.5rem;
+                 border-radius: 0.3rem;
+            }
+            
+            table tbody tr{
+                font-size: 1.25rem!important;
+                
+            }
+        </style>
     </head>
     <body>
         <%
@@ -30,19 +52,28 @@
         </div>
         
         <div class="main">
-            <form action="MainController" method="POST" style="margin-left: 65%;">
-                Xin chào, <a href="my-profile.jsp"><%= loginUser.getFullName() %></a>
-                <input type="submit" name="action" value="Logout" style="margin-left: 4%;">
-            </form>
+            <div class="flex-item text-right" id="manager__header">
+                <form class="m-0" action="MainController" method="POST">  
+                    <h5 class="dropdown">
+                        <b>Xin chào, </b>
+                        <a  data-toggle="dropdown" role="button"><b class="text-color-dark"><%= loginUser.getFullName()%></b></a>
+                        <div  class="dropdown-menu nav-tabs" role="tablist">
+                            <button class="dropdown-item btn" role="tab" type="button"><a class="text-dark" href="my-profile.jsp">Thông tin tài khoản</a></button>
+                            <input class=" dropdown-item btn" type="submit" name="action" value="Logout"/>
+                        </div>
+                    </h5>
+                </form>
+            </div>
+            <h3><b>Quản lý manager</b></h3>
             <form action="MainController" method="POST">
-                <input type="text" name="search" value="<%= search%>" placeholder="Tìm kiếm manager">
+                <input type="text" name="search" value="<%= search%>" placeholder="Tên tài khoản manager">
                 Trạng thái
                 <select name="status">
                     <option value="all" selected hidden>Chọn trạng thái</option>
                     <option value="true">Active</option>
                     <option value="false">Inactive</option>
                 </select>
-                <button type="submit" name="action" value="SearchManager" class="btn-outline-dark" style="width: 15%; padding: 0.5% 0.1%;"><i class="fa fa-search fa-lg"></i>Search</button>
+                <button type="submit" name="action" value="SearchManager" class="btn btn-default" style="width: 15%; padding: 0.5% 0.1%;"><i class="fa fa-search fa-lg"></i>Tìm kiếm</button>
             </form>   
             <%
             List<UserDTO> listManager = (List<UserDTO>) request.getAttribute("LIST_MANAGER");
@@ -50,6 +81,15 @@
                 if (listManager.size() > 0) {
             %>      
             <table class="table table-hover table-bordered">
+                <colgroup>
+                    <col span="1" style="width: 25%;">
+                    <col span="1" style="width: 25%;">
+                    <col span="1" style="width: 15%;">
+                    <col span="1" style="width: 10%;">
+                    <col span="1" style="width: 10%;">
+                    <col span="1" style="width: 10%;">
+                    
+                </colgroup>
                 <tr style="background-color: #b57c68">
                 <th>Tên tài khoản</th>
                 <th>Họ và tên</th>                
@@ -71,10 +111,10 @@
                         <%
                             if (user.isStatus()) {
                         %>
-                             <a href="MainController?action=DeactivateAccount&userID=<%=user.getUserID()%>&search=<%= search %>&from=showmanager">Vô hiệu hoá</a>
+                             <a class="btn btn-default" href="MainController?action=DeactivateAccount&userID=<%=user.getUserID()%>&search=<%= search %>&from=showmanager">Vô hiệu hoá</a>
                         <%} else {
                         %>
-                             <a href="MainController?action=ActivateAccount&userID=<%=user.getUserID()%>&search=<%= search %>&from=showmanager">Kích hoạt</a>
+                             <a class="btn btn-default" href="MainController?action=ActivateAccount&userID=<%=user.getUserID()%>&search=<%= search %>&from=showmanager">Kích hoạt</a>
                         <%
                             }
                         %>
@@ -194,7 +234,7 @@
                             </div>
                         </div>
                     </div>
-                    <button type="button" data-toggle="modal" data-target="#myModal<%=id++%>">Chỉnh sửa</button>
+                    <button class="btn btn-default" type="button" data-toggle="modal" data-target="#myModal<%=id++%>">Chỉnh sửa</button>
 
                     <!-- Modal -->
 

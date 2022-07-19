@@ -20,7 +20,20 @@
                 left:auto;
             }
             form input{
-                margin-right: 2%;
+                margin-right: 2%;        
+                border: 1px solid #adadad;
+                padding: 0.3rem;
+                 border-radius: 0.3rem;
+            }
+            select{
+                 border: 1px solid #adadad;
+                 padding: 0.5rem;
+                 border-radius: 0.3rem;
+            }
+            
+            table tbody tr{
+                font-size: 1.25rem!important;
+                
             }
         </style>
     </head>
@@ -82,7 +95,7 @@
                 <form class="m-0" action="MainController" method="POST">  
                     <h4 class="dropdown">
                         <b>Xin chào, </b>
-                            <a  data-toggle="dropdown" role="button"><b class="text-color-dark"><%= loginUser.getFullName()%></b></a>
+                        <a  data-toggle="dropdown" role="button"><b class="text-color-dark"><%= loginUser.getFullName()%></b></a>
                         <div  class="dropdown-menu nav-tabs" role="tablist">
                         <button class="dropdown-item btn" role="tab" type="button"><a class="text-dark" href="my-profile.jsp">Thông tin tài khoản</a></button>
                         <input class=" dropdown-item btn" type="submit" name="action" value="Logout"/>
@@ -90,7 +103,7 @@
                     </h4>
                 </form>
             </div>
-            <h1>Danh sách đơn hàng</h1>
+            <h2><b>Danh sách đơn hàng</b></h2>
             <form action="MainController" method="POST">
                 <input type="text" name="search" value="<%= searchValue%>" id="search-search" placeholder="Tên khách hàng">
                 
@@ -115,7 +128,7 @@
                 <input type="date" name="dateFrom" id="search-dateFrom" value="<%= dateFrom%>"/>
                 đến
                 <input type="date" name="dateTo" id="search-dateTo" value="<%= dateTo%>"/>
-                <button type="submit" name="action" value="SearchOrder" class="btn-outline-dark" style="width: 15%; padding: 0.5% 0.1%;"><i class="fa fa-search fa-lg"></i>Search</button>
+                <button type="submit" name="action" value="SearchOrder" class="btn btn-default" style="width: 15%; padding: 0.5% 0.1%;"><i class="fa fa-search fa-lg"></i>Search</button>
                 <!--switch to SearchController page count after submit form-->
                 <%
                     searchAll = (boolean) request.getAttribute("SWITCH_SEARCH");
@@ -131,6 +144,15 @@
 
             %>
             <table class="table table-hover table-bordered">
+                <colgroup>
+                    <col span="1" style="width: 5%;">
+                    <col span="1" style="width: 12%;">
+                    <col span="1" style="width: 12%;">
+                    <col span="1" style="width: 35%;">
+                    <col span="1" style="width: 10%;">
+                    <col span="1" style="width: 10%;">
+                    <col span="1" style="width: 8%;">
+                </colgroup>
                 <tr style="background-color: #b57c68">
                     <th>ID</th>
                     <th>Ngày đặt hàng</th>                
@@ -351,7 +373,7 @@
                                         <input type="hidden" name="dateFrom" id="update-dateFrom" value="<%= dateFrom%>"/>
                                         <input type="hidden" name="dateTo" id="update-dateTo" value="<%= dateTo%>"/>
                                         <input type="hidden" name="search-statusID" id="update-statusID" value="<%= sOrderStatusID%>"/>
-                                        <button type="submit" class="btn btn-secondary" data-toggle="tooltip" data-html="true" title="Đổi hàng" name="action" value="Return">
+                                        <button type="submit" class="ml-4 btn btn-secondary" data-toggle="tooltip" data-html="true" title="Đổi hàng" name="action" value="Return">
                                             Đổi hàng <!-- Icon return here -->
                                         </button>
                                         <button type="submit" class="btn btn-secondary" data-toggle="tooltip" data-html="true" title="Trả hàng" name="action" value="Refund">
@@ -366,7 +388,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="button" data-toggle="modal" data-target="#myModal<%=id++%>">Chỉnh sửa</button>
+                        <button class="btn btn-default" type="button" data-toggle="modal" data-target="#myModal<%=id++%>">Chỉnh sửa</button>
 
                     </td>
                     <!--Pop-up lịch sử trạng thái đơn hàng-->
@@ -413,7 +435,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="button" data-toggle="modal" data-target="#myModal<%=id++%>">Chi tiết</button>
+                        <button class="btn btn-default" type="button" data-toggle="modal" data-target="#myModal<%=id++%>">Chi tiết</button>
                     </td>
                 </tr>
 
@@ -480,7 +502,7 @@
                 <%  for (int i = begin; i <= end; i++) {
                         if (currentPage == i) {
                 %>
-                <a class="active" style="background: #000000; color: #ffffff"><%= i%></a>  <!-- There is no active class for pagination (currenly hard code) -->
+                <a class="active" style="background: #b57c68; color: #ffffff"><%= i%></a>  <!-- There is no active class for pagination (currenly hard code) -->
                 <%
                 } else {
                 %>

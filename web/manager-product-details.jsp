@@ -18,6 +18,10 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
         <style>
+            .dropdown-menu{
+                right:0;
+                left:auto;
+            }
             #product-details{
                 margin-bottom: 7rem;
             }
@@ -76,12 +80,17 @@
 
         <div class="main">
             <!--Welcome and Logout-->
-            <div class="row">
-                <form action="MainController" method="POST" class="col-12 text-right"">                
-                    Xin chào, <a href="my-profile.jsp"><%= loginUser.getFullName()%></a>
-                    <input type="submit" name="action" value="Logout" style="margin-left: 4%;">
+            <div class="flex-item text-right" id="manager__header">
+                <form class="m-0" action="MainController" method="POST">  
+                    <h5 class="dropdown">
+                        <b>Xin chào, </b>
+                            <a  data-toggle="dropdown" role="button"><b class="text-color-dark"><%= loginUser.getFullName()%></b></a>
+                        <div  class="dropdown-menu nav-tabs" role="tablist">
+                        <button class="dropdown-item btn" role="tab" type="button"><a class="text-dark" href="my-profile.jsp">Thông tin tài khoản</a></button>
+                        <input class=" dropdown-item btn" type="submit" name="action" value="Logout"/>
+                        </div>
+                    </h5>
                 </form>
-
             </div>
             <!-- Chi tiet san phan  -->
             <div id="product-details" class="d-flex flex-column align-items-center">
