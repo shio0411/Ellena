@@ -15,8 +15,7 @@
     <body>
         
 
-        <%  Integer statusCode = (Integer) request.getAttribute("STATUS_CODE");
-            if (statusCode == 404){ %>
+        
         <style>
             .main{
                 margin-top: 15%;
@@ -481,6 +480,6 @@
                 </svg>
             </div>
         </div>
-        <%}%>
+        
     </body>
 </html>

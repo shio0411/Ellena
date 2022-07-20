@@ -48,7 +48,7 @@
                         <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
                             <div class="card-body p-4 p-md-5">
                                 <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Thêm một sản phẩm mới</h3>
-                                <form action="MainController" class="info" method="POST" accept-charset="utf-8" enctype="multipart/form-data" id="myForm">
+                                <form action="AddProductController" class="info" method="POST" accept-charset="utf-8" enctype="multipart/form-data" id="myForm">
 
                                     <div class="row">
                                         <div class="col-md-12 mb-4">

@@ -67,7 +67,7 @@
                         <p><%=message%></p>
                     </div>
                     <div class="modal-footer">
-                        <a href="MainController?action=SearchAccount&search=<%=search%>&roleID=<%= roleID%>"><button type="button" class="btn btn-default">Đóng</button></a>
+                        <a href="SearchAccountController?search=<%=search%>&roleID=<%= roleID%>"><button type="button" class="btn btn-default">Đóng</button></a>
                     </div>
                 </div>
 
@@ -95,7 +95,7 @@
                 </form>
             </div>
             <h3><b>Quản lý tài khoản</b></h3>            
-            <form action="MainController" method="POST">
+            <form action="SearchAccountController" method="POST">
                 <input type="text" name="search" value="<%= search%>" placeholder="Tên tài khoản">
                 Quyền
                 <select name="roleID">
@@ -111,7 +111,7 @@
                     <option value="true">Active</option>
                     <option value="false">Inactive</option>
                 </select>
-                <button type="submit" name="action" value="SearchAccount" class="btn btn-default" style="width: 15%; padding: 0.5% 0.1%;"><i class="fa fa-search fa-lg"></i>Tìm kiếm</button>
+                <button type="submit" class="btn btn-default" style="width: 15%; padding: 0.5% 0.1%;"><i class="fa fa-search fa-lg"></i>Tìm kiếm</button>
                 <!--switch to SearchController page count after submit form-->
                         <%
                             searchAll = (boolean) request.getAttribute("SWITCH_SEARCH");
@@ -155,10 +155,10 @@
                         <%
                             if (user.isStatus()) {
                         %>
-                        <a class="btn btn-default" href="MainController?action=DeactivateAccount&userID=<%=user.getUserID()%>&search=<%= search%>&roleID=<%= roleID%>&from=ShowAccount">Vô hiệu hoá</a>
+                        <a class="btn btn-default" href="DeactivateAccountController?userID=<%=user.getUserID()%>&search=<%= search%>&roleID=<%= roleID%>&from=ShowAccount">Vô hiệu hoá</a>
                         <%} else {
                         %>
-                        <a class="btn btn-default" href="MainController?action=ActivateAccount&userID=<%=user.getUserID()%>&search=<%= search%>&roleID=<%= roleID%>&from=ShowAccount">Kích hoạt</a>
+                        <a class="btn btn-default" href="ActivateAccountController?userID=<%=user.getUserID()%>&search=<%= search%>&roleID=<%= roleID%>&from=ShowAccount">Kích hoạt</a>
                         <%
                             }
                         %>
@@ -175,7 +175,7 @@
 
                                     </div>
                                     <div class="modal-body">
-                                        <form action="MainController">
+                                        <form action="UpdateAccountController">
                                             <div class="row">
                                                 <div class="col-md-12 mb-4">
 

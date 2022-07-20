@@ -99,6 +99,15 @@ public class AuthenFilter implements Filter {
         ADMIN_FUNCTION.add("ShowCategoryController");
         ADMIN_FUNCTION.add("ShowAccountController");
         ADMIN_FUNCTION.add("SearchAccountController");
+        ADMIN_FUNCTION.add("AccountController");
+        ADMIN_FUNCTION.add("UpdateAccountController");
+        ADMIN_FUNCTION.add("DeactivateAccountController");
+        ADMIN_FUNCTION.add("ActivateAccountController");
+        ADMIN_FUNCTION.add("SearchManagerController");
+        ADMIN_FUNCTION.add("DeactivateCategoryController");
+        ADMIN_FUNCTION.add("ActivateCategoryController");
+        ADMIN_FUNCTION.add("UpdateCategoryController");
+        ADMIN_FUNCTION.add("AddCategoryController");
         
 
         MANAGER_FUNCTION = new ArrayList<>();
@@ -128,6 +137,18 @@ public class AuthenFilter implements Filter {
         MANAGER_FUNCTION.add("RefundOrderController");
         MANAGER_FUNCTION.add("manager-customer-return-history.jsp");
         MANAGER_FUNCTION.add("SearchReturnedHistoryController");
+        MANAGER_FUNCTION.add("ManagerSearchProductController");
+        MANAGER_FUNCTION.add("ManagerUpdateProductController");
+        MANAGER_FUNCTION.add("DeactivateProductController");
+        MANAGER_FUNCTION.add("ActivateProductController");
+        MANAGER_FUNCTION.add("UpdateVariantsController");
+        MANAGER_FUNCTION.add("DeleteColorController");
+        MANAGER_FUNCTION.add("DeleteSizeController");
+        MANAGER_FUNCTION.add("ViewImagesController");
+        MANAGER_FUNCTION.add("AddColorsController");
+        MANAGER_FUNCTION.add("AddVariantsController");
+        MANAGER_FUNCTION.add("AddImageController");
+        MANAGER_FUNCTION.add("DeleteImageController");
         
         EMPLOYEE_FUNCTION = new ArrayList<>();
         EMPLOYEE_FUNCTION.add("EmployeeShowOrderController");

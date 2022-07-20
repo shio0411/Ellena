@@ -104,7 +104,7 @@
             <div class="row">
                 <!--search bar-->
                 <div class="col-9">
-                    <form action="MainController">
+                    <form action="ManagerSearchProductController">
                         <input type="text" name="search" value="<%= search%>" placeholder="Tên sản phẩm">
 
                        
@@ -164,10 +164,10 @@
                         <%
                             if (list.isStatus()) {
                         %>
-                        <a class="btn btn-default" href="MainController?action=DeactivateProduct&productID=<%=list.getProductID()%>">Vô hiệu hoá</a> 
+                        <a class="btn btn-default" href="DeactivateProductController?productID=<%=list.getProductID()%>">Vô hiệu hoá</a> 
                         <%} else {
                         %>
-                        <a class="btn btn-default" href="MainController?action=ActivateProduct&productID=<%=list.getProductID()%>">Kích hoạt</a> 
+                        <a class="btn btn-default" href="ActivateProductController?productID=<%=list.getProductID()%>">Kích hoạt</a> 
                         <%
                             }
                         %>

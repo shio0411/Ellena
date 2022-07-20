@@ -9,7 +9,6 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -947,6 +946,7 @@ public class OrderDAO {
                     Date orderDate = rs.getDate("orderDate");
                     int total = rs.getInt("total");
                     String userName = rs.getString("fullName");
+                    String userID = rs.getString("userID");
                     int statusID = rs.getInt("statusID");
                     String statusName = rs.getString("statusName");
                     String payType = rs.getString("payType");
@@ -960,7 +960,7 @@ public class OrderDAO {
                     List<OrderDetailDTO> orderDetail = getOrderDetail(orderID);
                     List<OrderStatusDTO> orderStatus = getUpdateStatusHistory(orderID);
 
-                    order = new OrderDTO(orderID, orderDate, total, userName, statusID, statusName, payType, trackingID, fullName, address, phone, email, note, transactionNumber, orderDetail, orderStatus);
+                    order = new OrderDTO(orderID, orderDate, total, userName, userID, statusID, statusName, payType, trackingID, fullName, address, phone, email, note, transactionNumber, orderDetail, orderStatus);
                 }
             }
         } catch (Exception e) {

@@ -104,7 +104,7 @@
 
                 %>
                 
-                <form class="mt-0 mb-4" action="MainController" method="POST" >
+                <form class="mt-0 mb-4" action="ManagerUpdateProductController" method="POST" >
                     <label class="h2 h2 form-label" for="productDetail">Chi tiết sản phẩm</label> <br/>
                     <div class="row">
                         <div class="col-md-6 mb-4">
@@ -234,7 +234,7 @@
                                 for (String color : colorList) {
                             %>
                             <div id="<%=color%>-size" class="tab-pane fade <%if ((g == 1 && activeColor == null) || color.equalsIgnoreCase(activeColor)) { %> in active <%}%>">
-                                <form action="MainController" id="update<%=color%>VariantsForm">
+                                <form action="UpdateVariantsController" id="update<%=color%>VariantsForm">
                                     <input type="hidden" name="color" value="<%=color%>"/>
                                     <input type="hidden" name="productID" value="<%=product.getProductID()%>"/>
                                     <table>
@@ -271,7 +271,7 @@
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type='button' class='btn btn-default' data-dismiss="modal">Huỷ</button>
-                                                        <a href="MainController?action=DeleteSize&productID=<%=product.getProductID()%>&color=<%=color%>&size=<%=key.get(z + 1)%>"><button type="button" class="btn btn-danger">Xoá</button></a>
+                                                        <a href="DeleteSizeController?productID=<%=product.getProductID()%>&color=<%=color%>&size=<%=key.get(z + 1)%>"><button type="button" class="btn btn-danger">Xoá</button></a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -295,7 +295,7 @@
                                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                                             </div>
                                             <div class="modal-body">
-                                                <form action="MainController" id="add<%=color%>VariantsForm">
+                                                <form action="AddVariantsController" id="add<%=color%>VariantsForm">
                                                     <input type="hidden" name="productID" value="<%=product.getProductID()%>"/>
                                                     <input type="hidden" name="color" value="<%=color%>"/>
                                                     <div class="row">
@@ -333,7 +333,7 @@
                 <div class="col-md-7 mb-4">
                     <div class="form-outline" >
                         <label class=" h2 h2 form-label" for="colorImage">Hình ảnh sản phẩm</label><br/>
-                        <a class="btn btn-default" href="MainController?action=ViewImages&productID=<%=product.getProductID()%>"<button id="add" type="button" onClick="checkImages()">Thêm/xóa ảnh</button></a>
+                        <a class="btn btn-default" href="ViewImagesController?productID=<%=product.getProductID()%>"<button id="add" type="button" onClick="checkImages()">Thêm/xóa ảnh</button></a>
                     </div>
                     <!-- Pop-up chỉnh sửa màu -->
                     <div class="modal fade" id="editColorModal" role="dialog">
@@ -347,7 +347,7 @@
 
                                 </div>
                                 <div class="modal-body">
-                                    <form action="MainController" id="editColorForm">
+                                    <form action="AddColorsController" id="editColorForm">
                                         <input type="hidden" name="productID" value="<%=product.getProductID()%>"/>
                                         <input type="hidden" name="action" value="AddColors"/>
                                         <% for (String color : colorList) {%>
@@ -374,7 +374,7 @@
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type='button' class='btn btn-default' data-dismiss-modal="innerModal">Huỷ</button>
-                                                            <a href="MainController?action=DeleteColor&productID=<%=product.getProductID()%>&color=<%=color%>"><button type="button" class="btn btn-danger">Xoá</button></a>
+                                                            <a href="DeleteColorController?productID=<%=product.getProductID()%>&color=<%=color%>"><button type="button" class="btn btn-danger">Xoá</button></a>
                                                         </div>
                                                     </div>
                                                 </div>

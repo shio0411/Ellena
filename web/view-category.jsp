@@ -63,7 +63,7 @@
                         <p><%=message%></p>
                     </div>
                     <div class="modal-footer">
-                        <a href="MainController?action=SearchCategory&search=<%=search %>"><button type="button" class="btn btn-default">Đóng</button></a>
+                        <a href="SearchCategoryController&search=<%=search %>"><button type="button" class="btn btn-default">Đóng</button></a>
                     </div>
                 </div>
 
@@ -92,7 +92,7 @@
                 </form>
             </div>
             <h3><b>Quản lý loại sản phẩm</b></h3>
-            <form action="MainController" method="POST">
+            <form action="SearchCategoryController" method="POST">
                 <input type="text" name="search" value="<%= search%>" placeholder="Tìm kiếm loại sản phẩm">
                 Trạng thái
                 <select name="status">
@@ -128,10 +128,10 @@
                         <%
                             if (category.isStatus()) {
                         %>
-                            <a class="btn btn-default" href="MainController?action=DeactivateCategory&categoryID=<%=category.getCategoryID()%>&search=<%= search %>">Vô hiệu hoá</a>
+                            <a class="btn btn-default" href="DeactivateCategoryController?categoryID=<%=category.getCategoryID()%>&search=<%= search %>">Vô hiệu hoá</a>
                         <%} else {
                         %>
-                            <a class="btn btn-default" href="MainController?action=ActivateCategory&categoryID=<%=category.getCategoryID()%>&search=<%= search %>">Kích hoạt</a>
+                            <a class="btn btn-default" href="ActivateCategoryController?categoryID=<%=category.getCategoryID()%>&search=<%= search %>">Kích hoạt</a>
                         <%
                             }
                         %>
@@ -147,7 +147,7 @@
 
                                 </div>
                                 <div class="modal-body">
-                                    <form action="MainController">
+                                    <form action="UpdateCategoryController">
 
                                         <div class="row">
                                             <div class="col-md-6 mb-4 pb-2">

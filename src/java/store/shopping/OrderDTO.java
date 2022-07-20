@@ -10,6 +10,7 @@ public class OrderDTO {
     private int orderID;
     private Date orderDate;
     private int total;
+    private String userID;
     private String userName;
     private int statusID;
     private String statusName;
@@ -46,6 +47,26 @@ public class OrderDTO {
         this.orderDetail = orderDetail;
         this.updateStatusHistory = updateStatusHistory;
     }
+    
+    public OrderDTO(int orderID, Date orderDate, int total, String userID, String userName, int statusID, String statusName, String payType, String trackingID, String fullName, String address, String phone, String email, String note, String transactionNumber, List<OrderDetailDTO> orderDetail, List<OrderStatusDTO> updateStatusHistory) {
+        this.orderID = orderID;
+        this.orderDate = orderDate;
+        this.total = total;
+        this.userID = userID;
+        this.userName = userName;
+        this.statusID = statusID;
+        this.statusName = statusName;
+        this.payType = payType;
+        this.trackingID = trackingID;
+        this.fullName = fullName;
+        this.address = address;
+        this.phone = phone;
+        this.email = email;
+        this.note = note;
+        this.transactionNumber = transactionNumber;
+        this.orderDetail = orderDetail;
+        this.updateStatusHistory = updateStatusHistory;
+    }
 
     public OrderDTO(int orderID, Date orderDate, int total, String statusName, String payType) {
         this.orderID = orderID;
@@ -66,6 +87,8 @@ public class OrderDTO {
         this.payType = payType;
         this.trackingID = trackingID;
     }
+    
+   
 
     // normal constructor with no orderID, trackingID
     public OrderDTO(Date orderDate, int total, String userName, int statusID, String statusName, String payType, String fullName, String address, String phone, String email, String note, String transactionNumber) {
@@ -100,6 +123,16 @@ public class OrderDTO {
         this.status = status;
     }
 
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
+
+    
+    
     public Map<Integer, String> getStatus() {
         return status;
     }

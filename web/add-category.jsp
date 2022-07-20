@@ -24,7 +24,7 @@
             <div style="margin: 5% 5%;">
             <h3>Thêm một loại sản phẩm mới</h3>
             <br>
-            <form action="MainController" method="POST">
+            <form action="AddCategoryController" method="POST">
             <div class="row">
                 <div class="col-md-4 mb-4">
 

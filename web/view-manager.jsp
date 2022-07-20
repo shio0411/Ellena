@@ -53,7 +53,7 @@
         
         <div class="main">
             <div class="flex-item text-right" id="manager__header">
-                <form class="m-0" action="MainController" method="POST">  
+                <form class="m-0" action="SearchManagerController" method="POST">  
                     <h5 class="dropdown">
                         <b>Xin chào, </b>
                         <a  data-toggle="dropdown" role="button"><b class="text-color-dark"><%= loginUser.getFullName()%></b></a>
@@ -65,7 +65,7 @@
                 </form>
             </div>
             <h3><b>Quản lý manager</b></h3>
-            <form action="MainController" method="POST">
+            <form action="SearchManagerController" method="POST">
                 <input type="text" name="search" value="<%= search%>" placeholder="Tên tài khoản manager">
                 Trạng thái
                 <select name="status">
@@ -111,10 +111,10 @@
                         <%
                             if (user.isStatus()) {
                         %>
-                             <a class="btn btn-default" href="MainController?action=DeactivateAccount&userID=<%=user.getUserID()%>&search=<%= search %>&from=showmanager">Vô hiệu hoá</a>
+                             <a class="btn btn-default" href="DeactivateAccountController?userID=<%=user.getUserID()%>&search=<%= search %>&from=showmanager">Vô hiệu hoá</a>
                         <%} else {
                         %>
-                             <a class="btn btn-default" href="MainController?action=ActivateAccount&userID=<%=user.getUserID()%>&search=<%= search %>&from=showmanager">Kích hoạt</a>
+                             <a class="btn btn-default" href="ActivateAccountController?userID=<%=user.getUserID()%>&search=<%= search %>&from=showmanager">Kích hoạt</a>
                         <%
                             }
                         %>
@@ -130,7 +130,7 @@
 
                                 </div>
                                 <div class="modal-body">
-                                    <form action="MainController">
+                                    <form action="UpdateAccountController">
                                         <div class="row">
                                             <div class="col-md-12 mb-4">
 

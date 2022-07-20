@@ -98,7 +98,7 @@
                         <p><%=message%></p>
                     </div>
                     <div class="modal-footer">
-                        <a href="MainController?action=ViewImages&productID=<%=product.getProductID()%>"><button type="button" class="btn btn-default">Đóng</button></a>
+                        <a href="ViewImagesController?productID=<%=product.getProductID()%>"><button type="button" class="btn btn-default">Đóng</button></a>
                     </div>
                 </div>
 
@@ -124,7 +124,7 @@
                                     } %>                             
                         </ul>
 
-                        <form action="MainController" method="post" id="myForm" enctype="multipart/form-data">
+                        <form action="AddImageController" method="post" id="myForm" enctype="multipart/form-data">
                             <div class="tab-content">
                                 <% int j = 1;
 
@@ -154,7 +154,7 @@
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type='button' class='btn btn-default' data-dismiss="modal">Huỷ</button>
-                                                    <a href="MainController?action=DeleteImage&productID=<%=product.getProductID()%>&imageName=<%= product.getColorImage().get(color).get(k)%>"><button type="button" class="btn btn-danger">Xoá</button></a>
+                                                    <a href="DeleteImageController?productID=<%=product.getProductID()%>&imageName=<%= product.getColorImage().get(color).get(k)%>"><button type="button" class="btn btn-danger">Xoá</button></a>
                                                 </div>
                                             </div>
 
