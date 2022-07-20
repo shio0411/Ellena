@@ -69,10 +69,7 @@ public class MainController extends HttpServlet {
     
     
     
-    private static final String SEARCH_ORDER = "SearchOrder";
-    private static final String SEARCH_ORDER_CONTROLLER = "SearchOrderController";
-    private static final String UPDATE_ORDER = "UpdateOrder";
-    private static final String UPDATE_ORDER_CONTROLLER = "UpdateOrderController";
+    
     
     
     
@@ -122,18 +119,13 @@ public class MainController extends HttpServlet {
                         break;
                     case LOGIN_GOOGLE:
                         url = LOGIN_GOOGLE_CONTROLLER;
-                        break;
-                    
-                    
+                        break; 
                     case SEARCH_CATEGORY:
                         url = SEARCH_CATEGORY_CONTROLLER;
                         break;
-                    
                     case SEARCH_CATALOG:
                         url = SEARCH_CATALOG_CONTROLLER;
                         break;
-                    
-                    
                     case FILTER_SEARCHED:
                         url = FILTER_SEARCHED_CONTROLLER;
                         break;
@@ -142,12 +134,7 @@ public class MainController extends HttpServlet {
                         break;
                     case FILTER_ALL_PRODUCTS:
                         url = FILTER_ALL_PRODUCTS_CONTROLLER;
-                        break;
-                    
-                    
-                   
-                
-                       
+                        break;   
                     case UPDATE_PASSWORD:
                         url = UPDATE_PASSWORD_PAGE;
                         break;
@@ -166,13 +153,9 @@ public class MainController extends HttpServlet {
                     case UPDATE_BIRTHDAY:
                         url = UPDATE_BIRTHDAY_PAGE;
                         break;
-                    
                     case LOGOUT:
                         url = LOGOUT_CONTROLLER;
                         break;
-                    
-                    
-                    
                     case ADD_TO_CART:
                         url = ADD_TO_CART_CONTROLLER;
                         break;
@@ -182,19 +165,6 @@ public class MainController extends HttpServlet {
                     case CHECKOUT:
                         url = CHECKOUT_CONTROLLER;
                         break;
-                    
-                    
-                    
-                    
-                    
-                    
-                    case SEARCH_ORDER:
-                        url = SEARCH_ORDER_CONTROLLER;
-                        break;
-                    case UPDATE_ORDER:
-                        url = UPDATE_ORDER_CONTROLLER;
-                        break;
-                    
                     case DETELE_CART_ITEM:
                         url = DETELE_CART_ITEM_CONTROLLER;
                         break;

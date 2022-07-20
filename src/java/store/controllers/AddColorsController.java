@@ -20,7 +20,7 @@ import store.shopping.ProductDAO;
  */
 @WebServlet(name = "AddColorsController", urlPatterns = {"/AddColorsController"})
 public class AddColorsController extends HttpServlet {
-    private static final String ERROR = "error.jsp";
+    private static final String ERROR = "ManagerShowProductDetailController";
     private static final String SUCCESS = "ManagerShowProductDetailController";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,6 +43,8 @@ public class AddColorsController extends HttpServlet {
             if (check) {
                 request.setAttribute("MESSAGE", "Cập nhật thành công.");
                 url = SUCCESS;
+            } else {
+                request.setAttribute("MESSAGE", "Cập nhật thất bại.");
             }
         } catch (NumberFormatException | SQLException e) {
             log("Error at ManagerShowProductDetailController: " + e.toString());

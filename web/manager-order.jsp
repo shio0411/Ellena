@@ -105,7 +105,7 @@
                 </form>
             </div>
             <h2><b>Danh sách đơn hàng</b></h2>
-            <form action="MainController" method="POST">
+            <form action="SearchOrderController" method="POST">
                 <input type="text" name="search" value="<%= searchValue%>" id="search-search" placeholder="Tên khách hàng">
                 
                 <select name="search-statusID" id="search-statusID">
@@ -185,7 +185,7 @@
                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
                                     </div>
-                                    <form action="MainController">
+                                    <form action="UpdateOrderController">
                                         <div class="modal-body" >
 
                                             <div class="row">

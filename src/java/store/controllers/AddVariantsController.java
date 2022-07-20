@@ -21,7 +21,7 @@ import store.shopping.ProductDAO;
  */
 @WebServlet(name = "AddVariantsController", urlPatterns = {"/AddVariantsController"})
 public class AddVariantsController extends HttpServlet {
-    private static final String ERROR = "error.jsp";
+    private static final String ERROR = "ManagerShowProductDetailController";
     private static final String SUCCESS = "ManagerShowProductDetailController";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -48,10 +48,12 @@ public class AddVariantsController extends HttpServlet {
                 quantites[i] = Integer.parseInt(stringQuantities[i]);
             }
             boolean check = dao.addVariants(productColorID, sizes, quantites);
+            request.setAttribute("ACTIVE_COLOR", color);
             if (check) {
                 request.setAttribute("MESSAGE", "Cập nhật thành công.");
-                request.setAttribute("ACTIVE_COLOR", color);
                 url = SUCCESS;
+            } else {
+                request.setAttribute("MESSAGE", "Cập nhật thất bại.");
             }
         } catch (NumberFormatException | SQLException e) {
             log("Error at ManagerShowProductDetailController: " + e.toString());
