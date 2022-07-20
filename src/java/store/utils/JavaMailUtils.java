@@ -34,7 +34,7 @@ public class JavaMailUtils {
 //    ------------------------------------------------------------------------------------
     private static int otpOut = 0;
 
-    public static final String FORGOT_PASSWORD_OTP = "ForgotPasswordOTP";
+    public static final String VALIDATE_OTP = "validateOTP";
     public static final String ORDER_CONFIRM = "OrderConfirm";
 
     public static void sendMail(String recepient, String mailType) throws Exception {
@@ -54,8 +54,8 @@ public class JavaMailUtils {
         });
 
         switch (mailType) {
-            case FORGOT_PASSWORD_OTP:
-                Message message = forgotPasswordOTP(session, EMAIL_ACCOUNT, recepient);
+            case VALIDATE_OTP:
+                Message message = validateOTP(session, EMAIL_ACCOUNT, recepient);
                 Transport.send(message);
                 System.out.println("Message sent successfully");// print out console might not be needed for final product
                 break;
@@ -71,7 +71,7 @@ public class JavaMailUtils {
         return otpOut;
     }
 
-    private static Message forgotPasswordOTP(Session session, String myAccountEmail, String recepient) {
+    private static Message validateOTP(Session session, String myAccountEmail, String recepient) {
         try {
 //            Random number for OTP validation
             Random rand = new Random();
@@ -81,8 +81,8 @@ public class JavaMailUtils {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(myAccountEmail));
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(recepient));
-            message.setSubject("Reset password OTP");
-            message.setText("Dear User, \n Your OTP code for reseting your password is: " + otpValue);
+            message.setSubject("Validate OTP");
+            message.setText("Dear User, \n Your OTP code for validating OTP is: " + otpValue);
             return message;
         } catch (MessagingException ex) {
             Logger.getLogger(JavaMailUtils.class.getName()).log(Level.SEVERE, null, ex);

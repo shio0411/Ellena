@@ -1,41 +1,26 @@
-# Release summary discover,search-catalog pagination and update PageNav code
-***Changes since last push from 19/7/2022 4:14 PM***
+# Release summary Add validate OTP for register new account
+***Changes since last push from 20/7/2022 3:57 PM***
 
-***Release date: 20/7/2022 1:00 AM***
+***Release date: 21/7/2022 5:27 AM***
 
 ## Add in Files:
-- 
+- register-success.jsp
+- `RegisterAccountController`
 
 ## Change in Files:
-- Admin account pagination
-	- admin.jsp
-		- Fix pageNav calculating
-- Manager product pagination
-	- manager-product.jsp
-		- Fix pageNav calculating
-- Manager/Employee order paginaiton
-	- manager-order.jsp
-		- Fix pageNav calculating
-	- employee-order.jsp
-		- Fix pageNav calculating
-- Guest/Customer product paginaiton
-	- discover.jsp
-		- Reconfig for pagination pageNav
-	- search-catalog.jsp
-		- Reconfig for pagination pageNav
-	- `DiscoverController`
-		- Reconfig for pagination
-	- `FilterAllProductsController`
-		- Reconfig for pagination
-	- `SearchCatalogController`
-		- Reconfig for pagination
-	- `FilterSearchedProductsController`
-		- Reconfig for pagination
-	- `ProductDAO`
-		- Reconfig for pagination
+- validate-otp.jsp
+	- Force required to enter OTP value
+- `JavaMailUtils`
+	- Change variables name
+- `ForgotPasswordController`
+	- Send out new session to let ValidateOtpController know where to validate otp from
+- `RegisterController`
+	- Move `addUser()` to `RegisterAccountController`
+	- Add send OTP mail
+	- Send account info to `RegisterAccountController` to `addUser()`
+- `ValidateOtpController`
+	- Fix for multible uses of OTP validation
 - `AuthenFilter`
-	- Allow Guest/Customer direct access to :
-		- `FilterAllProductsController`
-		- `SearchCatalogController`
-		- `FilterSearchedProductsController`
+	- Allow guest to access `RegisterAccountController`
+
 

@@ -5,6 +5,8 @@
 package store.controllers;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,52 +14,49 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import store.user.UserDAO;
-import store.utils.JavaMailUtils;
+import store.user.UserDTO;
 
 /**
  *
- * @author Jason 2.0
+ * @author ASUS
  */
-@WebServlet(name = "ForgotPasswordController", urlPatterns = {"/ForgotPasswordController"})
-public class ForgotPasswordController extends HttpServlet {
+@WebServlet(name = "RegisterAccountController", urlPatterns = {"/RegisterAccountController"})
+public class RegisterAccountController extends HttpServlet {
 
-    private static final String ERROR = "forgot-password.jsp";
-    private static final String SUCCESS = "validate-otp.jsp";
+    private static final String ERROR = "register.jsp";
+    private static final String SUCCESS = "register-success.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
-            String userID = request.getParameter("userID");
-            UserDAO dao = new UserDAO();
             HttpSession session = request.getSession();
-            boolean checkDuplicate = dao.checkDuplicate(userID);
-            if (checkDuplicate) {// true == there's a valid email in database
+            String userID = (String) session.getAttribute("USER_ID");
+            String fullName = (String) session.getAttribute("FULL_NAME");
+            String roleID = "CM";
+            String password = (String) session.getAttribute("PASSWORD");
+            boolean sex = (boolean) session.getAttribute("SEX");
+            String address = (String) session.getAttribute("ADDRESS");
+            Date birthday =  (Date) session.getAttribute("BIRTHDAY");
+            String phone = (String) session.getAttribute("PHONE");
 
-                try {
-                    JavaMailUtils.sendMail(userID, "validateOTP");
-                    
-                    session.setAttribute("USER_ID", userID);// pass userID to reset-password.jsp page
-                    session.setAttribute("OTP_EXPECTED", JavaMailUtils.getOtpValue());// give expected OTP value to ValidateOtpController
-                    session.setAttribute("OTP_CHECK", false);// OTP check for reset-password.jsp page
-                    session.setAttribute("INPUT_ATTEMPS", 3);// set number of allow attemps to input OTP
-                    session.setAttribute("FROM_PAGE", "forgotPassword");// let ValidateOtpController know where to validate otp from
-                    
-                    url = SUCCESS;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-            } else {// false == there's no valid email in database
-                request.setAttribute("ERROR", "Bạn nhập sai ID hoặc bạn chưa có tài khoản!");
+            UserDAO dao = new UserDAO();
+            UserDTO user = new UserDTO(userID, fullName, password, sex, roleID, address, birthday, phone, true);
+            boolean checkInsert = dao.addUser(user);
+            if (checkInsert) {
+                url = SUCCESS;
+                request.setAttribute("MESSAGE", "Bạn đã đăng ký thành công");
+            } else {
+                request.setAttribute("MESSAGE", "Đăng ký thất bại");
             }
 
         } catch (Exception e) {
-            log("ERROR at ForgotPasswordController : " + toString());
+            log("ERROR at RegisterAccountController : " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

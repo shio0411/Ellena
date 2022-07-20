@@ -29,7 +29,7 @@
 
                                             <div class="form-outline">
                                                 <label class="form-label" for="userID">Mã OTP</label>
-                                                <input type="number" name="otpInputValue" class="form-control" placeholder="123456" id="otpInputValue">   
+                                                <input type="number" name="otpInputValue" class="form-control" placeholder="123456" id="otpInputValue" required="">   
                                             </div>
 
                                         </div>

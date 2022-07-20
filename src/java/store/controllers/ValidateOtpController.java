@@ -19,9 +19,15 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "ValidateOtpController", urlPatterns = {"/ValidateOtpController"})
 public class ValidateOtpController extends HttpServlet {
 
-    private static final String ERROR = "validate-otp.jsp";
-    private static final String OUT_OF_ATTEMPS = "forgot-password.jsp";
-    private static final String SUCCESS = "reset-password.jsp";
+    private static final String ERROR = "error.jsp";
+    private static final String WRONG_OTP = "validate-otp.jsp";
+    private static final String OUT_OF_ATTEMPS_RESET_PASSWORD = "forgot-password.jsp";
+    private static final String SUCCESS_RESET_PASSWORD = "reset-password.jsp";
+    private static final String OUT_OF_ATTEMPS_REGISTER = "register.jsp";
+    private static final String SUCCESS_REGISTER = "RegisterAccountController"; // go to "addUser" controller
+
+    private static final String FORGOT_PASSWORD = "forgotPassword";
+    private static final String REGISTER = "register";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -33,24 +39,47 @@ public class ValidateOtpController extends HttpServlet {
             int otpExpectedValue = (int) session.getAttribute("OTP_EXPECTED");
             int otpInputValue = Integer.parseInt(request.getParameter("otpInputValue"));
             int inputAttempts = (int) session.getAttribute("INPUT_ATTEMPS");
-            
+            String fromPage = (String) session.getAttribute("FROM_PAGE");
 
             if (inputAttempts > 0) {//check inputAttempts
-                
-                if (otpInputValue == otpExpectedValue) {//check OTP
-                    url = SUCCESS;
-                    session.setAttribute("OTP_CHECK", true);
-                } else {
-                    request.setAttribute("ERROR", "Sai mã OTP! Bạn còn "+ inputAttempts + " lượt nhập mã OTP còn lại!");
-                    session.setAttribute("INPUT_ATTEMPS", --inputAttempts);
+
+                switch (fromPage) {
+                    case FORGOT_PASSWORD:
+                        if (otpInputValue == otpExpectedValue) {//check OTP for reset password
+                            url = SUCCESS_RESET_PASSWORD;
+                            session.setAttribute("OTP_CHECK", true);
+                        } else {
+                            url = WRONG_OTP;
+                            request.setAttribute("ERROR", "Sai mã OTP! Bạn còn " + inputAttempts + " lượt nhập mã OTP còn lại!");
+                            session.setAttribute("INPUT_ATTEMPS", --inputAttempts);
+                        }
+                        break;
+                    case REGISTER:
+                        if (otpInputValue == otpExpectedValue) {//check OTP for register new account
+                            url = SUCCESS_REGISTER;
+                            session.setAttribute("OTP_CHECK", true);
+                        } else {
+                            url = WRONG_OTP;
+                            request.setAttribute("ERROR", "Sai mã OTP! Bạn còn " + inputAttempts + " lượt nhập mã OTP còn lại!");
+                            session.setAttribute("INPUT_ATTEMPS", --inputAttempts);
+                        }
+                        break;
                 }
-                
-            }else{
-                url = OUT_OF_ATTEMPS;
-                request.setAttribute("ERROR", "Hết lượt nhập mã OTP!");
+
+            } else {
+
+                switch (fromPage) {
+                    case FORGOT_PASSWORD:
+                        url = OUT_OF_ATTEMPS_RESET_PASSWORD;
+                        request.setAttribute("ERROR", "Hết lượt nhập mã OTP!");
+                        break;
+                    case REGISTER:
+                        url = OUT_OF_ATTEMPS_REGISTER;
+                        request.setAttribute("MESSAGE", "Hết lượt nhập mã OTP!");
+                        break;
+                }
             }
-            
-            
+
         } catch (Exception e) {
             log("Error at ValidateOtpController : " + toString());
         } finally {

@@ -257,7 +257,8 @@ public class AuthenFilter implements Filter {
                                 || uri.contains("about-us.jsp") || uri.contains("faq.jsp") || uri.contains("choose-size.jsp") || uri.contains("payment-policy.jsp") || uri.contains("return-policy.jsp")
                                 || uri.contains("forgot-password.jsp") || uri.contains("ForgotPasswordController") || uri.contains("validate-otp.jsp") || uri.contains("ValidateOtpController")
                                 || uri.contains("reset-password.jsp") || uri.contains("ResetPasswordController") || uri.contains("LogoutController") 
-                                || uri.contains("FilterAllProductsController") || uri.contains("SearchCatalogController") || uri.contains("FilterSearchedProductsController")) {
+                                || uri.contains("FilterAllProductsController") || uri.contains("SearchCatalogController") || uri.contains("FilterSearchedProductsController")
+                                || uri.contains("RegisterAccountController")) {
                             chain.doFilter(request, response);
                         } else if (!ADMIN_FUNCTION.contains(resource) && !CUSTOMER_FUNCTION.contains(resource) && !MANAGER_FUNCTION.contains(resource)) {
                             res.sendError(404);
