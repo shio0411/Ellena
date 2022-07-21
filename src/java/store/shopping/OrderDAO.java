@@ -49,7 +49,10 @@ public class OrderDAO {
             + "WHERE orderID = ? AND quantity > 0";
 
     //Order status
-    private static final String SEARCH_ORDER_STATUS = "SELECT t1.statusID, updateDate, statusName, modifiedBy, roleID FROM tblOrderStatusUpdate t1 JOIN tblOrderStatus t2 ON t1.statusID = t2.statusID WHERE orderID = ?";
+    private static final String SEARCH_ORDER_STATUS = "SELECT t1.statusID, updateDate, statusName, modifiedBy, t3.roleID, t3.fullName \n"
+            + "FROM tblOrderStatusUpdate t1 JOIN tblOrderStatus t2 ON t1.statusID = t2.statusID \n"
+            + "		JOIN tblUsers t3 ON t3.userID = modifiedBy\n"
+            + "WHERE orderID = ?";
 
     private static final String INSERT_ORDER = "INSERT INTO tblOrder(orderDate, total, userID, payType, fullName, [address], phone, email, note, transactionNumber) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -132,7 +135,7 @@ public class OrderDAO {
             + "FROM subTable\n"
             + "WHERE row# BETWEEN ? AND ?";
     private static final String NUMBER_OF_SEARCH_ORDER_BY_NAME = "SELECT Top 1 COUNT (*) OVER () AS ROW_COUNT FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID AND [TenKhongDau] LIKE '%' + [dbo].[fuChuyenCoDauThanhKhongDau](?) + '%'";
-    
+
     private static final String GET_RETURNED_ORDER = "SELECT v1.orderID, orderDate, total, userID, fullName, statusID, statusName, payType, trackingID, [orderFullName], [address], phone, email, note, transactionNumber \n"
             + "FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID \n"
             + "WHERE statusID = 8 AND userID LIKE ?";
@@ -235,7 +238,8 @@ public class OrderDAO {
                     String statusName = rs.getString("statusName");
                     String modifiedBy = rs.getString("modifiedBy");
                     String roleID = rs.getString("roleID");
-                    list.add(new OrderStatusDTO(statusID, updateDate, statusName, modifiedBy, roleID));
+                    String userName = rs.getString("fullName");
+                    list.add(new OrderStatusDTO(statusID, updateDate, statusName, modifiedBy, roleID, userName));
                 }
             }
         } catch (Exception e) {
@@ -1066,7 +1070,7 @@ public class OrderDAO {
 
         return result;
     }
-    
+
     public List<OrderDTO> getReturnedOrder(String userID) throws SQLException {
         List<OrderDTO> list = new ArrayList();
         Connection conn = null;
