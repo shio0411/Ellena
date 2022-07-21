@@ -231,6 +231,7 @@ public class AuthenFilter implements Filter {
             throws IOException, ServletException {
 
         try {
+            request.setCharacterEncoding("UTF-8");
             HttpServletRequest req = (HttpServletRequest) request;
             HttpServletResponse res = (HttpServletResponse) response;
             if (res.getStatus() == 404) {
