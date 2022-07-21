@@ -1,6 +1,6 @@
-<%@page import="store.shopping.OrderDAO"%>
-<%@page import="store.shopping.OrderStatusDTO"%>
 <%@page import="store.shopping.OrderDetailDTO"%>
+<%@page import="java.util.Map"%>
+<%@page import="store.shopping.OrderStatusDTO"%>
 <%@page import="store.shopping.OrderDTO"%>
 <%@page import="java.util.List"%>
 <%@page import="store.user.UserDTO"%>
@@ -15,27 +15,6 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
         <style>
-            .dropdown-menu{
-                right:0;
-                left:auto;
-            }
-            form input{
-                margin-right: 2%;        
-                border: 1px solid #adadad;
-                padding: 0.3rem;
-                 border-radius: 0.3rem;
-            }
-            select{
-                 border: 1px solid #adadad;
-                 padding: 0.5rem;
-                 border-radius: 0.3rem;
-            }
-            
-            table tbody tr{
-                font-size: 1.25rem!important;
-                
-            }
-            
             .fa-clock-rotate-left::before {
                 content: "\f1da";
             }
@@ -45,130 +24,97 @@
 
         <%
             UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
-            String message = (String) request.getAttribute("MESSAGE");
+            //String message = (String) request.getAttribute("MESSAGE");
             String searchValue = request.getAttribute("SEARCH") != null ? (String) request.getAttribute("SEARCH") : "";
-            String sOrderStatusID = request.getAttribute("STATUS_ID") != null ? (String) request.getAttribute("STATUS_ID") : "";
-            int orderStatusID = 0;
-            if (!sOrderStatusID.isEmpty()) {
-                orderStatusID = Integer.parseInt(sOrderStatusID);
-            }
-            String dateFrom = request.getAttribute("DATE_FROM") != null ? (String) request.getAttribute("DATE_FROM") : "";
-            String dateTo = request.getAttribute("DATE_TO") != null ? (String) request.getAttribute("DATE_TO") : "";
-            if (dateFrom.equals("") || dateTo.equals("")) {
-                dateFrom = dateTo = "";
-            }
-//            checking if using ShowController or SearchController page count
-            boolean searchAll = false;
-            int currentPage = (int) request.getAttribute("currentPage");
-            if (message != null) {
+            List<UserDTO> userList = (List<UserDTO>) request.getAttribute("USER_LIST");
         %>
-        <!-- Pop-up thông báo cập nhật thành công -->
-        <div class="modal fade" id="myModal" role="dialog">
-            <div class="modal-dialog">
 
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Thông báo</h4>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-
-                    </div>
-                    <div class="modal-body">
-                        <p><%=message%></p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-        <%
-            }
-        %>
-        <!--Hết pop-up cập nhật thành công-->
         <div class="sidenav">
             <a href="ManagerStatisticController"><i class="fa fa-bar-chart fa-lg"></i>Số liệu thống kê</a>
             <a href="ManagerShowProductController"><i class="fa fa-archive fa-lg"></i>Quản lí sản phẩm</a>
-            <a href="ShowOrderController" style="color: #873e23; font-weight: bold;"><i class="fa fa-cart-plus fa-lg"></i>Quản lí đơn hàng</a>
-            <a href="manager-customer-return-history.jsp"><i class="fa fa-clock-rotate-left"></i>Lịch sử đổi/trả</a>
+            <a href="ShowOrderController"><i class="fa fa-cart-plus fa-lg"></i>Quản lí đơn hàng</a>
+            <a href="#" style="color: #873e23; font-weight: bold;"><i class="fa fa-clock-rotate-left"></i>Lịch sử đổi/trả</a>
         </div> 
 
         <div class="main">
+            <form action="MainController" method="POST" style="margin-left: 65%;">  
+                Xin chào, <a href="my-profile.jsp"><%= loginUser.getFullName()%></a>
+                <input type="submit" name="action" value="Logout" style="margin-left: 4%;">
+            </form>
 
-           <div class="flex-item text-right" id="manager__header">
-                <form class="m-0" action="MainController" method="POST">  
-                    <h4 class="dropdown">
-                        <b>Xin chào, </b>
-                        <a  data-toggle="dropdown" role="button"><b class="text-color-dark"><%= loginUser.getFullName()%></b></a>
-                        <div  class="dropdown-menu nav-tabs" role="tablist">
-                        <button class="dropdown-item btn" role="tab" type="button"><a class="text-dark" href="my-profile.jsp">Thông tin tài khoản</a></button>
-                        <input class=" dropdown-item btn" type="submit" name="action" value="Logout"/>
-                        </div>
-                    </h4>
-                </form>
-            </div>
-            <h2><b>Danh sách đơn hàng</b></h2>
-            <form action="SearchOrderController" method="POST">
-                <input type="text" name="search" value="<%= searchValue%>" id="search-search" placeholder="Tên khách hàng">
-                
-                <select name="search-statusID" id="search-statusID">
-
-                    <%
-                        OrderDTO orderDTO = new OrderDTO();
-                        if (orderStatusID == 0) {
-                    %>
-                    <option class="p-1" value="" selected hidden>Chọn một trạng thái</option>
-
-                    <%
-                        }
-                        for (int i = 1; i <= 8; i++) {
-                    %>
-                    <option value="<%= i%>" <% if (i == orderStatusID) { %> selected  <% }%>>
-                        <%= orderDTO.getStatus(i)%>
-                    </option>
-                    <%}%>
-                </select>
-                Từ
-                <input type="date" name="dateFrom" id="search-dateFrom" value="<%= dateFrom%>"/>
-                đến
-                <input type="date" name="dateTo" id="search-dateTo" value="<%= dateTo%>"/>
-                <button type="submit" name="action" value="SearchOrder" class="btn btn-default" style="width: 15%; padding: 0.5% 0.1%;"><i class="fa fa-search fa-lg"></i>Search</button>
-                <!--switch to SearchController page count after submit form-->
-                <%
-                    searchAll = (boolean) request.getAttribute("SWITCH_SEARCH");
-                %>
-            </form>   
-            ${requestScope.EMPTY_LIST_MESSAGE}
+            <h3>Lịch sử đổi/trả</h3>
+            <form action="MainController" method="POST">
+                <input type="text" name="search" value="<%= searchValue%>" id="search-search" placeholder="Nhập tên khách hàng/email/số điện thoại" style="width: 40%;">
+                <button type="submit" name="action" value="SearchReturnedHistory" class="btn-outline-dark" style="width: 15%; padding: 0.5% 0.1%;"><i class="fa fa-search fa-lg"></i>Search</button>
+            </form>
 
             <%
-                List<OrderDTO> listOrder = (List<OrderDTO>) request.getAttribute("LIST_ORDER");
+                Map<UserDTO, List<OrderDTO>> map = (Map<UserDTO, List<OrderDTO>>) request.getAttribute("RETURNED_ORDERS");
+                if (userList != null) {
+                    if (userList.size() > 0) {
+                        int id = 1;
+                        for (UserDTO user : userList) {
+
+
+            %>
+
+            <div class="row">
+                <div class="col-md-5 mb-4 pb-2">
+                    <div class="form-outline">
+                        <label class="form-label" for="fullname">Họ và tên</label>
+                        <input type="text" readonly="" name="fullname" value="<%= user.getFullName()%>" id="fullname" class="form-control form-control-lg" />
+                    </div>
+                </div>
+                    
+                <div class="col-md-5 mb-4 pb-2">
+                    <div class="form-outline">
+                        <label class="form-label" for="userID">Email</label>
+                        <input type="text" readonly="" name="userID" value="<%= user.getUserID()%>" id="userID" class="form-control form-control-lg" />
+                    </div>
+                </div>
+                
+                <div class="col-md-2 mb-4 pb-2">
+                    <div class="form-outline">
+                        <label class="form-label" for="sex">Giới tính</label>
+                        <input type="text" readonly="" name="sex" <% if (user.getSex()) { %> value="Nam" <% } else { %> value="Nữ" <%}%> id="sex" class="form-control form-control-lg" />
+                    </div>
+                </div>
+                <div class="col-md-5 mb-4 pb-2">
+                    <div class="form-outline">
+                        <label class="form-label" for="address">Địa chỉ</label>
+                        <input type="text" readonly="" name="address" value="<%= user.getAddress()%>" id="address" class="form-control form-control-lg" />
+                    </div>
+                </div>
+                <div class="col-md-5 mb-4 pb-2">
+                    <div class="form-outline">
+                        <label class="form-label" for="phone">Số điện thoại</label>
+                        <input type="text" readonly="" name="phone" value="<%= user.getPhone()%>" id="phone" class="form-control form-control-lg" />
+                    </div>
+                </div>
+                
+            </div>
+            <%
+                
+                
+                List<OrderDTO> listOrder = map.get(user);
                 if (listOrder != null) {
                     if (listOrder.size() > 0) {
 
 
             %>
+
             <table class="table table-hover table-bordered">
-                <colgroup>
-                    <col span="1" style="width: 5%;">
-                    <col span="1" style="width: 12%;">
-                    <col span="1" style="width: 12%;">
-                    <col span="1" style="width: 35%;">
-                    <col span="1" style="width: 10%;">
-                    <col span="1" style="width: 10%;">
-                    <col span="1" style="width: 8%;">
-                </colgroup>
                 <tr style="background-color: #b57c68">
                     <th>ID</th>
                     <th>Ngày đặt hàng</th>                
                     <th>Tổng tiền</th>
                     <th>Tên khách hàng</th>
                     <th>Trạng thái</th>
-                    <th>Cập nhật trạng thái</th>
+                    <th>Chi tiết đơn hàng</th>
                     <th>Trạng thái đơn hàng</th>
                 </tr>
 
-                <%            int id = 1;
+                <%            
                     for (OrderDTO order : listOrder) {
                 %>
 
@@ -185,11 +131,11 @@
                             <div class="modal-dialog" id="<%=id%>" >
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h4 class="modal-title" id="myModalLabel">Chỉnh sửa đơn hàng</h4>
+                                        <h4 class="modal-title" id="myModalLabel">Chi tiết đơn hàng</h4>
                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
                                     </div>
-                                    <form action="UpdateOrderController" method="POST">
+                                    <form action="MainController">
                                         <div class="modal-body" >
 
                                             <div class="row">
@@ -214,7 +160,7 @@
                                                                     <%if (order.getStatusID() == k) {%>
                                                                     selected 
                                                                     <%}
-                                                                        if (order.getStatusID() == 5 || k < order.getStatusID() || (k == 5 && order.getStatusID() != 3 && order.getStatusID() != 1) || (k == 6 && order.getStatusID() != 1) || ((k == 7) && (order.getStatusID() != 6))) {%>
+                                                                        if (k < order.getStatusID() || (k == 5 && order.getStatusID() != 3 && order.getStatusID() != 1) || (k == 6 && order.getStatusID() != 1) || ((k == 7) && (order.getStatusID() != 6))) {%>
                                                                     disabled 
                                                                     <%}%> >
                                                                 <%= order.getStatus(k)%>
@@ -371,21 +317,8 @@
                                                 </tbody>
                                             </table>
                                         </div>
-                                        <input type="hidden" name="page" value="<%= currentPage%>"/>
-                                        <input type="hidden" name="payType" value="<%= order.getPayType()%>"/>
-                                        <input type="hidden" name="userID" value="<%= loginUser.getUserID()%>"/>
-                                        <input type="hidden" name="roleID" value="<%= loginUser.getRoleID()%>"/>
-                                        <input type="hidden" name="search" id="update-search" value="<%= searchValue%>"/>
-                                        <input type="hidden" name="dateFrom" id="update-dateFrom" value="<%= dateFrom%>"/>
-                                        <input type="hidden" name="dateTo" id="update-dateTo" value="<%= dateTo%>"/>
-                                        <input type="hidden" name="search-statusID" id="update-statusID" value="<%= sOrderStatusID%>"/>
-                                        <a href="ReturnController?orderID=<%= order.getOrderID()%>">
-                                            <!--<button class="btn btn-secondary" data-toggle="tooltip" data-html="true" title="Đổi hàng">-->
-                                                Đổi/trả <!-- Icon return here -->
-                                            <!--</button>-->
-                                        </a>
+                                        
                                         <div class="modal-footer">
-                                            <button class="btn btn-default" type="submit" name="action" value="UpdateOrder">Cập nhật</button>
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
                                         </div>
                                     </form>
@@ -393,7 +326,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button class="btn btn-default" type="button" data-toggle="modal" data-target="#myModal<%=id++%>">Chỉnh sửa</button>
+                        <button type="button" data-toggle="modal" data-target="#myModal<%=id++%>">Chi tiết</button>
 
                     </td>
                     <!--Pop-up lịch sử trạng thái đơn hàng-->
@@ -440,160 +373,28 @@
                                 </div>
                             </div>
                         </div>
-                        <button class="btn btn-default" type="button" data-toggle="modal" data-target="#myModal<%=id++%>">Chi tiết</button>
+                        <button type="button" data-toggle="modal" data-target="#myModal<%=id++%>">Chi tiết</button>
                     </td>
                 </tr>
 
                 <%
-                            }
                         }
                     }
+                }
                 %>
             </table>
 
-            <!--page nav-->
-            <%
-                if (listOrder != null) { //if no order in list, page nav won't display
-
+            <%          }
+                    } 
+                }
 
             %>
-            <div class="row pagination__option" style="justify-content: center; align-items: center; text-align: center;">
-
-                <%                    
-                    int noOfPages = (int) request.getAttribute("noOfPages");
-                    int noOfPageLinks = 5; // amount of page links to be displayed
-                    int minLinkRange = noOfPageLinks / 2; // minimum link range ahead/behind
-
-//                    -------------------------------Calculating the begin and end of pageNav for loop-------------------------------
-                    //  int begin = ((currentPage - minLinkRange) > 0 ? ((currentPage - minLinkRange) < (noOfPages - noOfPageLinks + 1) ? (currentPage - minLinkRange) : (noOfPages - noOfPageLinks)) : 0) + 1; (referance)
-                    int begin = 0;
-                    if ((currentPage - minLinkRange) > 0) {
-                        if ((currentPage - minLinkRange) < (noOfPages - noOfPageLinks + 1) || (noOfPages < noOfPageLinks)) { // add in (noOfPages < noOfPageLinks) in order to prevent negative page link
-                            begin = (currentPage - minLinkRange);
-                        } else {
-                            begin = (noOfPages - noOfPageLinks + 1);
-                        }
-                    } else {
-                        begin = 1;
-                    }
-
-                    //  int end = (currentPage + minLinkRange) < noOfPages ? ((currentPage + minLinkRange) > noOfPageLinks ? (currentPage + minLinkRange) : noOfPageLinks) : noOfPages; (referance)
-                    int end = 0;
-                    if ((currentPage + minLinkRange) < noOfPages) {
-                        if ((currentPage + minLinkRange) > noOfPageLinks) {
-                            end = (currentPage + minLinkRange);
-                        } else if (noOfPages < noOfPageLinks) {
-                            end = noOfPages; // in case noOfPageLinks larger than noOfPages and display wrong
-                        } else{
-                            end = noOfPageLinks;
-                        }
-                    } else {
-                        end = noOfPages;
-                    }
-//                    -----------------------------------------------------------------------------------------------------------------------------
-
-                    if (searchAll) { //Currently at ShowController
-
-                        //start of pageNav
-                        if (currentPage != 1) {
-                %>
-
-                <!-- For displaying 1st page link except for the 1st page -->
-                <a href="ShowOrderController?page=1"><i class="glyphicon glyphicon-menu-left"></i><i class="glyphicon glyphicon-menu-left"></i></a>
-                
-                <!-- For displaying Previous link except for the 1st page -->
-                <a href="ShowOrderController?page=<%= currentPage - 1%>"><i class="glyphicon glyphicon-menu-left"></i></a>
-                    <%
-                        }
-                    %>
-
-                <!--For displaying Page numbers. The when condition does not display a link for the current page-->
-
-                <%  for (int i = begin; i <= end; i++) {
-                        if (currentPage == i) {
-                %>
-                <a class="active" style="background: #b57c68; color: #ffffff"><%= i%></a>  <!-- There is no active class for pagination (currenly hard code) -->
-                <%
-                } else {
-                %>
-                <a href="ShowOrderController?page=<%= i%>" style="text-decoration: none;"><%= i%></a>
-                <%
-                        }
-                    }
-                %>
-
-
-                <!--For displaying Next link -->
-                <%
-                    if (currentPage < noOfPages) {
-                %>
-                <a href="ShowOrderController?page=<%= currentPage + 1%>"><i class="glyphicon glyphicon-menu-right"></i></a>
-                
-                <!-- For displaying last page link except for the last page -->
-                <a href="ShowOrderController?page=<%= noOfPages %>"><i class="glyphicon glyphicon-menu-right"></i><i class="glyphicon glyphicon-menu-right"></i></a>
-                
-                    <%
-                        }
-
-                        //                end of pageNav
-                    %>
-
-
-
-                <%            } else {//Currently at SearchController
-                    //                    start of pageNav
-                    if (currentPage != 1) {
-                %>
-
-                <!-- For displaying 1st page link except for the 1st page -->
-                <a href="SearchOrderController?search=<%= searchValue%>&search-statusID=<%= sOrderStatusID%>&dateFrom=<%= dateFrom%>&dateTo=<%= dateTo%>&page=1"><i class="glyphicon glyphicon-menu-left"></i><i class="glyphicon glyphicon-menu-left"></i></a>
-                
-                <!-- For displaying Previous link except for the 1st page -->
-                <a href="SearchOrderController?search=<%= searchValue%>&search-statusID=<%= sOrderStatusID%>&dateFrom=<%= dateFrom%>&dateTo=<%= dateTo%>&page=<%= currentPage - 1%>" style="text-decoration: none;"><i class="glyphicon glyphicon-menu-left"></i></a>
-                    <%
-                        }
-                    %>
-
-                <!--For displaying Page numbers. The when condition does not display a link for the current page--> 
-
-                <%  for (int i = begin; i <= end; i++) {
-                        if (currentPage == i) {
-                %>
-                <a class="active" style="background: #000000; color: #ffffff"><%= i%></a>  <!-- There is no active class for pagination (currenly hard code) -->
-                <%
-                } else {
-                %>
-                <a href="SearchOrderController?search=<%= searchValue%>&search-statusID=<%= sOrderStatusID%>&dateFrom=<%= dateFrom%>&dateTo=<%= dateTo%>&page=<%= i%>"><%= i%></a>
-                <%
-                        }
-                    }
-                %>
-
-
-                <!--For displaying Next link -->
-                <%
-                    if (currentPage < noOfPages) {
-                %>
-                <a href="SearchOrderController?search=<%= searchValue%>&search-statusID=<%= sOrderStatusID%>&dateFrom=<%= dateFrom%>&dateTo=<%= dateTo%>&page=<%= currentPage + 1%>"><i class="glyphicon glyphicon-menu-right"></i></a>
-                
-                <!-- For displaying last page link except for the last page -->
-                <a href="SearchOrderController?search=<%= searchValue%>&search-statusID=<%= sOrderStatusID%>&dateFrom=<%= dateFrom%>&dateTo=<%= dateTo%>&page=<%= noOfPages %>"><i class="glyphicon glyphicon-menu-right"></i><i class="glyphicon glyphicon-menu-right"></i></a>
-                
-                    <%
-                            }
-
-                        }
-                        //                end of pageNav
-
-                    %>
-
-            </div>
-            <%                
-                } //end of the "No product" if statement
-            %>
-
-
+            ${requestScope.MESSAGE}
+            
+            
+            
         </div>
+
         <script>
             $(document).ready(function () {
                 $("#myModal").modal();

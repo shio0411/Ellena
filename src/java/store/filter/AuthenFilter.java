@@ -132,7 +132,7 @@ public class AuthenFilter implements Filter {
         MANAGER_FUNCTION.add("manager-order.jsp");
         MANAGER_FUNCTION.add("return.jsp");
         MANAGER_FUNCTION.add("ReturnController");
-        MANAGER_FUNCTION.add("RefundController");
+//        MANAGER_FUNCTION.add("RefundController");
         MANAGER_FUNCTION.add("UpdateOrderDetailController");
         MANAGER_FUNCTION.add("RefundOrderController");
         MANAGER_FUNCTION.add("manager-customer-return-history.jsp");

@@ -1,24 +1,26 @@
 package store.controllers;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import store.shopping.OrderDAO;
-import store.shopping.ProductDAO;
+import store.shopping.OrderDTO;
+import store.user.UserDAO;
 import store.user.UserDTO;
 
 /**
  *
  * @author DuyLVL
  */
-@WebServlet(name = "RefundOrderController", urlPatterns = {"/RefundOrderController"})
-public class RefundOrderController extends HttpServlet {
+@WebServlet(name = "SearchReturnedHistoryController", urlPatterns = {"/SearchReturnedHistoryController"})
+public class SearchReturnedHistoryController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -29,47 +31,34 @@ public class RefundOrderController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    
-    private static final String SUCCESS = "ReturnController";
-    private static final String ERROR = "ReturnController";
+    private static final String SUCCESS = "manager-customer-return-history.jsp";
+    private static final String ERROR = "manager-customer-return-history.jsp";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
-            //String note = request.getParameter("note");
-            String note = request.getParameterValues("note")[0] + request.getParameterValues("note")[1];
-            int oldQuantity = Integer.parseInt(request.getParameter("oldQuantity"));
-            //newQuantity: số sản phẩm trả lại
-            int newQuantity = oldQuantity - Integer.parseInt(request.getParameter("newQuantity"));
-            int orderID = Integer.parseInt(request.getParameter("orderID"));
-            int productID = Integer.parseInt(request.getParameter("productID"));
-            int orderDetailID = Integer.parseInt(request.getParameter("orderDetailID"));
-            int price = Integer.parseInt(request.getParameter("price"));
-            
-            String size = request.getParameter("size");
-            String color = request.getParameter("color");
-            ProductDAO pdao = new ProductDAO();
-            OrderDAO odao = new OrderDAO();
-            List<String> colorSize = new ArrayList<>();
-                colorSize.add(color);
-                colorSize.add(size);
-
-            int maxQuantity = pdao.getProductDetail(productID).getColorSizeQuantity().get(colorSize);
-            //update order
-            HttpSession session = request.getSession();
-            UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
-            boolean check = odao.refundProduct(orderID, orderDetailID, oldQuantity, newQuantity, loginUser.getUserID(), loginUser.getRoleID(), maxQuantity, price, note);
-            //nhập product cũ vào lại kho
-            if (!note.equals("Sản phẩm bị lỗi/hỏng")) {
-                check = check && pdao.updateProductQuantity(maxQuantity + oldQuantity - newQuantity, pdao.getProductColorID(productID, color), size);
+            String search = request.getParameter("search");
+            List<UserDTO> userList = new UserDAO().getReturnedCustomer(search);
+            Collections.reverse(userList);
+            request.setAttribute("SEARCH", search);
+            request.setAttribute("USER_LIST", userList);
+            Map<UserDTO, List<OrderDTO>> map = new HashMap<>();
+            for (UserDTO user : userList) {
+                map.put(user, new OrderDAO().getReturnedOrder(user.getUserID()));
             }
-            if (check) {
+            request.setAttribute("RETURNED_ORDERS", map);
+            if (userList.size() > 0) {
                 url = SUCCESS;
-                request.setAttribute("UPDATE_MESSAGE", "Cập nhật thành công!");
+            } else {
+                if (!search.isEmpty()) {
+                    request.setAttribute("MESSAGE", "Không có kết quả tìm kiếm");
+                }
             }
+
         } catch (Exception e) {
-            log("Error at RefundOrderController: " + e.toString());
+            log("Error at SearchReturnedCustomerController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

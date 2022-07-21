@@ -43,6 +43,9 @@
                 right:0;
                 z-index: 1;
             }
+            .fa-clock-rotate-left::before {
+                content: "\f1da";
+            }
         </style>
     </head>
     <body>
@@ -76,7 +79,7 @@
             <a href="ManagerStatisticController"><i class="fa fa-bar-chart fa-lg"></i>Số liệu thống kê</a>
             <a href="ManagerShowProductController" style="color: #873e23; font-weight: bold;"><i class="fa fa-archive fa-lg"></i>Quản lí sản phẩm</a>
             <a href="ManagerShowOrderController"><i class="fa fa-cart-plus fa-lg"></i>Quản lí đơn hàng</a>
-            <a href="manager-customer-return-history.jsp"><span>CHO XIN CÁI ICON :V</span>Lịch sử đổi/trả</a>
+            <a href="manager-customer-return-history.jsp"><i class="fa fa-clock-rotate-left"></i>Lịch sử đổi/trả</a>
         </div>
 
         <div class="main">

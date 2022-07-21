@@ -17,6 +17,11 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <style>
+            .fa-clock-rotate-left::before {
+                content: "\f1da";
+            }
+        </style>
     </head>
     <body>
         <%
@@ -64,6 +69,7 @@
             <a href="ManagerStatisticController"><i class="fa fa-bar-chart fa-lg"></i>Số liệu thống kê</a>
             <a href="ManagerShowProductController"><i class="fa fa-archive fa-lg"></i>Quản lí sản phẩm</a>
             <a href="ShowOrderController" style="color: #873e23; font-weight: bold;"><i class="fa fa-cart-plus fa-lg"></i>Quản lí đơn hàng</a>
+            <a href="manager-customer-return-history.jsp"><i class="fa fa-clock-rotate-left"></i>Lịch sử đổi/trả</a>
         </div> 
         <%  }%>
 
@@ -182,7 +188,7 @@
                                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
                                             </div>
-                                            <form action="MainController" method="POST">
+                                            <form action="UpdateOrderDetailController" method="POST">
                                                 <div class="modal-body">
                                                     <div>
                                                         <span>Số lượng</span>
@@ -257,7 +263,7 @@
                                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
                                             </div>
-                                            <form action="MainController">
+                                            <form action="RefundOrderController">
                                                 <div class="modal-body">
                                                     <div>
                                                         <span>Số lượng trả lại</span>

@@ -142,6 +142,9 @@
     #manager__header h4{
         font-size: 1.75rem;
     }
+    .fa-clock-rotate-left::before {
+        content: "\f1da";
+    }
     </style>
     
 </head>
@@ -170,7 +173,7 @@
             <a class="pt-5" href="ManagerStatisticController" style="color: #873e23; font-weight: bold;"><i style="color: #873e23;" class="fa fa-bar-chart fa-lg"></i>Số liệu thống kê</a>
             <a href="ManagerShowProductController"><i class="fa fa-archive fa-lg"></i>Quản lí sản phẩm</a>
             <a href="ShowOrderController"><i class="fa fa-cart-plus fa-lg"></i>Quản lí đơn hàng</a>
-            <a href="manager-customer-return-history.jsp"><span>CHO XIN CÁI ICON :V</span>Lịch sử đổi/trả</a>
+            <a href="manager-customer-return-history.jsp"><i class="fa fa-clock-rotate-left"></i>Lịch sử đổi/trả</a>
         </nav>
         
         <%
