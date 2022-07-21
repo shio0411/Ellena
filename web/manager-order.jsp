@@ -276,7 +276,7 @@
 
                                                     <div class="form-outline">
                                                         <label class="form-label" for="trackingID">Tracking ID</label>
-                                                        <input type="text" name="trackingID" value="<%= order.getTrackingID()%>" id="trackingID" class="form-control form-control-lg" />
+                                                        <input type="text" name="trackingID" <%if (order.getTrackingID() != null){%>value="<%= order.getTrackingID()%>"<%} else {%> value=""  <%}%>  id="trackingID" class="form-control form-control-lg" />
                                                     </div>
 
                                                 </div>
@@ -424,9 +424,19 @@
                                                 <tr>
                                                     <td><%= orderStatus.getStatusName()%></td>
                                                     <td><%= orderStatus.getUpdateDate()%></td>
+                                                    <%
+                                                        if (orderStatus.getUserName() == null){
+                                                    
+                                                    %>
+                                                    <td><%= orderStatus.getUserID()%></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    
+                                                    <%} else {%>
                                                     <td><%= orderStatus.getUserName()%></td>
                                                     <td><%= orderStatus.getUserID()%></td>
                                                     <td><%= orderStatus.getRoleID()%></td>
+                                                    <%}%>
                                                 </tr>
                                                 <%
                                                     }

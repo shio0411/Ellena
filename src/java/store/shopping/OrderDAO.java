@@ -51,7 +51,7 @@ public class OrderDAO {
     //Order status
     private static final String SEARCH_ORDER_STATUS = "SELECT t1.statusID, updateDate, statusName, modifiedBy, t3.roleID, t3.fullName \n"
             + "FROM tblOrderStatusUpdate t1 JOIN tblOrderStatus t2 ON t1.statusID = t2.statusID \n"
-            + "		JOIN tblUsers t3 ON t3.userID = modifiedBy\n"
+            + "		LEFT JOIN tblUsers t3 ON t3.userID = modifiedBy\n"
             + "WHERE orderID = ?";
 
     private static final String INSERT_ORDER = "INSERT INTO tblOrder(orderDate, total, userID, payType, fullName, [address], phone, email, note, transactionNumber) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
