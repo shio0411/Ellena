@@ -78,11 +78,161 @@ public class JavaMailUtils {
             int otpValue = rand.nextInt(1255650);
             otpOut = otpValue;
 
-            Message message = new MimeMessage(session);
+            String otpMail = "<!doctype html>\n"
+                    + "<html>\n"
+                    + "\n"
+                    + "<head>\n"
+                    + "  <title>\n"
+                    + "  </title>\n"
+                    + "  <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n"
+                    + "  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n"
+                    + "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n"
+                    + "  <style type=\"text/css\">\n"
+                    + "    #outlook a {\n"
+                    + "      padding: 0;\n"
+                    + "    }\n"
+                    + "\n"
+                    + "    body {\n"
+                    + "      margin: 0;\n"
+                    + "      padding: 0;\n"
+                    + "      -webkit-text-size-adjust: 100%;\n"
+                    + "      -ms-text-size-adjust: 100%;\n"
+                    + "    }\n"
+                    + "\n"
+                    + "    table,\n"
+                    + "    td {\n"
+                    + "      border-collapse: collapse;\n"
+                    + "      mso-table-lspace: 0pt;\n"
+                    + "      mso-table-rspace: 0pt;\n"
+                    + "    }\n"
+                    + "\n"
+                    + "    img {\n"
+                    + "      border: 0;\n"
+                    + "      height: auto;\n"
+                    + "      line-height: 100%;\n"
+                    + "      outline: none;\n"
+                    + "      text-decoration: none;\n"
+                    + "      -ms-interpolation-mode: bicubic;\n"
+                    + "    }\n"
+                    + "\n"
+                    + "    p {\n"
+                    + "      display: block;\n"
+                    + "      margin: 13px 0;\n"
+                    + "    }\n"
+                    + "  </style>\n"
+                    + "  <link href=\"https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,700\" rel=\"stylesheet\" type=\"text/css\">\n"
+                    + "  <style type=\"text/css\">\n"
+                    + "    @import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,700);\n"
+                    + "  </style>\n"
+                    + "  <style type=\"text/css\">\n"
+                    + "    @media only screen and (min-width:480px) {\n"
+                    + "      .mj-column-per-100 {\n"
+                    + "        width: 100% !important;\n"
+                    + "        max-width: 100%;\n"
+                    + "      }\n"
+                    + "    }\n"
+                    + "  </style>\n"
+                    + "  <style media=\"screen and (min-width:480px)\">\n"
+                    + "    .moz-text-html .mj-column-per-100 {\n"
+                    + "      width: 100% !important;\n"
+                    + "      max-width: 100%;\n"
+                    + "    }\n"
+                    + "  </style>\n"
+                    + "  <style type=\"text/css\">\n"
+                    + "    @media only screen and (max-width:480px) {\n"
+                    + "      table.mj-full-width-mobile {\n"
+                    + "        width: 100% !important;\n"
+                    + "      }\n"
+                    + "\n"
+                    + "      td.mj-full-width-mobile {\n"
+                    + "        width: auto !important;\n"
+                    + "      }\n"
+                    + "    }\n"
+                    + "  </style>\n"
+                    + "</head>\n"
+                    + "\n"
+                    + "<body style=\"word-spacing:normal;background-color:#fafbfc;\">\n"
+                    + "  <div style=\"background-color:#fafbfc;\">\n"
+                    + "    <div style=\"margin:0px auto;max-width:600px;\">\n"
+                    + "      <table align=\"center\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\" style=\"width:100%;\">\n"
+                    + "        <tbody>\n"
+                    + "          <tr>\n"
+                    + "            <td style=\"direction:ltr;font-size:0px;padding:20px 0;padding-bottom:20px;padding-top:20px;text-align:center;\">\n"
+                    + "              <div class=\"mj-column-per-100 mj-outlook-group-fix\" style=\"font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:middle;width:100%;\">\n"
+                    + "                <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\" style=\"vertical-align:middle;\" width=\"100%\">\n"
+                    + "                  <tbody>\n"
+                    + "                    <tr>\n"
+                    + "                      <td align=\"center\" style=\"font-size:0px;padding:25px;word-break:break-word;\">\n"
+                    + "                        <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\" style=\"border-collapse:collapse;border-spacing:0px;\">\n"
+                    + "                          <tbody>\n"
+                    + "                            <tr>\n"
+                    + "                              <td align=\"center\" height=\"115\" style=\"font-family:Helvetica,Arial,sans-serif; font-size:24px;\">\n"
+                    + "                                 <a href=\"http://localhost:8080/Ellena/\"  style=\"text-decoration: none; color: #000;\"><h1>ELLENA</h1></a>\n"
+                    + "                              </td>\n"
+                    + "                            </tr>\n"
+                    + "                          </tbody>\n"
+                    + "                        </table>\n"
+                    + "                      </td>\n"
+                    + "                    </tr>\n"
+                    + "                  </tbody>\n"
+                    + "                </table>\n"
+                    + "              </div>\n"
+                    + "            </td>\n"
+                    + "          </tr>\n"
+                    + "        </tbody>\n"
+                    + "      </table>\n"
+                    + "    </div>\n"
+                    + "    <div style=\"background:#ffffff;background-color:#ffffff;margin:0px auto;max-width:600px;\">\n"
+                    + "      <table align=\"center\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\" style=\"background:#ffffff;background-color:#ffffff;width:100%;\">\n"
+                    + "        <tbody>\n"
+                    + "          <tr>\n"
+                    + "            <td style=\"direction:ltr;font-size:0px;padding:20px 0;padding-bottom:20px;padding-top:20px;text-align:center;\">\n"
+                    + "              <div class=\"mj-column-per-100 mj-outlook-group-fix\" style=\"font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:middle;width:100%;\">\n"
+                    + "                <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\" style=\"vertical-align:middle;\" width=\"100%\">\n"
+                    + "                  <tbody>\n"
+                    + "                    <tr>\n"
+                    + "                      <td align=\"center\" style=\"font-size:0px;padding:10px 25px;padding-right:25px;padding-left:25px;word-break:break-word;\">\n"
+                    + "                        <div style=\"font-family:open Sans Helvetica, Arial, sans-serif;font-size:16px;line-height:1;text-align:center;color:#000000;\"><span>Xin chào,</span></div>\n"
+                    + "                      </td>\n"
+                    + "                    </tr>\n"
+                    + "                    <tr>\n"
+                    + "                      <td align=\"center\" style=\"font-size:0px;padding:10px 25px;padding-right:25px;padding-left:25px;word-break:break-word;\">\n"
+                    + "                        <div style=\"font-family:open Sans Helvetica, Arial, sans-serif;font-size:16px;line-height:1;text-align:center;color:#000000;\">Vui lòng sử dụng mã xác minh dưới đây trên trang web Ellena:</div>\n"
+                    + "                      </td>\n"
+                    + "                    </tr>\n"
+                    + "                    <tr>\n"
+                    + "                      <td align=\"center\" style=\"font-size:0px;padding:10px 25px;word-break:break-word;\">\n"
+                    + "                        <div style=\"font-family:open Sans Helvetica, Arial, sans-serif;font-size:24px;font-weight:bold;line-height:1;text-align:center;color:#000000;\">" + otpValue + "</div>\n"
+                    + "                      </td>\n"
+                    + "                    </tr>\n"
+                    + "                    <tr>\n"
+                    + "                      <td align=\"center\" style=\"font-size:0px;padding:10px 25px;padding-right:16px;padding-left:25px;word-break:break-word;\">\n"
+                    + "                        <div style=\"font-family:open Sans Helvetica, Arial, sans-serif;font-size:16px;line-height:1;text-align:center;color:#000000;\">Nếu bạn không yêu cầu xác thực OTP này, bạn có thể bỏ qua email này hoặc cho chúng tôi biết.</div>\n"
+                    + "                      </td>\n"
+                    + "                    </tr>\n"
+                    + "                    <tr>\n"
+                    + "                      <td align=\"center\" style=\"font-size:0px;padding:10px 25px;padding-right:25px;padding-left:25px;word-break:break-word;\">\n"
+                    + "                        <div style=\"font-family:open Sans Helvetica, Arial, sans-serif;font-size:16px;line-height:1;text-align:center;color:#000000;\">Xin cảm ơn! <br />Đội ngũ Ellena</div>\n"
+                    + "                      </td>\n"
+                    + "                    </tr>\n"
+                    + "                  </tbody>\n"
+                    + "                </table>\n"
+                    + "              </div>\n"
+                    + "            </td>\n"
+                    + "          </tr>\n"
+                    + "        </tbody>\n"
+                    + "      </table>\n"
+                    + "    </div>\n"
+                    + "  </div>\n"
+                    + "</body>\n"
+                    + "\n"
+                    + "</html>";
+
+            MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(myAccountEmail));
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(recepient));
-            message.setSubject("Validate OTP");
-            message.setText("Dear User, \n Your OTP code for validating OTP is: " + otpValue);
+            message.setSubject("Xác thực OTP", "utf-8");
+            message.setContent(otpMail, "text/html; charset=UTF-8");
             return message;
         } catch (MessagingException ex) {
             Logger.getLogger(JavaMailUtils.class.getName()).log(Level.SEVERE, null, ex);
@@ -205,27 +355,27 @@ public class JavaMailUtils {
                 + "                                                                        <tr> <!-- seperator -->\n"
                 + "                                                                            <td width=\"100%\" style=\"border-top: 1px solid #000;\" colspan=\"5\"></td>\n"
                 + "                                                                        </tr>\n";
-        
+
         // number format
         NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
-        
+
         // adding each product to html string and calculate total
         int total = 0;
         for (CartProduct product : cartDetail) {
-            total += (product.getPrice() - product.getDiscount()) * product.getQuantity(); 
+            total += (product.getPrice() - product.getDiscount()) * product.getQuantity();
             firstPart += "                                                                        <tr> <!-- product -->\n"
                     + "                                                                            <td width=\"30%\">" + product.getProductName() + "</td>\n"
                     + "                                                                            <td width=\"20%\">" + product.getColor() + " / " + product.getSize() + "</td>\n"
                     + "                                                                            <td width=\"20%\">" + numberFormat.format((int) ((product.getPrice() - product.getDiscount()))) + "</td>\n"
                     + "                                                                            <td width=\"10%\">" + product.getQuantity() + "</td>\n"
-                    + "                                                                            <td width=\"20%\">" + numberFormat.format((int)(((product.getPrice() - product.getDiscount()) * product.getQuantity()))) + "</td>\n"
+                    + "                                                                            <td width=\"20%\">" + numberFormat.format((int) (((product.getPrice() - product.getDiscount()) * product.getQuantity()))) + "</td>\n"
                     + "                                                                        </tr>\n";
         }
 
         String orderConfirmMail = firstPart + "                                            <tr><td style=\"border-top:1px solid #000;\" width=\"100%\" colspan=\"5\"></td></tr> <!-- seperator -->\n"
                 + "                                                                        <tr> <!-- order total -->\n"
                 + "                                                                            <td width=\"80%\" colspan=\"4\"><b>Tổng tiền</b></td>\n"
-                + "                                                                            <td width=\"20%\"><b>"+ numberFormat.format(total) +"</b></td>\n"
+                + "                                                                            <td width=\"20%\"><b>" + numberFormat.format(total) + "</b></td>\n"
                 + "                                                                        </tr>\n"
                 + "                                                                    </table>\n"
                 + "                                                                    <!-- product end -->\n"
@@ -265,7 +415,7 @@ public class JavaMailUtils {
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(myAccountEmail));
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(recepient));
-            message.setSubject("ELLENA đã nhận đơn hàng " + orderDetail.getOrderID(),"utf-8");
+            message.setSubject("ELLENA đã nhận đơn hàng " + orderDetail.getOrderID(), "utf-8");
             message.setContent(orderConfirmMail, "text/html; charset=UTF-8");
             return message;
         } catch (MessagingException ex) {
