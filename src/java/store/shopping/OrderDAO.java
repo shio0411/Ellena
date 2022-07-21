@@ -442,9 +442,9 @@ public class OrderDAO {
                 ptm.setInt(1, orderID);
                 rs = ptm.executeQuery();
                 if (rs.next()) {
-                    currentTrackingID = rs.getString("trackingID");
+                    currentTrackingID = rs.getString("trackingID") == null ? "" : rs.getString("trackingID");
                 }
-                if (!currentTrackingID.equals("") && !currentTrackingID.equalsIgnoreCase(trackingID)) {
+                if (!currentTrackingID.equalsIgnoreCase(trackingID)) {
                     ptm = conn.prepareStatement(UPDATE_TRACKINGID);
                     ptm.setString(1, trackingID);
                     ptm.setInt(2, orderID);

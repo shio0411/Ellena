@@ -20,6 +20,11 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <style>
+            .fa-clock-rotate-left::before {
+                content: "\f1da";
+            }
+        </style>
     </head>
     <body>
         <%
@@ -70,25 +75,35 @@
         <div class="sidenav">
             <a href="ShowOrderController" style="color: #873e23; font-weight: bold;"><i class="fa fa-cart-plus fa-lg"></i>Quản lí đơn hàng</a>
             <a href="https://www.tawk.to/"><i class="fa fa-archive fa-lg"></i>Quản lí Q&A</a>
+            <a href="manager-customer-return-history.jsp"><i class="fa fa-clock-rotate-left fa-lg"></i>Lịch sử đổi/trả</a>
         </div> 
 
         <div class="main">
 
-            <form action="MainController" method="POST" style="margin-left: 65%;">  
-                Xin chào, <a href="my-profile.jsp"><%= loginUser.getFullName()%></a>
-                <input type="submit" name="action" value="Logout" style="margin-left: 4%;">
-            </form>
-            <h1>Danh sách đơn hàng</h1>
-            <form action="MainController" method="POST">
-                <input type="text" name="search" value="<%= searchValue%>" id="search-search" placeholder="Tìm kiếm đơn hàng">
-                Trạng thái
+           <div class="flex-item text-right" id="manager__header">
+                <form class="m-0" action="MainController" method="POST">  
+                    <h4 class="dropdown">
+                        <b>Xin chào, </b>
+                        <a  data-toggle="dropdown" role="button"><b class="text-color-dark"><%= loginUser.getFullName()%></b></a>
+                        <div  class="dropdown-menu nav-tabs" role="tablist">
+                        <button class="dropdown-item btn" role="tab" type="button"><a class="text-dark" href="my-profile.jsp">Thông tin tài khoản</a></button>
+                        <input class=" dropdown-item btn" type="submit" name="action" value="Logout"/>
+                        </div>
+                    </h4>
+                </form>
+            </div>
+            <h2><b>Danh sách đơn hàng</b></h2>
+            <form action="SearchOrderController" method="POST">
+                <input type="text" name="search" value="<%= searchValue%>" id="search-search" placeholder="Tên khách hàng">
+                
                 <select name="search-statusID" id="search-statusID">
 
                     <%
+                        int currentPage = (int) request.getAttribute("currentPage");
                         OrderDTO orderDTO = new OrderDTO();
                         if (orderStatusID == 0) {
                     %>
-                    <option value="" selected hidden>Chọn một trạng thái</option>
+                    <option class="p-1" value="" selected hidden>Chọn một trạng thái</option>
 
                     <%
                         }
@@ -103,7 +118,7 @@
                 <input type="date" name="dateFrom" id="search-dateFrom" value="<%= dateFrom%>"/>
                 đến
                 <input type="date" name="dateTo" id="search-dateTo" value="<%= dateTo%>"/>
-                <button type="submit" name="action" value="SearchOrder" class="btn-outline-dark" style="width: 15%; padding: 0.5% 0.1%;"><i class="fa fa-search fa-lg"></i>Search</button>
+                <button type="submit" name="action" value="SearchOrder" class="btn btn-default" style="width: 15%; padding: 0.5% 0.1%;"><i class="fa fa-search fa-lg"></i>Search</button>
                 <!--switch to SearchController page count after submit form-->
                 <%
                     searchAll = (boolean) request.getAttribute("SWITCH_SEARCH");
@@ -119,6 +134,15 @@
 
             %>
             <table class="table table-hover table-bordered">
+                <colgroup>
+                    <col span="1" style="width: 5%;">
+                    <col span="1" style="width: 12%;">
+                    <col span="1" style="width: 12%;">
+                    <col span="1" style="width: 35%;">
+                    <col span="1" style="width: 10%;">
+                    <col span="1" style="width: 10%;">
+                    <col span="1" style="width: 8%;">
+                </colgroup>
                 <tr style="background-color: #b57c68">
                     <th>ID</th>
                     <th>Ngày đặt hàng</th>                
@@ -150,7 +174,7 @@
                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
                                     </div>
-                                    <form action="MainController">
+                                    <form action="UpdateOrderController" method="POST">
                                         <div class="modal-body" >
 
                                             <div class="row">
@@ -175,7 +199,7 @@
                                                                     <%if (order.getStatusID() == k) {%>
                                                                     selected 
                                                                     <%}
-                                                                        if (k < order.getStatusID() || (k == 5 && order.getStatusID() != 3 && order.getStatusID() != 1) || (k == 6 && order.getStatusID() != 1) || ((k == 7) && (order.getStatusID() != 6))) {%>
+                                                                        if (order.getStatusID() == 5 || k < order.getStatusID() || (k == 5 && order.getStatusID() != 3 && order.getStatusID() != 1) || (k == 6 && order.getStatusID() != 1) || ((k == 7) && (order.getStatusID() != 6))) {%>
                                                                     disabled 
                                                                     <%}%> >
                                                                 <%= order.getStatus(k)%>
@@ -237,7 +261,7 @@
 
                                                     <div class="form-outline">
                                                         <label class="form-label" for="trackingID">Tracking ID</label>
-                                                        <input type="text" name="trackingID" value="<%= order.getTrackingID()%>" id="trackingID" class="form-control form-control-lg" />
+                                                        <input type="text" name="trackingID" <%if (order.getTrackingID() != null){%>value="<%= order.getTrackingID()%>"<%} else {%> value=""  <%}%>  id="trackingID" class="form-control form-control-lg" />
                                                     </div>
 
                                                 </div>
@@ -332,6 +356,7 @@
                                                 </tbody>
                                             </table>
                                         </div>
+                                        <input type="hidden" name="page" value="<%= currentPage%>"/>
                                         <input type="hidden" name="payType" value="<%= order.getPayType()%>"/>
                                         <input type="hidden" name="userID" value="<%= loginUser.getUserID()%>"/>
                                         <input type="hidden" name="roleID" value="<%= loginUser.getRoleID()%>"/>
@@ -339,12 +364,11 @@
                                         <input type="hidden" name="dateFrom" id="update-dateFrom" value="<%= dateFrom%>"/>
                                         <input type="hidden" name="dateTo" id="update-dateTo" value="<%= dateTo%>"/>
                                         <input type="hidden" name="search-statusID" id="update-statusID" value="<%= sOrderStatusID%>"/>
-                                        <button type="submit" class="btn btn-secondary" data-toggle="tooltip" data-html="true" title="Đổi hàng" name="action" value="Return">
-                                            Đổi hàng <!-- Icon return here -->
-                                        </button>
-                                        <button type="submit" class="btn btn-secondary" data-toggle="tooltip" data-html="true" title="Trả hàng" name="action" value="Refund">
-                                            Trả hàng <!-- Icon refund here -->
-                                        </button>
+                                        <a href="ReturnController?orderID=<%= order.getOrderID()%>">
+                                            <!--<button class="btn btn-secondary" data-toggle="tooltip" data-html="true" title="Đổi hàng">-->
+                                                Đổi/trả <!-- Icon return here -->
+                                            <!--</button>-->
+                                        </a>
                                         <div class="modal-footer">
                                             <button class="btn btn-default" type="submit" name="action" value="UpdateOrder">Cập nhật</button>
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
@@ -354,7 +378,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="button" data-toggle="modal" data-target="#myModal<%=id++%>">Chỉnh sửa</button>
+                        <button class="btn btn-default" type="button" data-toggle="modal" data-target="#myModal<%=id++%>">Chỉnh sửa</button>
 
                     </td>
                     <!--Pop-up lịch sử trạng thái đơn hàng-->
@@ -385,9 +409,19 @@
                                                 <tr>
                                                     <td><%= orderStatus.getStatusName()%></td>
                                                     <td><%= orderStatus.getUpdateDate()%></td>
+                                                    <%
+                                                        if (orderStatus.getUserName() == null){
+                                                    
+                                                    %>
+                                                    <td><%= orderStatus.getUserID()%></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    
+                                                    <%} else {%>
                                                     <td><%= orderStatus.getUserName()%></td>
                                                     <td><%= orderStatus.getUserID()%></td>
                                                     <td><%= orderStatus.getRoleID()%></td>
+                                                    <%}%>
                                                 </tr>
                                                 <%
                                                     }
@@ -403,7 +437,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="button" data-toggle="modal" data-target="#myModal<%=id++%>">Chi tiết</button>
+                        <button class="btn btn-default" type="button" data-toggle="modal" data-target="#myModal<%=id++%>">Chi tiết</button>
                     </td>
                 </tr>
 
@@ -422,7 +456,7 @@
             %>
             <div class="row pagination__option" style="justify-content: center; align-items: center; text-align: center;">
 
-                <%                    int currentPage = (int) request.getAttribute("currentPage");
+                <%                    
                     int noOfPages = (int) request.getAttribute("noOfPages");
                     int noOfPageLinks = 5; // amount of page links to be displayed
                     int minLinkRange = noOfPageLinks / 2; // minimum link range ahead/behind
@@ -475,7 +509,7 @@
                 <%  for (int i = begin; i <= end; i++) {
                         if (currentPage == i) {
                 %>
-                <a class="active" style="background: #000000; color: #ffffff"><%= i%></a>  <!-- There is no active class for pagination (currenly hard code) -->
+                <a class="active" style="background: #b57c68; color: #ffffff"><%= i%></a>  <!-- There is no active class for pagination (currenly hard code) -->
                 <%
                 } else {
                 %>
@@ -554,10 +588,6 @@
             <%                
                 } //end of the "No product" if statement
             %>
-
-
-
-
 
 
         </div>
