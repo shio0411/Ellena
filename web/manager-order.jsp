@@ -91,7 +91,7 @@
             <a href="ManagerStatisticController"><i class="fa fa-bar-chart fa-lg"></i>Số liệu thống kê</a>
             <a href="ManagerShowProductController"><i class="fa fa-archive fa-lg"></i>Quản lí sản phẩm</a>
             <a href="ShowOrderController" style="color: #873e23; font-weight: bold;"><i class="fa fa-cart-plus fa-lg"></i>Quản lí đơn hàng</a>
-            <a href="manager-customer-return-history.jsp"><i class="fa fa-clock-rotate-left"></i>Lịch sử đổi/trả</a>
+            <a href="manager-customer-return-history.jsp"><i class="fa fa-clock-rotate-left fa-lg"></i>Lịch sử đổi/trả</a>
         </div> 
 
         <div class="main">
@@ -413,6 +413,7 @@
                                                     <th>Trạng thái</th>
                                                     <th>Ngày</th>
                                                     <th>Chỉnh sửa bởi</th>
+                                                    <th>Email</th>
                                                     <th>RoleID</th>
                                                 </tr>
                                             </thead>
@@ -423,6 +424,7 @@
                                                 <tr>
                                                     <td><%= orderStatus.getStatusName()%></td>
                                                     <td><%= orderStatus.getUpdateDate()%></td>
+                                                    <td><%= orderStatus.getUserName()%></td>
                                                     <td><%= orderStatus.getUserID()%></td>
                                                     <td><%= orderStatus.getRoleID()%></td>
                                                 </tr>

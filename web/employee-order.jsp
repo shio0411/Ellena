@@ -374,6 +374,7 @@
                                                     <th>Trạng thái</th>
                                                     <th>Ngày</th>
                                                     <th>Chỉnh sửa bởi</th>
+                                                    <th>Email</th>
                                                     <th>RoleID</th>
                                                 </tr>
                                             </thead>
@@ -384,6 +385,7 @@
                                                 <tr>
                                                     <td><%= orderStatus.getStatusName()%></td>
                                                     <td><%= orderStatus.getUpdateDate()%></td>
+                                                    <td><%= orderStatus.getUserName()%></td>
                                                     <td><%= orderStatus.getUserID()%></td>
                                                     <td><%= orderStatus.getRoleID()%></td>
                                                 </tr>

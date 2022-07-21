@@ -10,16 +10,18 @@ public class OrderStatusDTO {
     private String statusName;
     private String userID;
     private String roleID;
+    private String userName;
 
     public OrderStatusDTO() {
     }
 
-    public OrderStatusDTO(int statusID, Timestamp updateDate, String statusName, String userID, String roleID) {
+    public OrderStatusDTO(int statusID, Timestamp updateDate, String statusName, String userID, String roleID, String userName) {
         this.statusID = statusID;
         this.updateDate = updateDate;
         this.statusName = statusName;
         this.userID = userID;
         this.roleID = roleID;
+        this.userName = userName;
     }
 
     public int getStatusID() {
@@ -61,6 +63,14 @@ public class OrderStatusDTO {
 
     public void setRoleID(String roleID) {
         this.roleID = roleID;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
 }

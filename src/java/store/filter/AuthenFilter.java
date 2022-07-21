@@ -161,6 +161,7 @@ public class AuthenFilter implements Filter {
         EMPLOYEE_FUNCTION.add("RefundController");
         EMPLOYEE_FUNCTION.add("UpdateOrderDetailController");
         EMPLOYEE_FUNCTION.add("RefundOrderController");
+        EMPLOYEE_FUNCTION.add("manager-customer-return-history.jsp");
     }
 
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
@@ -253,7 +254,7 @@ public class AuthenFilter implements Filter {
                                 || uri.contains("header.jsp") || uri.contains("new-arrival.jsp") || uri.contains("trend.jsp") || uri.contains("sale-product.jsp") || uri.contains("best-seller.jsp")
                                 || uri.contains("customer-product-details.jsp") || uri.contains("ProductRouteController") || uri.contains("DiscoverController")
                                 || uri.contains("CategoryRouteController") || uri.contains("CheckSizeQuantityController") || uri.contains("discover.jsp")
-                                || uri.contains("search-catalog.jsp") || uri.contains("LoginGoogleController") || uri.contains("LoginFacebookController") || uri.contains("AddToCartController")
+                                || uri.contains("search-catalog.jsp") || uri.contains("LoginGoogleController") || uri.contains("AddToCartController")
                                 || uri.contains("about-us.jsp") || uri.contains("faq.jsp") || uri.contains("choose-size.jsp") || uri.contains("payment-policy.jsp") || uri.contains("return-policy.jsp")
                                 || uri.contains("forgot-password.jsp") || uri.contains("ForgotPasswordController") || uri.contains("validate-otp.jsp") || uri.contains("ValidateOtpController")
                                 || uri.contains("reset-password.jsp") || uri.contains("ResetPasswordController") || uri.contains("LogoutController") 
