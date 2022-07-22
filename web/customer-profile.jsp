@@ -11,7 +11,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Profile của tôi</title>
+        <title>Tài khoản của tôi</title>
         <jsp:include page="meta.jsp" flush="true"/>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -37,7 +37,7 @@
                 <div class="col-md-8 centered">
                     <div class="p-3 py-5">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h4 class="text-right">Profile</h4>
+                            <h4 class="text-right"><b>Tài khoản</b></h4>
                         </div>
 
                         <div class="row mt-4">

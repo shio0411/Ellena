@@ -92,7 +92,7 @@
 
                                             <div class="range-slider">
                                                 <div class="price-input">
-                                                    <p>Price:</p>
+                                                    <p>Khoảng:</p>
                                                     <input type="text" readonly="" id="minamount" name="minAmount">
                                                     <span>₫  - </span>
                                                     <input type="text" readonly="" id="maxamount" name="maxAmount">

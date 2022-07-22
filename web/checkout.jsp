@@ -103,7 +103,7 @@
                         </div>
                         <div class="col-lg-12">
                             <div class="checkout__order">
-                                <h5>Your order</h5>
+                                <h5>Đơn hàng của bạn</h5>
                                 <div class="checkout__order__product">
 
                                     <div class="row product-details" style="padding-top: 20px;">
@@ -139,13 +139,13 @@
 
 
                                         <div class="col-md-2">
-                                            <%= item.getPrice() - item.getDiscount()%>
+                                             <%= (int) (((item.getPrice() - item.getDiscount())) / 1000)%>.000₫
                                         </div>
                                         <div class="col-md-2">
                                             <%= item.getQuantity()%>
                                         </div>
                                         <div class="col-md-2">
-                                            <%= (int) (((item.getPrice() - item.getDiscount()) * item.getQuantity()) / 1000)%>.000
+                                            <%= (int) (((item.getPrice() - item.getDiscount()) * item.getQuantity()) / 1000)%>.000₫
                                         </div>        
 
 
@@ -160,7 +160,7 @@
                                 <div class="checkout__order__total">
                                     <ul>
                                         <li>Subtotal <span></span></li>
-                                        <li>Total <span><%= (int) (total / 1000)%>.000</span></li>
+                                        <li>Total <span><%= (int) (total / 1000)%>.000₫</span></li>
                                         <input type="hidden" name="total" value="<%= ((int) (total / 1000)) * 1000%>"/>
                                         <% session.setAttribute("TOTAL", ((int) (total / 1000)) * 1000); %>
                                     </ul>

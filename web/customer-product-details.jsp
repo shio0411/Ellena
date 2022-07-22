@@ -110,6 +110,13 @@
                 cursor: default;
             }
             
+            input::-webkit-outer-spin-button,
+            input::-webkit-inner-spin-button {
+            /* display: none; <- Crashes Chrome on hover */
+            -webkit-appearance: none;
+            margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+            
         </style>
     </head>
     <body>
@@ -278,6 +285,7 @@
                                                 int k = 1; 
                                                 for (String color : colorList) {
                                             %>
+                                            
                                             <div id="<%=color%>-size" class="tab-pane fade <%if (g == 1) { %> in active <%}%>">
                                                 <form action="AddToCartController" id="get<%=color%>SizeForm">
                                                     <div class="sizes__container">
@@ -306,7 +314,7 @@
                                                         <div class="quantity">
                                                             <span>Số lượng</span>
                                                             <div class="pro-qty">
-                                                                <input class="m-0" name="quantity" id="quantity" type="text" value="1">
+                                                                <input class="m-0" name="quantity" id="quantity" type="number" value="1" min="1">
                                                             </div>
                                                         </div>
                                                         <button type="submit" form="get<%=color%>SizeForm" class="cart-btn" id="add-to-cart-hyperlink">
