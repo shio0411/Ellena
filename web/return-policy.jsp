@@ -65,9 +65,6 @@
                                 -  ELLENA hỗ trợ đổi hàng khi mua trên kênh Online tại bất kỳ cửa hàng nào của  ELLENA: trừ các chi nhánh GIGAMALL THỦ ĐỨC và AEON HẢI PHÒNG
                             </p>
                         </td>
-<!--                        <td style="width:225.0pt;border-top:none;border-left:none;border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:  119.0pt;">
-                            <p>- Hỗ trợ đổi tại bất kỳ cửa hàng nào của  ELLENA: trừ các chi nhánh GIGAMALL THỦ ĐỨC và AEON HẢI PHÒNG - KHÔNG áp dụng đổi bằng hình thức online.</p>
-                        </td>-->
                     </tr>
                     <tr>
                         <td style="width:77.55pt;border:solid #BFBFBF 1.0pt;border-top:none;padding:0cm 5.4pt 0cm 5.4pt;height:80pt;">
@@ -79,12 +76,6 @@
                                 - Giá trị sản phẩm đổi mới phải bằng sản phẩm đã mua.<br>
                             </p>
                         </td>
-<!--                        <td style="width:225.0pt;border-top:none;border-left:none;border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:  120.05pt;">
-                            <p>
-                                - Giá sản phẩm đổi mới được tính theo giá tại thời điểm khách mua hàng.<br>
-                                - Giá trị sản phẩm đổi mới phải bằng sản phẩm đã mua.<br>
-                            </p>
-                        </td>-->
                     </tr>
                     <tr>
                         <td style="width:77.55pt;border:solid #BFBFBF 1.0pt;border-top:none;padding:0cm 5.4pt 0cm 5.4pt;height:  85pt;">
