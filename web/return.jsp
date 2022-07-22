@@ -142,7 +142,7 @@
 
                         <div class="form-outline">
                             <label class="form-label" for="trackingID">Tracking ID</label>
-                            <input type="text" readonly="" name="trackingID" value="<%= order.getTrackingID()%>" id="trackingID" class="form-control form-control-lg" />
+                            <input type="text" readonly="" name="trackingID" <%if (order.getTrackingID() != null){%>value="<%= order.getTrackingID()%>"<%} else {%> value=""  <%}%>  id="trackingID" class="form-control form-control-lg" />
                         </div>
 
                     </div>
