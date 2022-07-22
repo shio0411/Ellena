@@ -54,7 +54,7 @@
                                     </li>
                                     <li>
                                         <h6><i class="fa fa-headphones"></i>Hỗ trợ</h6>
-                                        <p>tongductrung2017@gmail.com</p>
+                                        <p>Support@ellenafashion.com</p>
                                     </li>
                                 </ul>
                             </div>
