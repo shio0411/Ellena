@@ -25,13 +25,30 @@
             String searchValue = request.getAttribute("SEARCH") != null ? (String) request.getAttribute("SEARCH") : "";
             List<UserDTO> userList = (List<UserDTO>) request.getAttribute("USER_LIST");
         %>
-
+        <%
+            if (loginUser.getRoleID().equals("EM")){
+        %>
+        
+        <div class="sidenav">
+            <a href="ShowOrderController"><i class="fa fa-cart-plus fa-lg"></i>Quản lí đơn hàng</a>
+            <a href="https://www.tawk.to/"><i class="fa fa-archive fa-lg"></i>Quản lí Q&A</a>
+            <a href="manager-customer-return-history.jsp" style="color: #873e23; font-weight: bold;"><i class="fa fa-clock-rotate-left fa-lg"></i>Lịch sử đổi/trả</a>
+        </div> 
+        
+        <%
+            } else {
+        %>
+        
         <div class="sidenav">
             <a href="ManagerStatisticController"><i class="fa fa-bar-chart fa-lg"></i>Số liệu thống kê</a>
             <a href="ManagerShowProductController"><i class="fa fa-archive fa-lg"></i>Quản lí sản phẩm</a>
             <a href="ShowOrderController"><i class="fa fa-cart-plus fa-lg"></i>Quản lí đơn hàng</a>
-            <a href="#" style="color: #873e23; font-weight: bold;"><i class="fa fa-clock-rotate-left"></i>Lịch sử đổi/trả</a>
+            <a href="#" style="color: #873e23; font-weight: bold;"><i class="fa fa-clock-rotate-left fa-lg"></i>Lịch sử đổi/trả</a>
         </div> 
+        <%
+            }
+        %>
+        
 
         <div class="main">
              <div class="flex-item text-right" id="manager__header">
