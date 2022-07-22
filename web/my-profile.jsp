@@ -52,14 +52,23 @@
             <a href="ShowManagerController"><i class="fa fa-group fa-lg"></i>Quản lý manager</a>
             <a href="ShowCategoryController"><i class="fa fa-cart-plus fa-lg"></i>Quản lý loại sản phẩm</a>
         </div>
-        <% } else if ("MN".equalsIgnoreCase(loginUser.getRoleID()) || "EM".equalsIgnoreCase(loginUser.getRoleID())) {%>
+        <% } else     if (loginUser.getRoleID().equals("EM")) {    
+        %>
+        
+        <div class="sidenav">
+            <a href="ShowOrderController" style="color: #873e23; font-weight: bold;"><i class="fa fa-cart-plus fa-lg"></i>Quản lí đơn hàng</a>
+            <a href="https://www.tawk.to/"><i class="fa fa-archive fa-lg"></i>Quản lí Q&A</a>
+            <a href="customer-return-history.jsp"><i class="fa fa-clock-rotate-left fa-lg"></i>Lịch sử đổi/trả</a>
+        </div> 
+        
+        <%  } else {%>
         <div class="sidenav">
             <a href="ManagerStatisticController"><i class="fa fa-bar-chart fa-lg"></i>Số liệu thống kê</a>
             <a href="ManagerShowProductController"><i class="fa fa-archive fa-lg"></i>Quản lí sản phẩm</a>
-            <a href="manager-order.jsp"><i class="fa fa-cart-plus fa-lg"></i>Quản lí đơn hàng</a>
+            <a href="ShowOrderController" style="color: #873e23; font-weight: bold;"><i class="fa fa-cart-plus fa-lg"></i>Quản lí đơn hàng</a>
             <a href="manager-customer-return-history.jsp"><i class="fa fa-clock-rotate-left fa-lg"></i>Lịch sử đổi/trả</a>
-        </div>
-        <%}%>
+        </div> 
+        <%  }%>
         <div id="content" class="p-3 px-5 bg-grey">
             <!--WELCOME USER-->
             <div class="flex-item text-right" id="manager__header">
