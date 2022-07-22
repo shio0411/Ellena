@@ -163,6 +163,7 @@ public class AuthenFilter implements Filter {
         EMPLOYEE_FUNCTION.add("RefundOrderController");
         EMPLOYEE_FUNCTION.add("customer-return-history.jsp");
         EMPLOYEE_FUNCTION.add("SearchReturnedHistoryController");
+        EMPLOYEE_FUNCTION.add("my-profile.jsp");
     }
 
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)

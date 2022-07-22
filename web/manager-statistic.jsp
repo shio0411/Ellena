@@ -188,7 +188,7 @@
                         <b>Xin chào, </b>
                         <a  data-toggle="dropdown" role="button"><b class="text-color-dark"><%= loginUser.getFullName()%></b></a>
                         <div  class="dropdown-menu nav-tabs" role="tablist">
-                            <button class="dropdown-item btn" role="tab" type="button"><a class="text-dark" href="my-profile.jsp">Thông tin tài khoản</a></button>
+                            <a class="text-dark" href="my-profile.jsp"><button class="dropdown-item btn" role="tab" type="button">Thông tin tài khoản</button></a>
                             <input class=" dropdown-item btn" type="submit" name="action" value="Logout"/>
                         </div>
                     </h4>
