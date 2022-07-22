@@ -17,11 +17,7 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-        <style>
-            .fa-clock-rotate-left::before {
-                content: "\f1da";
-            }
-        </style>
+         <link rel="stylesheet" href="css/manager.css" type="text/css">
     </head>
     <body>
         <%
@@ -76,10 +72,18 @@
 
         <div class="main">
 
-            <form action="MainController" method="POST" style="margin-left: 65%;">  
-                Xin chào, <a href="my-profile.jsp"><%= loginUser.getFullName()%></a>
-                <input type="submit" name="action" value="Logout" style="margin-left: 4%;">
-            </form>
+             <div class="flex-item text-right" id="manager__header">
+                <form class="m-0" action="MainController" method="POST">  
+                    <h4 class="dropdown">
+                        <b>Xin chào, </b>
+                        <a  data-toggle="dropdown" role="button"><b class="text-color-dark"><%= loginUser.getFullName()%></b></a>
+                        <div  class="dropdown-menu nav-tabs" role="tablist">
+                        <button class="dropdown-item btn" role="tab" type="button"><a class="text-dark" href="my-profile.jsp">Thông tin tài khoản</a></button>
+                        <input class=" dropdown-item btn" type="submit" name="action" value="Logout"/>
+                        </div>
+                    </h4>
+                </form>
+            </div>
             
             <h3>Chọn sản phẩm muốn đổi/trả</h3>
             <div>
@@ -148,6 +152,15 @@
                     </div>
                 </div>
                 <table class="table table-hover table-bordered">
+                    <colgroup>
+                    <col span="1" style="width: 25%;">
+                    <col span="1" style="width: 12%;">
+                    <col span="1" style="width: 12%;">
+                    <col span="1" style="width: 12%;">
+                    <col span="1" style="width: 12%;">
+                    <col span="1" style="width: 14%;">
+                    <col span="1" style="width: 14%;">
+                </colgroup>
                     <thead>
                         <tr style="background-color: #b57c68">
                             <th>Sản phẩm</th>
@@ -172,9 +185,9 @@
                                 <%
                                     if (productList.get(count).getPrice() != orderDetail.getPrice()) {
                                 %>
-                                <s><%= productList.get(count).getPrice()%></s><br>
+                                <s><%= productList.get(count).getPrice()%>₫</s><br>
                                     <%}%>
-                                    <%= orderDetail.getPrice()%>
+                                    <%= orderDetail.getPrice()%>₫
                             </td>
                             <td><%= orderDetail.getQuantity()%></td>
                             <td><%= orderDetail.getColor()%></td>
@@ -252,7 +265,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button type="button" data-toggle="modal" data-target="#myModal<%=id++%>">Chi tiết</button>
+                                <button class="btn btn-default" type="button" data-toggle="modal" data-target="#myModal<%=id++%>">Chi tiết</button>
                             </td>
                             <!--Pop-up trả hàng-->
                             <td>
@@ -301,7 +314,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button type="button" data-toggle="modal" data-target="#myModal<%=id++%>">Chi tiết</button>
+                                <button class="btn btn-default" type="button" data-toggle="modal" data-target="#myModal<%=id++%>">Chi tiết</button>
                             </td>
                         </tr>
 
@@ -337,7 +350,7 @@
 
                     <tr>
                         <td><%= returnDTO.getProductName()%></td>
-                        <td><%= returnDTO.getPrice()%></td>
+                        <td><%= returnDTO.getPrice()%>₫</td>
                         <td><%= returnDTO.getReturnQuantity()%></td>
                         <td><%= returnDTO.getColor()%></td>
                         <td><%= returnDTO.getSize()%></td>

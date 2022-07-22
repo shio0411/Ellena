@@ -176,7 +176,7 @@
 
                           
 
-                            <button style="border: none; background: none;" type="submit" name="action" value="filter-all-products">Filter</button>
+                            <button class="site-btn" type="submit" name="action" value="filter-all-products">Lọc</button>
 
                             <!--switch to SearchController page count after submit form-->
                             <%                                searchAll = (boolean) request.getAttribute("SWITCH_SEARCH");

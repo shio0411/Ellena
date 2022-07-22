@@ -82,7 +82,7 @@
                                 <h5 class="card-header p-3">
                                     Mã đơn hàng: <%=order.getKey().getOrderID()%>
                                     <% if ("Chưa xác nhận".equalsIgnoreCase(order.getKey().getStatusName())) {%>
-                                    <button type="button" class="primary-btn" style="float: right; padding: 12px 15px 10px; text-align: center; font-weight: 600" data-toggle="modal" data-target="#<%=order.getKey().getOrderID()%>Modal">HUỶ ĐƠN HÀNG</button>
+                                    <button type="button" class="btn btn-danger" style="float: right; padding: 12px 15px 8px; text-align: center; font-weight: 600" data-toggle="modal" data-target="#<%=order.getKey().getOrderID()%>Modal">HUỶ ĐƠN HÀNG</button>
                                     <div class="modal fade" id="<%=order.getKey().getOrderID()%>Modal" role="dialog">
                                         <div class="modal-dialog">
                                             <!-- Modal content-->

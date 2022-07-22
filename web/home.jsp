@@ -20,6 +20,9 @@
     <!-- Css Styles -->
     <jsp:include page="meta.jsp" flush="true"/>
     <jsp:include page="js-plugins.jsp" flush="true" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     
 </head>
 
@@ -42,7 +45,7 @@
                             <h1>Enrich The Beauty</h1>
                             Khám phá bộ sưu tập mới nhất của chúng tôi
                             <p style="font-weight: bold;">The Ellena Project</p>
-                            <a href="DiscoverController">Shop now</a>
+                            <a href="DiscoverController">Mua ngay</a>
                         </div>
                     </div>
                 </div>
@@ -53,7 +56,7 @@
                                 <div class="categories__text">
                                     <h4>Nổi Bật</h4>
                                     <p><%=trendList.size()%> sản phẩm</p>
-                                    <a href="trend.jsp">Shop now</a>
+                                    <a href="trend.jsp">Mua ngay</a>
                                 </div>
                             </div>
                         </div>
@@ -62,7 +65,7 @@
                                 <div class="categories__text">
                                     <h4>Bán Chạy Nhất</h4>
                                     <p><%=bestSellerList.size()%> sản phẩm</p>
-                                    <a href="best-seller.jsp">Shop now</a>
+                                    <a href="best-seller.jsp">Mua ngay</a>
                                 </div>
                             </div>
                         </div>
@@ -71,7 +74,7 @@
                                 <div class="categories__text">
                                     <h4>Mới về</h4>
                                     <p><%=newArrivalList.size()%> sản phẩm</p>
-                                    <a href="new-arrival.jsp">Shop now</a>
+                                    <a href="new-arrival.jsp">Mua ngay</a>
                                 </div>
                             </div>
                         </div>
@@ -80,7 +83,7 @@
                                 <div class="categories__text">
                                     <h4>Khuyến Mãi</h4>
                                     <p><%=saleList.size()%> sản phẩm</p>
-                                    <a href="sale-product.jsp">Shop now</a>
+                                    <a href="sale-product.jsp">Mua ngay</a>
                                 </div>
                             </div>
                         </div>
@@ -204,23 +207,23 @@
                     <div class="banner__slider owl-carousel">
                         <div class="banner__item">
                             <div class="banner__text">
-                                <span>The Chloe Collection</span>
-                                <h1>The Project Jacket</h1>
-                                <a href="#">Shop now</a>
+                                <span>Summer sale</span>
+                                <h1>Ưu đãi lên đến 50%</h1>
+                                <a href="sale-product.jsp">Mua ngay</a>
                             </div>
                         </div>
                         <div class="banner__item">
                             <div class="banner__text">
-                                <span>The Chloe Collection</span>
-                                <h1>The Project Jacket</h1>
-                                <a href="#">Shop now</a>
+                                <span>Happy Daily</span>
+                                <h1>Chỉ từ 99k </h1>
+                                <a href="CategoryRouteController?category=Áo%20thun">Mua ngay</a>
                             </div>
                         </div>
                         <div class="banner__item">
                             <div class="banner__text">
-                                <span>The Chloe Collection</span>
-                                <h1>The Project Jacket</h1>
-                                <a href="#">Shop now</a>
+                                <span>Ellena Basic</span>
+                                <h1>Good mood, good day</h1>
+                                
                             </div>
                         </div>
                     </div>

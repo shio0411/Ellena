@@ -20,11 +20,7 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-        <style>
-            .fa-clock-rotate-left::before {
-                content: "\f1da";
-            }
-        </style>
+        <link rel="stylesheet" href="css/manager.css" type="text/css">
     </head>
     <body>
         <%
@@ -364,9 +360,9 @@
                                         <input type="hidden" name="dateFrom" id="update-dateFrom" value="<%= dateFrom%>"/>
                                         <input type="hidden" name="dateTo" id="update-dateTo" value="<%= dateTo%>"/>
                                         <input type="hidden" name="search-statusID" id="update-statusID" value="<%= sOrderStatusID%>"/>
-                                        <a href="ReturnController?orderID=<%= order.getOrderID()%>">
+                                        <a class="ml-4 btn btn-secondary" href="ReturnController?orderID=<%= order.getOrderID()%>">
                                             <!--<button class="btn btn-secondary" data-toggle="tooltip" data-html="true" title="Đổi hàng">-->
-                                                Đổi/trả <!-- Icon return here -->
+                                                Đổi / trả <!-- Icon return here -->
                                             <!--</button>-->
                                         </a>
                                         <div class="modal-footer">
