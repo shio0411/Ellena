@@ -285,8 +285,7 @@
                                                 int k = 1; 
                                                 for (String color : colorList) {
                                             %>
-                                            
-                                            <div id="<%=color%>-size" class="tab-pane fade <%if (g == 1) { %> in active <%}%>">
+                                            <div id="<%=color%>-size" class="tab-pane <%if (g == 1) { %> in active <%}%>">
                                                 <form action="AddToCartController" id="get<%=color%>SizeForm">
                                                     <div class="sizes__container">
                                                         <input type="hidden" name="color" value="<%=color%>"/>
@@ -366,9 +365,9 @@
                                         <% for (int t = 1; t <= rating.getStar(); t++) { %>
                                         <i class="fa fa-star"></i>
                                         <%}
-                                            if (averageStar != 5) {
+                                            if (rating.getStar() != 5) {
 
-                                                for (int a = 0; a < 5 - averageStar; a++) {
+                                                for (int a = 0; a < 5 - rating.getStar(); a++) {
                                         %>
                                         <i class="fa fa-star-o"></i>
                                         <%}

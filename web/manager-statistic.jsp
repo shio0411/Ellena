@@ -174,7 +174,7 @@
             <a class="pt-5" href="ManagerStatisticController" style="color: #873e23; font-weight: bold;"><i style="color: #873e23;" class="fa fa-bar-chart fa-lg"></i>Số liệu thống kê</a>
             <a href="ManagerShowProductController"><i class="fa fa-archive fa-lg"></i>Quản lí sản phẩm</a>
             <a href="ShowOrderController"><i class="fa fa-cart-plus fa-lg"></i>Quản lí đơn hàng</a>
-            <a href="manager-customer-return-history.jsp"><i class="fa fa-clock-rotate-left fa-lg"></i>Lịch sử đổi/trả</a>
+            <a href="customer-return-history.jsp"><i class="fa fa-clock-rotate-left fa-lg"></i>Lịch sử đổi/trả</a>
         </nav>
         
         <%
@@ -188,7 +188,7 @@
                         <b>Xin chào, </b>
                         <a  data-toggle="dropdown" role="button"><b class="text-color-dark"><%= loginUser.getFullName()%></b></a>
                         <div  class="dropdown-menu nav-tabs" role="tablist">
-                            <button class="dropdown-item btn" role="tab" type="button"><a class="text-dark" href="my-profile.jsp">Thông tin tài khoản</a></button>
+                            <a class="text-dark" href="my-profile.jsp"><button class="dropdown-item btn" role="tab" type="button">Thông tin tài khoản</button></a>
                             <input class=" dropdown-item btn" type="submit" name="action" value="Logout"/>
                         </div>
                     </h4>

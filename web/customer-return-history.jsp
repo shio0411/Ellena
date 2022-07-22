@@ -1,3 +1,4 @@
+<%@page import="store.shopping.ReturnDTO"%>
 <%@page import="store.shopping.OrderDetailDTO"%>
 <%@page import="java.util.Map"%>
 <%@page import="store.shopping.OrderStatusDTO"%>
@@ -15,7 +16,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="css/manager.css" type="text/css">
-        
+
     </head>
     <body>
 
@@ -26,19 +27,19 @@
             List<UserDTO> userList = (List<UserDTO>) request.getAttribute("USER_LIST");
         %>
         <%
-            if (loginUser.getRoleID().equals("EM")){
+            if (loginUser.getRoleID().equals("EM")) {
         %>
-        
+
         <div class="sidenav">
             <a href="ShowOrderController"><i class="fa fa-cart-plus fa-lg"></i>Quản lí đơn hàng</a>
             <a href="https://www.tawk.to/"><i class="fa fa-archive fa-lg"></i>Quản lí Q&A</a>
-            <a href="manager-customer-return-history.jsp" style="color: #873e23; font-weight: bold;"><i class="fa fa-clock-rotate-left fa-lg"></i>Lịch sử đổi/trả</a>
+            <a href="customer-return-history.jsp" style="color: #873e23; font-weight: bold;"><i class="fa fa-clock-rotate-left fa-lg"></i>Lịch sử đổi/trả</a>
         </div> 
-        
+
         <%
-            } else {
+        } else {
         %>
-        
+
         <div class="sidenav">
             <a href="ManagerStatisticController"><i class="fa fa-bar-chart fa-lg"></i>Số liệu thống kê</a>
             <a href="ManagerShowProductController"><i class="fa fa-archive fa-lg"></i>Quản lí sản phẩm</a>
@@ -48,17 +49,17 @@
         <%
             }
         %>
-        
+
 
         <div class="main">
-             <div class="flex-item text-right" id="manager__header">
+            <div class="flex-item text-right" id="manager__header">
                 <form class="m-0" action="MainController" method="POST">  
                     <h4 class="dropdown">
                         <b>Xin chào, </b>
-                            <a  data-toggle="dropdown" role="button"><b class="text-color-dark"><%= loginUser.getFullName()%></b></a>
+                        <a  data-toggle="dropdown" role="button"><b class="text-color-dark"><%= loginUser.getFullName()%></b></a>
                         <div  class="dropdown-menu nav-tabs" role="tablist">
-                        <button class="dropdown-item btn" role="tab" type="button"><a class="text-dark" href="my-profile.jsp">Thông tin tài khoản</a></button>
-                        <input class=" dropdown-item btn" type="submit" name="action" value="Logout"/>
+                            <button class="dropdown-item btn" role="tab" type="button"><a class="text-dark" href="my-profile.jsp">Thông tin tài khoản</a></button>
+                            <input class=" dropdown-item btn" type="submit" name="action" value="Logout"/>
                         </div>
                     </h4>
                 </form>
@@ -72,6 +73,7 @@
 
             <%
                 Map<UserDTO, List<OrderDTO>> map = (Map<UserDTO, List<OrderDTO>>) request.getAttribute("RETURNED_ORDERS");
+                Map<OrderDTO, List<ReturnDTO>> returnMap = (Map<OrderDTO, List<ReturnDTO>>) request.getAttribute("RETURNED_HISTORY");
                 if (userList != null) {
                     if (userList.size() > 0) {
                         int id = 1;
@@ -87,14 +89,14 @@
                         <input type="text" readonly="" name="fullname" value="<%= user.getFullName()%>" id="fullname" class="form-control form-control-lg" />
                     </div>
                 </div>
-                    
+
                 <div class="col-md-5 mb-4 pb-2">
                     <div class="form-outline">
                         <label class="form-label" for="userID">Email</label>
                         <input type="text" readonly="" name="userID" value="<%= user.getUserID()%>" id="userID" class="form-control form-control-lg" />
                     </div>
                 </div>
-                
+
                 <div class="col-md-2 mb-4 pb-2">
                     <div class="form-outline">
                         <label class="form-label" for="sex">Giới tính</label>
@@ -113,18 +115,22 @@
                         <input type="text" readonly="" name="phone" value="<%= user.getPhone()%>" id="phone" class="form-control form-control-lg" />
                     </div>
                 </div>
-                
+
             </div>
             <%
-                
-                
+
                 List<OrderDTO> listOrder = map.get(user);
+
                 if (listOrder != null) {
                     if (listOrder.size() > 0) {
 
 
             %>
 
+
+
+            <%                for (OrderDTO order : listOrder) {
+            %>
             <table class="table table-hover table-bordered">
                 <colgroup>
                     <col span="1" style="width: 5%;">
@@ -144,11 +150,6 @@
                     <th>Chi tiết đơn hàng</th>
                     <th>Trạng thái đơn hàng</th>
                 </tr>
-
-                <%            
-                    for (OrderDTO order : listOrder) {
-                %>
-
                 <tr>
                     <td style="font-weight: bold"><%= order.getOrderID()%></td>
                     <td><%= order.getOrderDate()%></td>
@@ -348,7 +349,7 @@
                                                 </tbody>
                                             </table>
                                         </div>
-                                        
+
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
                                         </div>
@@ -407,23 +408,65 @@
                         <button class="btn btn-default" type="button" data-toggle="modal" data-target="#myModal<%=id++%>">Chi tiết</button>
                     </td>
                 </tr>
+            </table>
+            <%
+                List<ReturnDTO> returnHistory = returnMap.get(order);
+            %>
+            <h5>Lịch sử đổi/trả: </h5>
+            <table class="table table-hover table-bordered">
+                <thead>
+                    <tr style="background-color: #b57c68">
+                        <th>Sản phẩm</th>
+                        <th>Đơn giá</th>
+                        <th>Số lượng</th>
+                        <th>Màu</th>
+                        <th>Size</th>
+                        <th>Ghi chú</th>
+                        <th>Đổi/trả</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%
+                        for (ReturnDTO returnDTO : returnHistory) {
+                    %>
 
-                <%
+
+                    <tr>
+                        <td><%= returnDTO.getProductName()%></td>
+                        <td><%= returnDTO.getPrice()%></td>
+                        <td><%= returnDTO.getReturnQuantity()%></td>
+                        <td><%= returnDTO.getColor()%></td>
+                        <td><%= returnDTO.getSize()%></td>
+                        <td><%= returnDTO.getNote()%></td>
+                        <td><%= returnDTO.getReturnType()%></td>
+                    </tr>
+
+                    <%
                         }
+                    %>
+                </tbody>
+            </table>
+            <%                   
+                
+
+                }
+            %>
+
+
+            <%
                     }
                 }
-                %>
-            </table>
+            %>
 
             <%          }
-                    } 
+                    }
                 }
 
             %>
             ${requestScope.MESSAGE}
-            
-            
-            
+
+
+
         </div>
 
         <script>

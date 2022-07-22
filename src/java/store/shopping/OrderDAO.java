@@ -964,7 +964,7 @@ public class OrderDAO {
                     List<OrderDetailDTO> orderDetail = getOrderDetail(orderID);
                     List<OrderStatusDTO> orderStatus = getUpdateStatusHistory(orderID);
 
-                    order = new OrderDTO(orderID, orderDate, total, userName, userID, statusID, statusName, payType, trackingID, fullName, address, phone, email, note, transactionNumber, orderDetail, orderStatus);
+                    order = new OrderDTO(orderID, orderDate, total, userID, userName, statusID, statusName, payType, trackingID, fullName, address, phone, email, note, transactionNumber, orderDetail, orderStatus);
                 }
             }
         } catch (Exception e) {

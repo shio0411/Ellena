@@ -128,7 +128,7 @@ public class CheckoutController extends HttpServlet {
                                 check = false;
                                 orderError.setEmail("Email quý khách nhập không hợp lệ!");
                             }
-
+                            c = cdao.getCartByUserID(user.getUserID());
                             OrderDTO order = new OrderDTO(Date.valueOf(LocalDate.now()), total, user.getUserID(), 1, "Chưa xác nhận", c.getPayType(), c.getFullName(), session.getAttribute("ADDRESS").toString(), c.getPhone(), c.getEmail(), c.getNote(), transactionNumber);
                             // check quantity and status
                             boolean checkQuantity = true;

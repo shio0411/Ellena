@@ -135,7 +135,7 @@ public class AuthenFilter implements Filter {
 //        MANAGER_FUNCTION.add("RefundController");
         MANAGER_FUNCTION.add("UpdateOrderDetailController");
         MANAGER_FUNCTION.add("RefundOrderController");
-        MANAGER_FUNCTION.add("manager-customer-return-history.jsp");
+        MANAGER_FUNCTION.add("customer-return-history.jsp");
         MANAGER_FUNCTION.add("SearchReturnedHistoryController");
         MANAGER_FUNCTION.add("ManagerSearchProductController");
         MANAGER_FUNCTION.add("ManagerUpdateProductController");
@@ -161,7 +161,9 @@ public class AuthenFilter implements Filter {
         EMPLOYEE_FUNCTION.add("RefundController");
         EMPLOYEE_FUNCTION.add("UpdateOrderDetailController");
         EMPLOYEE_FUNCTION.add("RefundOrderController");
-        EMPLOYEE_FUNCTION.add("manager-customer-return-history.jsp");
+        EMPLOYEE_FUNCTION.add("customer-return-history.jsp");
+        EMPLOYEE_FUNCTION.add("SearchReturnedHistoryController");
+        EMPLOYEE_FUNCTION.add("my-profile.jsp");
     }
 
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)

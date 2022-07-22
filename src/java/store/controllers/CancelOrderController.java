@@ -51,7 +51,7 @@ public class CancelOrderController extends HttpServlet {
             OrderDAO dao = new OrderDAO();
             OrderDTO order = dao.getOrder(orderID);
 
-            if (order.getUserID().equalsIgnoreCase(user.getUserID())) {
+            if (order.getUserID().trim().equalsIgnoreCase(user.getUserID())) {
                 boolean check;
                 String payType = request.getParameter("payType");
                 if ("COD".equals(payType)) {
