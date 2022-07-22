@@ -425,7 +425,7 @@
                 List<ReturnDTO> returnHistory = returnMap.get(order);
             %>
             <h5><b>Lịch sử đổi/trả: </b></h5>
-            <table class="table table-hover table-responsive">
+            <table class="table table-hover">
                 <thead>
                     <tr style="background-color: #b57c68">
                         <th>Sản phẩm</th>

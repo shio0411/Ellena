@@ -121,8 +121,10 @@
                                         </div>
 
                                         <%  int total = 0;
+                                            int subtotal = 0;
                                             for (CartProduct item : cart) {
                                                 total += (item.getPrice()  - item.getDiscount()) * item.getQuantity();
+                                                subtotal += item.getPrice() * item.getQuantity();
                                         %>
                                         <div class="col-md-6" style="margin-bottom: 10px;">
                                             <div class="row">
@@ -159,8 +161,15 @@
                                 </div>
                                 <div class="checkout__order__total">
                                     <ul>
-                                        <li>Subtotal <span></span></li>
-                                        <li>Total <span><%= (int) (total / 1000)%>.000</span></li>
+                                <%  
+                                    if (subtotal > total) {
+                                %>
+                                        <li>Tổng tiền hàng <span><%= (int) (subtotal / 1000)%>.000₫ </span></li>
+                                        <li>Giảm giá <span>-<%= (int) ((subtotal - total) / 1000)%>.000₫ </span></li>
+                                <%  }%>
+                                        <li>Tổng thanh toán 
+                                            <span><%= (int) (total / 1000)%>.000₫ </span>
+                                        </li>
                                         <input type="hidden" name="total" value="<%= ((int) (total / 1000)) * 1000%>"/>
                                         <% session.setAttribute("TOTAL", ((int) (total / 1000)) * 1000); %>
                                     </ul>

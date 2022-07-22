@@ -184,8 +184,12 @@
                         <div class="cart__total__procced">
                             <h6>Tổng thanh toán</h6>
                             <ul>
+                            <%  
+                                if (subtotal > total) {
+                            %>
                                 <li>Tổng tiền hàng <span><%= (int) (subtotal / 1000)%>.000₫ </span></li>
                                 <li>Giảm giá <span>-<%= (int) ((subtotal - total) / 1000)%>.000₫ </span></li>
+                            <%}%>
                                 <li>Tổng thanh toán 
                                     <span><%= (int) (total / 1000)%>.000₫ </span>
                                 </li>
