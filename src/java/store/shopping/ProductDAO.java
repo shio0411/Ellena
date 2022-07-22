@@ -536,6 +536,7 @@ public class ProductDAO {
                     colorSizeQuantity.put(Arrays.asList(color, size), quantity);
 
                 }
+                if(!productName.equals(""))
                 product = new ProductDTO(productID, productName, description, colorImage, colorSizeQuantity, price, price, discount, lowStockLimit, categoryName, status);
             }
         } catch (Exception e) {
