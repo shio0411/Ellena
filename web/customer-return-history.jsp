@@ -131,7 +131,7 @@
 
             <%                for (OrderDTO order : listOrder) {
             %>
-            <table class="table table-hover table-bordered table-responsive">
+            <table class="table table-hover table-responsive">
                 <colgroup>
                     <col span="1" style="width: 5%;">
                     <col span="1" style="width: 12%;">
@@ -425,7 +425,7 @@
                 List<ReturnDTO> returnHistory = returnMap.get(order);
             %>
             <h5><b>Lịch sử đổi/trả: </b></h5>
-            <table class="table table-hover table-bordered table-responsive">
+            <table class="table table-hover table-responsive">
                 <thead>
                     <tr style="background-color: #b57c68">
                         <th>Sản phẩm</th>
