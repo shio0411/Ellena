@@ -215,14 +215,14 @@
                         <div class="banner__item">
                             <div class="banner__text">
                                 <span>Happy Daily</span>
-                                <h1>Good mood, good day </h1>
+                                <h1>Chỉ từ 99k </h1>
                                 <a href="CategoryRouteController?category=Áo%20thun">Mua ngay</a>
                             </div>
                         </div>
                         <div class="banner__item">
                             <div class="banner__text">
                                 <span>Ellena Basic</span>
-                                <h1>Be woman, be fashion</h1>
+                                <h1>Good mood, good day</h1>
                                 
                             </div>
                         </div>

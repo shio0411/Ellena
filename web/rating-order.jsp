@@ -17,7 +17,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Đánh giá sản phẩm</title>
+        <title>Rating Order Page</title>
 
         <!-- Google Font -->
         <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
@@ -57,9 +57,9 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="breadcrumb__links">
-                            <a href="./"><i class="fa fa-home"></i> Trang chủ</a>
-                            <a href="MainController?action=ViewOrderHistory&userID=<%=user.getUserID()%>"> Lịch sử mua hàng</a>
-                            <span> Đánh giá sản phẩm</span>
+                            <a href="./"><i class="fa fa-home"></i> Home</a>
+                            <a href="MainController?action=ViewOrderHistory&userID=<%=user.getUserID()%>"> Order History</a>
+                            <span> Rating Order</span>
                         </div>
                     </div>
                 </div>

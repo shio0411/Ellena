@@ -58,7 +58,7 @@
 
                                             <div class="range-slider">
                                                 <div class="price-input">
-                                                    <p>Khoảng:</p>
+                                                    <p>Price:</p>
                                                     <input type="text" readonly="" id="minamount" name="minAmount">
                                                     <span>₫  - </span>
                                                     <input type="text" readonly="" id="maxamount" name="maxAmount">
@@ -71,7 +71,7 @@
                                 </div>
                                 <div class="sidebar__sizes">
                                     <div class="section-title">
-                                        <h4>Màu sắc</h4>
+                                        <h4>Kích cỡ</h4>
                                     </div>
                                     <div>
                                         <ul id="filters" style="list-style: none;">

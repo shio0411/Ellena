@@ -32,18 +32,6 @@
         <%
         List<ProductDTO> saleList = (List<ProductDTO>) session.getAttribute("SALE_LIST");
     %>
-    <div class="breadcrumb-option">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="breadcrumb__links">
-                            <a href="./"><i class="fa fa-home"></i> Trang chủ</a>
-                            <span>Khuyến mãi</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
      <section class="product spad">
         <div class="container">
             <div class="row">

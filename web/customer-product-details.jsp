@@ -110,13 +110,6 @@
                 cursor: default;
             }
             
-            input::-webkit-outer-spin-button,
-            input::-webkit-inner-spin-button {
-            /* display: none; <- Crashes Chrome on hover */
-            -webkit-appearance: none;
-            margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
-}
-            
         </style>
     </head>
     <body>
@@ -285,7 +278,11 @@
                                                 int k = 1; 
                                                 for (String color : colorList) {
                                             %>
+<<<<<<< HEAD
                                             <div id="<%=color%>-size" class="tab-pane <%if (g == 1) { %> in active <%}%>">
+=======
+                                            <div id="<%=color%>-size" class="tab-pane fade <%if (g == 1) { %> in active <%}%>">
+>>>>>>> parent of 14a896f (Fix Product Quantity Input & Banner)
                                                 <form action="AddToCartController" id="get<%=color%>SizeForm">
                                                     <div class="sizes__container">
                                                         <input type="hidden" name="color" value="<%=color%>"/>
@@ -313,7 +310,7 @@
                                                         <div class="quantity">
                                                             <span>Số lượng</span>
                                                             <div class="pro-qty">
-                                                                <input class="m-0" name="quantity" id="quantity" type="number" value="1" min="1">
+                                                                <input class="m-0" name="quantity" id="quantity" type="text" value="1">
                                                             </div>
                                                         </div>
                                                         <button type="submit" form="get<%=color%>SizeForm" class="cart-btn" id="add-to-cart-hyperlink">

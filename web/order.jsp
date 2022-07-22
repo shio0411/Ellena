@@ -103,8 +103,8 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="breadcrumb__links">
-                            <a href="./index.html"><i class="fa fa-home"></i> Trang chủ</a>
-                            <span>Chi tiết đơn hàng</span>
+                            <a href="./index.html"><i class="fa fa-home"></i> Home</a>
+                            <span>Shopping cart</span>
                         </div>
                     </div>
                 </div>
@@ -203,14 +203,14 @@
                                         </td>
 
                                         <td class="cart__price">
-                                            <%= orderDetail.getPrice() / 1000%>.000₫
+                                            <%= orderDetail.getPrice() / 1000%>.000
                                         </td>
                                         <%}%>
                                     <tr>
                                         <td></td>
 
 
-                                        <td colspan="2" class="cart__total" style="font-size: 24px">Tổng: <%= (int) (order.getKey().getTotal()) / 1000%>.000₫</td>
+                                        <td colspan="2" class="cart__total" style="font-size: 24px">Tổng: <%= (int) (order.getKey().getTotal()) / 1000%>.000</td>
                                     </tr>
                                     </tr>
                                 </tbody>

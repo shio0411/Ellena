@@ -35,7 +35,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="breadcrumb__links">
-                            <a href="./"><i class="fa fa-home"></i> Trang chủ</a>
+                            <a href="./"><i class="fa fa-home"></i> Home</a>
                             <span>Nổi bật</span>
                         </div>
                     </div>
