@@ -45,6 +45,7 @@
                 <% for(ProductDTO product : saleList){
                     
                     %>
+                    
                 <div class="col-lg-3 col-md-4 col-sm-6 mix">
                     <div class="product__item">
                         <div class="product__item__pic set-bg">
@@ -58,7 +59,9 @@
                                         for (String img : product.getColorImage().get("key")) {
                                     %>
                                     <div class="carousel-item">
+                                        <a href="ProductRouteController?productID=<%=product.getProductID()%>">
                                         <img class="d-block" src="<%=img%>">
+                                        </a>
                                     </div>
                                     <%
                                         }
@@ -75,7 +78,9 @@
                               </div>
                                   <%}else{
                                   %>
+                                  <a href="ProductRouteController?productID=<%=product.getProductID()%>">
                                   <img src="<%=product.getColorImage().get("key").get(0)%>">
+                                  </a>
                                   <%
                                    }
                                   %>
@@ -109,6 +114,7 @@
                         </div>
                     </div>
                 </div>
+                    
                 <%}%>
             </div>
         </div>

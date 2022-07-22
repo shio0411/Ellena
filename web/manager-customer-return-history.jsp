@@ -14,11 +14,8 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-        <style>
-            .fa-clock-rotate-left::before {
-                content: "\f1da";
-            }
-        </style>
+        <link rel="stylesheet" href="css/manager.css" type="text/css">
+        
     </head>
     <body>
 
@@ -37,15 +34,23 @@
         </div> 
 
         <div class="main">
-            <form action="MainController" method="POST" style="margin-left: 65%;">  
-                Xin chào, <a href="my-profile.jsp"><%= loginUser.getFullName()%></a>
-                <input type="submit" name="action" value="Logout" style="margin-left: 4%;">
-            </form>
+             <div class="flex-item text-right" id="manager__header">
+                <form class="m-0" action="MainController" method="POST">  
+                    <h4 class="dropdown">
+                        <b>Xin chào, </b>
+                            <a  data-toggle="dropdown" role="button"><b class="text-color-dark"><%= loginUser.getFullName()%></b></a>
+                        <div  class="dropdown-menu nav-tabs" role="tablist">
+                        <button class="dropdown-item btn" role="tab" type="button"><a class="text-dark" href="my-profile.jsp">Thông tin tài khoản</a></button>
+                        <input class=" dropdown-item btn" type="submit" name="action" value="Logout"/>
+                        </div>
+                    </h4>
+                </form>
+            </div>
 
-            <h3>Lịch sử đổi/trả</h3>
+            <h2><b>Lịch sử đổi/trả</b></h2>
             <form action="MainController" method="POST">
                 <input type="text" name="search" value="<%= searchValue%>" id="search-search" placeholder="Nhập tên khách hàng/email/số điện thoại" style="width: 40%;">
-                <button type="submit" name="action" value="SearchReturnedHistory" class="btn-outline-dark" style="width: 15%; padding: 0.5% 0.1%;"><i class="fa fa-search fa-lg"></i>Search</button>
+                <button type="submit" name="action" value="SearchReturnedHistory" class="btn btn-default" style="width: 15%; padding: 0.5% 0.1%;"><i class="fa fa-search fa-lg"></i>Search</button>
             </form>
 
             <%
@@ -104,6 +109,15 @@
             %>
 
             <table class="table table-hover table-bordered">
+                <colgroup>
+                    <col span="1" style="width: 5%;">
+                    <col span="1" style="width: 12%;">
+                    <col span="1" style="width: 12%;">
+                    <col span="1" style="width: 35%;">
+                    <col span="1" style="width: 10%;">
+                    <col span="1" style="width: 10%;">
+                    <col span="1" style="width: 10%;">
+                </colgroup>
                 <tr style="background-color: #b57c68">
                     <th>ID</th>
                     <th>Ngày đặt hàng</th>                
@@ -326,7 +340,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="button" data-toggle="modal" data-target="#myModal<%=id++%>">Chi tiết</button>
+                        <button class="btn btn-default" type="button" data-toggle="modal" data-target="#myModal<%=id++%>">Chi tiết</button>
 
                     </td>
                     <!--Pop-up lịch sử trạng thái đơn hàng-->
@@ -373,7 +387,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="button" data-toggle="modal" data-target="#myModal<%=id++%>">Chi tiết</button>
+                        <button class="btn btn-default" type="button" data-toggle="modal" data-target="#myModal<%=id++%>">Chi tiết</button>
                     </td>
                 </tr>
 

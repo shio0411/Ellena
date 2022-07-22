@@ -60,7 +60,9 @@
                                                 <div class="price-input">
                                                     <p>Price:</p>
                                                     <input type="text" readonly="" id="minamount" name="minAmount">
+                                                    <span>₫  - </span>
                                                     <input type="text" readonly="" id="maxamount" name="maxAmount">
+                                                    <span>₫</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -139,7 +141,7 @@
                                 </div>
                              
                                 </div>
-                            <a><button style="border: none; background: none;" type="submit" name="action" value="filter-in-category">Filter</button></a>
+                            <a><button class="site-btn" type="submit" name="action" value="filter-in-category">Lọc</button></a>
                             </form>
                         </div>
                         <%
@@ -157,6 +159,7 @@
                                             colorSize = key.next();
                                         }
                                 %>
+                                
                                 <div class="col-lg-4 col-md-6 mix <%for (String s : colorSize) {%><%= s.replaceAll("\\s", "") %> <%}%>">
                                     <div class="product__item">
                                         <div class="product__item__pic set-bg">
@@ -169,7 +172,9 @@
                                                         for (String img : product.getColorImage().get("key")) {
                                                     %>
                                                     <div class="carousel-item">
+                                                        <a href="ProductRouteController?productID=<%=product.getProductID()%>">
                                                         <img class="d-block" src="<%=img%>">
+                                                        </a>
                                                     </div>
                                                     <%
                                                         }
@@ -186,7 +191,9 @@
                                             </div>
                                             <%} else {
                                             %>
+                                            <a href="ProductRouteController?productID=<%=product.getProductID()%>">
                                             <img src="<%=product.getColorImage().get("key").get(0)%>">
+                                            </a>
                                             <%
                                                 }
                                             %>
@@ -222,6 +229,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                
                                 <%}
                                 } else {%>
                                 <div>Không có kết quả tìm kiếm.</div>

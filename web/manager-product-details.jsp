@@ -108,7 +108,7 @@
                 %>
                 
                 <form class="mt-0 mb-4" action="ManagerUpdateProductController" method="POST" >
-                    <label class="h2 h2 form-label" for="productDetail">Chi tiết sản phẩm</label> <br/>
+                    <label class="h2 h2 form-label" for="productDetail"><b>Chi tiết sản phẩm</b></label> <br/>
                     <div class="row">
                         <div class="col-md-6 mb-4">
 
@@ -193,7 +193,7 @@
                             </div> 
                         </div>
                     </div>
-                            <button class="btn btn-default bg-color-primary border-0" type="submit" name="action" value="ManagerUpdateProduct"><b>Cập nhật</b></button>
+                            <button class="btn btn-default bg-color-primary " type="submit" name="action" value="ManagerUpdateProduct">Cập nhật</button>
                 </form>
             </div>
         
@@ -207,7 +207,7 @@
 
                         <label class="h2 h2 form-label" for="colorSizeQuantity">Quản lý số lượng</label> <br/>
                        
-                            <button id="addColorButton" type="button" class="btn  bg-color-primary border-0 my-3"  data-toggle="modal" data-target="#editColorModal">Thêm/xóa màu</button>
+                            <button id="addColorButton" type="button" class="btn btn-default my-3"  data-toggle="modal" data-target="#editColorModal">Thêm/xóa màu</button>
                        
                         <ul class="mt-2 mb-5 nav nav-tabs">
 
@@ -287,7 +287,7 @@
                                 </form>
                                 <button class="my-3" type="button" data-toggle="modal" data-target="#add<%=color%>VariantsModal" style="border: none; background: none"><i class="fa fa-plus-circle fa-lg"></i></button>
                                 <div class="row ml-2">
-                                    <button type="submit" class="btn btn-default" name="action" form="update<%=color%>VariantsForm" value="UpdateVariants">Cập nhật</button>
+                                    <button type="submit" class="btn btn-default bg-color-primary" name="action" form="update<%=color%>VariantsForm" value="UpdateVariants">Cập nhật</button>
                                 </div>
                                 <div class="modal fade" id="add<%=color%>VariantsModal" role="dialog">
                                     <div class="modal-dialog">

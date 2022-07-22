@@ -163,6 +163,7 @@
             if (search == null) {
                 search = "";
             }
+            //Min date used for the default time range
             String MIN_DATE = "2000-01-01";
             
         %>

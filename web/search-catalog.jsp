@@ -88,18 +88,20 @@
                                     <div class="section-title">
                                         <h4>Giá</h4>
                                     </div>
-                                    <!--<form action="MainController">-->
-                                    <div class="filter-range-wrap">
+                                    <form action="MainController">
+                                        <div class="filter-range-wrap">
 
-                                        <div class="price-range ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content"
-                                             data-min="100000" data-max="1000000"></div>
+                                            <div class="price-range ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content"
+                                                 data-min="100000" data-max="1000000"></div>
 
-                                        <div class="range-slider">
-                                            <div class="price-input">
-                                                <p>Price:</p>
-                                                <input type="text" readonly="" id="minamount" name="minAmount">
-
-                                                <input class="ml-5 pl-4" type="text" readonly="" id="maxamount" name="maxAmount">
+                                            <div class="range-slider">
+                                                <div class="price-input">
+                                                    <p>Price:</p>
+                                                    <input type="text" readonly="" id="minamount" name="minAmount">
+                                                    <span>₫  - </span>
+                                                    <input type="text" readonly="" id="maxamount" name="maxAmount">
+                                                    <span>₫</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -177,12 +179,13 @@
                                     </div>
                                 </div>
 
-                            </div>
-                            <button style="border: none; background: none;" type="submit" name="action" value="filter-searched-products">Filter</button>
+                            
+                            <a><button class="site-btn" type="submit" name="action" value="filter-searched-products">Lọc</button></a>
                             <!--switch to SearchController page count after submit form-->
                             <%
                                 searchAll = (boolean) request.getAttribute("SWITCH_SEARCH");
                             %>
+                            
                         </form>
                     </div>
                     <%
@@ -212,7 +215,9 @@
                                                     for (String img : product.getColorImage().get("key")) {
                                                 %>
                                                 <div class="carousel-item">
+                                                    <a href="ProductRouteController?productID=<%=product.getProductID()%>">
                                                     <img class="d-block" src="<%=img%>">
+                                                    </a>
                                                 </div>
                                                 <%
                                                     }
@@ -229,7 +234,9 @@
                                         </div>
                                         <%} else {
                                         %>
+                                        <a href="ProductRouteController?productID=<%=product.getProductID()%>">
                                         <img src="<%=product.getColorImage().get("key").get(0)%>">
+                                        </a>
                                         <%
                                             }
                                         %>
@@ -318,7 +325,7 @@
                             %>
 
                             <!-- For displaying 1st page link except for the 1st page -->
-                            <a href="SearchCatalogController?search=<%= search %>&page=1"><i class="glyphicon glyphicon-menu-left"></i><i class="glyphicon glyphicon-menu-left"></i></a>
+                            <a href="SearchCatalogController?search=<%= search %>&page=1"><i style="margin-right: -4px" class="glyphicon glyphicon-menu-left"></i><i class="glyphicon glyphicon-menu-left"></i></a>
 
                             <!-- For displaying Previous link except for the 1st page -->
                             <a href="SearchCatalogController?search=<%= search %>&page=<%= currentPage - 1%>"><i class="glyphicon glyphicon-menu-left"></i></a>
@@ -331,7 +338,7 @@
                             <%  for (int i = begin; i <= end; i++) {
                                     if (currentPage == i) {
                             %>
-                            <a class="active" style="background: #000000; color: #ffffff"><%= i%></a>  <!-- There is no active class for pagination (currenly hard code) -->
+                            <a class="active" style="background: #ca1515; color: #ffffff"><%= i%></a>  <!-- There is no active class for pagination (currenly hard code) -->
                             <%
                             } else {
                             %>
@@ -349,7 +356,7 @@
                             <a href="SearchCatalogController?search=<%= search %>&page=<%= currentPage + 1%>"><i class="glyphicon glyphicon-menu-right"></i></a>
 
                             <!-- For displaying last page link except for the last page -->
-                            <a href="SearchCatalogController?search=<%= search %>&page=<%= noOfPages%>"><i class="glyphicon glyphicon-menu-right"></i><i class="glyphicon glyphicon-menu-right"></i></a>
+                            <a href="SearchCatalogController?search=<%= search %>&page=<%= noOfPages%>"><i class="glyphicon glyphicon-menu-right "></i><i style="margin-left: -4px" class="glyphicon glyphicon-menu-right"></i></a>
 
 
                             <%
@@ -379,7 +386,7 @@
                             <%  for (int i = begin; i <= end; i++) {
                                     if (currentPage == i) {
                             %>
-                            <a class="active" style="background: #000000; color: #ffffff"><%= i%></a>  <!-- There is no active class for pagination (currenly hard code) -->
+                            <a class="active" style="background: #ca1515; color: #ffffff"><%= i%></a>  <!-- There is no active class for pagination (currenly hard code) -->
                             <%
                             } else {
                             %>

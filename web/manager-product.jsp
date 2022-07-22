@@ -11,30 +11,8 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-        <style>
-            .dropdown-menu{
-                right:0;
-                left:auto;
-            }
-            form input{
-                border: 1px solid #adadad;
-                padding: 0.3rem;
-                 border-radius: 0.3rem;
-            }
-            select{
-                 border: 1px solid #adadad;
-                 padding: 0.5rem;
-                 border-radius: 0.3rem;
-            }
-            
-            table tbody tr{
-                font-size: 1.25rem!important;
-                
-            }
-            .fa-clock-rotate-left::before {
-                content: "\f1da";
-            }
-        </style>
+        <link rel="stylesheet" href="css/manager.css" type="text/css">
+        
     </head>
     <body>
         <%
@@ -239,7 +217,7 @@
                 %>
 
                 <!-- For displaying 1st page link except for the 1st page -->
-                <a href="ManagerShowProductController?page=1"><i class="glyphicon glyphicon-menu-left"></i><i class="glyphicon glyphicon-menu-left"></i></a>
+                <a href="ManagerShowProductController?page=1"><i class="glyphicon glyphicon-menu-left"></i><i style="margin-left: -4px" class="glyphicon glyphicon-menu-left"></i></a>
                 
                 <!-- For displaying Previous link except for the 1st page -->
                 <a href="ManagerShowProductController?page=<%= currentPage - 1%>"><i class="glyphicon glyphicon-menu-left"></i></a>
@@ -269,7 +247,7 @@
                 <a href="ManagerShowProductController?page=<%= currentPage + 1%>"><i class="glyphicon glyphicon-menu-right"></i></a>
                 
                 <!-- For displaying last page link except for the last page -->
-                <a href="ManagerShowProductController?page=<%= noOfPages %>"><i class="glyphicon glyphicon-menu-right"></i><i class="glyphicon glyphicon-menu-right"></i></a>
+                <a href="ManagerShowProductController?page=<%= noOfPages %>"><i class="glyphicon glyphicon-menu-right"></i><i style="margin-left: -4px" class="glyphicon glyphicon-menu-right"></i></a>
                 
                     <%
                         }
@@ -285,7 +263,7 @@
                 %>
 
                 <!-- For displaying 1st page link except for the 1st page -->
-                <a href="ManagerSearchProductController?search=<%= search%>&status=<%= status%>&page=1"><i class="glyphicon glyphicon-menu-left"></i><i class="glyphicon glyphicon-menu-left"></i></a>
+                <a href="ManagerSearchProductController?search=<%= search%>&status=<%= status%>&page=1"><i class="glyphicon glyphicon-menu-left"></i><i style="margin-left: -4px" class="glyphicon glyphicon-menu-left"></i></a>
                 
                 <!-- For displaying Previous link except for the 1st page -->
                 <a href="ManagerSearchProductController?search=<%= search%>&status=<%= status%>&page=<%= currentPage - 1%>" style="text-decoration: none;"><i class="glyphicon glyphicon-menu-left"></i></a>
@@ -316,7 +294,7 @@
                 <a href="ManagerSearchProductController?search=<%= search%>&status=<%= status%>&page=<%= currentPage + 1%>"><i class="glyphicon glyphicon-menu-right"></i></a>
                 
                 <!-- For displaying last page link except for the last page -->
-                <a href="ManagerSearchProductController?search=<%= search%>&status=<%= status%>&page=<%= noOfPages %>"><i class="glyphicon glyphicon-menu-right"></i><i class="glyphicon glyphicon-menu-right"></i></a>
+                <a href="ManagerSearchProductController?search=<%= search%>&status=<%= status%>&page=<%= noOfPages %>"><i class="glyphicon glyphicon-menu-right"></i><i style="margin-left: -4px"class="glyphicon glyphicon-menu-right"></i></a>
                 
                     <%
                             }

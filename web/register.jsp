@@ -122,7 +122,7 @@
                                         </div>
                                         <div class="col-md-6 mb-4">
 
-                                            <h6 class="mb-2 pb-1">Giới tính: </h6>
+                                            <p class="mb-2 pb-1 text-dark"><b>Giới tính: </b></p>
 
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input" type="radio" required="" name="sex" id="femaleGender"
@@ -154,7 +154,7 @@
                                         <div class="col-md-6 mb-4 pb-2">
 
                                             <div class="form-outline">
-                                                <label class="form-label" required="" for="phoneNumber">Phone Number</label>
+                                                <label class="form-label" required="" for="phoneNumber">Số điện thoại</label>
                                                 <input type="tel" id="phoneNumber" name="phone" class="form-control form-control-lg" />
 
                                             </div>
@@ -164,7 +164,7 @@
 
 
                                     <div>
-                                        <button class="primary-btn" type="submit" name="action" value="Register" >Đăng ký</button>
+                                        <button class="site-btn" type="submit" name="action" value="Register" >Đăng ký</button>
                                     </div>
 
                                 </form>

@@ -46,14 +46,14 @@ public class ProductDAO {
             + "WHERE  p.status = 1\n"
             + "GROUP BY p.productID, p.productName, p.price, p.discount, i.image\n"
             + "ORDER BY SUM(d.quantity) desc";
-    private static final String GET_SALE_LIST = "SELECT p.productID, p.productName, p.price, p.discount, i.image\n"
-            + "FROM tblProduct p JOIN tblProductColors pc ON p.productID = pc.productID \n"
-            + "JOIN tblColorImage i ON pc.productColorID = i.productColorID\n"
-            + "JOIN tblOrderDetail d ON p.productID = d.productID \n"
-            + "JOIN tblOrder o ON d.orderID = o.orderID\n"
-            + "WHERE  p.status = 1\n"
-            + "GROUP BY p.productID, p.productName, p.price, p.discount, i.image\n"
-            + "ORDER BY SUM(d.quantity) desc";
+    private static final String GET_SALE_LIST = "SELECT p.productID, p.productName, p.price, p.discount, i.image\n" +
+"            FROM tblProduct p JOIN tblProductColors pc ON p.productID = pc.productID \n" +
+"            JOIN tblColorImage i ON pc.productColorID = i.productColorID\n" +
+"            JOIN tblOrderDetail d ON p.productID = d.productID \n" +
+"            JOIN tblOrder o ON d.orderID = o.orderID\n" +
+"            WHERE  p.status = 1 AND p.discount <> 0\n" +
+"            GROUP BY p.productID, p.productName, p.price, p.discount, i.image\n" +
+"            ORDER BY p.discount desc";
     private static final String GET_NEW_ARRIVAL_LIST = "SELECT p.productID, p.productName, p.price, p.discount, i.image\n"
             + "FROM tblProduct p JOIN tblProductColors pc ON p.productID = pc.productID \n"
             + "JOIN tblColorImage i ON pc.productColorID = i.productColorID\n"
