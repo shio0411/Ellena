@@ -308,18 +308,15 @@
                                                 </div>
                                             </div>
 
-                                            <!--sửa if chỗ này thành [is not empty]-->
-                                            <% if (order.getNote() != null) {%> 
                                             <div class="row">
                                                 <div class="col-md-12 mb-4 pb-2">
                                                     <div class="form-outline">
                                                         <label class="form-label" for="note">Ghi chú</label>
-                                                        <input type="text" value="<%= order.getNote()%>" readonly="" class="form-control form-control-lg"/>
+                                                        <input type="text" <% if (order.getNote() != null) {%> value="<%= order.getNote()%>" <%} else {%>value=""<%}%> readonly="" class="form-control form-control-lg"/>
                                                     </div>
 
                                                 </div>
                                             </div>
-                                            <%}%>
                                             <table border="1">
                                                 <thead>
                                                     <tr>
