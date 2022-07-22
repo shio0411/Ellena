@@ -46,11 +46,11 @@
 
                                 <div class="col-lg-12">
                                     <div class="checkout__form__input">
-                                        <p>Họ tên <span>*</span></p>
+                                        <p>Full name <span>*</span></p>
                                         <input type="text" name="fullname" value="<%= c.getFullName()%>" placeholder="Họ và Tên" required="">
                                     </div>
                                     <div class="checkout__form__input">
-                                        <p>Tỉnh / thành phố <span>*</span></p>
+                                        <p>Town/City <span>*</span></p>
                                         <div class="col-lg-6 col-md-6 col-sm-6" style="padding: 0; padding-right: 15px;">
                                             <select style="width: 100%; height: 50px; margin: 0 4% 25px 0; padding: 1px 2px 1px 20px;" name="calc_shipping_provinces">
                                                 <option value="">Tỉnh / Thành phố</option>
@@ -69,7 +69,7 @@
                                             <p style="color: red"><%= orderError.getShippingProvinces()%></p>
                                         </div>
                                     <div class="checkout__form__input">
-                                        <p>Địa chỉ <span>*</span></p>
+                                        <p>Address <span>*</span></p>
                                         <input type="text" name="address" placeholder="Số nhà, tên đường, phường/ xã" required="" value="<%= c.getAddress() %>">
                                        
                                     </div>
@@ -78,7 +78,7 @@
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-6">
                                     <div class="checkout__form__input">
-                                        <p>Số điện thoại <span>*</span></p>
+                                        <p>Phone <span>*</span></p>
                                         <input type="text" name="phone" value="<%= c.getPhone()%>" placeholder="Số điện thoại liên lạc" required="">
                                         
                                     </div>
@@ -95,7 +95,7 @@
                                 <div class="col-lg-12">
 
                                     <div class="checkout__form__input">
-                                        <p>Ghi chú</p>
+                                        <p>Order notes</p>
                                         <input type="text" name="note" placeholder="Note about your order, e.g, special note for delivery" value="<%= c.getNote() %>">
                                     </div>
                                 </div>
@@ -103,7 +103,7 @@
                         </div>
                         <div class="col-lg-12">
                             <div class="checkout__order">
-                                <h5>Đơn hàng</h5>
+                                <h5>Đơn hàng của bạn</h5>
                                 <div class="checkout__order__product">
 
                                     <div class="row product-details" style="padding-top: 20px;">
@@ -121,10 +121,8 @@
                                         </div>
 
                                         <%  int total = 0;
-                                            int subtotal = 0;
                                             for (CartProduct item : cart) {
                                                 total += (item.getPrice()  - item.getDiscount()) * item.getQuantity();
-                                                subtotal += item.getPrice() * item.getQuantity();
                                         %>
                                         <div class="col-md-6" style="margin-bottom: 10px;">
                                             <div class="row">
@@ -161,16 +159,8 @@
                                 </div>
                                 <div class="checkout__order__total">
                                     <ul>
-                                        
-                                    <%  
-                                    if (subtotal > total) {
-                                    %>
-                                        <li>Tổng tiền hàng <span><%= (int) (subtotal / 1000)%>.000₫ </span></li>
-                                        <li>Giảm giá <span>-<%= (int) ((subtotal - total) / 1000)%>.000₫ </span></li>
-                                    <%}%>
-                                        <li>Tổng thanh toán 
-                                            <span><%= (int) (total / 1000)%>.000₫ </span>
-                                        </li>
+                                        <li>Subtotal <span></span></li>
+                                        <li>Total <span><%= (int) (total / 1000)%>.000₫</span></li>
                                         <input type="hidden" name="total" value="<%= ((int) (total / 1000)) * 1000%>"/>
                                         <% session.setAttribute("TOTAL", ((int) (total / 1000)) * 1000); %>
                                     </ul>

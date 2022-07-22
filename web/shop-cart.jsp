@@ -142,7 +142,7 @@
                                         </td>
                                         <td class="cart__total"><%= (item.getQuantity() * (item.getPrice() - item.getDiscount())) / 1000%>.000</td>
                                         <td class="cart__close">
-                                            <a href="DeleteCartItemController?productID=<%= item.getProductID()%>&color=<%= item.getColor()%>&size=<%= item.getSize()%>">
+                                            <a href="MainController?action=DeleteCartItem&productID=<%= item.getProductID()%>&color=<%= item.getColor()%>&size=<%= item.getSize()%>">
                                                 <span class="icon_close"></span>
                                             </a>
                                         </td>
@@ -184,12 +184,8 @@
                         <div class="cart__total__procced">
                             <h6>Tổng thanh toán</h6>
                             <ul>
-                            <%  
-                                if (subtotal > total) {
-                            %>
                                 <li>Tổng tiền hàng <span><%= (int) (subtotal / 1000)%>.000₫ </span></li>
                                 <li>Giảm giá <span>-<%= (int) ((subtotal - total) / 1000)%>.000₫ </span></li>
-                            <%}%>
                                 <li>Tổng thanh toán 
                                     <span><%= (int) (total / 1000)%>.000₫ </span>
                                 </li>
