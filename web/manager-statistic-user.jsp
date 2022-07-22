@@ -79,7 +79,7 @@
         color: #93a3b1;
     }
     .text-3{
-        color:#fca17d;
+        color:#b57c68;
     }
     .text-4{
         color:#344055;
@@ -356,7 +356,7 @@
 
         var gradient1 = "#344055";
         var gradient2 = "#93a3b1";
-        var gradient3 = "#fca17d";
+        var gradient3 = "#b57c68";
 
         var myChart = new Chart(ctx, {
         type: 'doughnut',
@@ -371,7 +371,7 @@
                     data: [<%for (Pair<String, Integer> p : userGender) {%>
             "<%=p.getValue()%>",
         <%}%>],
-                    backgroundColor: [gradient1,  gradient3]           
+                    backgroundColor: [gradient1,  gradient2]           
                 }]
         },      
         });

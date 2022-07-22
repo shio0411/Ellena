@@ -161,7 +161,7 @@
                             <div class="modal-dialog" id="<%=id%>" >
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h4 class="modal-title" id="myModalLabel">Chỉnh sửa đơn hàng</h4>
+                                        <h4 class="modal-title" id="myModalLabel"><b>Chỉnh sửa đơn hàng</b></h4>
                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
                                     </div>
@@ -355,9 +355,9 @@
                                         <input type="hidden" name="dateFrom" id="update-dateFrom" value="<%= dateFrom%>"/>
                                         <input type="hidden" name="dateTo" id="update-dateTo" value="<%= dateTo%>"/>
                                         <input type="hidden" name="search-statusID" id="update-statusID" value="<%= sOrderStatusID%>"/>
-                                        <a href="ReturnController?orderID=<%= order.getOrderID()%>">
+                                        <a class="ml-4 btn btn-secondary" href="ReturnController?orderID=<%= order.getOrderID()%>">
                                             <!--<button class="btn btn-secondary" data-toggle="tooltip" data-html="true" title="Đổi hàng">-->
-                                                Đổi/trả <!-- Icon return here -->
+                                                Đổi / trả <!-- Icon return here -->
                                             <!--</button>-->
                                         </a>
                                         <div class="modal-footer">
@@ -547,7 +547,7 @@
                 <%  for (int i = begin; i <= end; i++) {
                         if (currentPage == i) {
                 %>
-                <a class="active" style="background: #000000; color: #ffffff"><%= i%></a>  <!-- There is no active class for pagination (currenly hard code) -->
+                <a class="active" style="background: #b57c68; color: #ffffff"><%= i%></a>  <!-- There is no active class for pagination (currenly hard code) -->
                 <%
                 } else {
                 %>

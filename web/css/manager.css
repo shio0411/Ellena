@@ -17,7 +17,7 @@ and open the template in the editor.
 form input{
     margin-right: 2%;        
     border: 1px solid #adadad;
-    padding: 0.3rem;
+    padding: 0.4rem;
     border-radius: 0.3rem;
 }
 select{
@@ -27,10 +27,16 @@ select{
 }
 
 table tbody tr{
-    font-size: 1.25rem!important;                
+    font-size: 1.4rem!important;                
 } 
 table tbody tr td{
     vertical-align: middle!important;               
 }
+
+table tbody tr th{
+    vertical-align: middle!important;
+   
+}
+
 
 

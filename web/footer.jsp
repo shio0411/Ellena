@@ -80,11 +80,9 @@
                             </div>
                             <p>Địa chỉ: Long Thạnh Mỹ, Quận 9, TP.HCM <br> Email: Support@ellenafashion.com</p>
                             <div class="footer__payment">
-                                <a href="#"><img src="img/payment/payment-1.png" alt=""></a>
-                                <a href="#"><img src="img/payment/payment-2.png" alt=""></a>
-                                <a href="#"><img src="img/payment/payment-3.png" alt=""></a>
-                                <a href="#"><img src="img/payment/payment-4.png" alt=""></a>
-                                <a href="#"><img src="img/payment/payment-5.png" alt=""></a>
+                                <a href="#"><img width="36px" src="img/payment/payment-1.png" alt=""></a>
+                                <a href="#"><img width="40px" src="img/payment/payment-2.png" alt=""></a>
+                               
                             </div>
                         </div>
                     </div>
@@ -96,7 +94,7 @@
                             <ul>
                                 <li><a href="about-us.jsp">Giới thiệu</a></li>
                                 <li><a href="contact.jsp">Liên hệ</a></li>
-                                <li><a href="faq.jsp">FAQ</a></li>
+                                
                             </ul>
                         </div>
                     </div>

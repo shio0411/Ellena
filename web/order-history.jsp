@@ -82,7 +82,7 @@
                                 <h5 class="card-header p-3">
                                     Mã đơn hàng: <%=order.getKey().getOrderID()%>
                                     <% if ("Chưa xác nhận".equalsIgnoreCase(order.getKey().getStatusName())) {%>
-                                    <button type="button" class="btn btn-danger" style="float: right; padding: 12px 15px 8px; text-align: center; font-weight: 600" data-toggle="modal" data-target="#<%=order.getKey().getOrderID()%>Modal">HUỶ ĐƠN HÀNG</button>
+                                    <button type="button" class="primary-btn" style="float: right; padding: 12px 15px 10px; text-align: center; font-weight: 600" data-toggle="modal" data-target="#<%=order.getKey().getOrderID()%>Modal">HUỶ ĐƠN HÀNG</button>
                                     <div class="modal fade" id="<%=order.getKey().getOrderID()%>Modal" role="dialog">
                                         <div class="modal-dialog">
                                             <!-- Modal content-->
@@ -102,7 +102,7 @@
                                         </div>
                                     </div>
                                     <%}%>
-                                    <a style="float: right" class="mr-2" href="MainController?action=CustomerViewOrderDetail&orderID=<%=order.getKey().getOrderID()%>"><button class="primary-btn">Chi tiết</button></a>
+                                    <a style="float: right" class="mr-2" href="MainController?action=CustomerViewOrderDetail&orderID=<%=order.getKey().getOrderID()%>"><button class="primary-btn">CHI TIẾT</button></a>
 
                                     
                                     
@@ -134,7 +134,7 @@
                                     Tổng: <%= (int) (order.getKey().getTotal()) / 1000%>.000₫
                                 </div>  
                                 <%if(order.getKey().getStatusName().equalsIgnoreCase("ĐÃ GIAO")) {%>
-                                <div class="d-flex flex-row-reverse mr-2">
+                                <div class="d-flex flex-row-reverse mr-3 mb-3">
                                     <!-- button to rating page -->
                                     <a href="RatingController?orderID=<%=order.getKey().getOrderID()%>"><button class="primary-btn"><i class="fa fa-star"></i>Ðánh giá</button></a>
                                 </div> 

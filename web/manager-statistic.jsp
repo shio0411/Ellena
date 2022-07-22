@@ -86,7 +86,7 @@
         color: #93a3b1;
     }
     .text-3{
-        color:#fca17d;
+        color:#b57c68;
     }
     .text-4{
         color:#344055;
@@ -692,18 +692,9 @@
         var canvas = document.getElementById('pay-type');
         var ctx = canvas.getContext('2d');
 
-        var gradient1 = ctx.createLinearGradient(500,0, 500, 500);
-        var gradient2 = ctx.createLinearGradient(500,0, 500, 500);
-        var gradient3 = ctx.createLinearGradient(500,0, 500, 500);
-
-        gradient1.addColorStop(0, '#344055');
-        gradient1.addColorStop(1, '#93a3b1');
-
-        gradient2.addColorStop(0.5, '#93a3b1');
-        gradient2.addColorStop(1, '#ccffff');
-
-        gradient3.addColorStop(0, '#fca17d');
-        gradient3.addColorStop(1, '#ffcccc');
+        var gradient1 = '#344055';
+        var gradient2 = '#93a3b1';
+        var gradient3 = '#b57c68';
         var ctx = document.getElementById("pay-type");
         var myChart = new Chart(ctx, {
         type: 'doughnut',
@@ -734,18 +725,9 @@
         // Create a linear gradient
         // The start gradient point is at x=20, y=0
         // The end gradient point is at x=220, y=0
-        var gradient1 = ctx.createLinearGradient(500,0, 500, 500);
-        var gradient2 = ctx.createLinearGradient(500,0, 500, 500);
-        var gradient3 = ctx.createLinearGradient(500,0, 500, 500);
-        // Add three color stops
-        gradient1.addColorStop(0, '#344055');
-        gradient1.addColorStop(1, '#93a3b1');
-
-        gradient2.addColorStop(0.5, '#93a3b1');
-        gradient2.addColorStop(1, '#ccffff');
-
-        gradient3.addColorStop(0, '#fca17d');
-        gradient3.addColorStop(1, '#ffcccc');
+        var gradient1 = '#344055';
+        var gradient2 = '#93a3b1';
+        var gradient3 = '#b57c68';
         var ctx = document.getElementById("custom-chart");
         var myChart = new Chart(ctx, {
         type: 'bar',
@@ -836,18 +818,9 @@
         // Create a linear gradient
         // The start gradient point is at x=20, y=0
         // The end gradient point is at x=220, y=0
-        var gradient1 = ctx.createLinearGradient(500,0, 500, 500);
-        var gradient2 = ctx.createLinearGradient(500,0, 500, 500);
-        var gradient3 = ctx.createLinearGradient(500,0, 500, 500);
-        // Add three color stops
-        gradient1.addColorStop(0, '#344055');
-        gradient1.addColorStop(1, '#93a3b1');
-
-        gradient2.addColorStop(0.5, '#93a3b1');
-        gradient2.addColorStop(1, '#ccffff');
-
-        gradient3.addColorStop(0, '#fca17d');
-        gradient3.addColorStop(1, '#ffcccc');
+        var gradient1 = '#344055';
+        var gradient2 = '#93a3b1';
+        var gradient3 = '#b57c68';
         var ctx = document.getElementById("7DayChart");
         var myChart = new Chart(ctx, {
         type: 'bar',
@@ -936,18 +909,9 @@
     // Create a linear gradient
     // The start gradient point is at x=20, y=0
     // The end gradient point is at x=220, y=0
-    var gradient1 = ctx.createLinearGradient(500,0, 500, 500);
-    var gradient2 = ctx.createLinearGradient(500,0, 500, 500);
-    var gradient3 = ctx.createLinearGradient(500,0, 500, 500);
-    // Add three color stops
-    gradient1.addColorStop(0, '#344055');
-    gradient1.addColorStop(1, '#93a3b1');
-
-    gradient2.addColorStop(0.5, '#93a3b1');
-    gradient2.addColorStop(1, '#ccffff');
-
-    gradient3.addColorStop(0, '#fca17d');
-    gradient3.addColorStop(1, '#ffcccc');
+        var gradient1 = '#344055';
+        var gradient2 = '#93a3b1';
+        var gradient3 = '#b57c68';
     var ctx = document.getElementById("4WeekChart");
     var myChart = new Chart(ctx, {
         type: 'bar',
@@ -1036,18 +1000,10 @@
         // Create a linear gradient
         // The start gradient point is at x=20, y=0
         // The end gradient point is at x=220, y=0
-        var gradient1 = ctx.createLinearGradient(500,0, 500, 500);
-        var gradient2 = ctx.createLinearGradient(500,0, 500, 500);
-        var gradient3 = ctx.createLinearGradient(500,0, 500, 500);
-        // Add three color stops
-        gradient1.addColorStop(0, '#344055');
-        gradient1.addColorStop(1, '#93a3b1');
+        var gradient1 = '#344055';
+        var gradient2 = '#93a3b1';
+        var gradient3 = '#b57c68';
         
-        gradient2.addColorStop(0.5, '#93a3b1');
-        gradient2.addColorStop(1, '#ccffff');
-        
-        gradient3.addColorStop(0, '#fca17d');
-        gradient3.addColorStop(1, '#ffcccc');
         
         var ctx = document.getElementById("1YearChart");
         var myChart = new Chart(ctx, {

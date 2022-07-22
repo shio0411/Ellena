@@ -88,7 +88,7 @@
                         <input type="text" name="search" value="<%= search%>" placeholder="Tên sản phẩm">
 
                        
-                        <select class="p-1" name="status">
+                        <select name="status">
                             <option value="all">Chọn trạng thái</option>
                             <option value="true">Active</option>
                             <option value="false">Inactive</option>
