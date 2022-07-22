@@ -278,11 +278,8 @@
                                                 int k = 1; 
                                                 for (String color : colorList) {
                                             %>
-<<<<<<< HEAD
+
                                             <div id="<%=color%>-size" class="tab-pane <%if (g == 1) { %> in active <%}%>">
-=======
-                                            <div id="<%=color%>-size" class="tab-pane fade <%if (g == 1) { %> in active <%}%>">
->>>>>>> parent of 14a896f (Fix Product Quantity Input & Banner)
                                                 <form action="AddToCartController" id="get<%=color%>SizeForm">
                                                     <div class="sizes__container">
                                                         <input type="hidden" name="color" value="<%=color%>"/>

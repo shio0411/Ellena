@@ -18,6 +18,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
         <style>
+            
             .dropdown-menu{
                 right:0;
                 left:auto;
@@ -236,7 +237,7 @@
                                 }
                                 for (String color : colorList) {
                             %>
-                            <div id="<%=color%>-size" class="tab-pane fade <%if ((g == 1 && activeColor == null) || color.equalsIgnoreCase(activeColor)) { %> in active <%}%>">
+                            <div id="<%=color%>-size" class="tab-pane <%if ((g == 1 && activeColor == null) || color.equalsIgnoreCase(activeColor)) { %> in active <%}%>">
                                 <form action="UpdateVariantsController" id="update<%=color%>VariantsForm">
                                     <input type="hidden" name="color" value="<%=color%>"/>
                                     <input type="hidden" name="productID" value="<%=product.getProductID()%>"/>
