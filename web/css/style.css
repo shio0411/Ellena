@@ -237,6 +237,7 @@ ol {
     color: #000;
     background: #fbe2d6;
     border:1px solid transparent;
+    
 }
 
 .primary-btn:hover{
@@ -637,9 +638,9 @@ ol {
 }
 
 .banner__text h1 {
-    font-size: 80px;
+    font-size: 70px;
     color: #111111;
-    font-family: "Cookie", cursive;
+    font-family: 'Dancing Script', cursive;
     margin-bottom: 15px;
 }
 
@@ -3858,7 +3859,7 @@ ol {
     background: #93a3b1;
 }
 .color-3{
-    background: #fca17d;
+    background: #b57c68;
 }
 .color-4{
     background: #344055;

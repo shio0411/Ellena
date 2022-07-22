@@ -10,28 +10,7 @@
         <jsp:include page="meta.jsp" flush="true"/>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-        <style>
-            .dropdown-menu{
-                right:0;
-                left:auto;
-            }
-            form input{
-                margin-right: 2%;        
-                border: 1px solid #adadad;
-                padding: 0.3rem;
-                 border-radius: 0.3rem;
-            }
-            select{
-                 border: 1px solid #adadad;
-                 padding: 0.5rem;
-                 border-radius: 0.3rem;
-            }
-            
-            table tbody tr{
-                font-size: 1.25rem!important;
-                
-            }
-        </style>
+         <link rel="stylesheet" href="css/manager.css" type="text/css">
     </head>
     <body>
         <%

@@ -102,7 +102,7 @@
                                         </div>
                                     </div>
                                     <%}%>
-                                    <a style="float: right" class="mr-2" href="MainController?action=CustomerViewOrderDetail&orderID=<%=order.getKey().getOrderID()%>"><button class="primary-btn">Chi tiết</button></a>
+                                    <a style="float: right" class="mr-2" href="MainController?action=CustomerViewOrderDetail&orderID=<%=order.getKey().getOrderID()%>"><button class="primary-btn">CHI TIẾT</button></a>
 
                                     
                                     
@@ -134,7 +134,7 @@
                                     Tổng: <%= (int) (order.getKey().getTotal()) / 1000%>.000₫
                                 </div>  
                                 <%if(order.getKey().getStatusName().equalsIgnoreCase("ĐÃ GIAO")) {%>
-                                <div class="d-flex flex-row-reverse mr-2">
+                                <div class="d-flex flex-row-reverse mr-3 mb-3">
                                     <!-- button to rating page -->
                                     <a href="RatingController?orderID=<%=order.getKey().getOrderID()%>"><button class="primary-btn"><i class="fa fa-star"></i>Ðánh giá</button></a>
                                 </div> 

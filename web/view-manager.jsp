@@ -9,28 +9,8 @@
         <jsp:include page="meta.jsp" flush="true"/>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-        <style>
-            .dropdown-menu{
-                right:0;
-                left:auto;
-            }
-            form input{
-                margin-right: 2%;        
-                border: 1px solid #adadad;
-                padding: 0.3rem;
-                 border-radius: 0.3rem;
-            }
-            select{
-                 border: 1px solid #adadad;
-                 padding: 0.5rem;
-                 border-radius: 0.3rem;
-            }
-            
-            table tbody tr{
-                font-size: 1.25rem!important;
-                
-            }
-        </style>
+         <link rel="stylesheet" href="css/manager.css" type="text/css">
+        
     </head>
     <body>
         <%
@@ -53,7 +33,7 @@
         
         <div class="main">
             <div class="flex-item text-right" id="manager__header">
-                <form class="m-0" action="SearchManagerController" method="POST">  
+                <form class="m-0" action="MainController" method="POST">  
                     <h5 class="dropdown">
                         <b>Xin chào, </b>
                         <a  data-toggle="dropdown" role="button"><b class="text-color-dark"><%= loginUser.getFullName()%></b></a>

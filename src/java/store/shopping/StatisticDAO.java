@@ -138,7 +138,7 @@ public class StatisticDAO {
                 ptm = conn.prepareStatement(STATISTIC_ORDER_30DAY);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
-                    String date = rs.getString("Week");
+                    String date = rs.getString("orderDate");
                     int orderQuantity = rs.getInt("orderQuantity");
                     int income = rs.getInt("income");
                     int productQuantity = rs.getInt("productQuantity");
