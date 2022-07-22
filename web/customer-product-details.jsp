@@ -358,9 +358,9 @@
                                         <% for (int t = 1; t <= rating.getStar(); t++) { %>
                                         <i class="fa fa-star"></i>
                                         <%}
-                                            if (averageStar != 5) {
+                                            if (rating.getStar() != 5) {
 
-                                                for (int a = 0; a < 5 - averageStar; a++) {
+                                                for (int a = 0; a < 5 - rating.getStar(); a++) {
                                         %>
                                         <i class="fa fa-star-o"></i>
                                         <%}

@@ -71,7 +71,7 @@
                                 </div>
                                 <div class="sidebar__sizes">
                                     <div class="section-title">
-                                        <h4>Kích cỡ</h4>
+                                        <h4>Màu sắc</h4>
                                     </div>
                                     <div>
                                         <ul id="filters" style="list-style: none;">
