@@ -72,7 +72,7 @@
 
         <div class="main">
 
-           <div class="flex-item text-right" id="manager__header">
+            <div class="flex-item text-right" id="manager__header">
                 <form class="m-0" action="MainController" method="POST">  
                     <h4 class="dropdown">
                         <b>Xin chào, </b>
@@ -300,7 +300,7 @@
                                                 <div class="col-md-6 mb-4 pb-2">
                                                     <div class="form-outline">
                                                         <label class="form-label" for="transactionNumber">Mã giao dịch</label>
-                                                        <input type="text" <% if (!order.getPayType().equals("COD")) {%>value="<%= order.getTransactionNumber()%>" <%} else {%> value="" <%}%> readonly="" class="form-control form-control-lg"/>
+                                                        <input type="text" <% if (order.getTransactionNumber() != null) {%>value="<%= order.getTransactionNumber()%>" <%} else {%> value="" <%}%> readonly="" class="form-control form-control-lg"/>
                                                     </div>
 
                                                 </div>

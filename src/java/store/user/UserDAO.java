@@ -706,8 +706,8 @@ public class UserDAO {
             if (conn != null) {
                 ptm = conn.prepareStatement(SEARCH_RETURNED_HISTORY);
                 ptm.setString(1, "%" + search + "%");
-                ptm.setString(2, search);
-                ptm.setString(3, search);
+                ptm.setString(2, "%" + search + "%");
+                ptm.setString(3, "%" + search + "%");
                 rs = ptm.executeQuery();
                 while (rs.next()) {
                     String userID = rs.getString("userID");
