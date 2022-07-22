@@ -151,7 +151,6 @@ public class AuthenFilter implements Filter {
         MANAGER_FUNCTION.add("DeleteImageController");
         
         EMPLOYEE_FUNCTION = new ArrayList<>();
-        EMPLOYEE_FUNCTION.add("EmployeeShowOrderController");
         EMPLOYEE_FUNCTION.add("ShowOrderController");
         EMPLOYEE_FUNCTION.add("UpdateOrderController");
         EMPLOYEE_FUNCTION.add("SearchOrderController");

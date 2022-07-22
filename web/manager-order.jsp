@@ -124,7 +124,7 @@
 
 
             %>
-            <table class="table table-hover table-bordered">
+            <table class="table table-hover table-bordered table-responsive">
                 <colgroup>
                     <col span="1" style="width: 5%;">
                     <col span="1" style="width: 12%;">

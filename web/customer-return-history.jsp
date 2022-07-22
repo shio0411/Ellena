@@ -131,7 +131,7 @@
 
             <%                for (OrderDTO order : listOrder) {
             %>
-            <table class="table table-hover table-bordered table-responsive">
+            <table class="table table-hover table-responsive">
                 <colgroup>
                     <col span="1" style="width: 5%;">
                     <col span="1" style="width: 12%;">
@@ -254,7 +254,7 @@
 
                                                     <div class="form-outline">
                                                         <label class="form-label" for="trackingID">Tracking ID</label>
-                                                        <input type="text" name="trackingID" value="<%= order.getTrackingID()%>" id="trackingID" class="form-control form-control-lg" />
+                                                        <input type="text" name="trackingID" <%if (order.getTrackingID() != null){%>value="<%= order.getTrackingID()%>"<%} else {%> value=""  <%}%>  id="trackingID" class="form-control form-control-lg" />
                                                     </div>
 
                                                 </div>
@@ -378,6 +378,7 @@
                                                     <th>Trạng thái</th>
                                                     <th>Ngày</th>
                                                     <th>Chỉnh sửa bởi</th>
+                                                    <th>Email</th>
                                                     <th>RoleID</th>
                                                 </tr>
                                             </thead>
@@ -388,8 +389,19 @@
                                                 <tr>
                                                     <td><%= orderStatus.getStatusName()%></td>
                                                     <td><%= orderStatus.getUpdateDate()%></td>
+                                                    <%
+                                                        if (orderStatus.getUserName() == null){
+                                                    
+                                                    %>
+                                                    <td><%= orderStatus.getUserID()%></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    
+                                                    <%} else {%>
+                                                    <td><%= orderStatus.getUserName()%></td>
                                                     <td><%= orderStatus.getUserID()%></td>
                                                     <td><%= orderStatus.getRoleID()%></td>
+                                                    <%}%>
                                                 </tr>
                                                 <%
                                                     }
@@ -413,7 +425,7 @@
                 List<ReturnDTO> returnHistory = returnMap.get(order);
             %>
             <h5><b>Lịch sử đổi/trả: </b></h5>
-            <table class="table table-hover table-bordered table-responsive">
+            <table class="table table-hover table-responsive">
                 <thead>
                     <tr style="background-color: #b57c68">
                         <th>Sản phẩm</th>
