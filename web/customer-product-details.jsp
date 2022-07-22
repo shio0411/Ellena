@@ -357,9 +357,10 @@
                                 <div class="tab-pane" id="tabs-2" role="tabpanel">
                                     <h6>ĐÁNH GIÁ (<%= ratingDetails[1]%>)</h6>
                                     <% List<RatingDTO> ratingList = (List<RatingDTO>) request.getAttribute("RATING_LIST");
+                                    if(ratingList.size()>0){
                                         for (RatingDTO rating : ratingList) {
                                     %>
-
+                                    <hr>
                                     <p style="font-weight: bold"><%= rating.getFullName()%></p>
                                     <div class="rating">
                                         <% for (int t = 1; t <= rating.getStar(); t++) { %>
@@ -374,7 +375,8 @@
                                             }%>
                                     </div>
                                     <p><%= rating.getContent()%></p>
-                                    <br>
+                                    <%}}else{%>
+                                    <div><i>Hiện tại không có đánh giá cho sản phẩm này.</i></div>
                                     <%}%>
                                 </div>
                             </div>
