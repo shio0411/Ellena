@@ -28,7 +28,7 @@ public class AddToCartController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private static final String ERROR = "login.jsp";
+    private static final String ERROR = "error.jsp";
     private static final String SUCCESS = "ProductRouteController?productID=";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -50,9 +50,9 @@ public class AddToCartController extends HttpServlet {
                 }
                 UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
                 Cart c = cdao.getCartByUserID(user.getUserID());
-                if(c == null){
+                if (c == null) {
                     String address = "";
-                    if(user.getAddress()!=null){
+                    if (user.getAddress() != null) {
                         address = user.getAddress().split(",")[0];
                     }
                     c = new Cart(1, user.getUserID(), user.getFullName(), user.getPhone(), address, user.getUserID(), "", "");
@@ -93,12 +93,19 @@ public class AddToCartController extends HttpServlet {
                     session.setAttribute("CART", cart);
                     session.setAttribute("CART_INFO", c);
                     request.setAttribute("ADD_TO_CART_MESSAGE", "Thêm vào giỏ hàng thành công!");
+
                 } else {
-                    request.setAttribute("QUANTITY_MESSAGE", "Chỉ còn lại " + maxQuantity + " sản phẩm này!");
+                    if (quantity <= 0) {
+                        request.setAttribute("QUANTITY_MESSAGE", "Số lượng sản phẩm phải lớn hơn 0!");
+                    } else {
+                        request.setAttribute("QUANTITY_MESSAGE", "Chỉ còn lại " + maxQuantity + " sản phẩm này!");
+                    }
                 }
 
                 url = SUCCESS + productID;
-            } 
+            } else {
+                url = "login.jsp";
+            }
         } catch (Exception e) {
             log("Error at AddToCartController: " + e.toString());
         } finally {
