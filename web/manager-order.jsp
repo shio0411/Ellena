@@ -352,7 +352,7 @@
                                         <input type="hidden" name="dateFrom" id="update-dateFrom" value="<%= dateFrom%>"/>
                                         <input type="hidden" name="dateTo" id="update-dateTo" value="<%= dateTo%>"/>
                                         <input type="hidden" name="search-statusID" id="update-statusID" value="<%= sOrderStatusID%>"/>
-                                        <a class="ml-4 btn btn-secondary" <% if (order.getStatusID() == 5) {%> href="#" style="cursor: default;" <%} else { %> href="ReturnController?orderID=<%= order.getOrderID()%>" <%}%>>
+                                        <a class="ml-4 btn btn-secondary" <% if (order.getStatusID() == 5 || order.getOrderID() == 6 || order.getOrderID() == 7) {%> href="#" style="cursor: default;" <%} else { %> href="ReturnController?orderID=<%= order.getOrderID()%>" <%}%>>
                                             Đổi / trả 
                                         </a>
                                         <div class="modal-footer">
