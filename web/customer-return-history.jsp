@@ -117,6 +117,7 @@
                 </div>
 
             </div>
+                    
             <%
 
                 List<OrderDTO> listOrder = map.get(user);
@@ -126,7 +127,7 @@
 
 
             %>
-
+            <h3>Số lượng đơn hàng đã đổi/trả: <%= listOrder.size()%></h3>
 
 
             <%                for (OrderDTO order : listOrder) {

@@ -55,7 +55,8 @@ public class UpdateOrderDetailController extends HttpServlet {
             colorSize.add(size);
 
             int maxQuantity = pdao.getProductDetail(productID).getColorSizeQuantity().get(colorSize);
-            if (maxQuantity < newQuantity) {
+            if (maxQuantity == 0 || maxQuantity < newQuantity) {
+                request.setAttribute("UPDATE_MESSAGE", "Cập nhật thất bại!");
                 return;
             }
             String oldSize = request.getParameter("oldSize");
