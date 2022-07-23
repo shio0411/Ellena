@@ -165,8 +165,8 @@
                                             <%=order.getKey().getStatus().get(7)%><%}%></p></span></div>
                                     <%} else {%>
                                     <div class="step <%if (order.getKey().getStatus().containsKey(2)) {%>active<%}%>"> <span class="icon pl-3"> <i class="fa fa-user"></i> </span> <span class="text"><p class="m-0">Đơn hàng được xác nhận</p><p><%if (order.getKey().getStatus().containsKey(2)) {%><%=order.getKey().getStatus().get(2)%><%}%></p></span></div>
-                                    <div class="step <%if (order.getKey().getStatus().containsKey(3)) {%>active<%}%>"> <span class="icon pl-3"> <i class="fa fa-truck"></i> </span> <span class="text"><p class="m-0">Đang giao hàng</p><p><%if (order.getKey().getStatus().containsKey(2)) {%><%=order.getKey().getStatus().get(3)%><%}%></p></span></div>
-                                    <div class="step <%if (order.getKey().getStatus().containsKey(4)) {%>active<%}%>"> <span class="icon pl-3"> <i class="fa fa-cube"></i> </span> <span class="text"><p class="m-0">Giao hàng thành công</p><p><%if (order.getKey().getStatus().containsKey(2)) {%><%=order.getKey().getStatus().get(4)%><%}%></p></span> </div>
+                                    <div class="step <%if (order.getKey().getStatus().containsKey(3)) {%>active<%}%>"> <span class="icon pl-3"> <i class="fa fa-truck"></i> </span> <span class="text"><p class="m-0">Đang giao hàng</p><p><%if (order.getKey().getStatus().containsKey(3)) {%><%=order.getKey().getStatus().get(3)%><%}%></p></span></div>
+                                    <div class="step <%if (order.getKey().getStatus().containsKey(4)) {%>active<%}%>"> <span class="icon pl-3"> <i class="fa fa-cube"></i> </span> <span class="text"><p class="m-0">Giao hàng thành công</p><p><%if (order.getKey().getStatus().containsKey(4)) {%><%=order.getKey().getStatus().get(4)%><%}%></p></span> </div>
                                     <%}%>
                                 </div>
                             </div>
