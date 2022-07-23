@@ -4,6 +4,8 @@
     Author     : ASUS
 --%>
 
+<%@page import="java.util.Locale"%>
+<%@page import="java.text.NumberFormat"%>
 <%@page import="store.shopping.RatingDTO"%>
 <%@page import="store.user.UserDTO"%>
 <%@page import="store.shopping.OrderDetailDTO"%>
@@ -70,6 +72,8 @@
         <%
             Pair<OrderDTO, List<OrderDetailDTO>> order = (Pair<OrderDTO, List<OrderDetailDTO>>) request.getAttribute("ORDER_DETAILS");
             List<RatingDTO> listRating = (List<RatingDTO>) request.getAttribute("PRODUCT_RATING_LIST");
+            // number format
+            NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
         %>
 
 
@@ -114,7 +118,7 @@
                                                         </div>
                                                     </td>
                                                     <td class="cart__price">
-                                                        <%= orderDetail.getPrice() / 1000%>.000₫ 
+                                                        <%= numberFormat.format(orderDetail.getPrice()) %>
                                                     </td>
                                                 <tr>
                                                     <!-- Rating rows -->    
@@ -123,7 +127,7 @@
                                                         <!-- button to rating product page -->
                                                         <%
                                                             if (listRating == null || listRating.size() == 0) { // check if listRating is null
-%>
+                                                        %>
                                                         <a href="CreateRatingFormController?productID=<%= orderDetail.getProductID()%>&productImage=<%= orderDetail.getImage()%>&orderID=<%= order.getKey().getOrderID()%>&productName=<%= orderDetail.getProductName()%>"><button class="primary-btn"><i class="fa fa-star"></i>Ðánh giá sản phẩm</button></a>
                                                         <%
                                                         } else { // begin test with for
@@ -141,7 +145,7 @@
                                                         <a href="#"><button class="primary-btn" disabled="" style="background: #dbdbdb;"><i class="fa fa-star"></i>Ðánh giá sản phẩm</button></a>
                                                         <%
                                                         } else { // display normal link if there is no rating for that product
-%>
+                                                        %>
                                                         <a href="CreateRatingFormController?productID=<%= orderDetail.getProductID()%>&productImage=<%= orderDetail.getImage()%>&orderID=<%= order.getKey().getOrderID()%>&productName=<%= orderDetail.getProductName()%>"><button class="primary-btn"><i class="fa fa-star"></i>Ðánh giá sản phẩm</button></a>
                                                         <%
                                                                 }
@@ -159,7 +163,7 @@
                                                 <!-- Total rows -->
                                                 <tr style="border-bottom: none;">
                                                     <td></td>
-                                                    <td class="cart__total" style="font-size: 24px;">Tổng: <%= (int) (order.getKey().getTotal()) / 1000%>.000₫ </td>
+                                                    <td class="cart__total" style="font-size: 24px;">Tổng: <%= numberFormat.format((int) (order.getKey().getTotal())) %> </td>
                                                 </tr>    
 
 

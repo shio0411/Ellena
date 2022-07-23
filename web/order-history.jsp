@@ -4,6 +4,8 @@
     Author     : giama
 --%>
 
+<%@page import="java.util.Locale"%>
+<%@page import="java.text.NumberFormat"%>
 <%@page import="store.shopping.OrderDetailDTO"%>
 <%@page import="store.shopping.OrderDTO"%>
 <%@page import="javafx.util.Pair"%>
@@ -109,6 +111,8 @@
                                 </h5>
                                 <div class="card-body">
                                     <%
+                                        // number format
+                                        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
                                         for (int i = 0; i < order.getValue().size(); i++) {
                                             if (i % 4 == 0 || i == 0) {
                                     %>
@@ -121,7 +125,7 @@
                                                     <h6 class="mb-3"><%= order.getValue().get(i).getProductName()%></h6>
                                                 </a>
                                                 <%= order.getValue().get(i).getColor()%>, <%= order.getValue().get(i).getSize()%> x <%= order.getValue().get(i).getQuantity()%><br>
-                                                <p style="font-weight: 500; color: black"><%= order.getValue().get(i).getPrice() / 1000%>.000₫</p>
+                                                <p style="font-weight: 500; color: black"><%= numberFormat.format(order.getValue().get(i).getPrice()) %></p>
 
                                             </div>
                                         </div>
@@ -131,7 +135,7 @@
                                     }%>  
                                 </div>
                                 <div class="d-flex flex-row-reverse order__total mr-4 my-3" style="font-size: 20px">
-                                    Tổng: <%= (int) (order.getKey().getTotal()) / 1000%>.000₫
+                                    Tổng: <%= numberFormat.format((int) (order.getKey().getTotal())) %>
                                 </div>  
                                 <%if(order.getKey().getStatusName().equalsIgnoreCase("ĐÃ GIAO")) {%>
                                 <div class="d-flex flex-row-reverse mr-3 mb-3">
