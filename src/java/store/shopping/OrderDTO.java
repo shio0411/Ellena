@@ -149,9 +149,8 @@ public class OrderDTO {
         this.orderID = orderID;
     }
 
-    public String getOrderDate() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        return sdf.format(orderDate);
+    public Date getOrderDate() {
+        return orderDate;
     }
 
     public void setOrderDate(Date orderDate) {

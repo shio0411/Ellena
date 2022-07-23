@@ -4,6 +4,8 @@
  */
 package store.shopping;
 
+import java.util.Date;
+
 /**
  *
  * @author vankh
@@ -14,6 +16,7 @@ public class RatingDTO {
     private String content;
     private String fullName;
     private int productID;
+    private Date rateDate;
 
     public RatingDTO() {
     }
@@ -23,6 +26,22 @@ public class RatingDTO {
         this.content = content;
         this.fullName = fullName;
         this.productID = productID;
+    }
+
+    public RatingDTO(int star, String content, String fullName, int productID, Date rateDate) {
+        this.star = star;
+        this.content = content;
+        this.fullName = fullName;
+        this.productID = productID;
+        this.rateDate = rateDate;
+    }
+
+    public Date getRateDate() {
+        return rateDate;
+    }
+
+    public void setRateDate(Date rateDate) {
+        this.rateDate = rateDate;
     }
 
     

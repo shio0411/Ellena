@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import store.utils.DBUtils;
 
@@ -16,8 +17,8 @@ public class RatingDAO {
 
     private static final String GET_PRODUCT_RATING = "SELECT id, fullName, content, star, rateDate FROM tblRating r JOIN tblProduct p ON r.productID = p.productID JOIN tblUsers u ON u.userID = r.userID AND p.productID = ?";
     private static final String INSERT_RATING = "INSERT INTO tblRating(productID, userID, orderID, content, star, rateDate) VALUES (?, ?, ?, ?, ?, ?)";
-    private static final String GET_PRODUCT_RATING_PER_ORDER = "select star, content, productID FROM tblRating WHERE orderID = ?";
-    
+    private static final String GET_PRODUCT_RATING_PER_ORDER = "select star, content, productID, rateDate FROM tblRating WHERE orderID = ?";
+
     public List<RatingDTO> getProductRating(int productID) throws SQLException {
         List<RatingDTO> ratingList = new ArrayList<>();
         Connection conn = null;
@@ -51,7 +52,7 @@ public class RatingDAO {
         }
         return ratingList;
     }
-    
+
     public boolean addRating(int productID, String userID, int orderID, String content, int star, String rateDate) throws SQLException {
         boolean result = false;
         Connection conn = null;
@@ -66,9 +67,9 @@ public class RatingDAO {
                 ptm.setInt(3, orderID);
                 ptm.setString(4, content);
                 ptm.setInt(5, star);
-                ptm.setString(6, rateDate);            
+                ptm.setString(6, rateDate);
                 result = ptm.executeUpdate() > 0;
-                
+
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -85,7 +86,7 @@ public class RatingDAO {
         }
         return result;
     }
-    
+
     public List<RatingDTO> getProductRatingPerOrder(int orderID) throws SQLException {
         List<RatingDTO> ratingList = new ArrayList<>();
         Connection conn = null;
@@ -101,7 +102,8 @@ public class RatingDAO {
                     int star = rs.getInt("star");
                     String content = rs.getString("content");
                     int productID = rs.getInt("productID");
-                    ratingList.add(new RatingDTO(star, content, null, productID));
+                    Date rateDate = rs.getDate("rateDate");
+                    ratingList.add(new RatingDTO(star, content, null, productID, rateDate));
                 }
             }
         } catch (Exception e) {
@@ -119,5 +121,5 @@ public class RatingDAO {
         }
         return ratingList;
     }
-    
+
 }

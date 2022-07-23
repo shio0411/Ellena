@@ -4,6 +4,8 @@
     Author     : ASUS
 --%>
 
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.util.Date"%>
 <%@page import="java.util.Locale"%>
 <%@page import="java.text.NumberFormat"%>
 <%@page import="store.shopping.RatingDTO"%>
@@ -24,7 +26,8 @@
         <!-- Google Font -->
         <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
         <jsp:include page="meta.jsp" flush="true"/>
     </head>
     <body>
@@ -60,8 +63,8 @@
                     <div class="col-lg-12">
                         <div class="breadcrumb__links">
                             <a href="./"><i class="fa fa-home"></i> Home</a>
-                            <a href="MainController?action=ViewOrderHistory&userID=<%=user.getUserID()%>"> Order History</a>
-                            <span> Rating Order</span>
+                            <a href="MainController?action=ViewOrderHistory&userID=<%=user.getUserID()%>"> Lịch sử đơn hàng</a>
+                            <span> Đánh giá đơn hàng</span>
                         </div>
                     </div>
                 </div>
@@ -74,6 +77,7 @@
             List<RatingDTO> listRating = (List<RatingDTO>) request.getAttribute("PRODUCT_RATING_LIST");
             // number format
             NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+            int id = 1;
         %>
 
 
@@ -118,7 +122,7 @@
                                                         </div>
                                                     </td>
                                                     <td class="cart__price">
-                                                        <%= numberFormat.format(orderDetail.getPrice()) %>
+                                                        <%= numberFormat.format(orderDetail.getPrice())%>
                                                     </td>
                                                 <tr>
                                                     <!-- Rating rows -->    
@@ -126,23 +130,65 @@
                                                     <td>
                                                         <!-- button to rating product page -->
                                                         <%
-                                                            if (listRating == null || listRating.size() == 0) { // check if listRating is null
+                                                            if ((listRating == null || listRating.size() == 0)) { // check if listRating is null
                                                         %>
                                                         <a href="CreateRatingFormController?productID=<%= orderDetail.getProductID()%>&productImage=<%= orderDetail.getImage()%>&orderID=<%= order.getKey().getOrderID()%>&productName=<%= orderDetail.getProductName()%>"><button class="primary-btn"><i class="fa fa-star"></i>Ðánh giá sản phẩm</button></a>
                                                         <%
                                                         } else { // begin test with for
                                                             boolean checkRating = false;
+                                                            String content = "";
+                                                            Date rateDate = null;
+                                                            int star = 0;
                                                             for (RatingDTO rating : listRating) {
                                                                 if (rating.getProductID() == orderDetail.getProductID()) {
                                                                     if (!rating.getContent().isEmpty()) {
+                                                                        content = rating.getContent();
+                                                                        star = rating.getStar();
+                                                                        rateDate = rating.getRateDate();
                                                                         checkRating = true;
                                                                         break;
                                                                     }
                                                                 }
                                                             }
-                                                            if (checkRating) { // if there's a rating for this product in this order (disable and gray out)
+
+                                                            if (checkRating) { // if there's a rating for this product in this order, customers can view their rating
                                                         %>
-                                                        <a href="#"><button class="primary-btn" disabled="" style="background: #dbdbdb;"><i class="fa fa-star"></i>Ðánh giá sản phẩm</button></a>
+                                                        <div class="modal fade" id="myModal<%=id%>" role="dialog">
+                                                            <div class="modal-dialog">
+
+                                                                <!-- Modal content-->
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h4 class="modal-title">Xem lại đánh giá</h4>
+                                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div>
+                                                                            <% for (int t = 1; t <= star; t++) { %>
+                                                                            <i class="fa fa-star"></i>
+                                                                            <%}
+                                                                                if (star != 5) {
+
+                                                                                    for (int a = 0; a < 5 - star; a++) {
+                                                                            %>
+                                                                            <i class="fa fa-star-o"></i>
+                                                                            <%}
+                                                                                }%>
+                                                                        </div>
+                                                                        <div><%= new SimpleDateFormat("dd-MM-yyyy").format(rateDate)%></div>
+                                                                        <br>
+                                                                        <div><b>Đánh giá của bạn: </b><%= content%></div>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div> 
+                                                        <button class="primary-btn" data-toggle="modal" data-target="#myModal<%=id++%>"><i class="fa fa-star"></i>Xem lại đánh giá</button>
+
                                                         <%
                                                         } else { // display normal link if there is no rating for that product
                                                         %>
@@ -151,8 +197,6 @@
                                                                 }
                                                             }
                                                         %>
-
-
                                                     </td>
                                                     <td>
 
@@ -163,36 +207,28 @@
                                                 <!-- Total rows -->
                                                 <tr style="border-bottom: none;">
                                                     <td></td>
-                                                    <td class="cart__total" style="font-size: 24px;">Tổng: <%= numberFormat.format((int) (order.getKey().getTotal())) %> </td>
+                                                    <td class="cart__total" style="font-size: 24px;">Tổng: <%= numberFormat.format((int) (order.getKey().getTotal()))%> </td>
                                                 </tr>    
-
-
-
-
                                             </tbody>
-
-
                                         </table>
                                     </div>
                                 </div>
-
-
                             </div>
                         </article>
                     </div>  
                 </div>
             </div>
         </section>
-
-
         <!--rating-order End-->
-
-
-
-
 
         <jsp:include page="footer.jsp" flush="true" />
         <!-- Js Plugins -->
+
         <jsp:include page="js-plugins.jsp" flush="true" />
+        <script>
+            $(document).ready(function () {
+                $("#myModal").modal();
+            });
+        </script> 
     </body>
 </html>

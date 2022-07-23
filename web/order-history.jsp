@@ -4,6 +4,8 @@
     Author     : giama
 --%>
 
+<%@page import="java.util.concurrent.TimeUnit"%>
+<%@page import="java.util.Date"%>
 <%@page import="java.util.Locale"%>
 <%@page import="java.text.NumberFormat"%>
 <%@page import="store.shopping.OrderDetailDTO"%>
@@ -36,15 +38,15 @@
             String SUCCESS = "SUCCESS";
             if (message == null) {
                 message = "";
-            }else if(message == SUCCESS){
-                %>
-                <div class="alert alert-success" role="alert">
-                    <strong>Thành công!</strong> Cảm ơn bạn đã đánh giá sản phẩm.
-                    <button type="button" class="close" data-toggle="alert">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <%
+            } else if (message == SUCCESS) {
+        %>
+        <div class="alert alert-success" role="alert">
+            <strong>Thành công!</strong> Cảm ơn bạn đã đánh giá sản phẩm.
+            <button type="button" class="close" data-toggle="alert">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <%
             }
         %>
 
@@ -77,82 +79,89 @@
                 if (list.size() > 0) {
         %>
         <section class="shop-cart spad">
-            
-                        <% for (Pair<OrderDTO, List<OrderDetailDTO>> order : list) {%>
-                        <div class="container" style="margin-bottom: 20px">
-                            <article class="card">
-                                <h5 class="card-header p-3">
-                                    Mã đơn hàng: <%=order.getKey().getOrderID()%>
-                                    <% if ("Chưa xác nhận".equalsIgnoreCase(order.getKey().getStatusName())) {%>
-                                    <button type="button" class="btn btn-danger" style="float: right; padding: 12px 15px 8px; text-align: center; font-weight: 600" data-toggle="modal" data-target="#<%=order.getKey().getOrderID()%>Modal">HUỶ ĐƠN HÀNG</button>
-                                    <div class="modal fade" id="<%=order.getKey().getOrderID()%>Modal" role="dialog">
-                                        <div class="modal-dialog">
-                                            <!-- Modal content-->
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h4 class="modal-title">Huỷ đơn hàng</h4>
-                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <p>Bạn có chắc muốn huỷ đơn hàng này?</p>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type='button' class='btn btn-default' data-dismiss="modal">Huỷ</button>
-                                                    <a href="MainController?action=CancelOrder&orderID=<%=order.getKey().getOrderID()%>&payType=<%=order.getKey().getPayType()%>"><button type="button" class="btn btn-danger">Xác nhận</button></a>
-                                                </div>
-                                            </div>
-                                        </div>
+
+            <% for (Pair<OrderDTO, List<OrderDetailDTO>> order : list) {%>
+            <div class="container" style="margin-bottom: 20px">
+                <article class="card">
+                    <h5 class="card-header p-3">
+                        Mã đơn hàng: <%=order.getKey().getOrderID()%>
+                        <% if ("Chưa xác nhận".equalsIgnoreCase(order.getKey().getStatusName())) {%>
+                        <button type="button" class="btn btn-danger" style="float: right; padding: 12px 15px 8px; text-align: center; font-weight: 600" data-toggle="modal" data-target="#<%=order.getKey().getOrderID()%>Modal">HUỶ ĐƠN HÀNG</button>
+                        <div class="modal fade" id="<%=order.getKey().getOrderID()%>Modal" role="dialog">
+                            <div class="modal-dialog">
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Huỷ đơn hàng</h4>
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
                                     </div>
-                                    <%}%>
-                                    <a style="float: right" class="mr-2" href="MainController?action=CustomerViewOrderDetail&orderID=<%=order.getKey().getOrderID()%>"><button class="primary-btn">CHI TIẾT</button></a>
-
-                                    
-                                    
-                                </h5>
-                                <div class="card-body">
-                                    <%
-                                        // number format
-                                        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
-                                        for (int i = 0; i < order.getValue().size(); i++) {
-                                            if (i % 4 == 0 || i == 0) {
-                                    %>
-                                    <div class="d-flex flex-row" style="justify-content: flex-start">
-                                        <%}%>
-                                        <div class="order__product__item p-5">
-                                            <img src="<%= order.getValue().get(i).getImage()%>" alt="product-image" style="width: 80px; float: left">
-                                            <div class="order__product__item__title">
-                                                <a href="ProductRouteController?productID=<%= order.getValue().get(i).getProductID()%>">
-                                                    <h6 class="mb-3"><%= order.getValue().get(i).getProductName()%></h6>
-                                                </a>
-                                                <%= order.getValue().get(i).getColor()%>, <%= order.getValue().get(i).getSize()%> x <%= order.getValue().get(i).getQuantity()%><br>
-                                                <p style="font-weight: 500; color: black"><%= numberFormat.format(order.getValue().get(i).getPrice()) %></p>
-
-                                            </div>
-                                        </div>
-                                        <%if ((i % 3 == 0 & i != 0) || i == order.getValue().size() - 1) {%>
-                                            </div>
-                                        <%}
-                                    }%>  
+                                    <div class="modal-body">
+                                        <p>Bạn có chắc muốn huỷ đơn hàng này?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type='button' class='btn btn-default' data-dismiss="modal">Huỷ</button>
+                                        <a href="MainController?action=CancelOrder&orderID=<%=order.getKey().getOrderID()%>&payType=<%=order.getKey().getPayType()%>"><button type="button" class="btn btn-danger">Xác nhận</button></a>
+                                    </div>
                                 </div>
-                                <div class="d-flex flex-row-reverse order__total mr-4 my-3" style="font-size: 20px">
-                                    Tổng: <%= numberFormat.format((int) (order.getKey().getTotal())) %>
-                                </div>  
-                                <%if(order.getKey().getStatusName().equalsIgnoreCase("ĐÃ GIAO")) {%>
-                                <div class="d-flex flex-row-reverse mr-3 mb-3">
-                                    <!-- button to rating page -->
-                                    <a href="RatingController?orderID=<%=order.getKey().getOrderID()%>"><button class="primary-btn"><i class="fa fa-star"></i>Ðánh giá</button></a>
-                                </div> 
-                                <%}%>
-                            </article>
+                            </div>
                         </div>
-                            <hr/>
                         <%}%>
-                    
+                        <a style="float: right" class="mr-2" href="MainController?action=CustomerViewOrderDetail&orderID=<%=order.getKey().getOrderID()%>"><button class="primary-btn">CHI TIẾT</button></a>
+
+
+
+                    </h5>
+                    <div class="card-body">
+                        <%
+                            // number format
+                            NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+                            for (int i = 0; i < order.getValue().size(); i++) {
+                                if (i % 4 == 0 || i == 0) {
+                        %>
+                        <div class="d-flex flex-row" style="justify-content: flex-start">
+                            <%}%>
+                            <div class="order__product__item p-5">
+                                <img src="<%= order.getValue().get(i).getImage()%>" alt="product-image" style="width: 80px; float: left">
+                                <div class="order__product__item__title">
+                                    <a href="ProductRouteController?productID=<%= order.getValue().get(i).getProductID()%>">
+                                        <h6 class="mb-3"><%= order.getValue().get(i).getProductName()%></h6>
+                                    </a>
+                                    <%= order.getValue().get(i).getColor()%>, <%= order.getValue().get(i).getSize()%> x <%= order.getValue().get(i).getQuantity()%><br>
+                                    <p style="font-weight: 500; color: black"><%= numberFormat.format(order.getValue().get(i).getPrice())%></p>
+
+                                </div>
+                            </div>
+                            <%if ((i % 3 == 0 & i != 0) || i == order.getValue().size() - 1) {%>
+                        </div>
+                        <%}
+                            }%>  
+                    </div>
+                    <div class="d-flex flex-row-reverse order__total mr-4 my-3" style="font-size: 20px">
+                        Tổng: <%= numberFormat.format((int) (order.getKey().getTotal()))%>
+                    </div>  
+                    <%
+                        if (order.getKey().getStatusName().equalsIgnoreCase("ĐÃ GIAO")) {
+                            Date today = new Date();
+                            Date orderDate = order.getKey().getOrderDate();
+                            long diffInMillies = today.getTime() - orderDate.getTime();
+                            long dateDiff = TimeUnit.MILLISECONDS.toDays(diffInMillies);
+                            if(dateDiff <= 45){
+                    %>
+                    <div class="d-flex flex-row-reverse mr-3 mb-3">
+                        <!-- button to rating page -->
+                        <a href="RatingController?orderID=<%=order.getKey().getOrderID()%>"><button class="primary-btn"><i class="fa fa-star"></i>Ðánh giá</button></a>
+                    </div> 
+                    <%}}%>
+                </article>
+            </div>
+            <hr/>
+            <%}%>
+
         </section>
         <!-- Shop Cart Section End -->
 
         <%      }
-            } else {%>
+        } else {%>
         <div style="text-align: center;">
             <div style="margin-bottom: 20px;">
                 <img src="./images/empty-cart.png" alt="Empty cart"/>
