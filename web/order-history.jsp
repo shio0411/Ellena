@@ -53,8 +53,8 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="breadcrumb__links">
-                            <a href="./"><i class="fa fa-home"></i> Home</a>
-                            <span>Order History</span>
+                            <a href="./"><i class="fa fa-home"></i> Trang chủ</a>
+                            <span>Lịch sử mua hàng</span>
                         </div>
                     </div>
                 </div>

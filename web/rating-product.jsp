@@ -137,9 +137,9 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="breadcrumb__links">
-                            <a href="./"><i class="fa fa-home"></i> Home</a>
-                            <a href="MainController?action=ViewOrderHistory&userID=<%=user.getUserID()%>">Order History</a>                     
-                            <span>Rating Product</span>
+                            <a href="./"><i class="fa fa-home"></i> Trang chủ</a>
+                            <a href="MainController?action=ViewOrderHistory&userID=<%=user.getUserID()%>">Lịch sử mua hàng</a>                     
+                            <span>Đánh giá sản phẩm</span>
                         </div>
                     </div>
                 </div>
