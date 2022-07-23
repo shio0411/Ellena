@@ -24,7 +24,7 @@ public class ShowManagerController extends HttpServlet {
         try {
             UserDAO dao = new UserDAO();
             List<UserDTO> listUser = dao.getAllManagers();
-            if (listUser.size() > 0) {
+            if (!listUser.isEmpty()) {
                 request.setAttribute("LIST_MANAGER", listUser);
                 url = SUCCESS;
             }

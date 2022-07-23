@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -29,11 +30,11 @@ public class StatisticDAO {
             + "WHERE DATEDIFF(month, orderDate, GETDATE()) < 12  AND o.orderID IN (SELECT orderID FROM tblOrderStatusUpdate WHERE statusID = '4')\n"
             + "GROUP BY year(orderDate),month(orderDate) \n"
             + "ORDER BY year(orderDate) asc";
-    private static final String STATISTIC_ORDER_CUSTOM = "SELECT orderDate, COUNT(*) AS [orderQuantity], SUM(total) AS [income], SUM(quantity) as [productQuantity] \n" +
-"FROM tblOrder o JOIN tblOrderDetail d ON o.orderID = d.orderID \n" +
-"WHERE o.orderDate >= ? AND o.orderDate <= ? AND o.orderID IN (SELECT orderID FROM tblOrderStatusUpdate WHERE statusID = '4')\n" +
-"GROUP BY orderDate\n" +
-"ORDER BY orderDate"; 
+    private static final String STATISTIC_ORDER_CUSTOM = "SELECT orderDate, COUNT(*) AS [orderQuantity], SUM(total) AS [income], SUM(quantity) as [productQuantity] \n"
+            + "FROM tblOrder o JOIN tblOrderDetail d ON o.orderID = d.orderID \n"
+            + "WHERE o.orderDate >= ? AND o.orderDate <= ? AND o.orderID IN (SELECT orderID FROM tblOrderStatusUpdate WHERE statusID = '4')\n"
+            + "GROUP BY orderDate\n"
+            + "ORDER BY orderDate";
     private static final String STATISTIC_ORDER_DAY = "SELECT COUNT(*) AS [orderQuantity], SUM(total) AS [income], SUM(quantity) as [productQuantity] \n"
             + "FROM tblOrder o JOIN tblOrderDetail d ON o.orderID = d.orderID \n"
             + "WHERE o.orderDate >= ? AND o.orderDate <= ? AND o.orderID IN (SELECT orderID FROM tblOrderStatusUpdate WHERE statusID = '4')";
@@ -59,11 +60,10 @@ public class StatisticDAO {
             + "GROUP BY Sex";
     private static final String GET_CANCELLED_ORDER = "SELECT COUNT(*) as [Number Order] FROM tblOrderStatusUpdate osu\n"
             + "JOIN tblOrder o ON osu.orderID=o.orderID\n"
-            + "WHERE statusID = 5 AND o.orderDate >= ? AND o.orderDate <= ?\n"
-            + "GROUP BY statusID";
+            + "WHERE o.orderDate >= ? AND o.orderDate <= ? AND statusID IN (SELECT statusID FROM tblOrderStatus WHERE statusID = 5 OR statusID = 7) ";
     private static final String GET_REFUND_ORDER = "SELECT COUNT(*) as [Number Order] FROM tblOrderStatusUpdate osu\n"
             + "JOIN tblOrder o ON osu.orderID=o.orderID\n"
-            + "WHERE statusID = 7 AND o.orderDate >= ? AND o.orderDate <= ?\n"
+            + "WHERE statusID = 8 AND o.orderDate >= ? AND o.orderDate <= ?\n"
             + "GROUP BY statusID";
     private static final String GET_TOTAL_ORDER = "SELECT COUNT(*) as [Number Order] FROM tblOrderStatusUpdate osu\n"
             + "JOIN tblOrder o ON osu.orderID=o.orderID\n"
@@ -78,11 +78,12 @@ public class StatisticDAO {
     private static final String GET_TOTAL_CUSTOMER = "SELECT COUNT(*) As [Number]\n"
             + "FROM tblUsers\n"
             + "WHERE roleID = 'CM'";
-     private static final String GET_LOYAL_CUSTOMER_LIST = "SELECT TOP (?) u.userID, u.fullName, SUM(total) as [Buy Value], COUNT(*) as [Order] \n" +
-"FROM tblUsers u JOIN tblOrder o ON u.userID = o.userID\n" +
-"WHERE o.orderDate >= ? AND o.orderDate <= ? AND u.roleID = 'CM' AND o.orderID IN (SELECT orderID FROM tblOrderStatusUpdate WHERE statusID = '4')\n" +
-"GROUP BY u.userID, u.fullName\n" +
-"ORDER BY [Buy Value] desc";
+    private static final String GET_LOYAL_CUSTOMER_LIST = "SELECT TOP (?) u.userID, u.fullName, SUM(total) as [Buy Value], COUNT(*) as [Order] \n"
+            + "FROM tblUsers u JOIN tblOrder o ON u.userID = o.userID\n"
+            + "WHERE o.orderDate >= ? AND o.orderDate <= ? AND u.roleID = 'CM' AND o.orderID IN (SELECT orderID FROM tblOrderStatusUpdate WHERE statusID = '4')\n"
+            + "GROUP BY u.userID, u.fullName\n"
+            + "ORDER BY [Buy Value] desc";
+
     public Map<String, StatisticDTO> getStatisticOrder7Day() throws SQLException {
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -205,7 +206,7 @@ public class StatisticDAO {
         }
         return map;
     }
-    
+
     public Map<String, StatisticDTO> getStatisticCustom(String from, String to) throws SQLException {
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -226,7 +227,16 @@ public class StatisticDAO {
                     StatisticDTO triplet = new StatisticDTO(orderQuantity, income, productQuantity);
                     map.put(date, triplet);
                 }
-                
+                LocalDate start = LocalDate.parse(from);
+                LocalDate end = LocalDate.parse(to);             
+                while (!start.isAfter(end)) {
+                    String stringDate = start.toString();
+                    if (map.get(stringDate) == null) {
+                        map.put(stringDate, new StatisticDTO(0, 0, 0));
+                    }
+                    start = start.plusDays(1);
+                }
+
             }
         } catch (Exception e) {
         } finally {
@@ -242,7 +252,6 @@ public class StatisticDAO {
         }
         return map;
     }
-
 
     public StatisticDTO getStatisticOrder(String from, String to) throws SQLException {
         Connection conn = null;
@@ -613,27 +622,27 @@ public class StatisticDAO {
         }
         return result * 100;
     }
-    
-    public List<Pair< Pair<String, String>, Pair<Integer, Integer> >> getLoyalCustomer(String from, String to, int numberCustomer) throws SQLException {
+
+    public List<Pair< Pair<String, String>, Pair<Integer, Integer>>> getLoyalCustomer(String from, String to, int numberCustomer) throws SQLException {
         Connection conn = null;
         PreparedStatement ptm = null;
         ResultSet rs = null;
-        List<Pair< Pair<String, String>, Pair<Integer, Integer> >> list = new ArrayList<>();
+        List<Pair< Pair<String, String>, Pair<Integer, Integer>>> list = new ArrayList<>();
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
                 ptm = conn.prepareStatement(GET_LOYAL_CUSTOMER_LIST);
                 ptm.setInt(1, numberCustomer);
                 ptm.setString(2, from);
-                ptm.setString(3, to);  
+                ptm.setString(3, to);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
                     String userID = rs.getString("userID");
                     String fullName = rs.getString("fullName");
                     Integer buyValue = rs.getInt("Buy Value");
                     Integer order = rs.getInt("Order");
-                    Pair <String, String> ps = new Pair(userID, fullName);
-                    Pair <Integer, Integer> pi = new Pair(buyValue, order);
+                    Pair<String, String> ps = new Pair(userID, fullName);
+                    Pair<Integer, Integer> pi = new Pair(buyValue, order);
                     list.add(new Pair(ps, pi));
                 }
 

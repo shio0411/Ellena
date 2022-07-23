@@ -46,7 +46,7 @@ public class SearchOrderController extends HttpServlet {
             OrderDAO dao = new OrderDAO();
             List<OrderDTO> listOrder = dao.getOrder(search, sDateFrom, sDateTo, sStatusID, (page * orderPerPage) - orderPerPage + 1, orderPerPage * page);
             
-            if (listOrder.size() > 0) {
+            if (!listOrder.isEmpty()) {
                 
                 int noOfOrders = dao.getNumberOfOrder();
                 noOfPages = (int) Math.ceil(noOfOrders * 1.0 / orderPerPage);

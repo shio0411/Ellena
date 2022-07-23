@@ -206,7 +206,7 @@
             List<Pair<String, Integer>> userGender = (List<Pair<String, Integer>>)request.getAttribute("USER_GENDER");
             List<Pair< Pair<String, String>, Pair<Integer, Integer> >> loyalCustomer = (List<Pair< Pair<String, String>, Pair<Integer, Integer> >>)request.getAttribute("LOYAL_CUSTOMER_LIST");
             
-            String MIN_DAY = "1970-01-01";
+            String MIN_DAY = "2000-01-01";
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             
             String loyalFrom = (String)request.getParameter("loyalFrom");

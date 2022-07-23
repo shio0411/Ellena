@@ -40,7 +40,7 @@ public class ShowOrderController extends HttpServlet {
             
             HttpSession session = request.getSession();
             UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
-            if (listOrder.size() > 0) {
+            if (!listOrder.isEmpty()) {
                 
                 int noOfOrders = dao.getNumberOfOrder();
                 int noOfPages = (int) Math.ceil(noOfOrders * 1.0 / orderPerPage);

@@ -5,9 +5,7 @@
 package store.controllers;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.List;
 import javafx.util.Pair;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,7 +13,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import store.shopping.ProductDAO;
-import store.shopping.ProductDTO;
 
 /**
  *
@@ -35,7 +32,7 @@ public class CheckSizeQuantityController extends HttpServlet {
             int productID = Integer.parseInt(request.getParameter("productID"));
             ProductDAO dao = new ProductDAO();
             ArrayList<Pair<String, Integer>> sizeQuantityList = dao.checkSizeQuantity(productID, color);
-            if (sizeQuantityList.size() > 0) {
+            if (!sizeQuantityList.isEmpty()) {
                 request.setAttribute("SIZE_QUANTITY", sizeQuantityList);
                 url = "ProductRouteController";
             }

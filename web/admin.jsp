@@ -1,4 +1,4 @@
-<%@page import="store.user.UserDAO"%>
+
 <%@page import="java.util.List"%>
 <%@page import="store.user.UserDTO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>

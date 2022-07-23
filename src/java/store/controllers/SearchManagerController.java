@@ -33,7 +33,7 @@ public class SearchManagerController extends HttpServlet {
             String status = request.getParameter("status");
             UserDAO dao = new UserDAO();
             List<UserDTO> listManager = dao.getListManagers(search, status);
-            if (listManager.size() > 0) {
+            if (!listManager.isEmpty()) {
                 request.setAttribute("LIST_MANAGER", listManager);
                 url = SUCCESS;
             }

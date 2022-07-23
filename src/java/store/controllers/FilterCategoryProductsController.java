@@ -5,8 +5,8 @@
 package store.controllers;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -44,14 +44,10 @@ public class FilterCategoryProductsController extends HttpServlet {
             List<String> colorList = new ArrayList();
             List<String> sizeList = new ArrayList();
             if(colors!=null){
-                for(String c: colors){
-                    colorList.add(c);
-                }
+                colorList.addAll(Arrays.asList(colors));
             }
             if(sizes!=null){
-                for(String s: sizes){
-                    sizeList.add(s);
-                }
+                sizeList.addAll(Arrays.asList(sizes));
             }
             
             List<ProductDTO> listProduct = dao.filterCategoryProducts(category, minAmount, maxAmount, colorList, sizeList);
