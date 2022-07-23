@@ -160,13 +160,14 @@
                                     <%if (order.getKey().getStatus().containsKey(5)) {%>
                                     <div class="step active"> <span class="icon pl-2"> <i class="fa fa-times"></i> </span> <span class="text"><p class="m-0">Đơn hàng đã bị huỷ</p><p><%=order.getKey().getStatus().get(1)%></p></span></div>
                                     <%} else if (order.getKey().getStatus().containsKey(6)) {%>
-                                    <div class="step active"> <span class="icon pl-3"> <i class="fa fa-exchange"></i> </span> <span class="text"><p class="m-0">Đơn hàng đã bị huỷ/Chờ hoàn tiền</p><p><%=order.getKey().getStatus().get(6)%></p></span></div>
+                                    <div class="step active"> <span class="icon pl-3"> <i class="fa fa-spinner"></i> </span> <span class="text"><p class="m-0">Đơn hàng đã bị huỷ/Chờ hoàn tiền</p><p><%=order.getKey().getStatus().get(6)%></p></span></div>
                                     <div class="step <%if (order.getKey().getStatus().containsKey(7)) {%>active<%}%>"> <span class="icon pl-3"> <i class="fa fa-money"></i> </span> <span class="text"><p class="m-0">Đã hoàn tiền</p><p><% if (order.getKey().getStatus().get(7) != null) {%>
                                             <%=order.getKey().getStatus().get(7)%><%}%></p></span></div>
                                     <%} else {%>
                                     <div class="step <%if (order.getKey().getStatus().containsKey(2)) {%>active<%}%>"> <span class="icon pl-3"> <i class="fa fa-user"></i> </span> <span class="text"><p class="m-0">Đơn hàng được xác nhận</p><p><%if (order.getKey().getStatus().containsKey(2)) {%><%=order.getKey().getStatus().get(2)%><%}%></p></span></div>
                                     <div class="step <%if (order.getKey().getStatus().containsKey(3)) {%>active<%}%>"> <span class="icon pl-3"> <i class="fa fa-truck"></i> </span> <span class="text"><p class="m-0">Đang giao hàng</p><p><%if (order.getKey().getStatus().containsKey(3)) {%><%=order.getKey().getStatus().get(3)%><%}%></p></span></div>
                                     <div class="step <%if (order.getKey().getStatus().containsKey(4)) {%>active<%}%>"> <span class="icon pl-3"> <i class="fa fa-cube"></i> </span> <span class="text"><p class="m-0">Giao hàng thành công</p><p><%if (order.getKey().getStatus().containsKey(4)) {%><%=order.getKey().getStatus().get(4)%><%}%></p></span> </div>
+                                    <%if (order.getKey().getStatus().containsKey(8)) {%><div class="step active"> <span class="icon pl-3"> <i class="fa fa-exchange"></i> </span> <span class="text"><p class="m-0">Đổi/trả hàng</p><p><%=order.getKey().getStatus().get(8)%></p></span> </div><%}%>
                                     <%}%>
                                 </div>
                             </div>

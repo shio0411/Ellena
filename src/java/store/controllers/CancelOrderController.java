@@ -62,7 +62,7 @@ public class CancelOrderController extends HttpServlet {
                         String orderId = String.valueOf(System.currentTimeMillis());
                         Environment environment = Environment.selectEnv("dev");
                         RefundMoMoResponse refundMoMoResponse = RefundTransaction.process(environment, orderId, requestId, Long.toString(order.getTotal()), Long.valueOf(order.getTransactionNumber()), "");
-                        if (refundMoMoResponse.getResultCode() != 0) {
+                        if (refundMoMoResponse.getResultCode() == 0) {
                             dao.updateOrderStatus(orderID, 7, "System", "");
                         }
                     }
