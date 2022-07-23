@@ -20,7 +20,6 @@ import store.user.UserDAO;
 @WebServlet(name = "ActivateAccountController", urlPatterns = {"/ActivateAccountController"})
 public class ActivateAccountController extends HttpServlet {
     private static final String ERROR = "ShowAccountController";
-    private static final String SUCCESS = "SearchAccountController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

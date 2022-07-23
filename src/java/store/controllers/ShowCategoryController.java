@@ -23,7 +23,7 @@ public class ShowCategoryController extends HttpServlet {
         try {
             CategoryDAO dao = new CategoryDAO();
             List<CategoryDTO> listCategory = dao.getAllCategory();
-            if (listCategory.size() > 0) {
+            if (!listCategory.isEmpty()) {
                 request.setAttribute("LIST_CATEGORY", listCategory);
                 url = SUCCESS;
             }

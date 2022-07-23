@@ -26,7 +26,7 @@ public class SearchCategoryController extends HttpServlet {
             String status = request.getParameter("status");
             CategoryDAO dao = new CategoryDAO();
             List<CategoryDTO> listCategory = dao.getListCategory(search, status);
-            if (listCategory.size() > 0) {
+            if (!listCategory.isEmpty()) {
                 request.setAttribute("LIST_CATEGORY", listCategory);
                 url = SUCCESS;
             }

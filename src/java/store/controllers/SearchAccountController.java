@@ -45,7 +45,7 @@ public class SearchAccountController extends HttpServlet {
             UserDAO dao = new UserDAO();
             List<UserDTO> listUser = dao.getListUsers(search, roleID, status, (page * accountPerPage) - accountPerPage + 1, accountPerPage * page);
 
-            if (listUser.size() > 0) {
+            if (!listUser.isEmpty()) {
                 
                 int noOfAccounts = dao.getNumberOfUser();
                 noOfPages = (int) Math.ceil(noOfAccounts * 1.0 / accountPerPage);

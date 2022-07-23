@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import store.user.UserDAO;
 import store.user.UserDTO;
-import store.user.UserError;
 
 
 @WebServlet(name = "UpdateNameController", urlPatterns = {"/UpdateNameController"})

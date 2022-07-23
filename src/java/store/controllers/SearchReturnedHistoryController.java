@@ -59,7 +59,7 @@ public class SearchReturnedHistoryController extends HttpServlet {
             
             request.setAttribute("RETURNED_HISTORY", returnMap);
             request.setAttribute("RETURNED_ORDERS", userMap);
-            if (userList.size() > 0) {
+            if (!userList.isEmpty()) {
                 url = SUCCESS;
             } else {
                 if (!search.isEmpty()) {

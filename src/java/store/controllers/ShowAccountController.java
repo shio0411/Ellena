@@ -37,7 +37,7 @@ public class ShowAccountController extends HttpServlet {
             }
             
             List<UserDTO> listUser = dao.getAllUsers((page * accountPerPage) - accountPerPage + 1, accountPerPage * page);
-            if (listUser.size() > 0) {
+            if (!listUser.isEmpty()) {
                 
                 int noOfAccounts = dao.getNumberOfUser();
                 int noOfPages = (int) Math.ceil(noOfAccounts * 1.0 / accountPerPage);
