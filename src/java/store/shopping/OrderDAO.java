@@ -801,7 +801,7 @@ public class OrderDAO {
                         check = updateOrderReturnStatus(orderID, 8, modifiedBy, roleID);
                         if (check) {
                             ptm = conn.prepareStatement(UPDATE_ORDER_TOTAL);
-                            ptm.setInt(1, getOrderTotal(orderID) - newQuantity * price);
+                            ptm.setInt(1, getOrderTotal(orderID) - (oldQuantity - newQuantity) * price);
                             ptm.setInt(2, orderID);
                             result = ptm.executeUpdate() > 0;
                         }
