@@ -793,9 +793,11 @@ public class ProductDAO {
                     }
 
                 }
-                image.put("key", listImage);
-                ProductDTO product = new ProductDTO(productID, productName, "", image, new HashMap<List<String>, Integer>(), price, 0, discount, 0, "", false);
-                list.add(product);
+                 if (productID != 0) {
+                    image.put("key", listImage);
+                    ProductDTO product = new ProductDTO(productID, productName, "", image, new HashMap<List<String>, Integer>(), price, 0, discount, 0, "", false);
+                    list.add(product);
+                }
 
             }
         } catch (Exception e) {
