@@ -104,7 +104,7 @@
 
                                             <div class="form-outline">
                                                 <label class="form-label" for="lowStockLimit">Giới hạn số lượng thấp</label>
-                                                <input class="form-control form-control-lg" min="0" max="500" type="number" name="lowStockLimit" id="lowStockLimit" placeholder="Thông báo khi số lượng thấp"/>
+                                                <input class="form-control form-control-lg" min="0" max="500" required type="number" name="lowStockLimit" id="lowStockLimit" placeholder="Thông báo khi số lượng thấp"/>
 
                                             </div>
                                         </div>
