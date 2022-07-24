@@ -73,7 +73,7 @@
                                                 <div class="d-inline-block float-right">
                                                 <a href="forgot-password.jsp">Quên mật khẩu?</a>  
                                                 </div>
-                                                <input type="password" name="password" class="form-control" placeholder="*********" id="password">
+                                                <input type="password" required="" name="password" class="form-control" placeholder="*********" id="password">
 
                                             </div>
                                              
