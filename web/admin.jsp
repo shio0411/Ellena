@@ -33,6 +33,11 @@
             if (role == null || "%".equals(role)) {
                 role = "";
             }
+            
+            String Status = request.getParameter("Status");
+            if (Status == null) {
+                Status = "";
+            }
             // pageNav vars
             boolean searchAll = false;
             String status = request.getParameter("status");//For storing request param for pagnation
@@ -58,7 +63,7 @@
                         <p><%=message%></p>
                     </div>
                     <div class="modal-footer">
-                        <a href="SearchAccountController?search=<%=search%>&role=<%= role%>&page=<%=currentPage%>"><button type="button" class="btn btn-default">Đóng</button></a>
+                        <a href="SearchAccountController?search=<%=search%>&role=<%= role%>&Status=<%=Status%>page=<%=currentPage%>"><button type="button" class="btn btn-default">Đóng</button></a>
                     </div>
                 </div>
 
@@ -90,18 +95,17 @@
                 <input type="text" name="search" value="<%= search%>" placeholder="Tên tài khoản">
                 Quyền
                 <select name="role">
-                    <option value="%" selected hidden>Chọn một quyền</option>
-                    <option value="AD" <%if ("AD".equalsIgnoreCase(roleID)) {%>selected<%}%>>Quản trị viên</option>
-                    <option value="MN" <%if ("MN".equalsIgnoreCase(roleID)) {%>selected<%}%>>Người quản lý</option>
-                    <option value="EM" <%if ("EM".equalsIgnoreCase(roleID)) {%>selected<%}%>>Nhân viên</option>
-                    <option value="CM" <%if ("CM".equalsIgnoreCase(roleID)) {%>selected<%}%>>Khách hàng</option>
+                    <option value="%" selected >Tất cả</option>
+                    <option value="AD" <%if ("AD".equalsIgnoreCase(roleID) || "AD".equalsIgnoreCase(role)) {%>selected<%}%>>Quản trị viên</option>
+                    <option value="MN" <%if ("MN".equalsIgnoreCase(roleID) || "MN".equalsIgnoreCase(role)) {%>selected<%}%>>Người quản lý</option>
+                    <option value="EM" <%if ("EM".equalsIgnoreCase(roleID) || "EM".equalsIgnoreCase(role)) {%>selected<%}%>>Nhân viên</option>
+                    <option value="CM" <%if ("CM".equalsIgnoreCase(roleID) || "CM".equalsIgnoreCase(role)) {%>selected<%}%>>Khách hàng</option>
                 </select>
                 Trạng thái
                 <select name="Status">
-                    <option value="all" selected hidden>Chọn trạng thái</option>
-
-                    <option value="true" <%if ("true".equalsIgnoreCase(status)) {%>selected<%}%>>Hiệu lực</option>
-                    <option value="false" <%if ("false".equalsIgnoreCase(status)) {%>selected<%}%>>Vô hiệu lực</option>
+                    <option value="all" selected>Tất cả</option>
+                    <option value="true" <%if ("true".equalsIgnoreCase(status) || "true".equalsIgnoreCase(Status)) {%>selected<%}%>>Hiệu lực</option>
+                    <option value="false" <%if ("false".equalsIgnoreCase(status) || "true".equalsIgnoreCase(Status)) {%>selected<%}%>>Vô hiệu lực</option>
                 </select>
                 <button type="submit" class="btn btn-default" style="width: 15%; padding: 0.5% 0.1%;"><i class="fa fa-search fa-lg"></i>Tìm kiếm</button>
                 <!--switch to SearchController page count after submit form-->
@@ -259,7 +263,7 @@
 
                                             <input type="hidden" name="search" value="<%=search%>">
                                             <input type="hidden" name="role" value="<%=role%>">
-
+                                            <input type="hidden" name="Status" value="<%=Status%>">
                                             </div>
                                             <div class="modal-footer">
                                                 <button class="btn btn-default" type="submit" name="action" value="UpdateAccount">Cập nhật</button>
@@ -380,10 +384,10 @@
                 %>
 
                 <!-- For displaying 1st page link except for the 1st page -->
-                <a href="SearchAccountController?search=<%= search%>&role=<%= role%>&page=1"><i class="glyphicon glyphicon-menu-left"></i><i class="glyphicon glyphicon-menu-left"></i></a>
+                <a href="SearchAccountController?search=<%= search%>&role=<%= role%>&Status=<%=Status%>&page=1"><i class="glyphicon glyphicon-menu-left"></i><i class="glyphicon glyphicon-menu-left"></i></a>
 
                 <!-- For displaying Previous link except for the 1st page -->
-                <a href="SearchAccountController?search=<%= search%>&role=<%= role%>&page=<%= currentPage - 1%>" style="text-decoration: none;"><i class="glyphicon glyphicon-menu-left"></i></a>
+                <a href="SearchAccountController?search=<%= search%>&role=<%= role%>&Status=<%=Status%>&page=<%= currentPage - 1%>" style="text-decoration: none;"><i class="glyphicon glyphicon-menu-left"></i></a>
                     <%
                         }
                     %>
@@ -397,7 +401,7 @@
                 <%
                 } else {
                 %>
-                <a href="SearchAccountController?search=<%= search%>&role=<%= role%>&page=<%= i%>"><%= i%></a>
+                <a href="SearchAccountController?search=<%= search%>&role=<%= role%>&Status=<%=Status%>&page=<%= i%>"><%= i%></a>
                 <%
                         }
                     }
@@ -408,10 +412,10 @@
                 <%
                     if (currentPage < noOfPages) {
                 %>
-                <a href="SearchAccountController?search=<%= search%>&role=<%= role%>&page=<%= currentPage + 1%>"><i class="glyphicon glyphicon-menu-right"></i></a>
+                <a href="SearchAccountController?search=<%= search%>&role=<%= role%>&Status=<%=Status%>&page=<%= currentPage + 1%>"><i class="glyphicon glyphicon-menu-right"></i></a>
 
                 <!-- For displaying last page link except for the last page -->
-                <a href="SearchAccountController?search=<%= search%>&role=<%= role%>&page=<%= noOfPages%>"><i class="glyphicon glyphicon-menu-right"></i><i class="glyphicon glyphicon-menu-right"></i></a>
+                <a href="SearchAccountController?search=<%= search%>&role=<%= role%>&Status=<%=Status%>&page=<%= noOfPages%>"><i class="glyphicon glyphicon-menu-right"></i><i class="glyphicon glyphicon-menu-right"></i></a>
 
                 <%
                         }
