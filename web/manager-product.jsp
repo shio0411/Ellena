@@ -1,3 +1,5 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.Iterator"%>
 <%@page import="store.shopping.ProductDTO"%>
 <%@page import="java.util.List"%>
 <%@page import="store.user.UserDTO"%>
@@ -12,7 +14,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="css/manager.css" type="text/css">
-        
+
     </head>
     <body>
         <%
@@ -24,7 +26,7 @@
             String status = request.getAttribute("STATUS") != null ? (String) request.getAttribute("STATUS") : "";//For storing request param for pagnation            
 
             String searchValue = request.getAttribute("SEARCH") != null ? (String) request.getAttribute("SEARCH") : "";
-            
+
             String message = (String) request.getAttribute("MESSAGE");
             if (message != null) {
         %>
@@ -66,10 +68,10 @@
                 <form class="m-0" action="MainController" method="POST">  
                     <h4 class="dropdown">
                         <b>Xin chào, </b>
-                            <a  data-toggle="dropdown" role="button"><b class="text-color-dark"><%= loginUser.getFullName()%></b></a>
+                        <a  data-toggle="dropdown" role="button"><b class="text-color-dark"><%= loginUser.getFullName()%></b></a>
                         <div  class="dropdown-menu nav-tabs" role="tablist">
-                        <button class="dropdown-item btn" role="tab" type="button"><a class="text-dark" href="my-profile.jsp">Thông tin tài khoản</a></button>
-                        <input class=" dropdown-item btn" type="submit" name="action" value="Logout"/>
+                            <button class="dropdown-item btn" role="tab" type="button"><a class="text-dark" href="my-profile.jsp">Thông tin tài khoản</a></button>
+                            <input class=" dropdown-item btn" type="submit" name="action" value="Logout"/>
                         </div>
                     </h4>
                 </form>
@@ -84,9 +86,9 @@
                 <!--search bar-->
                 <div class="col-9">
                     <form action="ManagerSearchProductController">
-                        <input type="text" name="search" value="<%= searchValue %>" placeholder="Tên sản phẩm">
+                        <input type="text" name="search" value="<%= searchValue%>" placeholder="Tên sản phẩm">
 
-                       
+
                         <select name="status">
                             <option value="all" <% if (status.equals("") || status.equals("all")) { %> selected  <% }%>>Chọn trạng thái</option>
                             <option value="true" <% if (status.equals("true")) { %> selected  <% }%>>Kích hoạt</option>
@@ -105,8 +107,93 @@
 
 
             </div>
-            <a class="btn btn-default" href="add-product.jsp">Thêm sản phẩm mới</a>
-            
+            <div class="row">
+                <a class="btn btn-default" href="add-product.jsp">Thêm sản phẩm mới</a>
+
+                <!--pop up show product under lowStockLimit Start-->
+                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" >
+                        <div class="modal-content" >
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="myModalLabel">Sản phẩm sắp hết hàng</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+                            </div>
+                            <div>
+                                <table class="table table-hover table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Tên Sản Phẩm</th>
+                                            <th>Màu/Size</th>
+                                            <th>Mức Cảnh Báo</th>
+                                            <th>SL Trong Kho</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <%
+                                            List<ProductDTO> listLowStockProduct = (List<ProductDTO>) request.getAttribute("LIST_LOW_STOCK_PRODUCT");
+                                            for (ProductDTO lowStockProduct : listLowStockProduct) {
+                                        %>
+                                        <tr>
+                                            <td><%= lowStockProduct.getProductID()%></td>
+                                            <td><%= lowStockProduct.getProductName()%></td>
+
+                                            <%
+                                                Iterator<List<String>> it1 = lowStockProduct.getColorSizeQuantity().keySet().iterator();
+                                                List<String> key = new ArrayList<>();
+                                                while (it1.hasNext()) {
+                                                    for (String n : it1.next()) {
+                                                        key.add(n);
+                                                    }
+                                                }
+                                                List<String> colorSize = new ArrayList<>();
+                                                colorSize.add(key.get(0));
+                                                colorSize.add(key.get(1));
+                                            %>
+
+                                            <td><%= key.get(0)%>/<%= key.get(1)%></td>
+                                            <td><%= lowStockProduct.getLowStockLimit()%></td>
+                                            <td><%= lowStockProduct.getColorSizeQuantity().get(colorSize)%></td>
+                                        </tr>
+                                        <%
+                                            }
+                                        %>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!--pop up show product under lowStockLimit End-->
+                <!--button with warning number-->
+
+                <button class="btn btn-default" type="button" data-toggle="modal" data-target="#myModal">
+                    Sản phẩm sắp hết
+
+
+                </button>
+                <%
+                    if (listLowStockProduct != null) {
+                        if (listLowStockProduct.size() > 0) {
+                %>
+                <div class="tip"><%= listLowStockProduct.size()%></div>
+                <%
+                        }
+                    }
+                %>
+
+
+
+            </div>
+
+
             <%  List<ProductDTO> listProduct = (List<ProductDTO>) request.getAttribute("LIST_PRODUCT");
                 if (listProduct != null) {
                     if (listProduct.size() > 0) {
@@ -143,10 +230,10 @@
                         <%
                             if (list.isStatus()) {
                         %>
-                        <a class="btn btn-default" href="DeactivateProductController?productID=<%=list.getProductID()%>&search=<%= searchValue %>&status=<%= status%>&page=<%= currentPage %>">Vô hiệu hoá</a> 
+                        <a class="btn btn-default" href="DeactivateProductController?productID=<%=list.getProductID()%>&search=<%= searchValue%>&status=<%= status%>&page=<%= currentPage%>">Vô hiệu hoá</a> 
                         <%} else {
                         %>
-                        <a class="btn btn-default" href="ActivateProductController?productID=<%=list.getProductID()%>&search=<%= searchValue %>&status=<%= status%>&page=<%= currentPage %>">Kích hoạt</a> 
+                        <a class="btn btn-default" href="ActivateProductController?productID=<%=list.getProductID()%>&search=<%= searchValue%>&status=<%= status%>&page=<%= currentPage%>">Kích hoạt</a> 
                         <%
                             }
                         %>
@@ -159,12 +246,12 @@
 
                 </tr>
                 <%         }
-                        }
-                    }else{
-                        %>
-                        <div style="text-align: center">Không có kết quả tìm kiếm.</div>
+                    }
+                } else {
+                %>
+                <div style="text-align: center">Không có kết quả tìm kiếm.</div>
                 <%
-                        }%>
+                    }%>
             </table>
 
 
@@ -176,7 +263,6 @@
             <div class="row pagination__option" style="justify-content: center; align-items: center; text-align: center;">
 
                 <%
-                    
                     int noOfPages = (int) request.getAttribute("noOfPages");
                     int noOfPageLinks = 5; // amount of page links to be displayed
                     int minLinkRange = noOfPageLinks / 2; // minimum link range ahead/behind
@@ -201,7 +287,7 @@
                             end = (currentPage + minLinkRange);
                         } else if (noOfPages < noOfPageLinks) {
                             end = noOfPages; // in case noOfPageLinks larger than noOfPages and display wrong
-                        } else{
+                        } else {
                             end = noOfPageLinks;
                         }
                     } else {
@@ -217,7 +303,7 @@
 
                 <!-- For displaying 1st page link except for the 1st page -->
                 <a href="ManagerShowProductController?page=1"><i class="glyphicon glyphicon-menu-left"></i><i style="margin-left: -4px" class="glyphicon glyphicon-menu-left"></i></a>
-                
+
                 <!-- For displaying Previous link except for the 1st page -->
                 <a href="ManagerShowProductController?page=<%= currentPage - 1%>"><i class="glyphicon glyphicon-menu-left"></i></a>
                     <%
@@ -244,15 +330,15 @@
                     if (currentPage < noOfPages) {
                 %>
                 <a href="ManagerShowProductController?page=<%= currentPage + 1%>"><i class="glyphicon glyphicon-menu-right"></i></a>
-                
-                <!-- For displaying last page link except for the last page -->
-                <a href="ManagerShowProductController?page=<%= noOfPages %>"><i class="glyphicon glyphicon-menu-right"></i><i style="margin-left: -4px" class="glyphicon glyphicon-menu-right"></i></a>
-                
-                    <%
-                        }
 
-                        //                end of pageNav
-                    %>
+                <!-- For displaying last page link except for the last page -->
+                <a href="ManagerShowProductController?page=<%= noOfPages%>"><i class="glyphicon glyphicon-menu-right"></i><i style="margin-left: -4px" class="glyphicon glyphicon-menu-right"></i></a>
+
+                <%
+                    }
+
+                    //                end of pageNav
+                %>
 
 
 
@@ -262,10 +348,10 @@
                 %>
 
                 <!-- For displaying 1st page link except for the 1st page -->
-                <a href="ManagerSearchProductController?search=<%= searchValue %>&status=<%= status%>&page=1"><i class="glyphicon glyphicon-menu-left"></i><i style="margin-left: -4px" class="glyphicon glyphicon-menu-left"></i></a>
-                
+                <a href="ManagerSearchProductController?search=<%= searchValue%>&status=<%= status%>&page=1"><i class="glyphicon glyphicon-menu-left"></i><i style="margin-left: -4px" class="glyphicon glyphicon-menu-left"></i></a>
+
                 <!-- For displaying Previous link except for the 1st page -->
-                <a href="ManagerSearchProductController?search=<%= searchValue %>&status=<%= status%>&page=<%= currentPage - 1%>" style="text-decoration: none;"><i class="glyphicon glyphicon-menu-left"></i></a>
+                <a href="ManagerSearchProductController?search=<%= searchValue%>&status=<%= status%>&page=<%= currentPage - 1%>" style="text-decoration: none;"><i class="glyphicon glyphicon-menu-left"></i></a>
                     <%
                         }
                     %>
@@ -279,7 +365,7 @@
                 <%
                 } else {
                 %>
-                <a href="ManagerSearchProductController?search=<%= searchValue %>&status=<%= status%>&page=<%= i%>"><%= i%></a>
+                <a href="ManagerSearchProductController?search=<%= searchValue%>&status=<%= status%>&page=<%= i%>"><%= i%></a>
                 <%
                         }
                     }
@@ -290,23 +376,22 @@
                 <%
                     if (currentPage < noOfPages) {
                 %>
-                <a href="ManagerSearchProductController?search=<%= searchValue %>&status=<%= status%>&page=<%= currentPage + 1%>"><i class="glyphicon glyphicon-menu-right"></i></a>
-                
+                <a href="ManagerSearchProductController?search=<%= searchValue%>&status=<%= status%>&page=<%= currentPage + 1%>"><i class="glyphicon glyphicon-menu-right"></i></a>
+
                 <!-- For displaying last page link except for the last page -->
-                <a href="ManagerSearchProductController?search=<%= searchValue %>&status=<%= status%>&page=<%= noOfPages %>"><i class="glyphicon glyphicon-menu-right"></i><i style="margin-left: -4px"class="glyphicon glyphicon-menu-right"></i></a>
-                
-                    <%
-                            }
+                <a href="ManagerSearchProductController?search=<%= searchValue%>&status=<%= status%>&page=<%= noOfPages%>"><i class="glyphicon glyphicon-menu-right"></i><i style="margin-left: -4px"class="glyphicon glyphicon-menu-right"></i></a>
 
+                <%
                         }
-                        //                end of pageNav
 
-                    %>
+                    }
+                    //                end of pageNav
+
+                %>
 
             </div>
-            <%                
-                } //end of the "No product" if statement
-            %>
+            <%                } //end of the "No product" if statement
+%>
 
 
 

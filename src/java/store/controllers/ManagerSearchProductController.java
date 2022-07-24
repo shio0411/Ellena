@@ -47,6 +47,7 @@ public class ManagerSearchProductController extends HttpServlet {
             }
 
             List<ProductDTO> listProduct = dao.getListProduct(search, status, (page * productPerPage) - productPerPage + 1, productPerPage * page);
+            List<ProductDTO> listLowStockProduct = dao.getLowStockProduct();
 
             if (listProduct.size() > 0) {
                 
@@ -60,6 +61,7 @@ public class ManagerSearchProductController extends HttpServlet {
                 url = SUCCESS;
             }
             
+            request.setAttribute("LIST_LOW_STOCK_PRODUCT", listLowStockProduct);
             request.setAttribute("SEARCH", search);
             request.setAttribute("STATUS", status);
             

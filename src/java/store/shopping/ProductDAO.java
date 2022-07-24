@@ -46,14 +46,14 @@ public class ProductDAO {
             + "WHERE  p.status = 1\n"
             + "GROUP BY p.productID, p.productName, p.price, p.discount, i.image\n"
             + "ORDER BY SUM(d.quantity) desc";
-    private static final String GET_SALE_LIST = "SELECT p.productID, p.productName, p.price, p.discount, i.image\n" +
-"            FROM tblProduct p JOIN tblProductColors pc ON p.productID = pc.productID \n" +
-"            JOIN tblColorImage i ON pc.productColorID = i.productColorID\n" +
-"            JOIN tblOrderDetail d ON p.productID = d.productID \n" +
-"            JOIN tblOrder o ON d.orderID = o.orderID\n" +
-"            WHERE  p.status = 1 AND p.discount <> 0\n" +
-"            GROUP BY p.productID, p.productName, p.price, p.discount, i.image\n" +
-"            ORDER BY p.discount desc";
+    private static final String GET_SALE_LIST = "SELECT p.productID, p.productName, p.price, p.discount, i.image\n"
+            + "            FROM tblProduct p JOIN tblProductColors pc ON p.productID = pc.productID \n"
+            + "            JOIN tblColorImage i ON pc.productColorID = i.productColorID\n"
+            + "            JOIN tblOrderDetail d ON p.productID = d.productID \n"
+            + "            JOIN tblOrder o ON d.orderID = o.orderID\n"
+            + "            WHERE  p.status = 1 AND p.discount <> 0\n"
+            + "            GROUP BY p.productID, p.productName, p.price, p.discount, i.image\n"
+            + "            ORDER BY p.discount desc";
     private static final String GET_NEW_ARRIVAL_LIST = "SELECT p.productID, p.productName, p.price, p.discount, i.image\n"
             + "FROM tblProduct p JOIN tblProductColors pc ON p.productID = pc.productID \n"
             + "JOIN tblColorImage i ON pc.productColorID = i.productColorID\n"
@@ -135,6 +135,10 @@ public class ProductDAO {
             + "JOIN tblColorSizes cs ON cs.productColorID = pc.productColorID\n"
             + "WHERE dbo.fuChuyenCoDauThanhKhongDau(p.productName) LIKE ?\n"
             + "ORDER BY ROW_COUNT DESC";
+    private static final String GET_LOW_STOCK_LIMIT_PRODUCT = "SELECT p.productID, p.productName, pc.color, cs.size, p.lowStockLimit, cs.quantity\n"
+            + "FROM tblProduct p JOIN tblProductColors pc ON p.productID = pc.productID \n"
+            + "JOIN tblColorSizes cs ON pc.productColorID = cs.productColorID\n"
+            + "WHERE cs.quantity <= p.lowStockLimit AND p.status = 1";
 
     //-------------------------------
     private int numberOfProduct;
@@ -536,8 +540,9 @@ public class ProductDAO {
                     colorSizeQuantity.put(Arrays.asList(color, size), quantity);
 
                 }
-                if(!productName.equals(""))
-                product = new ProductDTO(productID, productName, description, colorImage, colorSizeQuantity, price, price, discount, lowStockLimit, categoryName, status);
+                if (!productName.equals("")) {
+                    product = new ProductDTO(productID, productName, description, colorImage, colorSizeQuantity, price, price, discount, lowStockLimit, categoryName, status);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -793,7 +798,7 @@ public class ProductDAO {
                     }
 
                 }
-                 if (productID != 0) {
+                if (productID != 0) {
                     image.put("key", listImage);
                     ProductDTO product = new ProductDTO(productID, productName, "", image, new HashMap<List<String>, Integer>(), price, 0, discount, 0, "", false);
                     list.add(product);
@@ -1639,6 +1644,53 @@ public class ProductDAO {
         for (ProductDTO p : filterOut) {
             listProduct.remove(p);
         }
+        return listProduct;
+    }
+
+    public List<ProductDTO> getLowStockProduct() throws SQLException {
+        List<ProductDTO> listProduct = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_LOW_STOCK_LIMIT_PRODUCT);
+                rs = ptm.executeQuery();
+                HashMap<List<String>, Integer> colorSizeQuantity = new HashMap<>();
+                List<String> colorSize = new ArrayList<>();
+                while (rs.next()) {
+                    colorSizeQuantity = new HashMap<>();
+                    colorSize = new ArrayList<>();
+                    int productID = rs.getInt("productID");
+                    String productName = rs.getString("productName");
+                    String color = rs.getString("color");
+                    String size = rs.getString("size");
+                    int lowStockLimit = rs.getInt("lowStockLimit");
+                    int quantity = rs.getInt("quantity");
+                    colorSize.add(color);
+                    colorSize.add(size);
+                    colorSizeQuantity.put(colorSize, quantity);
+                    
+                    listProduct.add(new ProductDTO(productID, productName, colorSizeQuantity, quantity, lowStockLimit));
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+
         return listProduct;
     }
 

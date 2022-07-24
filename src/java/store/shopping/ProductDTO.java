@@ -84,6 +84,16 @@ public class ProductDTO {
         this.status = status;
     }
 
+    public ProductDTO(int productID, String productName, Map<List<String>, Integer> colorSizeQuantity, int quantity, int lowStockLimit) {
+        this.productID = productID;
+        this.productName = productName;
+        this.colorSizeQuantity = colorSizeQuantity;
+        this.quantity = quantity;
+        this.lowStockLimit = lowStockLimit;
+    }
+
+    
+    
     public int getCategoryID() {
         return categoryID;
     }

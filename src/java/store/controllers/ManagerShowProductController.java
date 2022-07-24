@@ -39,6 +39,7 @@ public class ManagerShowProductController extends HttpServlet {
             
             ProductDAO dao = new ProductDAO();
             List<ProductDTO> listProduct = dao.getAllProduct((page * productPerPage) - productPerPage + 1, productPerPage * page);
+            List<ProductDTO> listLowStockProduct = dao.getLowStockProduct();
             
             if (listProduct.size() > 0) {
                 
@@ -46,6 +47,7 @@ public class ManagerShowProductController extends HttpServlet {
                 int noOfPages = (int) Math.ceil(noOfProducts * 1.0 / productPerPage);
                 
                 request.setAttribute("LIST_PRODUCT", listProduct);
+                request.setAttribute("LIST_LOW_STOCK_PRODUCT", listLowStockProduct);
                 request.setAttribute("noOfPages", noOfPages);
                 request.setAttribute("currentPage", page);
                 
