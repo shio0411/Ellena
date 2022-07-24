@@ -76,6 +76,10 @@
                 margin-top:-140px; /* This needs to be half of the height */
                 margin-left:-140px; /* This needs to be half of the width */
             }
+            
+            .fa-clock-rotate-left::before {
+                content: "\f1da";
+            }
         </style>
         <%ProductDTO product = (ProductDTO) request.getAttribute("PRODUCT_DETAIL");
             Set<String> colorList = product.getColorImage().keySet();
@@ -107,12 +111,13 @@
         <div class="sidenav">
             <a href="ManagerStatisticController"><i class="fa fa-bar-chart fa-lg"></i>Số liệu thống kê</a>
             <a href="ManagerShowProductController" style="color: #873e23; font-weight: bold;"><i class="fa fa-archive fa-lg"></i>Quản lí sản phẩm</a>
-            <a href="manager-order.jsp"><i class="fa fa-cart-plus fa-lg"></i>Quản lí đơn hàng</a>
+            <a href="ShowOrderController"><i class="fa fa-cart-plus fa-lg"></i>Quản lí đơn hàng</a>
+            <a href="customer-return-history.jsp"><i class="fa fa-clock-rotate-left fa-lg"></i>Lịch sử đổi/trả</a>
         </div>
         <div class='main'>
             <div class="row">
                 <div class="col-md-12 mb-4">
-                    <div class="form-outline" >
+                    <div class="form-outline">
                         <label class="form-label" for="colorImage">Hình ảnh sản phẩm</label>
                         <ul class="nav nav-pills mb-4">
                             <% int t = 1;
