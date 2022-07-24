@@ -20,7 +20,7 @@ import store.shopping.ProductDAO;
 @WebServlet(name = "DeleteImageController", urlPatterns = {"/DeleteImageController"})
 public class DeleteImageController extends HttpServlet {
     private static final String ERROR = "error.jsp";
-    private static final String SUCCESS = "MainController?action=ViewImages";
+    private static final String SUCCESS = "ViewImagesController";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
