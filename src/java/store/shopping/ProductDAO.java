@@ -124,7 +124,7 @@ public class ProductDAO {
             + "			FROM tblProduct p JOIN tblProductColors pc ON p.productID = pc.productID \n"
             + "			JOIN tblColorImage i ON pc.productColorID = i.productColorID\n"
             + "			JOIN tblColorSizes cs ON cs.productColorID = pc.productColorID\n"
-            + "			WHERE dbo.fuChuyenCoDauThanhKhongDau(p.productName) LIKE ?\n"
+            + "			WHERE dbo.fuChuyenCoDauThanhKhongDau(p.productName) LIKE ? AND p.status=1\n"
             + "			)\n"
             + "SELECT productID, productName, price, discount, image, color, size\n"
             + "FROM subTable\n"
