@@ -19,7 +19,7 @@ import store.shopping.ProductDAO;
  */
 @WebServlet(name = "DeleteImageController", urlPatterns = {"/DeleteImageController"})
 public class DeleteImageController extends HttpServlet {
-    private static final String ERROR = "error.jsp";
+    private static final String ERROR = "ViewImagesController";
     private static final String SUCCESS = "ViewImagesController";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,6 +42,8 @@ public class DeleteImageController extends HttpServlet {
             if (check) {
                 request.setAttribute("MESSAGE", "Ảnh đã được xoá thành công.");
                 url = SUCCESS;
+            } else {
+                request.setAttribute("MESSAGE", "Ảnh không tồn tại!");
             }
         } catch (Exception e) {
             log("Error at ManagerShowProductDetailController: " + e.toString());

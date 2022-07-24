@@ -453,25 +453,25 @@
                 var form = document.getElementById("editColorForm");
 
                 if (existedColors.list === null) {
-                    stored.push(existedColors.value);
+                    stored.push(existedColors.value.toLowerCase());
                 } else {
                     for (var i = 0; i < existedColors.length; i++) {
-                        stored.push(existedColors[i].value);
+                        stored.push(existedColors[i].value.toLowerCase());
                     }
                 }
 
                 if (form.color.list === null) {
-                    if (stored.includes(form.color.value)) {
+                    if (stored.includes(form.color.value.toLowerCase())) {
                         e.preventDefault();
                         return alert("Không thể nhập màu trùng nhau!");
                     }
                 } else {
                     for (var inputColor of form.color) {
-                        if (stored.includes(inputColor.value)) {
+                        if (stored.includes(inputColor.value.toLowerCase())) {
                             e.preventDefault();
                             return alert("Không thể nhập màu trùng nhau!");
                         }
-                        stored.push(inputColor.value);
+                        stored.push(inputColor.value.toLowerCase());
                     }
                 }
             }
@@ -483,25 +483,25 @@
                 var stored = [];
 
                 if (existedSizes.list === null) {
-                    stored.push(existedSizes.value);
+                    stored.push(existedSizes.value.toLowerCase());
                 } else {
                     for (var i = 0; i < existedSizes.length; i++) {
-                        stored.push(existedSizes[i].value);
+                        stored.push(existedSizes[i].value.toLowerCase());
                     }
                 }
 
                 if (sizes.list === null) {
-                    if (stored.includes(sizes.value)) {
+                    if (stored.includes(sizes.value.toLowerCase())) {
                         e.preventDefault();
                         return alert("Không thể nhập màu trùng nhau!");
                     }
                 } else {
                     for (var inputSize of sizes) {
-                        if (stored.includes(inputSize.value)) {
+                        if (stored.includes(inputSize.value.toLowerCase())) {
                             e.preventDefault();
                             return alert("Không thể nhập màu trùng nhau!");
                         }
-                        stored.push(inputSize.value);
+                        stored.push(inputSize.value.toLowerCase());
                     }
                 }
             }
