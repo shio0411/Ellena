@@ -89,8 +89,8 @@
                        
                         <select name="status">
                             <option value="all" <% if (status.equals("") || status.equals("all")) { %> selected  <% }%>>Chọn trạng thái</option>
-                            <option value="true" <% if (status.equals("true")) { %> selected  <% }%>>Active</option>
-                            <option value="false" <% if (status.equals("false")) { %> selected  <% }%>>Inactive</option>
+                            <option value="true" <% if (status.equals("true")) { %> selected  <% }%>>Kích hoạt</option>
+                            <option value="false" <% if (status.equals("false")) { %> selected  <% }%>>Vô hiệu hóa</option>
                         </select>
 
                         <button type="submit" name="action" value="ManagerSearchProduct" class="btn btn-default" style="width: 15%; padding: 0.5% 0.1%;"><i class="fa fa-search fa-lg"></i>Tìm kiếm</button>
