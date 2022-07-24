@@ -412,6 +412,13 @@
             }
             console.log(newId);
             function checkForm(e) {
+                var firstNumber = parseInt(document.getElementById("price").value, 10);
+                var secondNumber = parseInt(document.getElementById("discount").value, 10);
+                if(firstNumber < secondNumber)
+                {
+                    e.preventDefault();
+                    return alert("Giá gốc phải lớn hơn giá giảm");
+                }
                 var form = document.getElementById("myForm");
                 if (form.checkValidity()) {
 
