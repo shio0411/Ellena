@@ -141,7 +141,7 @@
 
                                         <td class="cart__quantity">
                                             <div class="pro-qty">
-                                                <input type="text" value="<%= item.getQuantity()%>" id="_quantity#<%= i%>">
+                                                <input type="number" value="<%= item.getQuantity()%>" id="_quantity#<%= i%>">
                                             </div>
                                         </td>
                                         <td class="cart__total"><%= numberFormat.format((item.getQuantity() * (item.getPrice() - item.getDiscount()))) %></td>
