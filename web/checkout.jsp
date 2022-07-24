@@ -1,3 +1,5 @@
+<%@page import="java.util.Locale"%>
+<%@page import="java.text.NumberFormat"%>
 <%@page import="store.shopping.CartProduct"%>
 <%@page import="store.shopping.Cart"%>
 <%@page import="store.shopping.OrderError"%>
@@ -32,6 +34,8 @@
             if(cartMessage == null){
                 cartMessage = "";
             }
+            // number format
+            NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
         %>
         
         <!-- Checkout Section Begin -->
@@ -141,13 +145,13 @@
 
 
                                         <div class="col-md-2">
-                                            <%= item.getPrice() - item.getDiscount()%>
+                                            <%= numberFormat.format(item.getPrice() - item.getDiscount()) %>
                                         </div>
                                         <div class="col-md-2">
                                             <%= item.getQuantity()%>
                                         </div>
                                         <div class="col-md-2">
-                                            <%= (int) (((item.getPrice() - item.getDiscount()) * item.getQuantity()) / 1000)%>.000
+                                            <%= numberFormat.format((int) (((item.getPrice() - item.getDiscount()) * item.getQuantity()))) %>
                                         </div>        
 
 
@@ -164,11 +168,11 @@
                                 <%  
                                     if (subtotal > total) {
                                 %>
-                                        <li>Tổng tiền hàng <span><%= (int) (subtotal / 1000)%>.000₫ </span></li>
-                                        <li>Giảm giá <span>-<%= (int) ((subtotal - total) / 1000)%>.000₫ </span></li>
+                                <li>Tổng tiền hàng <span><%= numberFormat.format((int) (subtotal)) %> </span></li>
+                                <li>Giảm giá <span>-<%= numberFormat.format((int) ((subtotal - total))) %> </span></li>
                                 <%  }%>
                                         <li>Tổng thanh toán 
-                                            <span><%= (int) (total / 1000)%>.000₫ </span>
+                                            <span><%= numberFormat.format((int) (total)) %> </span>
                                         </li>
                                         <input type="hidden" name="total" value="<%= ((int) (total / 1000)) * 1000%>"/>
                                         <% session.setAttribute("TOTAL", ((int) (total / 1000)) * 1000); %>

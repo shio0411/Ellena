@@ -392,7 +392,7 @@ public class JavaMailUtils {
                 + "                                <tr> \n"
                 + "                                    <td style=\"border-top:1px solid #000;\" width=\"100%\">\n"
                 + "                                        <p style=\"text-align:center;\">Trân trọng Đội ngũ ELLENA</p>\n"
-                + "                                        <p style=\"text-align:center;\">Mọi thắc mắc xin vui lòng liên hệ: <a href=\"mailto:tongductrung2017@gmail.com\">tongductrung2017@gmail.com</a></p>\n"
+                + "                                        <p style=\"text-align:center;\">Mọi thắc mắc xin vui lòng liên hệ: <a href=\"mailto:Support@ellenafashion.com\">Support@ellenafashion.com</a></p>\n"
                 + "                                    </td>\n"
                 + "                                </tr>\n"
                 + "                                <tr>\n"

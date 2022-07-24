@@ -1,3 +1,5 @@
+<%@page import="java.util.Locale"%>
+<%@page import="java.text.NumberFormat"%>
 <%@page import="java.util.List"%>
 <%@page import="store.shopping.CartProduct"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -25,6 +27,8 @@
             }
             String updateSuccessMsg = (String) request.getAttribute("QUANTITY_MESSAGE_SUCCESS");
             String updateFailMsg = (String) request.getAttribute("QUANTITY_MESSAGE_FAIL");
+            // number format
+            NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
             if (updateSuccessMsg != null) {
         %>
         <div class="alert alert-success add-to-cart-notify" id="add-to-cart-notify" style="text-align: center; margin-bottom: 0;">
@@ -124,12 +128,12 @@
                                             <%
                                                 if (item.getDiscount() != 0) {
                                             %>
-                                            <s style="color: #B1B0B0; font-weight: normal;"><%= item.getPrice() / 1000%>.000</s> <br>    
-                                            <%= (item.getPrice() - item.getDiscount()) / 1000%>.000
+                                            <s style="color: #B1B0B0; font-weight: normal;"><%= numberFormat.format(item.getPrice()) %></s> <br>    
+                                            <%= numberFormat.format((item.getPrice() - item.getDiscount())) %>
                                             <%
                                             } else {
                                             %>
-                                            <%= item.getPrice() / 1000%>.000
+                                            <%= numberFormat.format(item.getPrice()) %>
                                             <%
                                                 }
                                             %>
@@ -140,7 +144,7 @@
                                                 <input type="text" value="<%= item.getQuantity()%>" id="_quantity#<%= i%>">
                                             </div>
                                         </td>
-                                        <td class="cart__total"><%= (item.getQuantity() * (item.getPrice() - item.getDiscount())) / 1000%>.000</td>
+                                        <td class="cart__total"><%= numberFormat.format((item.getQuantity() * (item.getPrice() - item.getDiscount()))) %></td>
                                         <td class="cart__close">
                                             <a href="MainController?action=DeleteCartItem&productID=<%= item.getProductID()%>&color=<%= item.getColor()%>&size=<%= item.getSize()%>">
                                                 <span class="icon_close"></span>
@@ -187,11 +191,11 @@
                             <%  
                                 if (subtotal > total) {
                             %>
-                                <li>Tổng tiền hàng <span><%= (int) (subtotal / 1000)%>.000₫ </span></li>
-                                <li>Giảm giá <span>-<%= (int) ((subtotal - total) / 1000)%>.000₫ </span></li>
+                            <li>Tổng tiền hàng <span><%= numberFormat.format((int) (subtotal)) %> </span></li>
+                            <li>Giảm giá <span>-<%= numberFormat.format((int) ((subtotal - total))) %> </span></li>
                             <%}%>
                                 <li>Tổng thanh toán 
-                                    <span><%= (int) (total / 1000)%>.000₫ </span>
+                                    <span><%= numberFormat.format((int) (total)) %> </span>
                                 </li>
                             </ul>
                             <a href="checkout.jsp" class="primary-btn">Thanh toán</a>
