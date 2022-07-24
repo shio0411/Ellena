@@ -63,7 +63,7 @@
                         <p><%=message%></p>
                     </div>
                     <div class="modal-footer">
-                        <a href="SearchAccountController?search=<%=search%>&role=<%= role%>&Status=<%=Status%>page=<%=currentPage%>"><button type="button" class="btn btn-default">Đóng</button></a>
+                        <a href="SearchAccountController?search=<%=search%>&role=<%= role%>&Status=<%=Status%>&page=<%=currentPage%>"><button type="button" class="btn btn-default">Đóng</button></a>
                     </div>
                 </div>
 
