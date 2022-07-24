@@ -39,6 +39,7 @@ public class UpdateCartItemQuantityController extends HttpServlet {
                 quantities.add(Integer.parseInt(request.getParameter("quantity" + (i + 1))));
             }
             boolean checkQuantity = true;
+            boolean checkNegativeQuantity = true;
             for (int i = 0; i < cart.size(); i++) {
 
                 ProductDAO dao = new ProductDAO();
@@ -51,16 +52,24 @@ public class UpdateCartItemQuantityController extends HttpServlet {
 
                 if (quantities.get(i) <= maxQuantity && quantities.get(i) > 0) {
                     cart.get(i).setQuantity(quantities.get(i));
+
                 } else {
                     checkQuantity = false;
+                    if (quantities.get(i) < 0) {
+                        checkNegativeQuantity = false;
+                    }
                 }
             }
 
-            session.setAttribute("CART", cart);
             if (!checkQuantity) {
-                request.setAttribute("QUANTITY_MESSAGE_FAIL", "Số lượng sản phẩm không đủ");
+                if (!checkNegativeQuantity) {
+                    request.setAttribute("QUANTITY_MESSAGE_FAIL", "Số lượng sản phẩm phải lớn hơn 0!");
+                } else {
+                    request.setAttribute("QUANTITY_MESSAGE_FAIL", "Số lượng sản phẩm không đủ");
+                }
             } else {
                 request.setAttribute("QUANTITY_MESSAGE_SUCCESS", "Cập nhật giỏ hàng thành công!");
+                session.setAttribute("CART", cart);
             }
 
             url = SUCCESS;
