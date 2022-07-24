@@ -241,7 +241,7 @@
                                 <form action="UpdateVariantsController" id="update<%=color%>VariantsForm">
                                     <input type="hidden" name="color" value="<%=color%>"/>
                                     <input type="hidden" name="productID" value="<%=product.getProductID()%>"/>
-                                    <table>
+                                    <table class="table table-info">
                                         <tr>
                                             <th>Size</th>
                                             <th>Số lượng</th>
