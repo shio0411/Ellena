@@ -178,7 +178,7 @@
                         <div class="col-md-6 mb-4">
                             <div class="form-outline">
                                 <label class="form-label" for="discount">Giảm giá</label>
-                                <input class="form-control form-control-lg" type="number" min="0" max="1" step="0.01" name="discount" id="price" value="<%= product.getDiscount()%>"/>
+                                <input class="form-control form-control-lg" type="number" min="0" max="<%= product.getPrice()%>" step="1000" name="discount" id="price" value="<%= product.getDiscount()%>"/>
                             </div>
                         </div>
 

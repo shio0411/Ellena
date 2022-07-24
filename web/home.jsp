@@ -258,6 +258,7 @@
                     for (int i = 0; i < size; i++) {
                         ProductDTO product = trendList.get(i);
                 %>
+                
                 <div class="col-lg-3 col-md-4 col-sm-6 mix">
                     <div class="product__item">
                         <div class="product__item__pic set-bg">
@@ -290,7 +291,9 @@
                             </div>
                             <%}else{
                                   %>
+                                  <a href="ProductRouteController?productID=<%=product.getProductID()%>">
                             <img src="<%=product.getColorImage().get("key").get(0)%>">
+                                  </a>
                             <%
                                    }
                                   %>
@@ -326,6 +329,7 @@
                         </div>
                     </div>
                 </div>
+             
                 <%}%>
             </div>
         </div>
@@ -356,9 +360,10 @@
                 <%  
                     int size = 4;
                     if(bestSellerList.size() < 4) size = bestSellerList.size();
-                    for (int i = 0; i < 4; i++) {
+                    for (int i = 0; i < size; i++) {
                         ProductDTO product = bestSellerList.get(i);
                 %>
+                
                 <div class="col-lg-3 col-md-4 col-sm-6 mix women">
                     <div class="product__item">
                         <div class="product__item__pic set-bg" data-setbg="<%=product.getColorImage().get("key").get(0)%>">
@@ -417,6 +422,7 @@
                         </div>
                     </div>
                 </div>
+             
                 <%}%>
             </div>
         </div>
@@ -450,6 +456,7 @@
                     for (int i = 0; i < size; i++) {
                         ProductDTO product = saleList.get(i);
                 %>
+                
                 <div class="col-lg-3 col-md-4 col-sm-6 mix women">
                     <div class="product__item">
                         <div class="product__item__pic set-bg">
@@ -520,6 +527,7 @@
                         </div>
                     </div>
                 </div>
+                
                 <%}%>
             </div>
         </div>

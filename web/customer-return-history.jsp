@@ -68,7 +68,7 @@
             <h2><b>Lịch sử đổi/trả</b></h2>
             <form action="SearchReturnedHistoryController" method="POST">
                 <input type="text" name="search" value="<%= searchValue%>" id="search-search" placeholder="Nhập tên khách hàng/email/số điện thoại" style="width: 40%;">
-                <button type="submit" name="action" value="SearchReturnedHistory" class="btn btn-default" style="width: 15%; padding: 0.5% 0.1%;"><i class="fa fa-search fa-lg"></i>Search</button>
+                <button type="submit" name="action" value="SearchReturnedHistory" class="btn btn-default" style="width: 15%; padding: 0.5% 0.1%;"><i class="fa fa-search fa-lg"></i>Tìm kiếm</button>
             </form>
 
             <%
