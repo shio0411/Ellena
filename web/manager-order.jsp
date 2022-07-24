@@ -15,7 +15,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="css/manager.css" type="text/css">
-       
+
     </head>
     <body>
 
@@ -63,13 +63,23 @@
             }
         %>
         <!--Hết pop-up cập nhật thành công-->
+        <%
+            if (loginUser.getRoleID().equals("MN")) {
+        %>
         <div class="sidenav">
             <a href="ManagerStatisticController"><i class="fa fa-bar-chart fa-lg"></i>Số liệu thống kê</a>
             <a href="ManagerShowProductController"><i class="fa fa-archive fa-lg"></i>Quản lí sản phẩm</a>
             <a href="ShowOrderController" style="color: #873e23; font-weight: bold;"><i class="fa fa-cart-plus fa-lg"></i>Quản lí đơn hàng</a>
             <a href="customer-return-history.jsp"><i class="fa fa-clock-rotate-left fa-lg"></i>Lịch sử đổi/trả</a>
         </div> 
+        <%} else {%>
+        <div class="sidenav">
+            <a href="ShowOrderController" style="color: #873e23; font-weight: bold;"><i class="fa fa-cart-plus fa-lg"></i>Quản lí đơn hàng</a>
+            <a href="https://www.tawk.to/"><i class="fa fa-archive fa-lg"></i>Quản lí Q&A</a>
+            <a href="customer-return-history.jsp"><i class="fa fa-clock-rotate-left fa-lg"></i>Lịch sử đổi/trả</a>
+        </div> 
 
+        <%}%>
         <div class="main">
 
             <div class="flex-item text-right" id="manager__header">
@@ -78,8 +88,8 @@
                         <b>Xin chào, </b>
                         <a  data-toggle="dropdown" role="button"><b class="text-color-dark"><%= loginUser.getFullName()%></b></a>
                         <div  class="dropdown-menu nav-tabs" role="tablist">
-                        <button class="dropdown-item btn" role="tab" type="button"><a class="text-dark" href="my-profile.jsp">Thông tin tài khoản</a></button>
-                        <input class=" dropdown-item btn" type="submit" name="action" value="Logout"/>
+                            <button class="dropdown-item btn" role="tab" type="button"><a class="text-dark" href="my-profile.jsp">Thông tin tài khoản</a></button>
+                            <input class=" dropdown-item btn" type="submit" name="action" value="Logout"/>
                         </div>
                     </h4>
                 </form>
@@ -87,17 +97,15 @@
             <h2><b>Danh sách đơn hàng</b></h2>
             <form action="SearchOrderController" method="POST">
                 <input type="text" name="search" value="<%= searchValue%>" id="search-search" placeholder="Tên khách hàng">
-                
+
                 <select name="search-statusID" id="search-statusID">
 
                     <%
                         OrderDTO orderDTO = new OrderDTO();
-                        if (orderStatusID == 0) {
                     %>
-                    <option class="p-1" value="" selected hidden>Chọn một trạng thái</option>
+                    <option class="p-1" value="" <%if (orderStatusID == 0) {%> selected <%}%>>Chọn một trạng thái</option>
 
                     <%
-                        }
                         for (int i = 1; i <= 8; i++) {
                     %>
                     <option value="<%= i%>" <% if (i == orderStatusID) { %> selected  <% }%>>
@@ -190,7 +198,7 @@
                                                                     <%if (order.getStatusID() == k) {%>
                                                                     selected 
                                                                     <%}
-                                                                        if (order.getStatusID() == 5 || k < order.getStatusID() || (k == 5 && order.getStatusID() != 3 && order.getStatusID() != 1) || (k == 6 && order.getStatusID() != 1) || ((k == 7) && (order.getStatusID() != 6))) {%>
+                                                                        if (k == 8 || order.getStatusID() == 5 || k < order.getStatusID() || (k == 5 && order.getStatusID() != 3 && order.getStatusID() != 1) || (k == 6 && order.getStatusID() != 1) || ((k == 7) && (order.getStatusID() != 6))) {%>
                                                                     disabled 
                                                                     <%}%> >
                                                                 <%= order.getStatus(k)%>
@@ -252,7 +260,7 @@
 
                                                     <div class="form-outline">
                                                         <label class="form-label" for="trackingID">Tracking ID</label>
-                                                        <input type="text" name="trackingID" <%if (order.getTrackingID() != null){%>value="<%= order.getTrackingID()%>"<%} else {%> value=""  <%}%>  id="trackingID" class="form-control form-control-lg" />
+                                                        <input type="text" name="trackingID" <%if (order.getTrackingID() != null) {%>value="<%= order.getTrackingID()%>"<%} else {%> value=""  <%}%>  id="trackingID" class="form-control form-control-lg" />
                                                     </div>
 
                                                 </div>
@@ -352,7 +360,7 @@
                                         <input type="hidden" name="dateFrom" id="update-dateFrom" value="<%= dateFrom%>"/>
                                         <input type="hidden" name="dateTo" id="update-dateTo" value="<%= dateTo%>"/>
                                         <input type="hidden" name="search-statusID" id="update-statusID" value="<%= sOrderStatusID%>"/>
-                                        <a class="ml-4 btn btn-secondary" <% if (order.getStatusID() == 5 || order.getOrderID() == 6 || order.getOrderID() == 7) {%> href="#" style="cursor: default;" <%} else { %> href="ReturnController?orderID=<%= order.getOrderID()%>" <%}%>>
+                                        <a class="ml-4 btn btn-secondary" <% if (order.getStatusID() != 4) {%> href="#" style="cursor: default;" <%} else {%> href="ReturnController?orderID=<%= order.getOrderID()%>" <%}%>>
                                             Đổi / trả 
                                         </a>
                                         <div class="modal-footer">
@@ -396,13 +404,13 @@
                                                     <td><%= orderStatus.getStatusName()%></td>
                                                     <td><%= orderStatus.getUpdateDate()%></td>
                                                     <%
-                                                        if (orderStatus.getUserName() == null){
-                                                    
+                                                        if (orderStatus.getUserName() == null) {
+
                                                     %>
                                                     <td><%= orderStatus.getUserID()%></td>
                                                     <td></td>
                                                     <td></td>
-                                                    
+
                                                     <%} else {%>
                                                     <td><%= orderStatus.getUserName()%></td>
                                                     <td><%= orderStatus.getUserID()%></td>
@@ -442,8 +450,7 @@
             %>
             <div class="row pagination__option" style="justify-content: center; align-items: center; text-align: center;">
 
-                <%                    
-                    int noOfPages = (int) request.getAttribute("noOfPages");
+                <%                    int noOfPages = (int) request.getAttribute("noOfPages");
                     int noOfPageLinks = 5; // amount of page links to be displayed
                     int minLinkRange = noOfPageLinks / 2; // minimum link range ahead/behind
 
@@ -467,7 +474,7 @@
                             end = (currentPage + minLinkRange);
                         } else if (noOfPages < noOfPageLinks) {
                             end = noOfPages; // in case noOfPageLinks larger than noOfPages and display wrong
-                        } else{
+                        } else {
                             end = noOfPageLinks;
                         }
                     } else {
@@ -483,7 +490,7 @@
 
                 <!-- For displaying 1st page link except for the 1st page -->
                 <a href="ShowOrderController?page=1"><i class="glyphicon glyphicon-menu-left"></i><i style="margin-left: -4px" class="glyphicon glyphicon-menu-left"></i></a>
-                
+
                 <!-- For displaying Previous link except for the 1st page -->
                 <a href="ShowOrderController?page=<%= currentPage - 1%>"><i class="glyphicon glyphicon-menu-left"></i></a>
                     <%
@@ -511,15 +518,15 @@
                     if (currentPage < noOfPages) {
                 %>
                 <a href="ShowOrderController?page=<%= currentPage + 1%>"><i class="glyphicon glyphicon-menu-right"></i></a>
-                
-                <!-- For displaying last page link except for the last page -->
-                <a href="ShowOrderController?page=<%= noOfPages %>"><i class="glyphicon glyphicon-menu-right"></i><i style="margin-left: -4px" class="glyphicon glyphicon-menu-right"></i></a>
-                
-                    <%
-                        }
 
-                        //                end of pageNav
-                    %>
+                <!-- For displaying last page link except for the last page -->
+                <a href="ShowOrderController?page=<%= noOfPages%>"><i class="glyphicon glyphicon-menu-right"></i><i style="margin-left: -4px" class="glyphicon glyphicon-menu-right"></i></a>
+
+                <%
+                    }
+
+                    //                end of pageNav
+                %>
 
 
 
@@ -530,7 +537,7 @@
 
                 <!-- For displaying 1st page link except for the 1st page -->
                 <a href="SearchOrderController?search=<%= searchValue%>&search-statusID=<%= sOrderStatusID%>&dateFrom=<%= dateFrom%>&dateTo=<%= dateTo%>&page=1"><i class="glyphicon glyphicon-menu-left"></i><i style="margin-left: -4px" class="glyphicon glyphicon-menu-left"></i></a>
-                
+
                 <!-- For displaying Previous link except for the 1st page -->
                 <a href="SearchOrderController?search=<%= searchValue%>&search-statusID=<%= sOrderStatusID%>&dateFrom=<%= dateFrom%>&dateTo=<%= dateTo%>&page=<%= currentPage - 1%>" style="text-decoration: none;"><i class="glyphicon glyphicon-menu-left"></i></a>
                     <%
@@ -558,22 +565,21 @@
                     if (currentPage < noOfPages) {
                 %>
                 <a href="SearchOrderController?search=<%= searchValue%>&search-statusID=<%= sOrderStatusID%>&dateFrom=<%= dateFrom%>&dateTo=<%= dateTo%>&page=<%= currentPage + 1%>"><i class="glyphicon glyphicon-menu-right"></i></a>
-                
+
                 <!-- For displaying last page link except for the last page -->
-                <a href="SearchOrderController?search=<%= searchValue%>&search-statusID=<%= sOrderStatusID%>&dateFrom=<%= dateFrom%>&dateTo=<%= dateTo%>&page=<%= noOfPages %>"><i class="glyphicon glyphicon-menu-right"></i><i style="margin-left: -4px" class="glyphicon glyphicon-menu-right"></i></a>
-                
-                    <%
-                            }
+                <a href="SearchOrderController?search=<%= searchValue%>&search-statusID=<%= sOrderStatusID%>&dateFrom=<%= dateFrom%>&dateTo=<%= dateTo%>&page=<%= noOfPages%>"><i class="glyphicon glyphicon-menu-right"></i><i style="margin-left: -4px" class="glyphicon glyphicon-menu-right"></i></a>
 
+                <%
                         }
-                        //                end of pageNav
 
-                    %>
+                    }
+                    //                end of pageNav
+
+                %>
 
             </div>
-            <%                
-                } //end of the "No product" if statement
-            %>
+            <%                } //end of the "No product" if statement
+%>
 
 
         </div>

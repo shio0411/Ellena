@@ -1,12 +1,16 @@
 package store.controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import store.shopping.OrderDAO;
+import store.shopping.OrderDetailDTO;
+import store.shopping.ProductDAO;
 
 @WebServlet(name = "UpdateOrderController", urlPatterns = {"/UpdateOrderController"})
 public class UpdateOrderController extends HttpServlet {
@@ -26,6 +30,23 @@ public class UpdateOrderController extends HttpServlet {
             String roleID = request.getParameter("roleID");
             OrderDAO dao = new OrderDAO();
             boolean checkUpdateStatus = dao.updateOrderStatus(orderID, statusID, modifiedBy, roleID);
+            if (checkUpdateStatus) {
+                //đơn hàng bị huỳ --> cập nhật lại số lượng product
+                if (statusID == 5) {
+                    List<OrderDetailDTO> orderDetails = dao.getOrderDetail(orderID);
+                    boolean check = true;
+                    ProductDAO pdao = new ProductDAO();
+                    for (OrderDetailDTO orderDetail : orderDetails) {
+                        List<String> colorSize = new ArrayList<>();
+                            colorSize.add(orderDetail.getColor());
+                            colorSize.add(orderDetail.getSize());
+                        int maxQuantity = pdao.getProductDetail(orderDetail.getProductID()).getColorSizeQuantity().get(colorSize);
+
+                        check = check && pdao.updateProductQuantity(maxQuantity + orderDetail.getQuantity(), pdao.getProductColorID(orderDetail.getProductID(), orderDetail.getColor()), orderDetail.getSize());
+
+                    }
+                }
+            }
             boolean checkUpdateTrackingID = dao.updateOrderTrackingID(orderID, trackingID);
             boolean checkUpdate = checkUpdateStatus || checkUpdateTrackingID; 
             if (checkUpdate) {

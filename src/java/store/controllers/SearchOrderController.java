@@ -17,7 +17,7 @@ public class SearchOrderController extends HttpServlet {
 
     private static final String ERROR = "manager-order.jsp";
     private static final String MANAGER_SUCCESS = "manager-order.jsp";
-    private static final String EMPLOYEE_SUCCESS = "employee-order.jsp";
+    private static final String EMPLOYEE_SUCCESS = "manager-order.jsp";
     private static final String MN = "MN";
     private static final String EM = "EM";
     
