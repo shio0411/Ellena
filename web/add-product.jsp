@@ -24,11 +24,33 @@
     <body class="goto-here">
         <%
             List<CategoryDTO> listCategory = (List<CategoryDTO>) session.getAttribute("LIST_CATEGORY");
-
+            String message = (String) request.getAttribute("MESSAGE");
+            if (message != null) {
         %>
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Thông báo</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                    </div>
+                    <div class="modal-body">
+                        <p><%=message%></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <%}%>
         <style>
             .img-wrap {
-                display: inline-block; 
+                display: inline-block;
                 width: 200px;
                 position: relative;
 
@@ -137,7 +159,7 @@
                                                                     <div class="col-md-5 mb-4 pb-2">
                                                                         <div class="form-outline">
                                                                             <label class="form-label" for="size">Size</label>
-                                                                            <input class="form-control form-control-lg"  required="" type="text" name="size" placeholder="Ví dụ: XL"/>
+                                                                            <input class="form-control form-control-lg" type="text" name="size" placeholder="Ví dụ: XL"/>
                                                                         </div>
 
                                                                     </div>
@@ -145,7 +167,7 @@
 
                                                                         <div class="form-outline">
                                                                             <label class="form-label" for="quantity">Số lượng</label>
-                                                                            <input class="form-control form-control-lg" required="" type="number" min="0" name="quantity" value="0"/>
+                                                                            <input class="form-control form-control-lg" type="number" min="0" name="quantity" value="0"/>
                                                                         </div>
                                                                     </div>
                                                                     <button type="button" onclick="removeVariant('variant1')" style="border: none; background: none;"><i class="fa fa-remove fa-lg"></i></button>
@@ -179,7 +201,7 @@
                                                                     var input = document.createElement("input");
                                                                     input.setAttribute("accept", "image/*");
                                                                     input.setAttribute("type", "file");
-                                                                    input.setAttribute("name", "files" + (id-1));
+                                                                    input.setAttribute("name", "files" + (id - 1));
                                                                     input.setAttribute("onChange", "previewImages(event)");
 
                                                                     console.log(input);
@@ -255,7 +277,7 @@
                                                                         image.removeChild(image.firstChild);
                                                                     }
                                                                 }
-                                                            
+
                                                             </script>
                                                         </div>
                                                         <div class="modal-footer">
@@ -315,7 +337,7 @@
                             '<button type="button" onclick="removeVariant(`variant' + newId + '`)" style="border: none; background: none;"><i class="fa fa-remove fa-lg"></i></button></div></div>' +
                             '<button class="mb-4" type="button" id="addVariant' + newId + '" style="border: none; background: none"><i class="fa fa-plus-circle fa-lg"></i></button>' +
                             '<div class="row"><div id="upload-image' + newId + '" class="col-md-5 mb-4">' +
-                            '<div><input accept="image/*" type="file" name="files'+(newId-1)+'" onChange="previewImages(event)"/>' +
+                            '<div><input accept="image/*" type="file" name="files' + (newId - 1) + '" onChange="previewImages(event)"/>' +
                             '<div id="preview" class="img-wrap"></div></div></div></div>' +
                             '<button type="button" id="addImage' + newId + '" style="width: 25px; margin-left: 2.6%;" onClick="myFunction(event)">+</button></div>' +
                             '<div class="modal-footer">' +
@@ -391,36 +413,52 @@
             console.log(newId);
             function checkForm(e) {
                 var form = document.getElementById("myForm");
-                
-                
-                var stored = [];
-                
-                for (var i = 1; i < newId; i++) {
-                    var variant = document.getElementById("sq"+i);
-                    var sizes = variant.querySelectorAll("input[name='size']");
-                    for (var size of sizes) {
-                        if (stored.includes(size.value.toLowerCase()))  {
-                            e.preventDefault();
-                            return alert("Không thể nhập size trùng nhau!");
+                if (form.checkValidity()) {
+
+                    var stored = [];
+
+                    for (var i = 1; i < newId; i++) {
+                        var variant = document.getElementById("sq" + i);
+                        var sizes = variant.querySelectorAll("input[name='size']");
+                        
+                        var quantities = variant.querySelectorAll("input[name='quantity']");
+                        for (var size of sizes) {
+                            
+                            if (size.value === "") {
+                                e.preventDefault();
+                                return alert("Bạn chưa nhập size!");
+                            }
+                            
+                            if (stored.includes(size.value.toLowerCase())) {
+                                e.preventDefault();
+                                return alert("Không thể nhập size trùng nhau!");
+                            }
+                            stored.push(size.value.toLowerCase());
+
                         }
-                        stored.push(size.value.toLowerCase());
                         
+                        for (var quantity of quantities) {
+                            if (quantity.value === "") {
+                                e.preventDefault();
+                                return alert("Bạn chưa nhập số lượng!");
+                            }
+                        }
+                        stored = [];
                     }
-                    stored = [];
-                }
-                
-                for (var inputColor of form.color) {
-                    if (stored.includes(inputColor.value.toLowerCase())) {
-                        e.preventDefault();
-                        return alert("Không thể nhập màu trùng nhau!");
-                        
+
+                    for (var inputColor of form.color) {
+                        if (stored.includes(inputColor.value.toLowerCase())) {
+                            e.preventDefault();
+                            return alert("Không thể nhập màu trùng nhau!");
+
+                        }
+
+                        stored.push(inputColor.value.toLowerCase());
                     }
-                    
-                    stored.push(inputColor.value.toLowerCase());
                 }
-                
-                
-                
+
+
+
             }
         </script>
 

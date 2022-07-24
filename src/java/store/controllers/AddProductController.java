@@ -110,11 +110,13 @@ public class AddProductController extends HttpServlet {
             
             if (check) {
                 url = SUCCESS;
+                request.setAttribute("MESSAGE", "Thêm sản phẩm thành công");
 //                boolean checkInsert = dao.addUser(user);
 //                if (checkInsert) {
 //                    url = SUCCESS;
 //                }
             } else {
+                request.setAttribute("MESSAGE", "Đã có lỗi xảy ra!");
                 // request.setAttribute("USER_ERROR", userError);
                 //for push
             }
