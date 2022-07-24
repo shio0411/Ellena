@@ -16,8 +16,12 @@
         <%
             UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
             String search = request.getParameter("search");
+            String status = request.getParameter("status");
             if (search == null) {
                 search = "";
+            }
+            if (status == null) {
+                status = "";
             }
             if (loginUser == null || !"AD".equals(loginUser.getRoleID())) {
                 response.sendRedirect("login.jsp");
@@ -42,7 +46,7 @@
                         <p><%=message%></p>
                     </div>
                     <div class="modal-footer">
-                        <a href="SearchCategoryController&search=<%=search %>"><button type="button" class="btn btn-default">Đóng</button></a>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
                     </div>
                 </div>
 
@@ -71,7 +75,7 @@
                 </form>
             </div>
             <h3><b>Quản lý loại sản phẩm</b></h3>
-            <form action="SearchCategoryController" method="POST">
+            <form action="MainController" method="POST">
                 <input type="text" name="search" value="<%= search%>" placeholder="Tìm kiếm loại sản phẩm">
                 Trạng thái
                 <select name="status">
@@ -158,7 +162,8 @@
                                             </div>
 
                                         </div>
-
+                                        <input type="hidden" name="search" value="<%= search%>">
+                                        <input type="hidden" name="status" value="<%= status%>">
                                 </div>
                                 <div class="modal-footer">
                                     <button class="btn btn-default" type="submit" name="action" value="UpdateCategory">Cập nhật</button>

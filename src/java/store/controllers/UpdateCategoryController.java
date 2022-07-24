@@ -17,8 +17,8 @@ import store.shopping.CategoryDTO;
 @WebServlet(name = "UpdateCategoryController", urlPatterns = {"/UpdateCategoryController"})
 public class UpdateCategoryController extends HttpServlet {
 
-    private static final String ERROR = "ShowCategoryController";
-    private static final String SUCCESS = "ShowCategoryController";
+    private static final String ERROR = "SearchCategoryController";
+    private static final String SUCCESS = "SearchCategoryController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
