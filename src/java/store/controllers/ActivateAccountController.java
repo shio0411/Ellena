@@ -27,7 +27,6 @@ public class ActivateAccountController extends HttpServlet {
         String url = ERROR;
         try {
             String userID = request.getParameter("userID");
-            String roleID = request.getParameter("roleID");
             String from = request.getParameter("from");
             UserDAO dao = new UserDAO();
             boolean check = dao.activateAccount(userID);

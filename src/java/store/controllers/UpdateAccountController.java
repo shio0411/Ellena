@@ -23,8 +23,8 @@ import store.user.UserDTO;
 @WebServlet(name = "UpdateAccountController", urlPatterns = {"/UpdateAccountController"})
 public class UpdateAccountController extends HttpServlet {
 
-    private static final String ERROR = "ShowAccountController";
-    private static final String SUCCESS = "ShowAccountController";
+    private static final String ERROR = "SearchAccountController";
+    private static final String SUCCESS = "SearchAccountController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

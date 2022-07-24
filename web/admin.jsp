@@ -23,13 +23,13 @@
             List<UserDTO> listUser = (List<UserDTO>) request.getAttribute("LIST_USER");
 
             //parameter role of UpdateAccountController
-            String roleID = request.getParameter("roleID"); // also use storing request param for pagnation
+            String roleID = request.getParameter("roleID"); 
             if (roleID == null) {
-                roleID = "%";
+                roleID = "";
             }
 
             //parameter role of SearchAccountController
-            String role = request.getParameter("role");
+            String role = request.getParameter("role"); // also use storing request param for pagnation
             if (role == null || "%".equals(role)) {
                 role = "";
             }
@@ -63,7 +63,8 @@
                         <p><%=message%></p>
                     </div>
                     <div class="modal-footer">
-                        <a href="SearchAccountController?search=<%=search%>&role=<%= role%>&Status=<%=Status%>&page=<%=currentPage%>"><button type="button" class="btn btn-default">Đóng</button></a>
+                        <!--<a href="SearchAccountController?search=<%=search%>&role=<%= role%>&Status=<%=Status%>&page=<%=currentPage%>"><button type="button" class="btn btn-default">Đóng</button></a>-->
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
                     </div>
                 </div>
 
@@ -151,11 +152,14 @@
                         <%
                             if (user.isStatus()) {
                         %>
-                        <a class="btn btn-default" href="DeactivateAccountController?userID=<%=user.getUserID()%>&search=<%= search%>&roleID=<%= roleID%>&from=ShowAccount">Vô hiệu hoá</a>
-                        <%} else {
-                        %>
-                        <a class="btn btn-default" href="ActivateAccountController?userID=<%=user.getUserID()%>&search=<%= search%>&roleID=<%= roleID%>&from=ShowAccount">Kích hoạt</a>
+                        <a class="btn btn-default" href="DeactivateAccountController?userID=<%=user.getUserID()%>&search=<%= search%>&role=<%= role%>&Status=<%=Status%>&from=ShowAccount&page=<%= currentPage %>">Vô hiệu hoá</a>
                         <%
+                            searchAll = (boolean) request.getAttribute("SWITCH_SEARCH");
+                            } else {
+                        %>
+                        <a class="btn btn-default" href="ActivateAccountController?userID=<%=user.getUserID()%>&search=<%= search%>&role=<%= role%>&Status=<%=Status%>&from=ShowAccount&page=<%= currentPage %>">Kích hoạt</a>
+                        <%
+                            searchAll = (boolean) request.getAttribute("SWITCH_SEARCH");
                             }
                         %>
                     </td>
@@ -264,6 +268,7 @@
                                             <input type="hidden" name="search" value="<%=search%>">
                                             <input type="hidden" name="role" value="<%=role%>">
                                             <input type="hidden" name="Status" value="<%=Status%>">
+                                            <input type="hidden" name="page" value="<%= currentPage %>">
                                             </div>
                                             <div class="modal-footer">
                                                 <button class="btn btn-default" type="submit" name="action" value="UpdateAccount">Cập nhật</button>

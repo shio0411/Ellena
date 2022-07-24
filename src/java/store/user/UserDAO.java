@@ -242,7 +242,7 @@ public class UserDAO {
             e.printStackTrace();
         } finally {
             if (rs != null) {
-                if (roleID == null) {
+                if ("".equals(roleID)) {
                     ptm = conn.prepareStatement(NUMBER_OF_SEARCH_USER);
                     ptm.setString(1, "%" + search + "%");
                 } else if ("true".equalsIgnoreCase(Status) || "false".equalsIgnoreCase(Status)) {
