@@ -111,7 +111,7 @@
                 <a class="btn btn-default" href="add-product.jsp">Thêm sản phẩm mới</a>
 
                 <!--pop up show product under lowStockLimit Start-->
-                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal fade" id="lowStockLimitModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                     <div class="modal-dialog" >
                         <div class="modal-content" >
                             <div class="modal-header">
@@ -174,7 +174,7 @@
                 <!--pop up show product under lowStockLimit End-->
                 <!--button with warning number-->
 
-                <button class="btn btn-default" type="button" data-toggle="modal" data-target="#myModal">
+                <button class="btn btn-default" type="button" data-toggle="modal" data-target="#lowStockLimitModal">
                     Sản phẩm sắp hết
 
 
@@ -404,6 +404,7 @@
         <script>
             $(document).ready(function () {
                 $("#myModal").modal();
+//                $("#lowStockLimitModal").modal("hide");
             });
         </script> 
 
