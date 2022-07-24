@@ -35,6 +35,7 @@ public class UpdateAccountController extends HttpServlet {
             String fullName = request.getParameter("fullName");
             String password = "*********";
             String roleID = request.getParameter("roleID");
+            String from = request.getParameter("from");
             boolean sex = Boolean.parseBoolean(request.getParameter("sex"));
             String address = request.getParameter("address");
             Date birthday = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("birthday"));
@@ -46,6 +47,9 @@ public class UpdateAccountController extends HttpServlet {
                 boolean checkUpdate = dao.updateAccount(user);
                 if (checkUpdate) {
                     url = SUCCESS;
+                    if (from != null) {
+                        url = "ShowManagerController";
+                    }
                     request.setAttribute("MESSAGE", "Cập nhật thành công!");
                 }
             } else {

@@ -10,9 +10,9 @@
         <jsp:include page="meta.jsp" flush="true"/>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-         <link rel="stylesheet" href="css/manager.css" type="text/css">
+        <link rel="stylesheet" href="css/manager.css" type="text/css">
     </head>
-    
+
     <body>
         <%
             UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
@@ -21,13 +21,23 @@
                 search = "";
             }
             List<UserDTO> listUser = (List<UserDTO>) request.getAttribute("LIST_USER");
+
+            //parameter role of UpdateAccountController
             String roleID = request.getParameter("roleID"); // also use storing request param for pagnation
             if (roleID == null) {
                 roleID = "%";
             }
+
+            //parameter role of SearchAccountController
+            String role = request.getParameter("role");
+            if (role == null || "%".equals(role)) {
+                role = "";
+            }
             // pageNav vars
             boolean searchAll = false;
             String status = request.getParameter("status");//For storing request param for pagnation
+
+            int currentPage = (int) request.getAttribute("currentPage");
 
             String message = (String) request.getAttribute("MESSAGE");
             if (message != null) {
@@ -48,7 +58,7 @@
                         <p><%=message%></p>
                     </div>
                     <div class="modal-footer">
-                        <a href="SearchAccountController?search=<%=search%>&roleID=<%= roleID%>"><button type="button" class="btn btn-default">Đóng</button></a>
+                        <a href="SearchAccountController?search=<%=search%>&role=<%= role%>&page=<%=currentPage%>"><button type="button" class="btn btn-default">Đóng</button></a>
                     </div>
                 </div>
 
@@ -69,8 +79,8 @@
                         <b>Xin chào, </b>
                         <a  data-toggle="dropdown" role="button"><b class="text-color-dark"><%= loginUser.getFullName()%></b></a>
                         <div  class="dropdown-menu nav-tabs" role="tablist">
-                        <button class="dropdown-item btn" role="tab" type="button"><a class="text-dark" href="my-profile.jsp">Thông tin tài khoản</a></button>
-                        <input class=" dropdown-item btn" type="submit" name="action" value="Logout"/>
+                            <button class="dropdown-item btn" role="tab" type="button"><a class="text-dark" href="my-profile.jsp">Thông tin tài khoản</a></button>
+                            <input class=" dropdown-item btn" type="submit" name="action" value="Logout"/>
                         </div>
                     </h5>
                 </form>
@@ -79,27 +89,28 @@
             <form action="SearchAccountController" method="POST">
                 <input type="text" name="search" value="<%= search%>" placeholder="Tên tài khoản">
                 Quyền
-                <select name="roleID">
+                <select name="role">
                     <option value="%" selected hidden>Chọn một quyền</option>
-                    <option value="AD">Quản trị viên</option>
-                    <option value="MN">Người quản lý</option>
-                    <option value="EM">Nhân viên</option>
-                    <option value="CM">Khách hàng</option>
+                    <option value="AD" <%if ("AD".equalsIgnoreCase(roleID)) {%>selected<%}%>>Quản trị viên</option>
+                    <option value="MN" <%if ("MN".equalsIgnoreCase(roleID)) {%>selected<%}%>>Người quản lý</option>
+                    <option value="EM" <%if ("EM".equalsIgnoreCase(roleID)) {%>selected<%}%>>Nhân viên</option>
+                    <option value="CM" <%if ("CM".equalsIgnoreCase(roleID)) {%>selected<%}%>>Khách hàng</option>
                 </select>
                 Trạng thái
-                <select name="status">
+                <select name="Status">
                     <option value="all" selected hidden>Chọn trạng thái</option>
-                    <option value="true">Active</option>
-                    <option value="false">Inactive</option>
+
+                    <option value="true" <%if ("true".equalsIgnoreCase(status)) {%>selected<%}%>>Hiệu lực</option>
+                    <option value="false" <%if ("false".equalsIgnoreCase(status)) {%>selected<%}%>>Vô hiệu lực</option>
                 </select>
                 <button type="submit" class="btn btn-default" style="width: 15%; padding: 0.5% 0.1%;"><i class="fa fa-search fa-lg"></i>Tìm kiếm</button>
                 <!--switch to SearchController page count after submit form-->
-                        <%
-                            searchAll = (boolean) request.getAttribute("SWITCH_SEARCH");
-                        %>
+                <%
+                    searchAll = (boolean) request.getAttribute("SWITCH_SEARCH");
+                %>
             </form>   
-                
-                
+
+
             <a class="btn btn-default" href="add-account.jsp">Tạo tài khoản mới</a>
             <%
                 if (listUser != null) {
@@ -113,7 +124,7 @@
                     <col span="1" style="width: 10%;">
                     <col span="1" style="width: 10%;">
                     <col span="1" style="width: 10%;">
-                    
+
                 </colgroup>
                 <tr style="background-color: #b57c68">
                     <th>Tên tài khoản</th>
@@ -156,7 +167,7 @@
 
                                     </div>
                                     <div class="modal-body">
-                                        <form action="UpdateAccountController">
+                                        <form action="UpdateAccountController" method="POST">
                                             <div class="row">
                                                 <div class="col-md-12 mb-4">
 
@@ -246,31 +257,33 @@
                                                 </div>
                                             </div>
 
+                                            <input type="hidden" name="search" value="<%=search%>">
+                                            <input type="hidden" name="role" value="<%=role%>">
 
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button class="btn btn-default" type="submit" name="action" value="UpdateAccount">Cập nhật</button>
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                                                <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+                                            </div>
+                                        </form>
 
                                     </div>
-                                    <div class="modal-footer">
-                                        <button class="btn btn-default" type="submit" name="action" value="UpdateAccount">Cập nhật</button>
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                                        <!--<button type="button" class="btn btn-primary">Save changes</button>-->
-                                    </div>
-                                    </form>
-
                                 </div>
                             </div>
-                        </div>
-                        <button class="btn btn-default" type="button" data-toggle="modal" data-target="#myModal<%=id++%>">Chỉnh sửa</button>
+
+                            <button class="btn btn-default" type="button" data-toggle="modal" data-target="#myModal<%=id++%>">Chỉnh sửa</button>
 
                     </td>
 
                 </tr>
                 <%         }
-                        }
-                    }else{
-                        %>
-                        <div style="text-align:center">Không có kết quả tìm kiếm.</div>
+                    }
+                } else {
+                %>
+                <div style="text-align:center">Không có kết quả tìm kiếm.</div>
                 <%
-                        }%>
+                    }%>
             </table>
 
 
@@ -283,9 +296,7 @@
 
             %>
             <div class="row pagination__option" style="justify-content: center; align-items: center; text-align: center;">
-                <% 
-                    int currentPage = (int) request.getAttribute("currentPage");
-                    int noOfPages = (int) request.getAttribute("noOfPages");
+                <%                    int noOfPages = (int) request.getAttribute("noOfPages");
                     int noOfPageLinks = 5; // amount of page links to be displayed
                     int minLinkRange = noOfPageLinks / 2; // minimum link range ahead/behind
 
@@ -325,7 +336,7 @@
 
                 <!-- For displaying 1st page link except for the 1st page -->
                 <a href="ShowAccountController?page=1"><i class="glyphicon glyphicon-menu-left"></i><i class="glyphicon glyphicon-menu-left"></i></a>
-                
+
                 <!-- For displaying Previous link except for the 1st page -->
                 <a href="ShowAccountController?page=<%= currentPage - 1%>"><i class="glyphicon glyphicon-menu-left"></i></a>
                     <%
@@ -353,27 +364,26 @@
                     if (currentPage < noOfPages) {
                 %>
                 <a href="ShowAccountController?page=<%= currentPage + 1%>"><i class="glyphicon glyphicon-menu-right"></i></a>
-                
-                <!-- For displaying last page link except for the last page -->
-                <a href="ShowAccountController?page=<%= noOfPages %>"><i class="glyphicon glyphicon-menu-right"></i><i class="glyphicon glyphicon-menu-right"></i></a>
-                
-                    <%
-                        }
 
-                        //                end of pageNav
-                    %>
-                <%            
-                    } // end ShowController
-                    else {//Currently at SearchController
+                <!-- For displaying last page link except for the last page -->
+                <a href="ShowAccountController?page=<%= noOfPages%>"><i class="glyphicon glyphicon-menu-right"></i><i class="glyphicon glyphicon-menu-right"></i></a>
+
+                <%
+                    }
+
+                    //                end of pageNav
+                %>
+                <%                } // end ShowController
+                else {//Currently at SearchController
                     //                    start of pageNav
                     if (currentPage != 1) {
                 %>
-                
+
                 <!-- For displaying 1st page link except for the 1st page -->
-                <a href="SearchAccountController?search=<%= search%>&roleID=<%= roleID%>&status=<%= status%>&page=1"><i class="glyphicon glyphicon-menu-left"></i><i class="glyphicon glyphicon-menu-left"></i></a>
-                
+                <a href="SearchAccountController?search=<%= search%>&role=<%= role%>&page=1"><i class="glyphicon glyphicon-menu-left"></i><i class="glyphicon glyphicon-menu-left"></i></a>
+
                 <!-- For displaying Previous link except for the 1st page -->
-                <a href="SearchAccountController?search=<%= search%>&roleID=<%= roleID%>&status=<%= status%>&page=<%= currentPage - 1%>" style="text-decoration: none;"><i class="glyphicon glyphicon-menu-left"></i></a>
+                <a href="SearchAccountController?search=<%= search%>&role=<%= role%>&page=<%= currentPage - 1%>" style="text-decoration: none;"><i class="glyphicon glyphicon-menu-left"></i></a>
                     <%
                         }
                     %>
@@ -387,7 +397,7 @@
                 <%
                 } else {
                 %>
-                <a href="SearchAccountController?search=<%= search%>&roleID=<%= roleID%>&status=<%= status%>&page=<%= i%>"><%= i%></a>
+                <a href="SearchAccountController?search=<%= search%>&role=<%= role%>&page=<%= i%>"><%= i%></a>
                 <%
                         }
                     }
@@ -398,26 +408,24 @@
                 <%
                     if (currentPage < noOfPages) {
                 %>
-                <a href="SearchAccountController?search=<%= search%>&roleID=<%= roleID%>&status=<%= status%>&page=<%= currentPage + 1%>"><i class="glyphicon glyphicon-menu-right"></i></a>
-                
-                <!-- For displaying last page link except for the last page -->
-                <a href="SearchAccountController?search=<%= search%>&roleID=<%= roleID%>&status=<%= status%>&page=<%= noOfPages %>"><i class="glyphicon glyphicon-menu-right"></i><i class="glyphicon glyphicon-menu-right"></i></a>
-                
-                    <%
-                            }
+                <a href="SearchAccountController?search=<%= search%>&role=<%= role%>&page=<%= currentPage + 1%>"><i class="glyphicon glyphicon-menu-right"></i></a>
 
-                            
+                <!-- For displaying last page link except for the last page -->
+                <a href="SearchAccountController?search=<%= search%>&role=<%= role%>&page=<%= noOfPages%>"><i class="glyphicon glyphicon-menu-right"></i><i class="glyphicon glyphicon-menu-right"></i></a>
+
+                <%
                         }
-                        //                end of pageNav
-                        
-                    %>
-                
-                
-                
+
+                    }
+                    //                end of pageNav
+
+                %>
+
+
+
             </div>
-            <%                
-                } // end of the "No product" if statement
-            %>
+            <%                } // end of the "No product" if statement
+%>
 
 
 

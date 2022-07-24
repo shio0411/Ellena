@@ -23,7 +23,31 @@
                 response.sendRedirect("login.jsp");
                 return;
             }
+        String message = (String) request.getAttribute("MESSAGE");
+            if (message != null) {
         %>
+
+        <!-- Pop-up thông báo cập nhật thành công -->
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Thông báo</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                    </div>
+                    <div class="modal-body">
+                        <p><%=message%></p>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="SearchManagerController?search=<%=search%>"><button type="button" class="btn btn-default">Đóng</button></a>
+                    </div>
+                </div>
+
+            </div>
+        </div> <%}%>
         
         <div class="sidenav">
             <a href="ShowAccountController"><i class="fa fa-address-card fa-lg"></i>Quản lý tài khoản</a>
@@ -199,6 +223,7 @@
                                                     <input type="tel" id="phoneNumber" value="<%=user.getPhone()%>" name="phone" class="form-control form-control-lg" />
                                                 </div>
                                             </div>
+                                                <input type="hidden" name="from" value="manager">
                                         </div>
 
 

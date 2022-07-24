@@ -133,6 +133,7 @@
 
                                     <div>
                                         <button class="primary-btn" type="submit" >Tạo một tài khoản mới</button>
+                                        <a href="ShowAccountController"><button class="primary-btn" type="button">Hủy</button></a>
                                     </div>
 
                                 </form>

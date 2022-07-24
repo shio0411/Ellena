@@ -34,8 +34,8 @@ public class SearchAccountController extends HttpServlet {
         
         try {
             String search = request.getParameter("search");
-            String roleID = request.getParameter("roleID");
-            String status = request.getParameter("status");
+            String roleID = request.getParameter("role");
+            String status = request.getParameter("Status");
             
             // if there is a "page" param, take it
             if (request.getParameter("page") != null) {

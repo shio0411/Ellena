@@ -205,7 +205,7 @@ public class UserDAO {
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                if (roleID == null) {
+                if ("".equals(roleID)) {
                     ptm = conn.prepareStatement(SEARCH_USER);
                     ptm.setString(1, "%" + search + "%");
                     ptm.setInt(2, offset);
