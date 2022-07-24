@@ -41,7 +41,10 @@ public class ManagerSearchProductController extends HttpServlet {
             
             ProductDAO dao = new ProductDAO();
             String search = VNCharacterUtils.removeAccent(request.getParameter("search"));
-            String status = request.getParameter("status");
+            String status = "all"; // if status is empty then search status is "all"
+            if (!request.getParameter("status").equals("")) {
+                status = request.getParameter("status");
+            }
 
             List<ProductDTO> listProduct = dao.getListProduct(search, status, (page * productPerPage) - productPerPage + 1, productPerPage * page);
 
@@ -56,6 +59,10 @@ public class ManagerSearchProductController extends HttpServlet {
                 
                 url = SUCCESS;
             }
+            
+            request.setAttribute("SEARCH", search);
+            request.setAttribute("STATUS", status);
+            
             //give manager-product.jsp know that we are in SearchProduct
             boolean searchPage = false;
             request.setAttribute("noOfPages", noOfPages);

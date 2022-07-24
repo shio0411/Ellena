@@ -17,15 +17,14 @@
     <body>
         <%
             UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
+            int currentPage = (int) request.getAttribute("currentPage"); // move up from pagination
 
 //            checking if using ShowController or SearchController page count
             boolean searchAll = false;
-            String status = request.getParameter("status");//For storing request param for pagnation            
+            String status = request.getAttribute("STATUS") != null ? (String) request.getAttribute("STATUS") : "";//For storing request param for pagnation            
 
-            String search = request.getParameter("search");
-            if (search == null) {
-                search = "";
-            }
+            String searchValue = request.getAttribute("SEARCH") != null ? (String) request.getAttribute("SEARCH") : "";
+            
             String message = (String) request.getAttribute("MESSAGE");
             if (message != null) {
         %>
@@ -85,13 +84,13 @@
                 <!--search bar-->
                 <div class="col-9">
                     <form action="ManagerSearchProductController">
-                        <input type="text" name="search" value="<%= search%>" placeholder="Tên sản phẩm">
+                        <input type="text" name="search" value="<%= searchValue %>" placeholder="Tên sản phẩm">
 
                        
                         <select name="status">
-                            <option value="all">Chọn trạng thái</option>
-                            <option value="true">Active</option>
-                            <option value="false">Inactive</option>
+                            <option value="all" <% if (status.equals("") || status.equals("all")) { %> selected  <% }%>>Chọn trạng thái</option>
+                            <option value="true" <% if (status.equals("true")) { %> selected  <% }%>>Active</option>
+                            <option value="false" <% if (status.equals("false")) { %> selected  <% }%>>Inactive</option>
                         </select>
 
                         <button type="submit" name="action" value="ManagerSearchProduct" class="btn btn-default" style="width: 15%; padding: 0.5% 0.1%;"><i class="fa fa-search fa-lg"></i>Tìm kiếm</button>
@@ -144,10 +143,10 @@
                         <%
                             if (list.isStatus()) {
                         %>
-                        <a class="btn btn-default" href="DeactivateProductController?productID=<%=list.getProductID()%>">Vô hiệu hoá</a> 
+                        <a class="btn btn-default" href="DeactivateProductController?productID=<%=list.getProductID()%>&search=<%= searchValue %>&status=<%= status%>&page=<%= currentPage %>">Vô hiệu hoá</a> 
                         <%} else {
                         %>
-                        <a class="btn btn-default" href="ActivateProductController?productID=<%=list.getProductID()%>">Kích hoạt</a> 
+                        <a class="btn btn-default" href="ActivateProductController?productID=<%=list.getProductID()%>&search=<%= searchValue %>&status=<%= status%>&page=<%= currentPage %>">Kích hoạt</a> 
                         <%
                             }
                         %>
@@ -177,7 +176,7 @@
             <div class="row pagination__option" style="justify-content: center; align-items: center; text-align: center;">
 
                 <%
-                    int currentPage = (int) request.getAttribute("currentPage");
+                    
                     int noOfPages = (int) request.getAttribute("noOfPages");
                     int noOfPageLinks = 5; // amount of page links to be displayed
                     int minLinkRange = noOfPageLinks / 2; // minimum link range ahead/behind
@@ -263,10 +262,10 @@
                 %>
 
                 <!-- For displaying 1st page link except for the 1st page -->
-                <a href="ManagerSearchProductController?search=<%= search%>&status=<%= status%>&page=1"><i class="glyphicon glyphicon-menu-left"></i><i style="margin-left: -4px" class="glyphicon glyphicon-menu-left"></i></a>
+                <a href="ManagerSearchProductController?search=<%= searchValue %>&status=<%= status%>&page=1"><i class="glyphicon glyphicon-menu-left"></i><i style="margin-left: -4px" class="glyphicon glyphicon-menu-left"></i></a>
                 
                 <!-- For displaying Previous link except for the 1st page -->
-                <a href="ManagerSearchProductController?search=<%= search%>&status=<%= status%>&page=<%= currentPage - 1%>" style="text-decoration: none;"><i class="glyphicon glyphicon-menu-left"></i></a>
+                <a href="ManagerSearchProductController?search=<%= searchValue %>&status=<%= status%>&page=<%= currentPage - 1%>" style="text-decoration: none;"><i class="glyphicon glyphicon-menu-left"></i></a>
                     <%
                         }
                     %>
@@ -280,7 +279,7 @@
                 <%
                 } else {
                 %>
-                <a href="ManagerSearchProductController?search=<%= search%>&status=<%= status%>&page=<%= i%>"><%= i%></a>
+                <a href="ManagerSearchProductController?search=<%= searchValue %>&status=<%= status%>&page=<%= i%>"><%= i%></a>
                 <%
                         }
                     }
@@ -291,10 +290,10 @@
                 <%
                     if (currentPage < noOfPages) {
                 %>
-                <a href="ManagerSearchProductController?search=<%= search%>&status=<%= status%>&page=<%= currentPage + 1%>"><i class="glyphicon glyphicon-menu-right"></i></a>
+                <a href="ManagerSearchProductController?search=<%= searchValue %>&status=<%= status%>&page=<%= currentPage + 1%>"><i class="glyphicon glyphicon-menu-right"></i></a>
                 
                 <!-- For displaying last page link except for the last page -->
-                <a href="ManagerSearchProductController?search=<%= search%>&status=<%= status%>&page=<%= noOfPages %>"><i class="glyphicon glyphicon-menu-right"></i><i style="margin-left: -4px"class="glyphicon glyphicon-menu-right"></i></a>
+                <a href="ManagerSearchProductController?search=<%= searchValue %>&status=<%= status%>&page=<%= noOfPages %>"><i class="glyphicon glyphicon-menu-right"></i><i style="margin-left: -4px"class="glyphicon glyphicon-menu-right"></i></a>
                 
                     <%
                             }
