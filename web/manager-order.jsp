@@ -81,7 +81,7 @@
                                 String msg[] = updateTrackingIdMsg.split("\n");
                                 for (String string : msg) {
                         %>
-                        <p><%=string%></p> 
+                        <p style="color: red;"><%=string%></p> 
 
 
                         <%
@@ -90,7 +90,7 @@
 
                         %>
 
-                        <p><%=updateTrackingIdMsg%></p>
+                        <p <% if (!updateTrackingIdMsg.equals("Cập nhật thành công")) {%>style="color: red;"<%}%>><%=updateTrackingIdMsg%></p>
                         <%}%>
                     </div>
                     <div class="modal-footer">

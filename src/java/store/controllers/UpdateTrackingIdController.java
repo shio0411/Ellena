@@ -45,7 +45,9 @@ public class UpdateTrackingIdController extends HttpServlet {
             String orderTrackingIDs = request.getParameter("orderTrackingIdList").trim().replace("\t\t", "\t");
             String[] orderId_trackingIds = orderTrackingIDs.split("\r\n");
             for (int i = 0; i < orderId_trackingIds.length; i++) {
-
+                if (orderId_trackingIds[i].equals("")) {
+                    continue;
+                }
                 String[] orderId_trackingId = orderId_trackingIds[i].split("\t| ");
                 boolean check = dao.updateOrderTrackingID(Integer.parseInt(orderId_trackingId[0]), orderId_trackingId[1], true);
                 if (!check) {
