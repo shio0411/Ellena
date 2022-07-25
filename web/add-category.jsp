@@ -8,13 +8,7 @@
         <jsp:include page="meta.jsp" flush="true"/>
     </head>
     <body>
-        <%
-            UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
-            if (loginUser == null || !"AD".equals(loginUser.getRoleID())) {
-                response.sendRedirect("login.jsp");
-                return;
-            }
-        %><div class="sidenav">
+        <div class="sidenav">
             <a href="ShowAccountController" style="color: #873e23; font-weight: bold;"><i class="fa fa-address-card fa-lg"></i>Quản lý tài khoản</a>
             <a href="ShowManagerController"><i class="fa fa-group fa-lg"></i>Quản lý manager</a>
             <a href="ShowCategoryController"><i class="fa fa-cart-plus fa-lg"></i>Quản lý loại sản phẩm</a>
@@ -55,7 +49,7 @@
 
                     <div class="form-outline">
                         <button type="submit" name="action" value="AddCategory">Tạo</button>
-
+                        <a href="ShowCategoryController"> <button type="button">Hủy</button></a>
                     </div>
 
                 </div>
