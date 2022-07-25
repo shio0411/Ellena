@@ -60,10 +60,12 @@ public class ProductDAO {
             + "WHERE p.productID in (SELECT TOP 20 productID FROM tblProduct ORDER BY productID desc) AND p.status = 1\n"
             + "ORDER BY p.productID desc";
     private static final String GET_SEARCH_CATALOG = "SELECT p.productID, p.productName, p.price, p.discount, i.image, color, size\n"
-            + "FROM tblProduct p JOIN tblProductColors pc ON p.productID = pc.productID \n"
+            + "FROM tblProduct p JOIN tblProductColors pc ON p.productID = pc.productID\n"
             + "JOIN tblColorImage i ON pc.productColorID = i.productColorID\n"
             + "JOIN tblColorSizes cs ON cs.productColorID = pc.productColorID\n"
-            + "WHERE dbo.fuChuyenCoDauThanhKhongDau(p.productName) LIKE ?";
+            + "JOIN tblCategory c ON c.categoryID = p.categoryID\n"
+            + "WHERE dbo.fuChuyenCoDauThanhKhongDau(p.productName) LIKE ?\n"
+            + "AND c.status =1";
     private static final String DELETE_IMAGE = "DELETE FROM tblColorImage WHERE image=?";
     private static final String INSERT_PRODUCT = "INSERT INTO tblProduct(productName, description, price, categoryID, discount, lowStockLimit, status) VALUES(?, ?, ?, ?, ?, ?, ?)";
     private static final String INSERT_PRODUCT_COLORS = "INSERT INTO tblProductColors(productID, color) VALUES(?, ?)";
@@ -90,7 +92,7 @@ public class ProductDAO {
             + "JOIN tblColorImage i ON pc.productColorID = i.productColorID\n"
             + "JOIN tblColorSizes cs ON cs.productColorID = pc.productColorID\n"
             + "JOIN tblCategory c ON c.categoryID = p.categoryID\n"
-            + "WHERE dbo.fuChuyenCoDauThanhKhongDau(categoryName) LIKE ?";
+            + "WHERE dbo.fuChuyenCoDauThanhKhongDau(categoryName) LIKE ? AND c.status=1";
 
     private static final String UPDATE_PRODUCT_QUANTITY = "UPDATE tblColorSizes SET quantity = ? WHERE productColorID = ? AND size LIKE ?";
     private static final String GET_PRODUCTCOLORID = "SELECT pc.productColorID, color FROM tblProduct p JOIN tblProductColors pc ON p.productID = pc.productID WHERE p.productID = ? AND color LIKE ?";
@@ -124,7 +126,8 @@ public class ProductDAO {
             + "			FROM tblProduct p JOIN tblProductColors pc ON p.productID = pc.productID \n"
             + "			JOIN tblColorImage i ON pc.productColorID = i.productColorID\n"
             + "			JOIN tblColorSizes cs ON cs.productColorID = pc.productColorID\n"
-            + "			WHERE dbo.fuChuyenCoDauThanhKhongDau(p.productName) LIKE ? AND p.status=1\n"
+            + "                 JOIN tblCategory c ON c.categoryID = p.categoryID"
+            + "			WHERE dbo.fuChuyenCoDauThanhKhongDau(p.productName) LIKE ? AND p.status=1 AND c.status=1\n"
             + "			)\n"
             + "SELECT productID, productName, price, discount, image, color, size\n"
             + "FROM subTable\n"
@@ -133,7 +136,8 @@ public class ProductDAO {
             + "FROM tblProduct p JOIN tblProductColors pc ON p.productID = pc.productID \n"
             + "JOIN tblColorImage i ON pc.productColorID = i.productColorID\n"
             + "JOIN tblColorSizes cs ON cs.productColorID = pc.productColorID\n"
-            + "WHERE dbo.fuChuyenCoDauThanhKhongDau(p.productName) LIKE ?\n"
+            + "JOIN tblCategory c ON c.categoryID = p.categoryID\n"
+            + "WHERE dbo.fuChuyenCoDauThanhKhongDau(p.productName) LIKE ? AND c.status=1 AND p.status=1\n"
             + "ORDER BY ROW_COUNT DESC";
     private static final String GET_LOW_STOCK_LIMIT_PRODUCT = "SELECT p.productID, p.productName, pc.color, cs.size, p.lowStockLimit, cs.quantity\n"
             + "FROM tblProduct p JOIN tblProductColors pc ON p.productID = pc.productID \n"
@@ -1672,7 +1676,7 @@ public class ProductDAO {
                     colorSize.add(color);
                     colorSize.add(size);
                     colorSizeQuantity.put(colorSize, quantity);
-                    
+
                     listProduct.add(new ProductDTO(productID, productName, colorSizeQuantity, quantity, lowStockLimit));
                 }
             }

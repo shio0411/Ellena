@@ -206,7 +206,7 @@ public class CheckoutController extends HttpServlet {
                     }
                 } else {
                     url = CART_ERROR;
-                    request.setAttribute("CART_MESSAGE", "Ở đây chúng tôi không chơi chạy link vào thẳng Check Out >:( ");
+                    request.setAttribute("CART_MESSAGE", "Đơn hàng của bạn không tồn tại.");
                 }
 
             }

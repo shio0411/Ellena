@@ -69,9 +69,9 @@
                                         <input class="billing_address_2" name="" type="hidden" value="">
                                         
                                     </div>
-                                    <div class="row">
-                                            <p style="color: red"><%= orderError.getShippingProvinces()%></p>
-                                        </div>
+                                    <div class="checkout__form__input" style="color: red;">
+                                           <%= orderError.getShippingProvinces()%>
+                                    </div>
                                     <div class="checkout__form__input">
                                         <p>Địa chỉ <span>*</span></p>
                                         <input type="text" name="address" placeholder="Số nhà, tên đường, phường/ xã" required="" value="<%= c.getAddress() %>">
