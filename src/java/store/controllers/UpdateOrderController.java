@@ -47,7 +47,7 @@ public class UpdateOrderController extends HttpServlet {
                     }
                 }
             }
-            boolean checkUpdateTrackingID = dao.updateOrderTrackingID(orderID, trackingID);
+            boolean checkUpdateTrackingID = dao.updateOrderTrackingID(orderID, trackingID, false);
             boolean checkUpdate = checkUpdateStatus || checkUpdateTrackingID; 
             if (checkUpdate) {
                 url = SUCCESS;
