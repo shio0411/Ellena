@@ -20,6 +20,7 @@ public class CategoryDAO {
     private static final String INCREMENT_LARGER_ORDER_BY_ONE = "UPDATE tblCategory SET [order]=? WHERE categoryID=?";
     private static final String ACTIVATE_CATEGORY = "UPDATE tblCategory SET status=1 WHERE categoryID=?";
     private static final String DEACTIVATE_CATEGORY = "UPDATE tblCategory SET status=0 WHERE categoryID=?";
+    private static final String CHECK_DUPLICATE_CATEGORY_NAME = "SELECT categoryID, categoryName, [order], status FROM tblCategory WHERE dbo.fuChuyenCoDauThanhKhongDau(categoryName) = ?";
 
     public List<CategoryDTO> getListCategory(String search, String Status) throws SQLException {
         List<CategoryDTO> list = new ArrayList<>();
@@ -170,6 +171,34 @@ public class CategoryDAO {
             }
             if (ptm != null) {
                 ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+    
+    public boolean checkDuplicateCategoryName(String categoryName) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                stm = conn.prepareStatement(CHECK_DUPLICATE_CATEGORY_NAME);
+                stm.setString(1, categoryName);
+                rs = stm.executeQuery();
+                if(rs.next()){
+                    check = true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (stm != null) {
+                stm.close();
             }
             if (conn != null) {
                 conn.close();

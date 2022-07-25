@@ -25,13 +25,13 @@
                     <div class="form-outline">
                         <label class="form-label" for="categoryName">Tên loại sản phẩm</label>
                         <input type="text" name="categoryName" id="userID" required="" class="form-control form-control-lg" />
-                        <p style="color: red">${requestScope.USER_ERROR.userID}</p>
+                        
 
                     </div>
-
+                    
                 </div>
-
-            </div>
+                
+            </div><p style="color: red">${requestScope.ERROR_MESSAGE}</p>
             <div class="row">
                 <div class="col-md-4 mb-4">
 
