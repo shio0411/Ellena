@@ -1,4 +1,3 @@
-<%@page import="store.shopping.OrderDAO"%>
 <%@page import="store.shopping.OrderStatusDTO"%>
 <%@page import="store.shopping.OrderDetailDTO"%>
 <%@page import="store.shopping.OrderDTO"%>
@@ -59,11 +58,35 @@
 
             </div>
         </div>
-        <%
-            }
-        %>
         <!--Hết pop-up cập nhật thành công-->
         <%
+            }
+            String updateTrackingIdMsg = (String) request.getAttribute("UPDATE_TRACKING_ID_MESSAGE");
+            if (updateTrackingIdMsg != null) {
+        %>
+        <!-- Pop-up thông báo cập nhật tracking Id -->
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Thông báo</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                    </div>
+                    <div class="modal-body">
+                        <p><%=updateTrackingIdMsg%></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!--Hết pop-up cập nhật tracking Id-->
+        <%}
             if (loginUser.getRoleID().equals("MN")) {
         %>
         <div class="sidenav">
@@ -123,8 +146,40 @@
                     searchAll = (boolean) request.getAttribute("SWITCH_SEARCH");
                 %>
             </form>   
-            ${requestScope.EMPTY_LIST_MESSAGE}
 
+            <!--Pop-up cập nhật Tracking ID-->
+            <div class="modal fade" id="myModalTrackingId" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog" id="UpdateTrackingId" >
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="myModalLabel"><b>Cập nhật Tracking ID</b></h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+                        </div>
+                        <form action="UpdateTrackingIdController" method="POST">
+                            <div class="row">
+
+                                <div class="col-md-12">
+                                    <label>ID đơn hàng và Tracking ID tương ứng</label>
+                                </div>
+                                <div class="col-md-12">
+                                    <textarea required="" placeholder="ID đơn hàng  Tracking ID" cols="30" rows="20" name="orderTrackingIdList"></textarea>
+                                </div>
+                            </div>
+
+                            <input type="hidden" name="search" id="update-search" value="<%= searchValue%>"/>
+                            <input type="hidden" name="dateFrom" id="update-dateFrom" value="<%= dateFrom%>"/>
+                            <input type="hidden" name="dateTo" id="update-dateTo" value="<%= dateTo%>"/>
+                            <input type="hidden" name="search-statusID" id="update-statusID" value="<%= sOrderStatusID%>"/>
+                            <input type="hidden" name="page" value="<%= currentPage%>"/>
+                            <button type="submit" class="btn btn-default" style="width: 15%; padding: 0.5% 0.1%;">Cập nhật</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-default" type="button" data-toggle="modal" data-target="#myModalTrackingId">Cập nhật tracking ID</button>
+            <!--Hết pop-up cập nhật Tracking ID-->
+            <br>${requestScope.EMPTY_LIST_MESSAGE}
             <%
                 List<OrderDTO> listOrder = (List<OrderDTO>) request.getAttribute("LIST_ORDER");
                 if (listOrder != null) {
@@ -579,7 +634,7 @@
 
             </div>
             <%                } //end of the "No product" if statement
-%>
+            %>
 
 
         </div>

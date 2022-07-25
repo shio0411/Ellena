@@ -429,7 +429,7 @@ public class OrderDAO {
         return result;
     }
 
-    public boolean updateOrderTrackingID(int orderID, String trackingID) throws SQLException {
+    public boolean updateOrderTrackingID(int orderID, String trackingID, boolean allowDuplicateTrackingId) throws SQLException {
         boolean check = false;
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -437,20 +437,29 @@ public class OrderDAO {
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                String currentTrackingID = "";
-                ptm = conn.prepareStatement(GET_ORDER_TRACKING_ID);
-                ptm.setInt(1, orderID);
-                rs = ptm.executeQuery();
-                if (rs.next()) {
-                    currentTrackingID = rs.getString("trackingID") == null ? "" : rs.getString("trackingID");
-                }
-                if (!currentTrackingID.equalsIgnoreCase(trackingID)) {
+                if (!allowDuplicateTrackingId) {
+                    String currentTrackingID = "";
+                    ptm = conn.prepareStatement(GET_ORDER_TRACKING_ID);
+                    ptm.setInt(1, orderID);
+                    rs = ptm.executeQuery();
+                    if (rs.next()) {
+                        currentTrackingID = rs.getString("trackingID") == null ? "" : rs.getString("trackingID");
+                    }
+                    if (!currentTrackingID.equalsIgnoreCase(trackingID)) {
+                        ptm = conn.prepareStatement(UPDATE_TRACKINGID);
+                        ptm.setString(1, trackingID);
+                        ptm.setInt(2, orderID);
+
+                        check = ptm.executeUpdate() > 0;
+                    }
+                } else {
                     ptm = conn.prepareStatement(UPDATE_TRACKINGID);
                     ptm.setString(1, trackingID);
                     ptm.setInt(2, orderID);
 
                     check = ptm.executeUpdate() > 0;
                 }
+                
             }
         } catch (Exception e) {
             e.printStackTrace();

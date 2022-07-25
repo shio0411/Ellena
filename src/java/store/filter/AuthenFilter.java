@@ -133,7 +133,7 @@ public class AuthenFilter implements Filter {
         MANAGER_FUNCTION.add("manager-order.jsp");
         MANAGER_FUNCTION.add("return.jsp");
         MANAGER_FUNCTION.add("ReturnController");
-//        MANAGER_FUNCTION.add("RefundController");
+        MANAGER_FUNCTION.add("UpdateTrackingIdController");
         MANAGER_FUNCTION.add("UpdateOrderDetailController");
         MANAGER_FUNCTION.add("RefundOrderController");
         MANAGER_FUNCTION.add("customer-return-history.jsp");
@@ -164,6 +164,7 @@ public class AuthenFilter implements Filter {
         EMPLOYEE_FUNCTION.add("customer-return-history.jsp");
         EMPLOYEE_FUNCTION.add("SearchReturnedHistoryController");
         EMPLOYEE_FUNCTION.add("my-profile.jsp");
+        EMPLOYEE_FUNCTION.add("UpdateTrackingIdController");
     }
 
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
