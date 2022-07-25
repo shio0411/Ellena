@@ -51,7 +51,7 @@
         <style>
             .img-wrap {
                 display: inline-block;
-                width: 200px;
+                width: 280px;
                 position: relative;
 
             }
@@ -176,6 +176,8 @@
                                                             <!-- Add a variant inside pop-up -->
                                                             <button class="mb-4" type="button" id="addVariant1" style="margin-left: 2.6%; border: none; background: none"><i class="fa fa-plus-circle fa-lg"></i></button>
                                                             <!-- Upload image -->
+                                                            <br/>
+                                                            <label class="form-label" for="image">Hình ảnh</label>
                                                             <div class="row">
                                                                 <div id="upload-image1" class="col-md-5 mb-4">
                                                                     <div>
@@ -185,7 +187,7 @@
                                                                 </div>
                                                             </div>
                                                             <!-- Add an image browse button -->
-                                                            <button type="button" id="addImage1" style="width: 25px; margin-left: 2.6%;" onClick="myFunction(event)">+</button>
+                                                            <button type="button" class="mb-4" id="addImage1" style="margin-left: 2.6%; border: none; background: none;" onClick="myFunction(event)"><i class="fa fa-plus-circle fa-lg" style="pointer-events: none"></i></button>
                                                             <script>
 
                                                                 var maxInputs = 3;
@@ -244,7 +246,7 @@
 
                                                                         reader.addEventListener("load", function () {
 
-                                                                            var image = new Image(200, 100);
+                                                                            var image = new Image(280, 280);
                                                                             image.title = file.name;
                                                                             image.src = this.result;
 
@@ -339,7 +341,7 @@
                             '<div class="row"><div id="upload-image' + newId + '" class="col-md-5 mb-4">' +
                             '<div><input accept="image/*" type="file" name="files' + (newId - 1) + '" onChange="previewImages(event)"/>' +
                             '<div id="preview" class="img-wrap"></div></div></div></div>' +
-                            '<button type="button" id="addImage' + newId + '" style="width: 25px; margin-left: 2.6%;" onClick="myFunction(event)">+</button></div>' +
+                            '<button type="button" class="mb-4" id="addImage' + newId + '" style="margin-left: 2.6%; border: none; background: none;" onClick="myFunction(event)"><i class="fa fa-plus-circle fa-lg" style="pointer-events: none"></i></button></div>' +
                             '<div class="modal-footer">' +
                             '<button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button></div></div></div></div>' +
                             '<button type="button" data-toggle="modal" data-target="#myModal' + newId + '" style="border: none; background: none;"><i class="fa fa-edit fa-lg"></i></button>' +
@@ -414,7 +416,7 @@
             function checkForm(e) {
                 var firstNumber = parseInt(document.getElementById("price").value, 10);
                 var secondNumber = parseInt(document.getElementById("discount").value, 10);
-                if(firstNumber < secondNumber)
+                if (firstNumber < secondNumber)
                 {
                     e.preventDefault();
                     return alert("Giá gốc phải lớn hơn giá giảm");
@@ -427,15 +429,15 @@
                     for (var i = 1; i < newId; i++) {
                         var variant = document.getElementById("sq" + i);
                         var sizes = variant.querySelectorAll("input[name='size']");
-                        
+
                         var quantities = variant.querySelectorAll("input[name='quantity']");
                         for (var size of sizes) {
-                            
+
                             if (size.value === "") {
                                 e.preventDefault();
                                 return alert("Bạn chưa nhập size!");
                             }
-                            
+
                             if (stored.includes(size.value.toLowerCase())) {
                                 e.preventDefault();
                                 return alert("Không thể nhập size trùng nhau!");
@@ -443,7 +445,7 @@
                             stored.push(size.value.toLowerCase());
 
                         }
-                        
+
                         for (var quantity of quantities) {
                             if (quantity.value === "") {
                                 e.preventDefault();

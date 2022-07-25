@@ -47,7 +47,7 @@ public class AddColorsController extends HttpServlet {
                 request.setAttribute("MESSAGE", "Cập nhật thất bại.");
             }
         } catch (NumberFormatException | SQLException e) {
-            log("Error at ManagerShowProductDetailController: " + e.toString());
+            log("Error at AddColorsController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

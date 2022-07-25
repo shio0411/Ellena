@@ -53,7 +53,7 @@ public class UpdateVariantsController extends HttpServlet {
                 url = SUCCESS;
             }
         } catch (NumberFormatException | SQLException e) {
-            log("Error at ManagerShowProductDetailController: " + e.toString());
+            log("Error at UpdateVariantsController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

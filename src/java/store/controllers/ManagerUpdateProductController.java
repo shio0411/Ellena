@@ -86,7 +86,7 @@ public class ManagerUpdateProductController extends HttpServlet {
                 url = SUCCESS;
             }
         } catch (NumberFormatException | SQLException e) {
-            log("Error at ManagerShowProductDetailController: " + e.toString());
+            log("Error at ManagerUpdateProductController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
