@@ -44,7 +44,7 @@ public class ViewImagesController extends HttpServlet {
                 url = SUCCESS;
             }
         } catch (Exception e) {
-            log("Error at ManagerShowProductDetailController: " + e.toString());
+            log("Error at ViewImagesController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

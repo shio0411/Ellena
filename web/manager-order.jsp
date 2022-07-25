@@ -76,7 +76,22 @@
 
                     </div>
                     <div class="modal-body">
-                        <p><%=updateTrackingIdMsg%></p>
+                        <%
+                            if (updateTrackingIdMsg.contains("\n")) {
+                                String msg[] = updateTrackingIdMsg.split("\n");
+                                for (String string : msg) {
+                        %>
+                        <p style="color: red;"><%=string%></p> 
+
+
+                        <%
+                            }
+                        } else {
+
+                        %>
+
+                        <p <% if (!updateTrackingIdMsg.equals("Cập nhật thành công")) {%>style="color: red;"<%}%>><%=updateTrackingIdMsg%></p>
+                        <%}%>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
@@ -157,22 +172,28 @@
 
                         </div>
                         <form action="UpdateTrackingIdController" method="POST">
-                            <div class="row">
+                            <div class="modal-body">
+                                <div class="row">
 
-                                <div class="col-md-12">
-                                    <label>ID đơn hàng và Tracking ID tương ứng</label>
+                                    <div class="col-md-12">
+                                        <label>ID đơn hàng và Tracking ID tương ứng</label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <textarea required="" placeholder="ID đơn hàng  Tracking ID" cols="30" rows="20" name="orderTrackingIdList"></textarea>
+                                    </div>
                                 </div>
-                                <div class="col-md-12">
-                                    <textarea required="" placeholder="ID đơn hàng  Tracking ID" cols="30" rows="20" name="orderTrackingIdList"></textarea>
-                                </div>
+
+                                <input type="hidden" name="search" id="update-search" value="<%= searchValue%>"/>
+                                <input type="hidden" name="dateFrom" id="update-dateFrom" value="<%= dateFrom%>"/>
+                                <input type="hidden" name="dateTo" id="update-dateTo" value="<%= dateTo%>"/>
+                                <input type="hidden" name="search-statusID" id="update-statusID" value="<%= sOrderStatusID%>"/>
+                                <input type="hidden" name="page" value="<%= currentPage%>"/>
                             </div>
-
-                            <input type="hidden" name="search" id="update-search" value="<%= searchValue%>"/>
-                            <input type="hidden" name="dateFrom" id="update-dateFrom" value="<%= dateFrom%>"/>
-                            <input type="hidden" name="dateTo" id="update-dateTo" value="<%= dateTo%>"/>
-                            <input type="hidden" name="search-statusID" id="update-statusID" value="<%= sOrderStatusID%>"/>
-                            <input type="hidden" name="page" value="<%= currentPage%>"/>
-                            <button type="submit" class="btn btn-default" style="width: 15%; padding: 0.5% 0.1%;">Cập nhật</button>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-default">Cập nhật</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                            </div>
+                            
                         </form>
                     </div>
                 </div>
@@ -634,7 +655,7 @@
 
             </div>
             <%                } //end of the "No product" if statement
-            %>
+%>
 
 
         </div>

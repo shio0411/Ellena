@@ -1292,7 +1292,7 @@ public class ProductDAO {
             for (int i = 0; i < sizes.length; i++) {
                 ptm.setInt(1, quantities[i]);
                 ptm.setInt(2, productColorID);
-                ptm.setString(3, sizes[i]);
+                ptm.setString(3, sizes[i].toUpperCase());
                 ptm.addBatch();
             }
 
