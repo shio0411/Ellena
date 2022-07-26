@@ -90,7 +90,7 @@
 
                         %>
 
-                        <p <% if (!updateTrackingIdMsg.equals("Cập nhật thành công")) {%>style="color: red;"<%}%>><%=updateTrackingIdMsg%></p>
+                        <p <% if (!updateTrackingIdMsg.equals("Cập nhật thành công")) {%>style="color: red;"<%} else {%>style="color: green;"<%}%>><%=updateTrackingIdMsg%></p>
                         <%}%>
                     </div>
                     <div class="modal-footer">

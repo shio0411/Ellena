@@ -42,13 +42,24 @@ public class UpdateTrackingIdController extends HttpServlet {
             int count = 0;
             String updateMsg = "";
             OrderDAO dao = new OrderDAO();
-            String orderTrackingIDs = request.getParameter("orderTrackingIdList").trim().replace("\t\t", "\t");
+            
+            String orderTrackingIDs = request.getParameter("orderTrackingIdList").trim();//
+            while (orderTrackingIDs.contains("\t\t") || orderTrackingIDs.contains("  ") || orderTrackingIDs.contains("\r\n\t\r\n")) {
+                orderTrackingIDs = orderTrackingIDs.replace("\t\t", "\t").replace("  ", " ").replace("\r\n\t\r\n", "\r\n");
+            }
             String[] orderId_trackingIds = orderTrackingIDs.split("\r\n");
             for (int i = 0; i < orderId_trackingIds.length; i++) {
-                if (orderId_trackingIds[i].equals("")) {
+                
+                String[] orderId_trackingId = orderId_trackingIds[i].split("\t| ");
+                if (orderId_trackingId[0].equals("")) {
+                    //checkUpdate = false;
                     continue;
                 }
-                String[] orderId_trackingId = orderId_trackingIds[i].split("\t| ");
+                if (orderId_trackingId.length < 2){
+                    updateMsg += "\nXảy ra lỗi ở đơn hàng #" + orderId_trackingId[0];
+                    checkUpdate = false;
+                    continue;
+                }
                 boolean check = dao.updateOrderTrackingID(Integer.parseInt(orderId_trackingId[0]), orderId_trackingId[1], true);
                 if (!check) {
                     updateMsg += "\nXảy ra lỗi ở đơn hàng #" + orderId_trackingId[0];
