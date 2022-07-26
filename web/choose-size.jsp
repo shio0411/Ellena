@@ -55,7 +55,7 @@
                         </p>
                         <br> <br>
 
-                        <img src="/images/choose-size/Choosize.png" alt="huong-dan-chon-size-ao" style="display: block; margin: 0 auto;">
+                        <img src="img/choose-size/Choosize.png" alt="huong-dan-chon-size-ao" style="display: block; margin: 0 auto;">
                         <p style="text-align:center;"><i><strong>(Hình: Minh họa cách đo 3 vòng cơ thể)</strong></i></p>
 
                     </li>
@@ -79,7 +79,7 @@
 
                         <br> <br>
 
-                        <img src="/images/choose-size/Size.png" alt="size-giay" style="display: block; margin: 0 auto;">
+                        <img src="img/choose-size/Size.png" alt="size-giay" style="display: block; margin: 0 auto;">
                         <p style="text-align:center;"><i><strong>(Bảng thông số size Váy - Đầm chung. Mỗi mẫu, mỗi kiểu dáng đều có 1 thông số <br> riêng, vào chi tiết sản phẩm để tham khảo thông số chính xác.)</strong></i></p>
                     </li>
                     <!--Final note-->
