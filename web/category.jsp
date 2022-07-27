@@ -10,7 +10,8 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Home Page</title>
+        <% String category = request.getParameter("category");%>
+        <title>Thời Trang | <%= category%></title>
 
         <!-- Google Font -->
         <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
@@ -31,7 +32,6 @@
                     <div class="col-lg-12">
                         <div class="breadcrumb__links">
                             <a href="./"><i class="fa fa-home"></i> Trang chủ</a>
-                            <% String category = request.getParameter("category");%>
                             <span><%= category%></span>
                         </div>
                     </div>

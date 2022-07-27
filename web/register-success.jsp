@@ -9,7 +9,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Register success</title>
+        <title>Đăng Ký Thành Công</title>
         <jsp:include page="meta.jsp" flush="true"/>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -56,7 +56,7 @@
                     window.location = url;
                 } else {
                     seconds--;
-                    document.getElementById("pageInfo").innerHTML = "Chuyển về trang login trong " + seconds + " giây.";
+                    document.getElementById("pageInfo").innerHTML = "Chuyển về trang Home trong " + seconds + " giây.";
                     setTimeout("redirect()", 1000);
                 }
             }

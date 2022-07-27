@@ -4,6 +4,8 @@
     Author     : giama
 --%>
 
+<%@page import="java.util.Locale"%>
+<%@page import="java.text.NumberFormat"%>
 <%@page import="store.shopping.OrderDetailDTO"%>
 <%@page import="java.util.List"%>
 <%@page import="store.shopping.OrderDTO"%>
@@ -15,7 +17,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Order Page</title>
+        <title>Chi Tiết Đơn Hàng</title>
 
         <!-- Google Font -->
         <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
@@ -111,8 +113,10 @@
             </div>
         </div>
         <!-- Breadcrumb End -->
-        <% Pair<OrderDTO, List<OrderDetailDTO>> order = (Pair<OrderDTO, List<OrderDetailDTO>>) request.getAttribute("ORDER_DETAILS");
-
+        <% 
+            // number format
+            NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+            Pair<OrderDTO, List<OrderDetailDTO>> order = (Pair<OrderDTO, List<OrderDetailDTO>>) request.getAttribute("ORDER_DETAILS");
         %>
         <!-- Shop Cart Section Begin -->
         <section class="shop-cart spad">
@@ -122,26 +126,26 @@
                         <article class="card">
                             <header class="card-header"> Theo dõi đơn hàng 
                                 <% if ("Chưa xác nhận".equalsIgnoreCase(order.getKey().getStatusName())) {%>
-                                    <button type="button" class="btn btn-danger" style="float: right; padding: 12px 15px 8px; text-align: center; font-weight: 600" data-toggle="modal" data-target="#<%=order.getKey().getOrderID()%>Modal">HUỶ ĐƠN HÀNG</button>
-                                    <div class="modal fade" id="<%=order.getKey().getOrderID()%>Modal" role="dialog">
-                                        <div class="modal-dialog">
-                                            <!-- Modal content-->
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h4 class="modal-title">Huỷ đơn hàng</h4>
-                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <p>Bạn có chắc muốn huỷ đơn hàng này?</p>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type='button' class='btn btn-default' data-dismiss="modal">Huỷ</button>
-                                                    <a href="MainController?action=CancelOrder&orderID=<%=order.getKey().getOrderID()%>&payType=<%=order.getKey().getPayType()%>"><button type="button" class="btn btn-danger">Xác nhận</button></a>
-                                                </div>
+                                <button type="button" class="btn btn-danger" style="float: right; padding: 12px 15px 8px; text-align: center; font-weight: 600" data-toggle="modal" data-target="#<%=order.getKey().getOrderID()%>Modal">HUỶ ĐƠN HÀNG</button>
+                                <div class="modal fade" id="<%=order.getKey().getOrderID()%>Modal" role="dialog">
+                                    <div class="modal-dialog">
+                                        <!-- Modal content-->
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Huỷ đơn hàng</h4>
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Bạn có chắc muốn huỷ đơn hàng này?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type='button' class='btn btn-default' data-dismiss="modal">Huỷ</button>
+                                                <a href="MainController?action=CancelOrder&orderID=<%=order.getKey().getOrderID()%>&payType=<%=order.getKey().getPayType()%>"><button type="button" class="btn btn-danger">Xác nhận</button></a>
                                             </div>
                                         </div>
                                     </div>
-                                    <%}%>
+                                </div>
+                                <%}%>
                             </header>
                             <div class="card-body">
                                 <h6 class="mb-2" style="font-size: 18px; color: #ca1515">Mã đơn hàng: <%=order.getKey().getOrderID()%></h6>
@@ -149,7 +153,7 @@
                                     <div class="card-body row">
                                         <div class="col"> <strong>Trạng thái:</strong> <br> <%=order.getKey().getStatusName()%> </div>
                                         <div class="col"> <strong>Mã vận đơn:</strong> <br>  <% if (order.getKey().getTrackingID() == null) {%>N/A<%} else {%>
-                                                <%=order.getKey().getTrackingID()%>
+                                            <%=order.getKey().getTrackingID()%>
                                             <%}%> </div>
                                     </div>
                                 </article>
@@ -162,8 +166,8 @@
                                     <%} else if (order.getKey().getStatus().containsKey(6)) {%>
                                     <div class="step active"> <span class="icon pl-3"> <i class="fa fa-spinner"></i> </span> <span class="text"><p class="m-0">Đơn hàng đã bị huỷ/Chờ hoàn tiền</p><p><%=order.getKey().getStatus().get(6)%></p></span></div>
                                     <div class="step <%if (order.getKey().getStatus().containsKey(7)) {%>active<%}%>"> <span class="icon pl-3"> <i class="fa fa-money"></i> </span> <span class="text"><p class="m-0">Đã hoàn tiền</p><p><% if (order.getKey().getStatus().get(7) != null) {%>
-                                            <%=order.getKey().getStatus().get(7)%><%}%></p></span></div>
-                                    <%} else {%>
+                                                <%=order.getKey().getStatus().get(7)%><%}%></p></span></div>
+                                                <%} else {%>
                                     <div class="step <%if (order.getKey().getStatus().containsKey(2)) {%>active<%}%>"> <span class="icon pl-3"> <i class="fa fa-user"></i> </span> <span class="text"><p class="m-0">Đơn hàng được xác nhận</p><p><%if (order.getKey().getStatus().containsKey(2)) {%><%=order.getKey().getStatus().get(2)%><%}%></p></span></div>
                                     <div class="step <%if (order.getKey().getStatus().containsKey(3)) {%>active<%}%>"> <span class="icon pl-3"> <i class="fa fa-truck"></i> </span> <span class="text"><p class="m-0">Đang giao hàng</p><p><%if (order.getKey().getStatus().containsKey(3)) {%><%=order.getKey().getStatus().get(3)%><%}%></p></span></div>
                                     <div class="step <%if (order.getKey().getStatus().containsKey(4)) {%>active<%}%>"> <span class="icon pl-3"> <i class="fa fa-cube"></i> </span> <span class="text"><p class="m-0">Giao hàng thành công</p><p><%if (order.getKey().getStatus().containsKey(4)) {%><%=order.getKey().getStatus().get(4)%><%}%></p></span> </div>
@@ -171,58 +175,58 @@
                                     <%}%>
                                 </div>
                             </div>
-                                <hr/>
+                            <hr/>
                             <div class="row mt-5 ml-5">
-                    <div class="col-lg-12">
-                        <div class="shop__cart__table mb-20">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Sản phẩm</th>
-                                        <th>Giá</th>                 
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <%
-                                        for (OrderDetailDTO orderDetail : order.getValue()) {
-                                    %>
+                                <div class="col-lg-12">
+                                    <div class="shop__cart__table mb-20">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Sản phẩm</th>
+                                                    <th>Giá</th>                 
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <%
+                                                    for (OrderDetailDTO orderDetail : order.getValue()) {
+                                                %>
 
-                                    <tr>
-                                        <td class="cart__product__item">
-                                            <img src="<%= orderDetail.getImage()%>" alt="product-image" style="width: 80px;">
-                                            <div class="cart__product__item__title">
-                                                <a href="ProductRouteController?productID=<%= orderDetail.getProductID()%>">
-                                                    <h6 class="mb-3"><%= orderDetail.getProductName()%></h6>
-                                                </a>    
-                                                <%= orderDetail.getColor()%>, <%= orderDetail.getSize()%> <%if (orderDetail.getQuantity() != 0) {%> x <%= orderDetail.getQuantity()%> 
-                                                <%} else {%> 
-                                                <br/>
-                                                <%= orderDetail.getReturnStatus()%>: <%= orderDetail.getNote()%>
-                                                <%}%>
+                                                <tr>
+                                                    <td class="cart__product__item">
+                                                        <img src="<%= orderDetail.getImage()%>" alt="product-image" style="width: 80px;">
+                                                        <div class="cart__product__item__title">
+                                                            <a href="ProductRouteController?productID=<%= orderDetail.getProductID()%>">
+                                                                <h6 class="mb-3"><%= orderDetail.getProductName()%></h6>
+                                                            </a>    
+                                                            <%= orderDetail.getColor()%>, <%= orderDetail.getSize()%> <%if (orderDetail.getQuantity() != 0) {%> x <%= orderDetail.getQuantity()%> 
+                                                            <%} else {%> 
+                                                            <br/>
+                                                            <%= orderDetail.getReturnStatus()%>: <%= orderDetail.getNote()%>
+                                                            <%}%>
 
-                                            </div>
-                                        </td>
+                                                        </div>
+                                                    </td>
 
-                                        <td class="cart__price">
-                                            <%= orderDetail.getPrice() / 1000%>.000
-                                        </td>
-                                        <%}%>
-                                    <tr>
-                                        <td></td>
+                                                    <td class="cart__price">
+                                                        <%= numberFormat.format(orderDetail.getPrice()) %>
+                                                    </td>
+                                                    <%}%>
+                                                <tr>
+                                                    <td></td>
 
 
-                                        <td colspan="2" class="cart__total" style="font-size: 24px">Tổng: <%= (int) (order.getKey().getTotal()) / 1000%>.000</td>
-                                    </tr>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+                                                    <td colspan="2" class="cart__total" style="font-size: 24px">Tổng: <%= numberFormat.format((int) (order.getKey().getTotal())) %></td>
+                                                </tr>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
                         </article>
                     </div>
                 </div>
-                                
+
                 <div class="row">
                     <div class="col-lg-7">
                         <div class="card">
@@ -239,8 +243,8 @@
                                         <div class="form-group">
                                             <div class="form-row">
                                                 <div class="col">
-                                            <label for="address">Địa chỉ</label>
-                                            <input type="text" name="address" class="form-control form-control-sm" value="${requestScope.ORDER_DETAILS.getKey().getAddress()}" readonly>
+                                                    <label for="address">Địa chỉ</label>
+                                                    <input type="text" name="address" class="form-control form-control-sm" value="${requestScope.ORDER_DETAILS.getKey().getAddress()}" readonly>
                                                 </div>                  
                                             </div>
                                         </div>                                
@@ -275,7 +279,7 @@
                     </div>
                 </div>
 
-                
+
 
             </div>
 
