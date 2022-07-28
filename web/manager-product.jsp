@@ -108,6 +108,7 @@
 
             </div>
             <div class="row">
+                <div class="col-9">
                 <a class="btn btn-default" href="add-product.jsp">Thêm sản phẩm mới</a>
 
                 <!--pop up show product under lowStockLimit Start-->
@@ -175,22 +176,20 @@
                 <!--button with warning number-->
 
                 <button class="btn btn-default" type="button" data-toggle="modal" data-target="#lowStockLimitModal">
-                    Sản phẩm sắp hết
-
-
-                </button>
-                <%
+                    Sản phẩm sắp hết<%
                     if (listLowStockProduct != null) {
                         if (listLowStockProduct.size() > 0) {
                 %>
-                <div class="tip"><%= listLowStockProduct.size()%></div>
+                <span style="font-size: .6em; position: relative; bottom: 5px;"><%= listLowStockProduct.size()%></span>
                 <%
                         }
                     }
                 %>
+                </button>
+                
 
 
-
+                </div>
             </div>
 
 
