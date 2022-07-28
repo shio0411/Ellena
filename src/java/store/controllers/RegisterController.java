@@ -13,9 +13,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import store.user.UserDAO;
-import store.user.UserDTO;
 import store.user.UserError;
+import store.utils.JavaMailUtils;
 
 /**
  *
@@ -25,13 +26,14 @@ import store.user.UserError;
 public class RegisterController extends HttpServlet {
 
     private static final String ERROR = "register.jsp";
-    private static final String SUCCESS = "login.jsp";
+    private static final String SUCCESS = "validate-otp.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
+            HttpSession session = request.getSession();
             String userID = request.getParameter("userID");
             String fullName = request.getParameter("fullName");
             String roleID = "CM";
@@ -52,15 +54,26 @@ public class RegisterController extends HttpServlet {
             }
             if (!password.equals(confirm)) {
                 check = false;
-                userError.setConfirm("Password và xác nhận password khác nhau!");
+                userError.setConfirm("Mật khẩu và xác nhận mật khẩu khác nhau!");
             }
 
             if (check) {
-                UserDTO user = new UserDTO(userID, fullName, password, sex, roleID, address, birthday, phone, true);
-                boolean checkInsert = dao.addUser(user);
-                if (checkInsert) {
-                    url = SUCCESS;
-                }
+                JavaMailUtils.sendMail(userID, "validateOTP");
+                session.setAttribute("OTP_EXPECTED", JavaMailUtils.getOtpValue());// give expected OTP value to ValidateOtpController
+                session.setAttribute("OTP_CHECK", false);// OTP check for register-success.jsp page
+                session.setAttribute("INPUT_ATTEMPS", 3);// set number of allow attemps to input OTP
+                session.setAttribute("FROM_PAGE", "register");// let ValidateOtpController know where to validate otp from
+                
+                // pass input session for addUser later
+                session.setAttribute("USER_ID", userID);
+                session.setAttribute("FULL_NAME", fullName);
+                session.setAttribute("PASSWORD", password);
+                session.setAttribute("SEX", sex);
+                session.setAttribute("ADDRESS", address);
+                session.setAttribute("BIRTHDAY", birthday);
+                session.setAttribute("PHONE", phone);
+                
+                url = SUCCESS;
 
             } else {
                 request.setAttribute("USER_ERROR", userError);

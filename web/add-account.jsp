@@ -10,7 +10,6 @@
 
         <jsp:include page="meta.jsp" flush="true"/>
     </head>
-    <body>
         <body class="goto-here">
 
         <section class="vh-100 gradient-custom">
@@ -20,7 +19,7 @@
                         <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
                             <div class="card-body p-4 p-md-5">
                                 <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Tạo tài khoản mới</h3>
-                                <form action="MainController" class="info" method="POST" accept-charset="utf-8">
+                                <form action="AddAccountController" class="info" method="POST" accept-charset="utf-8">
 
                                     <div class="row">
                                         <div class="col-md-12 mb-4">
@@ -124,7 +123,7 @@
                                         <div class="col-md-6 mb-4 pb-2">
 
                                             <div class="form-outline">
-                                                <label class="form-label" required="" for="phoneNumber">Phone Number</label>
+                                                <label class="form-label" required="" for="phoneNumber">Số điện thoại</label>
                                                 <input type="tel" id="phoneNumber" name="phone" class="form-control form-control-lg" />
 
                                             </div>
@@ -133,7 +132,8 @@
                                     </div>
 
                                     <div>
-                                        <button class="primary-btn" type="submit" name="action" value="Create an account" >Tạo một tài khoản mới</button>
+                                        <button class="primary-btn" type="submit" >Tạo một tài khoản mới</button>
+                                        <a href="ShowAccountController"><button class="primary-btn" type="button">Hủy</button></a>
                                     </div>
 
                                 </form>
@@ -156,5 +156,4 @@
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/jquery.nicescroll.min.js"></script>
     <script src="js/main.js"></script>  
-    </body>
 </html>

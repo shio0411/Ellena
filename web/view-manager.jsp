@@ -9,6 +9,8 @@
         <jsp:include page="meta.jsp" flush="true"/>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+         <link rel="stylesheet" href="css/manager.css" type="text/css">
+        
     </head>
     <body>
         <%
@@ -21,7 +23,31 @@
                 response.sendRedirect("login.jsp");
                 return;
             }
+        String message = (String) request.getAttribute("MESSAGE");
+            if (message != null) {
         %>
+
+        <!-- Pop-up thông báo cập nhật thành công -->
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Thông báo</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                    </div>
+                    <div class="modal-body">
+                        <p><%=message%></p>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="SearchManagerController?search=<%=search%>"><button type="button" class="btn btn-default">Đóng</button></a>
+                    </div>
+                </div>
+
+            </div>
+        </div> <%}%>
         
         <div class="sidenav">
             <a href="ShowAccountController"><i class="fa fa-address-card fa-lg"></i>Quản lý tài khoản</a>
@@ -30,19 +56,28 @@
         </div>
         
         <div class="main">
-            <form action="MainController" method="POST" style="margin-left: 65%;">
-                Xin chào, <a href="my-profile.jsp"><%= loginUser.getFullName() %></a>
-                <input type="submit" name="action" value="Logout" style="margin-left: 4%;">
-            </form>
-            <form action="MainController" method="POST">
-                <input type="text" name="search" value="<%= search%>" placeholder="Tìm kiếm manager">
+            <div class="flex-item text-right" id="manager__header">
+                <form class="m-0" action="MainController" method="POST">  
+                    <h5 class="dropdown">
+                        <b>Xin chào, </b>
+                        <a  data-toggle="dropdown" role="button"><b class="text-color-dark"><%= loginUser.getFullName()%></b></a>
+                        <div  class="dropdown-menu nav-tabs" role="tablist">
+                            <button class="dropdown-item btn" role="tab" type="button"><a class="text-dark" href="my-profile.jsp">Thông tin tài khoản</a></button>
+                            <input class=" dropdown-item btn" type="submit" name="action" value="Logout"/>
+                        </div>
+                    </h5>
+                </form>
+            </div>
+            <h3><b>Quản lý manager</b></h3>
+            <form action="SearchManagerController" method="POST">
+                <input type="text" name="search" value="<%= search%>" placeholder="Tên tài khoản manager">
                 Trạng thái
                 <select name="status">
                     <option value="all" selected hidden>Chọn trạng thái</option>
                     <option value="true">Active</option>
                     <option value="false">Inactive</option>
                 </select>
-                <button type="submit" name="action" value="SearchManager" class="btn-outline-dark" style="width: 15%; padding: 0.5% 0.1%;"><i class="fa fa-search fa-lg"></i>Search</button>
+                <button type="submit" name="action" value="SearchManager" class="btn btn-default" style="width: 15%; padding: 0.5% 0.1%;"><i class="fa fa-search fa-lg"></i>Tìm kiếm</button>
             </form>   
             <%
             List<UserDTO> listManager = (List<UserDTO>) request.getAttribute("LIST_MANAGER");
@@ -50,6 +85,15 @@
                 if (listManager.size() > 0) {
             %>      
             <table class="table table-hover table-bordered">
+                <colgroup>
+                    <col span="1" style="width: 25%;">
+                    <col span="1" style="width: 25%;">
+                    <col span="1" style="width: 15%;">
+                    <col span="1" style="width: 10%;">
+                    <col span="1" style="width: 10%;">
+                    <col span="1" style="width: 10%;">
+                    
+                </colgroup>
                 <tr style="background-color: #b57c68">
                 <th>Tên tài khoản</th>
                 <th>Họ và tên</th>                
@@ -71,10 +115,10 @@
                         <%
                             if (user.isStatus()) {
                         %>
-                             <a href="MainController?action=DeactivateAccount&userID=<%=user.getUserID()%>&search=<%= search %>&from=showmanager">Vô hiệu hoá</a>
+                             <a class="btn btn-default" href="DeactivateAccountController?userID=<%=user.getUserID()%>&search=<%= search %>&from=showmanager">Vô hiệu hoá</a>
                         <%} else {
                         %>
-                             <a href="MainController?action=ActivateAccount&userID=<%=user.getUserID()%>&search=<%= search %>&from=showmanager">Kích hoạt</a>
+                             <a class="btn btn-default" href="ActivateAccountController?userID=<%=user.getUserID()%>&search=<%= search %>&from=showmanager">Kích hoạt</a>
                         <%
                             }
                         %>
@@ -90,7 +134,7 @@
 
                                 </div>
                                 <div class="modal-body">
-                                    <form action="MainController">
+                                    <form action="UpdateAccountController">
                                         <div class="row">
                                             <div class="col-md-12 mb-4">
 
@@ -179,6 +223,7 @@
                                                     <input type="tel" id="phoneNumber" value="<%=user.getPhone()%>" name="phone" class="form-control form-control-lg" />
                                                 </div>
                                             </div>
+                                                <input type="hidden" name="from" value="manager">
                                         </div>
 
 
@@ -194,7 +239,7 @@
                             </div>
                         </div>
                     </div>
-                    <button type="button" data-toggle="modal" data-target="#myModal<%=id++%>">Chỉnh sửa</button>
+                    <button class="btn btn-default" type="button" data-toggle="modal" data-target="#myModal<%=id++%>">Chỉnh sửa</button>
 
                     <!-- Modal -->
 
@@ -202,7 +247,11 @@
                 </td>
                     
                 </tr>
-            <% } } }%>
+            <% } } }else{
+                        %>
+                        <div style="text-align: center">Không có kết quả tìm kiếm.</div>
+                <%
+                        }%>
         </table>
         </div>
         <script>

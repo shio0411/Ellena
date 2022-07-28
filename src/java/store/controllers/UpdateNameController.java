@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import store.user.UserDAO;
 import store.user.UserDTO;
-import store.user.UserError;
 
 
 @WebServlet(name = "UpdateNameController", urlPatterns = {"/UpdateNameController"})
@@ -32,6 +31,7 @@ public class UpdateNameController extends HttpServlet {
             boolean checkUpdate = dao.updateName(newName, userID);
             if (checkUpdate) {
                 url = SUCCESS;
+                if("CM".equalsIgnoreCase(loginUser.getRoleID())) url = "customer-profile.jsp";
                 UserDTO user = dao.getUserByID(userID);
                 session.setAttribute("LOGIN_USER", user);
             }

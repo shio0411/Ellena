@@ -6,13 +6,11 @@
 package store.controllers;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -30,8 +28,9 @@ public class ExceptionHandlerController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private void processError(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void processError(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		// Analyze the servlet exception
+                try {
 		Throwable throwable = (Throwable) request.getAttribute("javax.servlet.error.exception");
 		Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
 		String servletName = (String) request.getAttribute("javax.servlet.error.servlet_name");
@@ -42,17 +41,22 @@ public class ExceptionHandlerController extends HttpServlet {
 		if (requestUri == null) {
 			requestUri = "Unknown";
 		}
+                
 		
 		// Set response content type
-                response.sendRedirect("error.jsp");
-                HttpSession session = request.getSession();
                 
-                session.setAttribute("STATUS_CODE", statusCode);
-                session.setAttribute("REQUESTED_URI", requestUri);
+                request.setAttribute("STATUS_CODE", statusCode);
+                request.setAttribute("REQUESTED_URI", requestUri);
                 
-                session.setAttribute("SERVLET_NAME", servletName);
-                session.setAttribute("EXCEPTION_NAME", throwable.getClass().getName());
-                session.setAttribute("EXCEPTION_MESSAGE", throwable.getMessage());
+                request.setAttribute("SERVLET_NAME", servletName);
+                request.setAttribute("EXCEPTION_NAME", throwable.getClass().getName());
+                request.setAttribute("EXCEPTION_MESSAGE", throwable.getMessage());
+                }catch (Exception e) {
+                    
+                }finally {
+                    request.getRequestDispatcher("error.jsp").forward(request, response);
+                }
+                
                 
                 
 	}

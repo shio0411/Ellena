@@ -10,13 +10,18 @@
         <jsp:include page="meta.jsp" flush="true"/>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+         <link rel="stylesheet" href="css/manager.css" type="text/css">
     </head>
     <body>
         <%
             UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
             String search = request.getParameter("search");
+            String status = request.getParameter("status");
             if (search == null) {
                 search = "";
+            }
+            if (status == null) {
+                status = "";
             }
             if (loginUser == null || !"AD".equals(loginUser.getRoleID())) {
                 response.sendRedirect("login.jsp");
@@ -41,7 +46,7 @@
                         <p><%=message%></p>
                     </div>
                     <div class="modal-footer">
-                        <a href="MainController?action=SearchCategory&search=<%=search %>"><button type="button" class="btn btn-default">Đóng</button></a>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
                     </div>
                 </div>
 
@@ -57,21 +62,30 @@
         
         
         <div class="main">
-            <form action="MainController" method="POST" style="margin-left: 65%;">
-                Xin chào, <a href="my-profile.jsp"><%= loginUser.getFullName() %></a>
-                <input type="submit" name="action" value="Logout" style="margin-left: 4%;">
-            </form>
+           <div class="flex-item text-right" id="manager__header">
+                <form class="m-0" action="MainController" method="POST">  
+                    <h5 class="dropdown">
+                        <b>Xin chào, </b>
+                        <a  data-toggle="dropdown" role="button"><b class="text-color-dark"><%= loginUser.getFullName()%></b></a>
+                        <div  class="dropdown-menu nav-tabs" role="tablist">
+                        <button class="dropdown-item btn" role="tab" type="button"><a class="text-dark" href="my-profile.jsp">Thông tin tài khoản</a></button>
+                        <input class=" dropdown-item btn" type="submit" name="action" value="Logout"/>
+                        </div>
+                    </h5>
+                </form>
+            </div>
+            <h3><b>Quản lý loại sản phẩm</b></h3>
             <form action="MainController" method="POST">
                 <input type="text" name="search" value="<%= search%>" placeholder="Tìm kiếm loại sản phẩm">
                 Trạng thái
                 <select name="status">
-                    <option value="all">Chọn trạng thái</option>
+                    <option value="all">Tất cả</option>
                     <option value="true">Active</option>
                     <option value="false">Inactive</option>
                 </select>
-                <button type="submit" name="action" value="SearchCategory" class="btn-outline-dark" style="width: 15%; padding: 0.5% 0.1%;"><i class="fa fa-search fa-lg"></i>Search</button>
+                <button type="submit" name="action" value="SearchCategory" class="btn btn-default" style="width: 15%; padding: 0.5% 0.1%;"><i class="fa fa-search fa-lg"></i>Search</button>
             </form>   
-            <a href="add-category.jsp">Tạo loại sản phẩm mới</a>
+            <a class="btn btn-default" href="add-category.jsp">Tạo loại sản phẩm mới</a>
             <%
             List<CategoryDTO> listCategory = (List<CategoryDTO>) request.getAttribute("LIST_CATEGORY");
             if (listCategory != null) {
@@ -97,10 +111,10 @@
                         <%
                             if (category.isStatus()) {
                         %>
-                            <a href="MainController?action=DeactivateCategory&categoryID=<%=category.getCategoryID()%>&search=<%= search %>">Vô hiệu hoá</a>
+                            <a class="btn btn-default" href="DeactivateCategoryController?categoryID=<%=category.getCategoryID()%>&search=<%= search %>">Vô hiệu hoá</a>
                         <%} else {
                         %>
-                            <a href="MainController?action=ActivateCategory&categoryID=<%=category.getCategoryID()%>&search=<%= search %>">Kích hoạt</a>
+                            <a class="btn btn-default" href="ActivateCategoryController?categoryID=<%=category.getCategoryID()%>&search=<%= search %>">Kích hoạt</a>
                         <%
                             }
                         %>
@@ -116,7 +130,7 @@
 
                                 </div>
                                 <div class="modal-body">
-                                    <form action="MainController">
+                                    <form action="UpdateCategoryController">
 
                                         <div class="row">
                                             <div class="col-md-6 mb-4 pb-2">
@@ -148,7 +162,8 @@
                                             </div>
 
                                         </div>
-
+                                        <input type="hidden" name="search" value="<%= search%>">
+                                        <input type="hidden" name="status" value="<%= status%>">
                                 </div>
                                 <div class="modal-footer">
                                     <button class="btn btn-default" type="submit" name="action" value="UpdateCategory">Cập nhật</button>
@@ -159,12 +174,16 @@
                             </div>
                         </div>
                     </div>
-                    <button type="button" data-toggle="modal" data-target="#myModal<%=id++%>">Chỉnh sửa</button>
+                    <button class="btn btn-default" type="button" data-toggle="modal" data-target="#myModal<%=id++%>">Chỉnh sửa</button>
 
                     <!-- Modal -->
                     </td>
                 </tr>
-            <% } } }%>
+            <% } } }else{
+                        %>
+                        <div style="text-align: center">Không có kết quả tìm kiếm.</div>
+                <%
+                        }%>
         </table>
         </div>
         <script>

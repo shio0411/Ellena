@@ -11,7 +11,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Login Page</title>
+        <title>Đăng Nhâp</title>
         <jsp:include page="meta.jsp" flush="true"/>
     </head>
     <body>
@@ -39,10 +39,10 @@
                         <div class="header__logo">
                             <a href="./"><img class="img-fluid" style="height: 38px;" src="img/ellena-logo.png" alt=""></a>
                         </div>
-                           
+
+                    </div>
+                </div>
             </div>
-                </div>
-                </div>
         </header>
         <!-- Header Section End -->
         <section class="vh-100 gradient-custom">
@@ -69,35 +69,51 @@
                                         <div class="col-md-12 mb-4">
 
                                             <div class="form-outline">
-                                                <label for="password">Mật khẩu</label>                                                
-                                                <input type="password" name="password" class="form-control" placeholder="*********" id="password">
+                                                <label for="password">Mật khẩu</label> 
+                                                <div class="d-inline-block float-right">
+                                                <a href="forgot-password.jsp">Quên mật khẩu?</a>  
+                                                </div>
+                                                <input type="password" required="" name="password" class="form-control" placeholder="*********" id="password">
 
                                             </div>
+                                             
 
                                         </div>
 
                                     </div>
                                     <p style="color: red">${requestScope.ERROR}</p>
                                     <div>
-                                        <button class="primary-btn" type="submit" name="action" value="Login" >Đăng nhập</button>
+                                        <button class="site-btn" type="submit" name="action" value="Login" >Đăng nhập</button>
                                     </div>
-                                    
+
                                 </form>
-                            </div>
+                                    <p class="mb-0">Hoặc đăng nhập bằng</p>
+                                <div class="m-0">
+                                    <a href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/Ellena/LoginGoogleController&response_type=code
+                                       &client_id=772482426218-2l2bv33430edm3s1v7g12kul82kb5bmd.apps.googleusercontent.com&approval_prompt=force"><image style="width: 98px; height: 39px;" src="./images/google-login.png" alt="Log in with Google"/></a>  
+                                    <!--<a href="https://www.facebook.com/dialog/oauth?client_id=893226585410442&redirect_uri=http://localhost:8080/Ellena/LoginFacebookController"><image style="width: 98px; height: 39px;" src="./images/facebook-login.png" alt="Log in with Facebook"/></a>-->
+                                </div>
+                                
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-        <script src="js/jquery-3.3.1.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script src="js/jquery.magnific-popup.min.js"></script>
-        <script src="js/jquery-ui.min.js"></script>
-        <script src="js/mixitup.min.js"></script>
-        <script src="js/jquery.countdown.min.js"></script>
-        <script src="js/jquery.slicknav.js"></script>
-        <script src="js/owl.carousel.min.js"></script>
-        <script src="js/jquery.nicescroll.min.js"></script>
-        <script src="js/main.js"></script>
+        <!--Start of Tawk.to Script-->
+        <script type="text/javascript">
+            var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+            (function () {
+                var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+                s1.async = true;
+                s1.src = 'https://embed.tawk.to/62986537b0d10b6f3e754a36/1g4hkmp1j';
+                s1.charset = 'UTF-8';
+                s1.setAttribute('crossorigin', '*');
+                s0.parentNode.insertBefore(s1, s0);
+            })();
+        </script>
+        <!--End of Tawk.to Script-->
+
+        <!-- Js Plugins -->
+        <jsp:include page="js-plugins.jsp" flush="true"/>
     </body>
 </html>

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import store.shopping.CategoryDAO;
 import store.shopping.CategoryDTO;
+import store.utils.VNCharacterUtils;
 
 @WebServlet(name = "AddCategoryController", urlPatterns = {"/AddCategoryController"})
 public class AddCategoryController extends HttpServlet {
@@ -22,20 +23,25 @@ public class AddCategoryController extends HttpServlet {
         String url = ERROR;
         try {
             String categoryName = request.getParameter("categoryName");
+            String categoryNameWithoutVN = VNCharacterUtils.removeAccent(categoryName);
             int order = Integer.parseInt(request.getParameter("order"));
             CategoryDAO dao = new CategoryDAO();
             int i = order;
-            if (dao.checkDuplicateOrder(order)) {
-                List<Integer> largerOrderCategoryID = dao.listLargerOrderCategoryID(order);
-                for (Integer categoryId : largerOrderCategoryID) {
-                    dao.incrementLargerOrderByOne(i, categoryId);
-                    i++;
+            if (!dao.checkDuplicateCategoryName(categoryNameWithoutVN)) {
+                if (dao.checkDuplicateOrder(order)) {
+                    List<Integer> largerOrderCategoryID = dao.listLargerOrderCategoryID(order);
+                    for (Integer categoryId : largerOrderCategoryID) {
+                        dao.incrementLargerOrderByOne(i, categoryId);
+                        i++;
+                    }
                 }
-            }
-            CategoryDTO cat = new CategoryDTO(categoryName, order, true);
-            boolean checkInsert = dao.addCategory(cat);
-            if (checkInsert) {
-                url = SUCCESS;
+                CategoryDTO cat = new CategoryDTO(categoryName, order, true);
+                boolean checkInsert = dao.addCategory(cat);
+                if (checkInsert) {
+                    url = SUCCESS;
+                }
+            }else{
+                request.setAttribute("ERROR_MESSAGE", "Tên thể loại sản phầm không được trùng nhau.");
             }
         } catch (Exception e) {
             log("Error at AddCategoryController: " + e.toString());

@@ -33,10 +33,11 @@ public class AuthenFilter implements Filter {
     private static List<String> CUSTOMER_FUNCTION;
     private static List<String> ADMIN_FUNCTION;
     private static List<String> MANAGER_FUNCTION;
+    private static List<String> EMPLOYEE_FUNCTION;
+    private static final String EM = "EM";
     private static final String CM = "CM";
     private static final String AD = "AD";
     private static final String MN = "MN";
-    private static final String LOGIN_PAGE = "login.jsp";
     private static final String HOME_PAGE = "./";
     private static final boolean debug = true;
     // The filter configuration object we are associated with.  If
@@ -46,19 +47,124 @@ public class AuthenFilter implements Filter {
 
     public AuthenFilter() {
         CUSTOMER_FUNCTION = new ArrayList<>();
-        CUSTOMER_FUNCTION.add("./");
-
+        CUSTOMER_FUNCTION.add("");
+        CUSTOMER_FUNCTION.add("home.jsp");
+        CUSTOMER_FUNCTION.add("ViewHomeController");
+        CUSTOMER_FUNCTION.add("contact.jsp");
+        CUSTOMER_FUNCTION.add("category.jsp");
+        CUSTOMER_FUNCTION.add("new-arrival.jsp");
+        CUSTOMER_FUNCTION.add("sale-product.jsp");
+        CUSTOMER_FUNCTION.add("trend.jsp");
+        CUSTOMER_FUNCTION.add("customer-product-details.jsp");
+        CUSTOMER_FUNCTION.add("ProductRouteController");
+        CUSTOMER_FUNCTION.add("CheckSizeQuantityController");
+        CUSTOMER_FUNCTION.add("shop-cart.jsp");
+        CUSTOMER_FUNCTION.add("AddToCartController");
+        CUSTOMER_FUNCTION.add("CheckSizeQuantityController");
+        CUSTOMER_FUNCTION.add("best-seller.jsp");
+        CUSTOMER_FUNCTION.add("DeleteCartItemController");
+        CUSTOMER_FUNCTION.add("UpdateCartItemQuantityController");
+        CUSTOMER_FUNCTION.add("checkout.jsp");
+        CUSTOMER_FUNCTION.add("vnpay.jsp");
+        CUSTOMER_FUNCTION.add("ajaxServlet");
+        CUSTOMER_FUNCTION.add("CheckoutController");
+        CUSTOMER_FUNCTION.add("order-history.jsp");
+        CUSTOMER_FUNCTION.add("ViewOrderHistoryController");
+        CUSTOMER_FUNCTION.add("CreateRatingFormController");
+        CUSTOMER_FUNCTION.add("rating-product.jsp");       
+        CUSTOMER_FUNCTION.add("UpdateRatingController");     
+        CUSTOMER_FUNCTION.add("customer-profile.jsp");
+        CUSTOMER_FUNCTION.add("DiscoverController");
+        CUSTOMER_FUNCTION.add("CategoryRouteController");
+        CUSTOMER_FUNCTION.add("about-us.jsp");
+        CUSTOMER_FUNCTION.add("faq.jsp");
+        CUSTOMER_FUNCTION.add("choose-size.jsp");
+        CUSTOMER_FUNCTION.add("payment-policy.jsp");
+        CUSTOMER_FUNCTION.add("return-policy.jsp");
+        CUSTOMER_FUNCTION.add("RatingController");
+        CUSTOMER_FUNCTION.add("rating-order.jsp");
+        CUSTOMER_FUNCTION.add("rating-product.jsp");
+        CUSTOMER_FUNCTION.add("FilterAllProductsController");
+        CUSTOMER_FUNCTION.add("SearchCatalogController");
+        CUSTOMER_FUNCTION.add("FilterSearchedProductsController");
+        
         ADMIN_FUNCTION = new ArrayList<>();
         ADMIN_FUNCTION.add("admin.jsp");
         ADMIN_FUNCTION.add("add-account.jsp");
         ADMIN_FUNCTION.add("add-category.jsp");
         ADMIN_FUNCTION.add("view-category.jsp");
         ADMIN_FUNCTION.add("view-manager.jsp");
+        ADMIN_FUNCTION.add("my-profile.jsp");
+        ADMIN_FUNCTION.add("ShowManagerController");
+        ADMIN_FUNCTION.add("ShowCategoryController");
+        ADMIN_FUNCTION.add("ShowAccountController");
+        ADMIN_FUNCTION.add("SearchAccountController");
+        ADMIN_FUNCTION.add("AddAccountController");
+        ADMIN_FUNCTION.add("UpdateAccountController");
+        ADMIN_FUNCTION.add("DeactivateAccountController");
+        ADMIN_FUNCTION.add("ActivateAccountController");
+        ADMIN_FUNCTION.add("SearchManagerController");
+        ADMIN_FUNCTION.add("SearchCategoryController");
+        ADMIN_FUNCTION.add("DeactivateCategoryController");
+        ADMIN_FUNCTION.add("ActivateCategoryController");
+        ADMIN_FUNCTION.add("UpdateCategoryController");
+        ADMIN_FUNCTION.add("AddCategoryController");
+        
 
         MANAGER_FUNCTION = new ArrayList<>();
         MANAGER_FUNCTION.add("manager-product.jsp");
         MANAGER_FUNCTION.add("manager-statistic.jsp");
-
+        MANAGER_FUNCTION.add("manager-statistic-user.jsp");
+        MANAGER_FUNCTION.add("my-profile.jsp");
+        MANAGER_FUNCTION.add("ManagerStatisticController");
+        MANAGER_FUNCTION.add("ManagerStatisticUserController");
+        MANAGER_FUNCTION.add("ManagerShowProductController");
+        MANAGER_FUNCTION.add("ManagerSearchProductController");
+        MANAGER_FUNCTION.add("ManagerShowProductDetailController");
+        MANAGER_FUNCTION.add("manager-product-details.jsp");
+        MANAGER_FUNCTION.add("add-product.jsp");
+        MANAGER_FUNCTION.add("add-variant.jsp");
+        MANAGER_FUNCTION.add("AddProductController");
+        MANAGER_FUNCTION.add("view-product-images.jsp");
+        MANAGER_FUNCTION.add("ManagerShowOrderController");
+        MANAGER_FUNCTION.add("ShowOrderController");
+        MANAGER_FUNCTION.add("UpdateOrderController");
+        MANAGER_FUNCTION.add("SearchOrderController");
+        MANAGER_FUNCTION.add("manager-order.jsp");
+        MANAGER_FUNCTION.add("return.jsp");
+        MANAGER_FUNCTION.add("ReturnController");
+        MANAGER_FUNCTION.add("UpdateTrackingIdController");
+        MANAGER_FUNCTION.add("UpdateOrderDetailController");
+        MANAGER_FUNCTION.add("RefundOrderController");
+        MANAGER_FUNCTION.add("customer-return-history.jsp");
+        MANAGER_FUNCTION.add("SearchReturnedHistoryController");
+        MANAGER_FUNCTION.add("ManagerSearchProductController");
+        MANAGER_FUNCTION.add("ManagerUpdateProductController");
+        MANAGER_FUNCTION.add("DeactivateProductController");
+        MANAGER_FUNCTION.add("ActivateProductController");
+        MANAGER_FUNCTION.add("UpdateVariantsController");
+        MANAGER_FUNCTION.add("DeleteColorController");
+        MANAGER_FUNCTION.add("DeleteSizeController");
+        MANAGER_FUNCTION.add("ViewImagesController");
+        MANAGER_FUNCTION.add("AddColorsController");
+        MANAGER_FUNCTION.add("AddVariantsController");
+        MANAGER_FUNCTION.add("AddImageController");
+        MANAGER_FUNCTION.add("DeleteImageController");
+        
+        EMPLOYEE_FUNCTION = new ArrayList<>();
+        EMPLOYEE_FUNCTION.add("ShowOrderController");
+        EMPLOYEE_FUNCTION.add("UpdateOrderController");
+        EMPLOYEE_FUNCTION.add("SearchOrderController");
+        EMPLOYEE_FUNCTION.add("manager-order.jsp");
+        EMPLOYEE_FUNCTION.add("return.jsp");
+        EMPLOYEE_FUNCTION.add("ReturnController");
+        EMPLOYEE_FUNCTION.add("RefundController");
+        EMPLOYEE_FUNCTION.add("UpdateOrderDetailController");
+        EMPLOYEE_FUNCTION.add("RefundOrderController");
+        EMPLOYEE_FUNCTION.add("customer-return-history.jsp");
+        EMPLOYEE_FUNCTION.add("SearchReturnedHistoryController");
+        EMPLOYEE_FUNCTION.add("my-profile.jsp");
+        EMPLOYEE_FUNCTION.add("UpdateTrackingIdController");
     }
 
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
@@ -128,51 +234,73 @@ public class AuthenFilter implements Filter {
             throws IOException, ServletException {
 
         try {
+            request.setCharacterEncoding("UTF-8");
             HttpServletRequest req = (HttpServletRequest) request;
             HttpServletResponse res = (HttpServletResponse) response;
             if (res.getStatus() == 404) {
                 res.sendRedirect("error.jsp");
             } else {
-                String uri = req.getRequestURI();
-                if (uri.equals("/Ellena/") || uri.contains("google") || uri.contains(".jpg") || uri.contains(".gif") || uri.contains(".png")
-                        || uri.contains("css") || uri.contains("fonts") || uri.contains("scss") || uri.contains("Ellena/js")
-                        || uri.contains("sass") || uri.contains("error.jsp")) {
-                    chain.doFilter(request, response);
+                HttpSession session = req.getSession();
+                if (session == null) {
+                    request.setAttribute("ERROR", "Session timeout!");
+                    res.sendRedirect(HOME_PAGE);
                 } else {
-                    if (uri.contains("ViewHomeController") || uri.contains("error.jsp") || uri.contains("register.jsp")
-                            || uri.contains("login.jsp") || uri.contains("MainController")
-                            || uri.contains("footer.jsp") || uri.contains("home.jsp")
-                            || uri.contains("js-plugin.jsp") || uri.contains("meta.jsp") || uri.contains("contact.jsp")
-                            || uri.contains("category.jsp") || uri.contains("error.jsp") || uri.contains("header.jsp")) {
-                        chain.doFilter(request, response);
-                    } else {
-                        int index = uri.lastIndexOf("/");
-                        String resource = uri.substring(index + 1);
-                        HttpSession session = req.getSession();
-                        if (session == null) {
-                            res.sendRedirect(HOME_PAGE);
-                            request.setAttribute("ERROR", "Session timeout!");
+                    UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
+                    String uri = req.getRequestURI();
+                    int index = uri.lastIndexOf("/");
+                    String resource = uri.substring(index + 1);
+                    if (loginUser == null) {
+                        if (uri.equals("/Ellena/") || uri.contains("google") || uri.contains(".jpg") || uri.contains(".gif") || uri.contains(".png")
+                                || uri.contains("css") || uri.contains("fonts") || uri.contains("scss") || uri.contains("Ellena/js")
+                                || uri.contains("sass") || uri.contains("error.jsp") || uri.contains("ViewHomeController")
+                                || uri.contains("register.jsp") || uri.contains("login.jsp") || uri.contains("MainController") || uri.contains("footer.jsp")
+                                || uri.contains("home.jsp") || uri.contains("meta.jsp") || uri.contains("contact.jsp") || uri.contains("category.jsp")
+                                || uri.contains("header.jsp") || uri.contains("new-arrival.jsp") || uri.contains("trend.jsp") || uri.contains("sale-product.jsp") || uri.contains("best-seller.jsp")
+                                || uri.contains("customer-product-details.jsp") || uri.contains("ProductRouteController") || uri.contains("DiscoverController")
+                                || uri.contains("CategoryRouteController") || uri.contains("CheckSizeQuantityController") || uri.contains("discover.jsp")
+                                || uri.contains("search-catalog.jsp") || uri.contains("LoginGoogleController") || uri.contains("AddToCartController")
+                                || uri.contains("about-us.jsp") || uri.contains("faq.jsp") || uri.contains("choose-size.jsp") || uri.contains("payment-policy.jsp") || uri.contains("return-policy.jsp")
+                                || uri.contains("forgot-password.jsp") || uri.contains("ForgotPasswordController") || uri.contains("validate-otp.jsp") || uri.contains("ValidateOtpController")
+                                || uri.contains("reset-password.jsp") || uri.contains("ResetPasswordController") || uri.contains("LogoutController") 
+                                || uri.contains("FilterAllProductsController") || uri.contains("SearchCatalogController") || uri.contains("FilterSearchedProductsController")
+                                || uri.contains("RegisterAccountController")) {
+                            chain.doFilter(request, response);
+                        } else if (!ADMIN_FUNCTION.contains(resource) && !CUSTOMER_FUNCTION.contains(resource) && !MANAGER_FUNCTION.contains(resource)) {
+                            res.sendError(404);
                         } else {
-                            UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
-                            if (loginUser != null) {
-                                String roleID = loginUser.getRoleID();
-                                if (AD.equals(roleID) && ADMIN_FUNCTION.contains(resource)) {
-                                    chain.doFilter(request, response);
-                                } else if (CM.equals(roleID) && CUSTOMER_FUNCTION.contains(resource)) {
-                                    chain.doFilter(request, response);
-                                } else {
+                            res.sendRedirect(HOME_PAGE);
+                        }
+
+                    } else {
+                        if (uri.contains(".jpg") || uri.contains(".gif") || uri.contains(".png")
+                                || uri.contains("css") || uri.contains("fonts") || uri.contains("scss") || uri.contains("Ellena/js")
+                                || uri.contains("sass") || uri.contains("error.jsp") || uri.contains("MainController")
+                                || uri.contains("meta.jsp")) {
+                            chain.doFilter(request, response);
+                        } else {
+
+                            String roleID = loginUser.getRoleID();
+                            if (AD.equals(roleID) && ADMIN_FUNCTION.contains(resource)) {
+                                chain.doFilter(request, response);
+                            } else if (CM.equals(roleID) && CUSTOMER_FUNCTION.contains(resource)) {
+                                chain.doFilter(request, response);
+                            } else if (MN.equals(roleID) && MANAGER_FUNCTION.contains(resource)) {
+                                chain.doFilter(request, response);
+                            } else if (EM.equals(roleID) && EMPLOYEE_FUNCTION.contains(resource)) {
+                                chain.doFilter(request, response);
+                            }else {
+                                if (CM.equals(roleID))
                                     res.sendRedirect(HOME_PAGE);
-                                }
-                            } else {
-                                if (!ADMIN_FUNCTION.contains(resource) && !CUSTOMER_FUNCTION.contains(resource)) 
-                                    res.sendError(404);
+                                else
+                                    res.sendRedirect("error.jsp");
                             }
+
                         }
                     }
                 }
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 

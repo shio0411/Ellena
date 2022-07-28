@@ -2,7 +2,6 @@
 package store.controllers;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -33,6 +32,7 @@ public class UpdatePhoneController extends HttpServlet {
             boolean checkUpdate = dao.updatePhone(newPhone, userID);
             if (checkUpdate) {
                 url = SUCCESS;
+                if("CM".equalsIgnoreCase(loginUser.getRoleID())) url = "customer-profile.jsp";
                 UserDTO user = dao.getUserByID(userID);
                 session.setAttribute("LOGIN_USER", user);
             }

@@ -12,8 +12,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import store.shopping.CategoryDAO;
-import store.shopping.CategoryDTO;
+import javax.servlet.http.HttpSession;
+import store.shopping.ProductDAO;
+import store.shopping.ProductDTO;
 import store.utils.VNCharacterUtils;
 
 /**
@@ -39,12 +40,12 @@ public class CategoryRouteController extends HttpServlet {
         String url = ERROR;
         try {
             String category = VNCharacterUtils.removeAccent(request.getParameter("category"));
-            CategoryDAO dao = new CategoryDAO();
-            List<CategoryDTO> listCategory = dao.getListCategory(category, "true");
-            if (listCategory.size() > 0) {
-                request.setAttribute("LIST_CATEGORY", listCategory);
-                url = "./category/" + category;
-            }
+            ProductDAO dao = new ProductDAO();
+            HttpSession session = request.getSession();
+            List<ProductDTO> searchCatalog = dao.getProductByCategory(category);
+            session.setAttribute("SEARCH_CATALOG", searchCatalog);
+            url = "./category/" + category;
+
         } catch (Exception e) {
             log("Error at CategoryRouteController: " + e.toString());
         } finally {

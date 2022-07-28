@@ -1,30 +1,112 @@
 package store.shopping;
 
-import java.util.Date;
-
+import java.util.List;
+import java.util.Map;
 
 public class ProductDTO {
-    private String productID;
+
+    private int productID;
     private String productName;
-    private String image;
     private String description;
-    private String size;
-    private String color;
+    private Map<String, List<String>> colorImage;
+    private Map<List<String>, Integer> colorSizeQuantity;
     private int price;
     private int quantity;
-    private int categoryID;
-    private Date importDate;
+    private int discount;
+    private int lowStockLimit;
+    private String categoryName;
     private boolean status;
+    private int categoryID;
 
-    public ProductDTO() {
         
+    public ProductDTO() {
+
     }
 
-    public String getProductID() {
+    public ProductDTO(int productID, String productName, String description, Map<String, List<String>> colorImage, Map<List<String>, Integer> colorSizeQuantity, int price, int discount, int lowStockLimit, boolean status, int categoryID) {
+        this.productID = productID;
+        this.productName = productName;
+        this.description = description;
+        this.colorImage = colorImage;
+        this.colorSizeQuantity = colorSizeQuantity;
+        this.price = price;
+        this.discount = discount;
+        this.lowStockLimit = lowStockLimit;
+        this.status = status;
+        this.categoryID = categoryID;
+    }
+
+    public ProductDTO(int productID, String productName, String description, int price, int discount, int lowStockLimit, boolean status, int categoryID) {
+        this.productID = productID;
+        this.productName = productName;
+        this.description = description;
+        this.price = price;
+        this.discount = discount;
+        this.lowStockLimit = lowStockLimit;
+        this.status = status;
+        this.categoryID = categoryID;
+    }
+
+    public ProductDTO(int productID, String productName, String description, Map<String, List<String>> colorImage, int price, int quantity, int discount, int lowStockLimit, String categoryName, boolean status) {
+        this.productID = productID;
+        this.productName = productName;
+        this.description = description;
+        this.colorImage = colorImage;
+        this.price = price;
+        this.quantity = quantity;
+        this.discount = discount;
+        this.lowStockLimit = lowStockLimit;
+        this.categoryName = categoryName;
+        this.status = status;
+    }
+
+    public ProductDTO(int productID, String productName, int price, int discount, int lowStockLimit, String categoryName, boolean status) {
+        this.productID = productID;
+        this.productName = productName;
+        this.price = price;
+        this.discount = discount;
+        this.lowStockLimit = lowStockLimit;
+        this.categoryName = categoryName;
+        this.status = status;
+    }
+
+    public ProductDTO(int productID, String productName, String description, Map<String, List<String>> colorImage, Map<List<String>, Integer> colorSizeQuantity, int price, int quantity, int discount, int lowStockLimit, String categoryName, boolean status) {
+        this.productID = productID;
+        this.productName = productName;
+        this.description = description;
+        this.colorImage = colorImage;
+        this.colorSizeQuantity = colorSizeQuantity;
+        this.price = price;
+        this.quantity = quantity;
+        this.discount = discount;
+        this.lowStockLimit = lowStockLimit;
+        this.categoryName = categoryName;
+        this.status = status;
+    }
+
+    public ProductDTO(int productID, String productName, Map<List<String>, Integer> colorSizeQuantity, int quantity, int lowStockLimit) {
+        this.productID = productID;
+        this.productName = productName;
+        this.colorSizeQuantity = colorSizeQuantity;
+        this.quantity = quantity;
+        this.lowStockLimit = lowStockLimit;
+    }
+
+    
+    
+    public int getCategoryID() {
+        return categoryID;
+    }
+
+    public void setCategoryID(int categoryID) {
+        this.categoryID = categoryID;
+    }
+
+    public int getProductID() {
         return productID;
     }
 
-    public void setProductID(String productID) {
+    public void setProductID(int productID) {
         this.productID = productID;
     }
 
@@ -36,14 +118,6 @@ public class ProductDTO {
         this.productName = productName;
     }
 
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -52,20 +126,20 @@ public class ProductDTO {
         this.description = description;
     }
 
-    public String getSize() {
-        return size;
+    public Map<String, List<String>> getColorImage() {
+        return colorImage;
     }
 
-    public void setSize(String size) {
-        this.size = size;
+    public void setColorImage(Map<String, List<String>> colorImage) {
+        this.colorImage = colorImage;
     }
 
-    public String getColor() {
-        return color;
+    public Map<List<String>, Integer> getColorSizeQuantity() {
+        return colorSizeQuantity;
     }
 
-    public void setColor(String color) {
-        this.color = color;
+    public void setColorSizeQuantity(Map<List<String>, Integer> colorSizeQuantity) {
+        this.colorSizeQuantity = colorSizeQuantity;
     }
 
     public int getPrice() {
@@ -84,20 +158,28 @@ public class ProductDTO {
         this.quantity = quantity;
     }
 
-    public int getCategoryID() {
-        return categoryID;
+    public int getDiscount() {
+        return discount;
     }
 
-    public void setCategoryID(int categoryID) {
-        this.categoryID = categoryID;
+    public void setDiscount(int discount) {
+        this.discount = discount;
     }
 
-    public Date getImportDate() {
-        return importDate;
+    public int getLowStockLimit() {
+        return lowStockLimit;
     }
 
-    public void setImportDate(Date importDate) {
-        this.importDate = importDate;
+    public void setLowStockLimit(int lowStockLimit) {
+        this.lowStockLimit = lowStockLimit;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 
     public boolean isStatus() {
@@ -107,6 +189,5 @@ public class ProductDTO {
     public void setStatus(boolean status) {
         this.status = status;
     }
-    
-    
+
 }

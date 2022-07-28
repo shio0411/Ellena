@@ -5,6 +5,8 @@
  */
 package store.user;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -20,7 +22,7 @@ public class UserDTO {
     private String address;
     private Date   birthday;
     private String phone;
-    private boolean status;    
+    private boolean status;   
     
     public UserDTO() {
         this.userID = "";
@@ -29,11 +31,20 @@ public class UserDTO {
         this.sex = false;
         this.roleID = "";
         this.address = "";
-        this.birthday = new Date();
+        this.birthday = null;
         this.phone = "";
         this.status = false;
     }
-
+    
+    //return history constructor
+    public UserDTO(String userID, String fullName, boolean sex, String address, String phone) {
+        this.userID = userID;
+        this.fullName = fullName;
+        this.sex = sex;
+        this.address = address;
+        this.phone = phone;
+    }
+    
     public UserDTO(String userID, String fullName, String password, boolean sex, String roleID, String address, Date birthday, String phone, boolean status) {
         this.userID = userID;
         this.fullName = fullName;

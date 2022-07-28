@@ -26,8 +26,8 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="breadcrumb__links">
-                            <a href="./index.html"><i class="fa fa-home"></i> Home</a>
-                            <span>Contact</span>
+                            <a href="./"><i class="fa fa-home"></i> Trang chủ</a>
+                            <span>Liên hệ</span>
                         </div>
                     </div>
                 </div>
@@ -45,7 +45,7 @@
                                 <h5>Thông tin liên hệ</h5>
                                 <ul>
                                     <li>
-                                        <h6><i class="fa fa-map-marker"></i> Address</h6>
+                                        <h6><i class="fa fa-map-marker"></i> Địa chỉ</h6>
                                         <p>Long Thạnh Mỹ, Quận 9, TP.HCM</p>
                                     </li>
                                     <li>
@@ -58,16 +58,7 @@
                                     </li>
                                 </ul>
                             </div>
-                            <div class="contact__form">
-                                <h5>GỬI TIN NHẮN</h5>
-                                <form action="#">
-                                    <input type="text" placeholder="Name">
-                                    <input type="text" placeholder="Email">
-                                    <input type="text" placeholder="Website">
-                                    <textarea placeholder="Message"></textarea>
-                                    <button type="submit" class="site-btn">Gửi tin nhắn</button>
-                                </form>
-                            </div>
+                            
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-6">

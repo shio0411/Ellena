@@ -8,13 +8,7 @@
         <jsp:include page="meta.jsp" flush="true"/>
     </head>
     <body>
-        <%
-            UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
-            if (loginUser == null || !"AD".equals(loginUser.getRoleID())) {
-                response.sendRedirect("login.jsp");
-                return;
-            }
-        %><div class="sidenav">
+        <div class="sidenav">
             <a href="ShowAccountController" style="color: #873e23; font-weight: bold;"><i class="fa fa-address-card fa-lg"></i>Quản lý tài khoản</a>
             <a href="ShowManagerController"><i class="fa fa-group fa-lg"></i>Quản lý manager</a>
             <a href="ShowCategoryController"><i class="fa fa-cart-plus fa-lg"></i>Quản lý loại sản phẩm</a>
@@ -24,20 +18,20 @@
             <div style="margin: 5% 5%;">
             <h3>Thêm một loại sản phẩm mới</h3>
             <br>
-            <form action="MainController" method="POST">
+            <form action="AddCategoryController" method="POST">
             <div class="row">
                 <div class="col-md-4 mb-4">
 
                     <div class="form-outline">
                         <label class="form-label" for="categoryName">Tên loại sản phẩm</label>
                         <input type="text" name="categoryName" id="userID" required="" class="form-control form-control-lg" />
-                        <p style="color: red">${requestScope.USER_ERROR.userID}</p>
+                        
 
                     </div>
-
+                    
                 </div>
-
-            </div>
+                
+            </div><p style="color: red">${requestScope.ERROR_MESSAGE}</p>
             <div class="row">
                 <div class="col-md-4 mb-4">
 
@@ -55,7 +49,7 @@
 
                     <div class="form-outline">
                         <button type="submit" name="action" value="AddCategory">Tạo</button>
-
+                        <a href="ShowCategoryController"> <button type="button">Hủy</button></a>
                     </div>
 
                 </div>

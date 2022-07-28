@@ -5,12 +5,16 @@
 package store.controllers;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import store.shopping.ProductDAO;
+import store.shopping.ProductDTO;
+import store.utils.VNCharacterUtils;
 
 /**
  *
@@ -19,30 +23,50 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "SearchCatalogController", urlPatterns = {"/SearchCatalogController"})
 public class SearchCatalogController extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    public static final String ERROR = "error.jsp";
+    public static final String SUCCESS = "search-catalog.jsp";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet SearchCatalogController</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet SearchCatalogController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        String url = ERROR;
+        int page = 1; // page it start counting
+        int productPerPage = 6; //number of product per page
+
+        try {
+            // if there is a page param, take it
+            if (request.getParameter("page") != null) {
+                page = Integer.parseInt(request.getParameter("page"));
+            }
+            
+            ProductDAO dao = new ProductDAO();
+            String search = VNCharacterUtils.removeAccent(request.getParameter("search"));
+            List<ProductDTO> listProduct = dao.getSearchCatalogPagination(search, (page * productPerPage) - productPerPage + 1, productPerPage * page);
+            HttpSession session = request.getSession();
+            session.setAttribute("SEARCH_CATALOG", listProduct);
+            
+            
+            int noOfProducts = dao.getNumberOfProduct();
+            int noOfPages = (int) Math.ceil(noOfProducts * 1.0 / productPerPage);
+            
+            request.setAttribute("MIN_AMOUNT", 0);
+            request.setAttribute("MAX_AMOUNT", 0);
+            
+            request.setAttribute("noOfPages", noOfPages);
+            request.setAttribute("currentPage", page);
+//            give manager-product.jsp know that we are in ShowProduct
+            boolean searchPage = true;
+            request.setAttribute("SWITCH_SEARCH", searchPage);
+            
+            
+            url = SUCCESS;
+
+        } catch (Exception e) {
+            log("Error at SearchCatalogController: " + toString());
+        } finally {
+            request.getRequestDispatcher(url).forward(request, response);
         }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

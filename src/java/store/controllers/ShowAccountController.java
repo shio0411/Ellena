@@ -25,11 +25,31 @@ public class ShowAccountController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
+        int page = 1; // page it start counting
+        int accountPerPage = 8; //number of account per page
+        
         try {
             UserDAO dao = new UserDAO();
-            List<UserDTO> listUser = dao.getAllUsers();
-            if (listUser.size() > 0) {
+            
+            // if there is a "page" param, take it
+            if (request.getParameter("page") != null) {
+                page = Integer.parseInt(request.getParameter("page"));
+            }
+            
+            List<UserDTO> listUser = dao.getAllUsers((page * accountPerPage) - accountPerPage + 1, accountPerPage * page);
+            if (!listUser.isEmpty()) {
+                
+                int noOfAccounts = dao.getNumberOfUser();
+                int noOfPages = (int) Math.ceil(noOfAccounts * 1.0 / accountPerPage);
+                
                 request.setAttribute("LIST_USER", listUser);
+                request.setAttribute("noOfPages", noOfPages);
+                request.setAttribute("currentPage", page);
+                
+                //give admin.jsp know that we are in ShowAccountController
+                boolean searchPage = true;
+                request.setAttribute("SWITCH_SEARCH", searchPage);
+                
                 url = SUCCESS;
             }
         } catch (Exception e) {

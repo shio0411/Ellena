@@ -20,7 +20,6 @@ import store.user.UserDAO;
 @WebServlet(name = "ActivateAccountController", urlPatterns = {"/ActivateAccountController"})
 public class ActivateAccountController extends HttpServlet {
     private static final String ERROR = "ShowAccountController";
-    private static final String SUCCESS = "SearchAccountController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -28,7 +27,6 @@ public class ActivateAccountController extends HttpServlet {
         String url = ERROR;
         try {
             String userID = request.getParameter("userID");
-            String roleID = request.getParameter("roleID");
             String from = request.getParameter("from");
             UserDAO dao = new UserDAO();
             boolean check = dao.activateAccount(userID);
