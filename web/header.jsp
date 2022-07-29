@@ -18,7 +18,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Header Page</title>
         <jsp:include page="meta.jsp" flush="true"/>
-        
+
     </head>
     <body>
         <% List<CategoryDTO> listCategory = (List<CategoryDTO>) session.getAttribute("LIST_CATEGORY");
@@ -43,21 +43,45 @@
             <div class="offcanvas__close">+</div>
             <ul class="offcanvas__widget">
                 <li><span class="icon_search search-switch"></span></li>
-                <li><a href="#"><span class="icon_heart_alt"></span>
-                        <div class="tip">2</div>
-                    </a></li>
-                <li><a href="shop-cart.jsp"><span class="icon_bag_alt"></span>
-                        <div class="tip">2</div>
-                    </a></li>
+                <li>
+                    <% if (user == null) { %>
+
+                    <a href="login.jsp">
+                        <%} else { %>
+
+                        <a href="shop-cart.jsp">
+                            <%}%>
+                            <span class="icon_bag_alt"></span>
+                            <% if (cart != null) {
+                                    if (cart.size() > 0) {
+                            %>
+                            <div class="tip"><%= cart.size()%></div>
+                            <%
+                                    }
+                                }
+                            %>
+                        </a>
+                </li>
             </ul>
             <div class="offcanvas__logo">
                 <a href="./"><img class="img-fluid" style="height: 38px;" src="img/ellena-logo.png" alt="off-canvas logo"></a>
             </div>
             <div id="mobile-menu-wrap"></div>
+            <%if (user != null) {%>
             <div class="offcanvas__auth">
-                <a href="./login.jsp">Login</a>
-                <a href="./register.jsp">Register</a>
+                <a style="font-weight: 500; color: #721c24" href="customer-profile.jsp"><%= user.getFullName().toUpperCase()%></a>
+                <ul class="dropdown">
+                    <li> <a href="MainController?action=ViewOrderHistory">Đơn hàng <i class="fa fa-shopping-cart text-dark"></i></a></li>
+                    <li> <a href="MainController?action=Logout">Đăng xuất <i class="fa fa-sign-out text-dark"></i></a></li>
+                </ul>
             </div>
+            <% } else {%>
+            <div class="offcanvas__auth">
+                <a href="login.jsp">Đăng nhập</a>
+                <a href="register.jsp">Đăng ký</a>
+            </div>
+            <%}%>
+
         </div>
         <!-- Offcanvas Menu End -->
 
@@ -114,22 +138,22 @@
                                 <li><span class="icon_search search-switch"></span></li>
                                 <li>
                                     <% if (user == null) { %>
-                                    
+
                                     <a href="login.jsp">
-                                    <%} else { %>
-                                    
-                                    <a href="shop-cart.jsp">
-                                    <%}%>
-                                    <span class="icon_bag_alt"></span>
-                                        <% if (cart != null) {
-                                                if (cart.size() > 0) {
-                                        %>
-                                        <div class="tip"><%= cart.size()%></div>
-                                        <%
+                                        <%} else { %>
+
+                                        <a href="shop-cart.jsp">
+                                            <%}%>
+                                            <span class="icon_bag_alt"></span>
+                                            <% if (cart != null) {
+                                                    if (cart.size() > 0) {
+                                            %>
+                                            <div class="tip"><%= cart.size()%></div>
+                                            <%
+                                                    }
                                                 }
-                                            }
-                                        %>
-                                    </a></li>
+                                            %>
+                                        </a></li>
                             </ul>
                         </div>
                     </div>
@@ -165,7 +189,7 @@
                 }
             }
             if (check)
-                    btns[0].className += " active";
+                btns[0].className += " active";
         </script>
         <!--Start of Tawk.to Script-->
         <script type="text/javascript">
