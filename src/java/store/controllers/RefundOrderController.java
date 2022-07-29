@@ -70,6 +70,7 @@ public class RefundOrderController extends HttpServlet {
             }
         } catch (Exception e) {
             log("Error at RefundOrderController: " + e.toString());
+            request.setAttribute("UPDATE_MESSAGE", "Cập nhật thất bại!");
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

@@ -258,7 +258,7 @@
                                                 <input type="hidden" name="productID" value="<%= orderDetail.getProductID()%>"/>
                                                 <input type="hidden" name="orderDetailID" value="<%= orderDetail.getOrderDetailID()%>"/>
                                                 <div class="modal-footer">
-                                                    <button class="btn btn-default" <% if (order.getStatusID()!= 4) {%> disabled="" <%}%> type="submit" name="action" value="UpdateOrderDetail">Cập nhật</button>
+                                                    <button class="btn btn-default" <% if (order.getStatusID() != 4) {%> disabled="" <%}%> type="submit" name="action" value="UpdateOrderDetail">Cập nhật</button>
                                                     <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
                                                 </div>
                                             </form>
@@ -307,7 +307,7 @@
                                                 <input type="hidden" name="productID" value="<%= orderDetail.getProductID()%>"/>
                                                 <input type="hidden" name="orderDetailID" value="<%= orderDetail.getOrderDetailID()%>"/>
                                                 <div class="modal-footer">
-                                                    <button class="btn btn-default" <% if (order.getStatusID()!= 4) {%> disabled="" <%}%> type="submit" name="action" value="RefundOrder">Cập nhật</button>
+                                                    <button class="btn btn-default" <% if (order.getStatusID() != 4) {%> disabled="" <%}%> type="submit" name="action" value="RefundOrder">Cập nhật</button>
                                                     <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
                                                 </div>
                                             </form>
