@@ -88,7 +88,7 @@
                     window.location = url;
                 } else {
                     seconds--;
-                    document.getElementById("pageInfo").innerHTML = "Chuyển về trang login trong " + seconds + " giây.";
+                    document.getElementById("pageInfo").innerHTML = "Chuyển về trang Home trong " + seconds + " giây.";
                     setTimeout("redirect()", 1000);
                 }
             }

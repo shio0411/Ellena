@@ -39,6 +39,9 @@ public class ResetPasswordController extends HttpServlet {
             if (!newPassword.equals(confirmNewPassword)) {
                 check = false;
                 request.setAttribute("ERROR", "Hai mật khẩu không giống nhau!");
+            }else if (newPassword.length() <= 8){
+                check = false;
+                request.setAttribute("ERROR", "Mật khẩu phải dài hơn 8 kí tự!");
             }
             
             if (check) {

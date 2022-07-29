@@ -8,6 +8,7 @@ package store.controllers;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Pattern;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -27,6 +28,7 @@ public class RegisterController extends HttpServlet {
 
     private static final String ERROR = "register.jsp";
     private static final String SUCCESS = "validate-otp.jsp";
+    private static final String EMAIL_PATTERN = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@ [^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -51,10 +53,18 @@ public class RegisterController extends HttpServlet {
             if (checkDuplicate) {
                 check = false;
                 userError.setUserID("Email đã được dùng!");
+            } else if (Pattern.matches(EMAIL_PATTERN, userID)) {
+                check = false;
+                userError.setUserID("Email không hợp lệ!");
             }
+            
+            
             if (!password.equals(confirm)) {
                 check = false;
                 userError.setConfirm("Mật khẩu và xác nhận mật khẩu khác nhau!");
+            }else if (password.length() <= 8){
+                check = false;
+                userError.setPassword("Mật khẩu phải dài hơn 8 kí tự!");
             }
 
             if (check) {

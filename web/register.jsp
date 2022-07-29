@@ -109,6 +109,7 @@
                                         </div>
                                     </div>
                                     <p style="color: red">${requestScope.USER_ERROR.confirm}</p>
+                                    <p style="color: red">${requestScope.USER_ERROR.password}</p>
 
                                     <div class="row">
                                         <div class="col-md-6 mb-4 d-flex align-items-center">
