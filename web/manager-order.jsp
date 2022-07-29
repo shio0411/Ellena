@@ -1,3 +1,4 @@
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="store.shopping.OrderStatusDTO"%>
 <%@page import="store.shopping.OrderDetailDTO"%>
 <%@page import="store.shopping.OrderDTO"%>
@@ -141,7 +142,7 @@
                     <%
                         OrderDTO orderDTO = new OrderDTO();
                     %>
-                    <option class="p-1" value="" <%if (orderStatusID == 0) {%> selected <%}%>>Chọn một trạng thái</option>
+                    <option class="p-1" value="" <%if (orderStatusID == 0) {%> selected <%}%>>Tất cả trạng thái</option>
 
                     <%
                         for (int i = 1; i <= 8; i++) {
@@ -229,12 +230,13 @@
                 </tr>
 
                 <%            int id = 1;
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
                     for (OrderDTO order : listOrder) {
                 %>
 
                 <tr>
                     <td style="font-weight: bold"><%= order.getOrderID()%></td>
-                    <td><%= order.getOrderDate()%></td>
+                    <td><%= sdf.format(order.getOrderDate())%></td>
                     <td><%= order.getTotal()%></td>
                     <td><%= order.getUserName()%></td>
                     <td><%= order.getStatusName()%></td>
@@ -304,7 +306,7 @@
 
                                                     <div class="form-outline">
                                                         <label class="form-label" for="orderDate">Ngày đặt hàng</label>
-                                                        <input type="text" readonly="" name="orderDate" value="<%= order.getOrderDate()%>" id="orderDate" class="form-control form-control-lg" />
+                                                        <input type="text" readonly="" name="orderDate" value="<%= sdf.format(order.getOrderDate())%>" id="orderDate" class="form-control form-control-lg" />
 
                                                     </div>
 

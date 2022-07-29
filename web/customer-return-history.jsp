@@ -1,3 +1,4 @@
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="store.shopping.ReturnDTO"%>
 <%@page import="store.shopping.OrderDetailDTO"%>
 <%@page import="java.util.Map"%>
@@ -72,6 +73,7 @@
             </form>
 
             <%
+                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
                 Map<UserDTO, List<OrderDTO>> map = (Map<UserDTO, List<OrderDTO>>) request.getAttribute("RETURNED_ORDERS");
                 Map<OrderDTO, List<ReturnDTO>> returnMap = (Map<OrderDTO, List<ReturnDTO>>) request.getAttribute("RETURNED_HISTORY");
                 if (userList != null) {
@@ -153,7 +155,7 @@
                 </tr>
                 <tr>
                     <td style="font-weight: bold"><%= order.getOrderID()%></td>
-                    <td><%= order.getOrderDate()%></td>
+                    <td><%= sdf.format(order.getOrderDate())%></td>
                     <td><%= order.getTotal()%></td>
                     <td><%= order.getUserName()%></td>
                     <td><%= order.getStatusName()%></td>
@@ -168,7 +170,7 @@
                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
                                     </div>
-                                    <form action="MainController">
+                                    <form action="MainController" method="POST">
                                         <div class="modal-body" >
 
                                             <div class="row">
@@ -223,7 +225,7 @@
 
                                                     <div class="form-outline">
                                                         <label class="form-label" for="orderDate">Ngày đặt hàng</label>
-                                                        <input type="text" readonly="" name="orderDate" value="<%= order.getOrderDate()%>" id="orderDate" class="form-control form-control-lg" />
+                                                        <input type="text" readonly="" name="orderDate" value="<%= sdf.format(order.getOrderDate())%>" id="orderDate" class="form-control form-control-lg" />
 
                                                     </div>
 

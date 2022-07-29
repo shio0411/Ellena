@@ -1,3 +1,4 @@
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="store.shopping.ReturnDTO"%>
 <%@page import="javafx.util.Pair"%>
 <%@page import="java.util.ArrayList"%>
@@ -51,7 +52,7 @@
             UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
             OrderDTO order = (OrderDTO) request.getAttribute("ORDER");
             List<ProductDTO> productList = (List<ProductDTO>) request.getAttribute("PRODUCT_LIST");
-        
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
             if (loginUser.getRoleID().equals("EM")) {    
         %>
         
@@ -118,7 +119,7 @@
 
                         <div class="form-outline">
                             <label class="form-label" for="orderDate">Ngày đặt hàng</label>
-                            <input type="text" readonly="" name="orderDate" value="<%= order.getOrderDate()%>" id="orderDate" class="form-control form-control-lg" />
+                            <input type="text" readonly="" name="orderDate" value="<%= sdf.format(order.getOrderDate())%>" id="orderDate" class="form-control form-control-lg" />
 
                         </div>
 
@@ -277,7 +278,7 @@
                                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
                                             </div>
-                                            <form action="RefundOrderController">
+                                            <form action="RefundOrderController" method="POST">
                                                 <div class="modal-body">
                                                     <div>
                                                         <span>Số lượng trả lại</span>
