@@ -46,7 +46,7 @@ public class UpdateVariantsController extends HttpServlet {
             for (int i = 0; i < stringQuantities.length; i++) {
                 quantites[i] = Integer.parseInt(stringQuantities[i]);
             }
-            boolean check = dao.addVariants(productColorID, sizes, quantites);
+            boolean check = dao.updateVariants(productColorID, sizes, quantites);
             if (check) {
                 request.setAttribute("MESSAGE", "Cập nhật thành công.");
                 request.setAttribute("ACTIVE_COLOR", color);
