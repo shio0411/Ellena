@@ -45,7 +45,7 @@
             }
             .add-image-frame{
                 width: 280px;
-                height: 280px;
+                height: 360px;
                 border-radius: 5px;
                 border:  2px dashed #d5d5e1;
                 color: #c8c9dd;
@@ -64,12 +64,12 @@
 
             .my {
                 position:relative; /* This avoids whatever it's absolute inside of it to go off the container */
-                height: 280px; /* let's imagine that your login box height is 250px . This height needs to be added, otherwise .img-responsive will be like "Oh no, I need to be vertically aligned?! but from which value I need to be aligned??" */
+                height: 440px; /* let's imagine that your login box height is 250px . This height needs to be added, otherwise .img-responsive will be like "Oh no, I need to be vertically aligned?! but from which value I need to be aligned??" */
             }
 
             .img-responsive {   
                 width: 280px;
-                height: 280px;
+                height: 360px;
                 position:absolute;
                 left:50%;
                 top:50%;
@@ -142,7 +142,7 @@
                                     <div class='col-12 col-md-4 img-wrap'>
 
                                         <button class="close" type="button" data-toggle="modal" data-target="#<%=color%>Modal<%=k%>">&times;</button>
-                                        <img style="height: 280px; width: 280px;" src="<%= product.getColorImage().get(color).get(k)%>"/>
+                                        <img style="height: 360px; width: 280px;" src="<%= product.getColorImage().get(color).get(k)%>"/>
                                     </div>
                                     <div class="modal fade" id="<%=color%>Modal<%=k%>" role="dialog">
                                         <div class="modal-dialog">
@@ -198,7 +198,7 @@
                                                 <div id="preview"></div>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type='button' class='btn btn-default' data-dismiss="modal">Huỷ</button>
+                                                <button type='button' class='btn btn-default' data-dismiss="modal" onClick="removeImageValue()">Huỷ</button>
                                                 <button name="action" value="AddImage" type="submit" form="myForm" class="btn btn-danger">Thêm</button>
                                             </div>
                                         </div>
@@ -245,7 +245,7 @@
 
                     reader.addEventListener("load", function () {
 
-                        var image = new Image(280, 280);
+                        var image = new Image(280, 360);
                         image.title = file.name;
                         image.src = this.result;
                         image.setAttribute("class", "img-responsive");
@@ -257,6 +257,10 @@
                     reader.readAsDataURL(file);
 
                 }
+            }
+            
+            function removeImageValue() {
+                document.querySelector("input[name='image']").value = "";
             }
         </script>
     </body>

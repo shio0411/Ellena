@@ -246,7 +246,7 @@
 
                                                                         reader.addEventListener("load", function () {
 
-                                                                            var image = new Image(280, 280);
+                                                                            var image = new Image(280, 360);
                                                                             image.title = file.name;
                                                                             image.src = this.result;
 
