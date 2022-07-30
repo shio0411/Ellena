@@ -41,7 +41,7 @@
     <section class="categories">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-6 p-0">
+                <div class="col-12 col-lg-6 p-0">
                     <div class="categories__item categories__large__item set-bg" data-setbg="img/categories/category-1.jpg">
                         <div class="categories__text">
                             <h1>Enrich The Beauty</h1>
@@ -275,7 +275,7 @@
                                     %>
                                     <div class="carousel-item">
                                         <a href="ProductRouteController?productID=<%=product.getProductID()%>">
-                                        <img class="d-block" src="<%=img%>" height="100%" width="100%">
+                                        <img class="d-block" src="<%=img%>"  width="100%">
                                         </a>
                                     </div>
                                     <%
@@ -376,7 +376,7 @@
                                     %>
                                     <div class="carousel-item">
                                         <a href="ProductRouteController?productID=<%=product.getProductID()%>">
-                                        <img class="d-block" src="<%=img%>" height="100%" width="100%">
+                                        <img class="d-block" src="<%=img%>"  width="100%">
                                         </a>
                                     </div>
                                     <%
@@ -473,7 +473,7 @@
                                     %>
                                     <div class="carousel-item">
                                         <a href="ProductRouteController?productID=<%=product.getProductID()%>">
-                                        <img class="d-block" src="<%=img%>" height="100%" width="100%">
+                                        <img class="d-block" src="<%=img%>"  width="100%">
                                         </a>
                                     </div>
                                     <%
@@ -492,7 +492,7 @@
                             <%}else{
                                   %>
                                   <a href="ProductRouteController?productID=<%=product.getProductID()%>">
-                            <img src="<%=product.getColorImage().get("key").get(0)%>" height="100%" width="100%">
+                            <img src="<%=product.getColorImage().get("key").get(0)%>"  width="100%">
                                   </a>
                             <%
                                    }

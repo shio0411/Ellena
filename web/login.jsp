@@ -87,13 +87,14 @@
                                     </div>
 
                                 </form>
-                                    <p class="mb-0">Hoặc đăng nhập bằng</p>
-                                <div class="m-0">
-                                    <a href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/Ellena/LoginGoogleController&response_type=code
-                                       &client_id=772482426218-2l2bv33430edm3s1v7g12kul82kb5bmd.apps.googleusercontent.com&approval_prompt=force"><image style="width: 98px; height: 39px;" src="./images/google-login.png" alt="Log in with Google"/></a>  
+                                <p class="my-3">Hoặc đăng nhập bằng
+                                <a href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/Ellena/LoginGoogleController&response_type=code
+                                       &client_id=772482426218-2l2bv33430edm3s1v7g12kul82kb5bmd.apps.googleusercontent.com&approval_prompt=force"><image style="width: 98px; height: 39px;" src="./images/google-login.png" alt="Log in with Google"/></a>  </p>
+                               
+                                  
                                     <!--<a href="https://www.facebook.com/dialog/oauth?client_id=893226585410442&redirect_uri=http://localhost:8080/Ellena/LoginFacebookController"><image style="width: 98px; height: 39px;" src="./images/facebook-login.png" alt="Log in with Facebook"/></a>-->
-                                </div>
-                                
+                              
+                                <p class="mb-0">Chưa có tài khoản?     <a href="register.jsp">Đăng ký ngay</a></p>
                         </div>
                     </div>
                 </div>

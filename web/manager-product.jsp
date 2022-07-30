@@ -180,12 +180,12 @@
                     if (listLowStockProduct != null) {
                         if (listLowStockProduct.size() > 0) {
                 %>
-                <span style="font-size: .6em; position: relative; bottom: 5px;"><%= listLowStockProduct.size()%></span>
+               
                 <%
                         }
                     }
                 %>
-                </button>
+                <span id="low-stock__tip"><%= listLowStockProduct.size()%></span></button>
                 
 
 
