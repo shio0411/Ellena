@@ -141,7 +141,7 @@
 
                                         </div>
                                         <div class="modal-body">
-                                            <form action="MainController">
+                                            <form action="MainController" method="POST">
                                                 <div class="row">
                                                     <div class="col-md-12 mb-4">
 
@@ -324,7 +324,7 @@
 
                                         </div>
                                         <div class="modal-body">
-                                            <form action="MainController">
+                                            <form action="MainController" method="POST">
                                                 <div class="row">
                                                     <div class="col-md-12 mb-4">
 

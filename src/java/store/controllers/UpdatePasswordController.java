@@ -46,6 +46,11 @@ public class UpdatePasswordController extends HttpServlet {
                 userError.setConfirm("Mật khẩu và xác nhận mật khẩu khác nhau!");
             }
             
+             if (newPassword.length() <= 8){
+                check = false;
+                userError.setConfirm("Mật khẩu phải dài hơn 8 kí tự!");
+            }
+            
             if (check) {
                 boolean checkUpdate = dao.updatePassword(newPassword, userID);
                 if (checkUpdate) {
