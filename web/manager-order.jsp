@@ -9,7 +9,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Quản lí đơn hàng | Manager</title>
+        <title>Quản lí đơn hàng</title>
         <jsp:include page="meta.jsp" flush="true"/>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -162,48 +162,78 @@
                     searchAll = (boolean) request.getAttribute("SWITCH_SEARCH");
                 %>
             </form>   
+            <div class="row">
+                <div class="col-md-2">
+                    <!--Pop-up cập nhật Tracking ID-->
+                    <div class="modal fade" id="myModalTrackingId" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" id="UpdateTrackingId" >
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title" id="myModalLabel"><b>Cập nhật Tracking ID</b></h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
-            <!--Pop-up cập nhật Tracking ID-->
-            <div class="modal fade" id="myModalTrackingId" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-dialog" id="UpdateTrackingId" >
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title" id="myModalLabel"><b>Cập nhật Tracking ID</b></h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-
-                        </div>
-                        <form action="UpdateTrackingIdController" method="POST">
-                            <div class="modal-body">
-                                <div class="row">
-
-                                    <div class="col-md-12">
-                                        <label>ID đơn hàng và Tracking ID tương ứng</label>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <textarea required="" placeholder="ID đơn hàng  Tracking ID" cols="30" rows="20" name="orderTrackingIdList"></textarea>
-                                    </div>
                                 </div>
+                                <form action="UpdateTrackingIdController" method="POST">
+                                    <div class="modal-body">
+                                        <div class="row">
 
-                                <input type="hidden" name="search" id="update-search" value="<%= searchValue%>"/>
-                                <input type="hidden" name="dateFrom" id="update-dateFrom" value="<%= dateFrom%>"/>
-                                <input type="hidden" name="dateTo" id="update-dateTo" value="<%= dateTo%>"/>
-                                <input type="hidden" name="search-statusID" id="update-statusID" value="<%= sOrderStatusID%>"/>
-                                <input type="hidden" name="page" value="<%= currentPage%>"/>
+                                            <div class="col-md-12">
+                                                <label>ID đơn hàng và Tracking ID tương ứng</label>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <textarea required="" placeholder="ID đơn hàng  Tracking ID" cols="30" rows="20" name="orderTrackingIdList"></textarea>
+                                            </div>
+                                        </div>
+
+                                        <input type="hidden" name="search" id="update-search" value="<%= searchValue%>"/>
+                                        <input type="hidden" name="dateFrom" id="update-dateFrom" value="<%= dateFrom%>"/>
+                                        <input type="hidden" name="dateTo" id="update-dateTo" value="<%= dateTo%>"/>
+                                        <input type="hidden" name="search-statusID" id="update-statusID" value="<%= sOrderStatusID%>"/>
+                                        <input type="hidden" name="page" value="<%= currentPage%>"/>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-default">Cập nhật</button>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                                    </div>
+
+                                </form>
                             </div>
-                            <div class="modal-footer">
-                                <button type="submit" class="btn btn-default">Cập nhật</button>
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                            </div>
-                            
-                        </form>
+                        </div>
                     </div>
+                    <button class="btn btn-default" type="button" data-toggle="modal" data-target="#myModalTrackingId">Cập nhật tracking ID</button>
+                    <!--Hết pop-up cập nhật Tracking ID-->
                 </div>
+                <div class="col-md-2">
+                    <%
+                        List<OrderDTO> listOrder = (List<OrderDTO>) request.getAttribute("LIST_ORDER");
+                        int count = 0;
+                        if (listOrder != null) {
+                            for (OrderDTO order : listOrder) {
+                                if (order.getStatusID() == 6) {
+                                    count++;
+                                }
+                            }
+                        }
+
+                    %>
+                    <form style="margin: 0;" action="SearchOrderController" method="POST">
+                        <input type="hidden" name="search-statusID" value="6"/>
+                        <input type="hidden" name="search" value=""/>
+                        <input type="hidden" name="dateFrom" value=""/>
+                        <input type="hidden" name="dateTo" value=""/>
+                        <button <% if (count == 0) { %> disabled="" style="cursor: default;"<%}%> data-toggle="tooltip" title="Hiện tại có <%= count%> đơn hàng đang chờ hoàn tiền" class="btn btn-default" type="submit">
+                            <i class="fa fa-lg fa-bell"></i>
+                            <% if (count > 0) {%><span style="font-size: .6em; position: relative; bottom: 5px;"><%= count%></span><%}%>
+                        </button>
+                    </form>
+                </div>
+
             </div>
-            <button class="btn btn-default" type="button" data-toggle="modal" data-target="#myModalTrackingId">Cập nhật tracking ID</button>
-            <!--Hết pop-up cập nhật Tracking ID-->
+
+
+
             <br>${requestScope.EMPTY_LIST_MESSAGE}
             <%
-                List<OrderDTO> listOrder = (List<OrderDTO>) request.getAttribute("LIST_ORDER");
                 if (listOrder != null) {
                     if (listOrder.size() > 0) {
 
