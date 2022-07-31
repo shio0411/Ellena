@@ -77,6 +77,7 @@ public class AddImageController extends HttpServlet {
                     if (check) {
                         url = SUCCESS;
                         request.setAttribute("MESSAGE", "Thêm ảnh thành công!");
+                        request.setAttribute("ACTIVE_COLOR", request.getParameter("color"));
                     } else {
                         file.delete();
                     }
@@ -84,6 +85,7 @@ public class AddImageController extends HttpServlet {
             } else {
                 url = SUCCESS;
                 request.setAttribute("MESSAGE", "Số lượng ảnh quá giới hạn cho phép!");
+                request.setAttribute("ACTIVE_COLOR", request.getParameter("color"));
             }
 
         } catch (IOException | NumberFormatException | SQLException | ServletException e) {

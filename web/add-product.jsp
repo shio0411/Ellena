@@ -76,7 +76,7 @@
                                         <div class="col-md-12 mb-4">
 
                                             <div class="form-outline">
-                                                <label class="form-label" for="productName">Tên sản phẩm</label>
+                                                <label class="form-label" for="productName">Tên sản phẩm<p style="display: inline; color: red;">*</p></label>
                                                 <input type="text" name="productName" id="productName" required="" class="form-control form-control-lg" placeholder="Ví dụ: ÁO THUN TRẮNG CƠ BẢN"/>
 
                                             </div>
@@ -88,7 +88,7 @@
                                     <div class="row">
                                         <div class="col-md-6 mb-4">
                                             <div class="form-outline">
-                                                <label class="form-label" for="categoryID">Loại sản phẩm</label>
+                                                <label class="form-label" for="categoryID">Loại sản phẩm<p style="display: inline; color: red;">*</p></label>
                                                 <select class="form-control form-control-lg" name="categoryID" id="categoryID">
                                                     <%  for (CategoryDTO category : listCategory) {
                                                     %>
@@ -103,7 +103,7 @@
                                         <div class="col-md-6 mb-4">
 
                                             <div class="form-outline">
-                                                <label class="form-label" for="lowStockLimit">Giới hạn số lượng thấp</label>
+                                                <label class="form-label" for="lowStockLimit">Giới hạn số lượng thấp<p style="display: inline; color: red;">*</p></label>
                                                 <input class="form-control form-control-lg" min="0" max="500" required type="number" name="lowStockLimit" id="lowStockLimit" placeholder="Thông báo khi số lượng thấp"/>
 
                                             </div>
@@ -112,13 +112,13 @@
                                     <div class="row">
                                         <div class="col-md-6 mb-4">
                                             <div class="form-outline">
-                                                <label class="form-label" for="price">Giá tiền</label>
+                                                <label class="form-label" for="price">Giá tiền<p style="display: inline; color: red;">*</p></label>
                                                 <input class="form-control form-control-lg" type="number" name="price" min="0" id="price" required="" placeholder="Ví dụ: 300000"/>
                                             </div>
                                         </div>
                                         <div class="col-md-6 mb-4">
                                             <div class="form-outline">
-                                                <label class="form-label" for="discount">Giảm giá</label>
+                                                <label class="form-label" for="discount">Giảm giá<p style="display: inline; color: red;">*</p></label>
                                                 <input class="form-control form-control-lg" type="number" min="0" value="0" name="discount" id="discount"/>
                                             </div>
                                         </div>
@@ -139,7 +139,7 @@
                                         <div class="row" id="color1">
                                             <div class="col-md-4 mb-4">
                                                 <div class="form-outline">
-                                                    <label class="form-label" for="color">Màu</label>
+                                                    <label class="form-label" for="color">Màu<p style="display: inline; color: red;">*</p></label>
 
                                                     <input class="form-control form-control-lg" required="" type="text" name="color" placeholder="Ví dụ: Trắng"/>
                                                     <input id="variantsCount1" type="hidden" name="variantsCount" value="1"/>
@@ -158,7 +158,7 @@
                                                                 <div class="row" id="variant1">
                                                                     <div class="col-md-5 mb-4 pb-2">
                                                                         <div class="form-outline">
-                                                                            <label class="form-label" for="size">Size</label>
+                                                                            <label class="form-label" for="size">Size<p style="display: inline; color: red;">*</p></label>
                                                                             <input class="form-control form-control-lg" type="text" name="size" placeholder="Ví dụ: XL"/>
                                                                         </div>
 
@@ -166,7 +166,7 @@
                                                                     <div class="col-md-5 mb-4 pb-2">
 
                                                                         <div class="form-outline">
-                                                                            <label class="form-label" for="quantity">Số lượng</label>
+                                                                            <label class="form-label" for="quantity">Số lượng<p style="display: inline; color: red;">*</p></label>
                                                                             <input class="form-control form-control-lg" type="number" min="0" name="quantity" value="0"/>
                                                                         </div>
                                                                     </div>
@@ -314,7 +314,7 @@
                 $("#addColor").click(function () {
 
                     $(".color-container").append('<div class="row" id="color' + newId + '"><div class="col-md-4 mb-4"><div class="form-outline">' +
-                            '<label class="form-label" for="color">Màu</label>' +
+                            '<label class="form-label" for="color">Màu<p style="display: inline; color: red;">*</p></label>' +
                             '<input class="form-control form-control-lg" type="text" name="color" placeholder="Ví dụ: Trắng"/></div></div>' +
                             '<input id="variantsCount' + newId + '" type="hidden" name="variantsCount" value="1"/>' +
                             '<div class="modal fade" id="myModal' + newId + '" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
@@ -328,12 +328,12 @@
                             '<div class="row" id="variant' + newId + '">' +
                             '<div class="col-md-5 mb-4 pb-2">' +
                             '<div class="form-outline">' +
-                            '<label class="form-label" for="size">Size</label>' +
+                            '<label class="form-label" for="size">Size<p style="display: inline; color: red;">*</p></label>' +
                             '<input class="form-control form-control-lg"  required="" type="text" name="size" placeholder="Ví dụ: XL"/>' +
                             '</div></div>' +
                             '<div class="col-md-5 mb-4 pb-2">' +
                             '<div class="form-outline">' +
-                            '<label class="form-label" for="quantity">Số lượng</label>' +
+                            '<label class="form-label" for="quantity">Số lượng<p style="display: inline; color: red;">*</p></label>' +
                             '<input class="form-control form-control-lg" required="" type="number" min="0" name="quantity" placeholder="Ví dụ: 300"/>' +
                             '</div></div>' +
                             '<button type="button" onclick="removeVariant(`variant' + newId + '`)" style="border: none; background: none;"><i class="fa fa-remove fa-lg"></i></button></div></div>' +
@@ -402,6 +402,7 @@
             function removeColor(id) {
                 const element = document.getElementById(id);
                 element.remove();
+                console.log(document.getElementById("myForm"));
             }
             function removeVariant(id) {
                 const element = document.getElementById(id);

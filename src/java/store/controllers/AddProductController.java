@@ -62,7 +62,7 @@ public class AddProductController extends HttpServlet {
             }
             List<Pair<String, Integer>> colorVariants = new ArrayList<>();
             for (int i = 0; i < color.length; i++) {
-                color[i] = color[i].substring(0, 1).toUpperCase() + color[i].substring(1);
+                color[i] = color[i].substring(0, 1).toUpperCase() + color[i].substring(1);//capitalize the string
                 colorVariants.add(new Pair<>(color[i], variantsCount[i]));
             }
 
@@ -75,12 +75,12 @@ public class AddProductController extends HttpServlet {
             }
 
             Map<List<String>, Integer> colorSizeQuantity = new HashMap<>();
-
+            int count = 0;
             for (Pair<String, Integer> pair : colorVariants) {
-                int count = 0;
+                
                 for (int i = 0; i < pair.getValue(); i++) {
                     List<String> colorSize = new ArrayList<>();
-                    colorSize.add(pair.getKey()); //capitalize the string
+                    colorSize.add(pair.getKey()); 
                     colorSize.add(size[count].toUpperCase());
                     colorSizeQuantity.put(colorSize, quantity[count++]);
 

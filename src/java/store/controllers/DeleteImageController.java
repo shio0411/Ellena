@@ -36,14 +36,16 @@ public class DeleteImageController extends HttpServlet {
         String url = ERROR;
         try {
             String image = request.getParameter("imageName");
-
+            String color = request.getParameter("color");
             ProductDAO dao = new ProductDAO();
             boolean check = dao.deleteImage(image);
             if (check) {
                 request.setAttribute("MESSAGE", "Ảnh đã được xoá thành công.");
+                request.setAttribute("ACTIVE_COLOR", color);
                 url = SUCCESS;
             } else {
                 request.setAttribute("MESSAGE", "Ảnh không tồn tại!");
+                request.setAttribute("ACTIVE_COLOR", request.getParameter("color"));
             }
         } catch (Exception e) {
             log("Error at ManagerShowProductDetailController: " + e.toString());

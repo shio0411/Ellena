@@ -84,6 +84,7 @@
         <%ProductDTO product = (ProductDTO) request.getAttribute("PRODUCT_DETAIL");
             Set<String> colorList = product.getColorImage().keySet();
             String message = (String) request.getAttribute("MESSAGE");
+            String activeColor = (String) request.getAttribute("ACTIVE_COLOR");
             if (message != null) {
         %>
 
@@ -102,7 +103,7 @@
                         <p><%=message%></p>
                     </div>
                     <div class="modal-footer">
-                        <a href="ViewImagesController?productID=<%=product.getProductID()%>"><button type="button" class="btn btn-default">Đóng</button></a>
+                        <a href="ViewImagesController?productID=<%=product.getProductID()%>&activeColor=<%=activeColor%>"><button type="button" class="btn btn-default">Đóng</button></a>
                     </div>
                 </div>
 
@@ -118,13 +119,13 @@
             <div class="row">
                 <div class="col-md-12 mb-4">
                     <div class="form-outline">
-                        <label class="form-label" for="colorImage">Hình ảnh sản phẩm</label>
+                        <a href="ManagerShowProductDetailController?productID=<%=product.getProductID()%>"><button style="border: none; background: none" type="button"><i class="fa fa-arrow-left fa-1x" aria-hidden="true"></i></button></a><label class="form-label" for="colorImage">Hình ảnh sản phẩm</label>
                         <ul class="nav nav-pills mb-4">
                             <% int t = 1;
 
                                 for (String color : colorList) {
                             %>
-                            <li class='nav-item <%if (t == 1) { %> active <%}%>'><a data-toggle="tab" href="#<%= color%>"><%= color%></a></li>
+                            <li class='nav-item <%if ((t == 1 && activeColor == null) || color.equalsIgnoreCase(activeColor)) { %> active <%}%>'><a data-toggle="tab" href="#<%= color%>"><%= color%></a></li>
                                 <% t++;
                                     } %>                             
                         </ul>
@@ -132,11 +133,12 @@
                         <form action="AddImageController" method="post" id="myForm" enctype="multipart/form-data">
                             <div class="tab-content">
                                 <% int j = 1;
+                                    
 
                                     for (String color : colorList) {
                                         int imagesNumber = 0;
                                 %>
-                                <div id="<%= color%>" class="row tab-pane fade <%if (j == 1) { %> active in <%}%>">
+                                <div id="<%= color%>" class="row tab-pane fade <%if ((j == 1 && activeColor == null)  || color.equalsIgnoreCase(activeColor)) { %> active in <%}%>">
                                     <%  for (int k = 0; k < product.getColorImage().get(color).size(); k++) {%>
 
                                     <div class='col-12 col-md-4 img-wrap'>
@@ -159,7 +161,7 @@
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type='button' class='btn btn-default' data-dismiss="modal">Huỷ</button>
-                                                    <a href="DeleteImageController?productID=<%=product.getProductID()%>&imageName=<%= product.getColorImage().get(color).get(k)%>"><button type="button" class="btn btn-danger">Xoá</button></a>
+                                                    <a href="DeleteImageController?productID=<%=product.getProductID()%>&imageName=<%= product.getColorImage().get(color).get(k)%>&activeColor=<%=color%>"><button type="button" class="btn btn-danger">Xoá</button></a>
                                                 </div>
                                             </div>
 
@@ -225,8 +227,9 @@
             function previewImage(e) {
                 var preview = document.getElementById("preview");
                 var color = e.target.parentElement.parentElement.id;
+                console.log(e.target.parentElement.parentElement.id);
                 document.getElementById("color").value = color;
-
+                console.log(document.getElementById("color").value);
                 if (e.target.files) {
                     [].forEach.call(e.target.files, readAndPreview);
                 }

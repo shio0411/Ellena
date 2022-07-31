@@ -39,8 +39,14 @@ public class ViewImagesController extends HttpServlet {
             ProductDAO dao = new ProductDAO();
             int id = Integer.parseInt(request.getParameter("productID"));
             ProductDTO product = dao.getProductDetail(id);
+            String activeColor = request.getParameter("activeColor");
+            if ("null".equals(activeColor)) {
+                activeColor = null;
+            }
             if (product != null) {
                 request.setAttribute("PRODUCT_DETAIL", product);
+                if (activeColor != null)
+                    request.setAttribute("ACTIVE_COLOR", activeColor);
                 url = SUCCESS;
             }
         } catch (Exception e) {
